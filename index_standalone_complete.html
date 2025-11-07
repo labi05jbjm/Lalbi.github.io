@@ -8035,9 +8035,7 @@ class Game {
         this.round++;
         this.isPlayerTurn = true;
 
-        this.log(`
-=== ROUND ${this.round} ===
-`);
+        this.log(`\n=== ROUND ${this.round} ===\n`);
         this.setTherapistDialogue(this.getTherapistDialogue());
 
         // Autosave every 3 rounds
@@ -8278,15 +8276,9 @@ class Game {
         document.body.classList.add('final-revelation');
 
         this.showNarrativeEvent(
-            "Lo specchio.
-
-" +
-            "Vedi il riflesso della stanza... ma non c'è nessun terapista.
-
-" +
-            "Sei sempre stata sola.
-
-" +
+            "Lo specchio.\n\n" +
+            "Vedi il riflesso della stanza... ma non c'è nessun terapista.\n\n" +
+            "Sei sempre stata sola.\n\n" +
             "Il Dr. Lumen... è sempre stato... TE."
         );
 
@@ -8297,8 +8289,7 @@ class Game {
 
     // === NARRATIVE EVENTS ===
     showNarrativeEvent(text) {
-        this.elements.narrativeText.innerHTML = text.replace(/
-/g, '<br>');
+        this.elements.narrativeText.innerHTML = text.replace(/\n/g, '<br>');
         this.elements.narrativeModal.classList.remove('hidden');
     }
 
@@ -8361,15 +8352,9 @@ class Game {
             this.log("=== FRAMMENTAZIONE COMPLETA ===");
             setTimeout(() => {
                 this.showNarrativeEvent(
-                    "GAME OVER
-
-" +
-                    "Neve si è frammentata completamente.
-
-" +
-                    "Le identità si disperdono nel limen.
-
-" +
+                    "GAME OVER\n\n" +
+                    "Neve si è frammentata completamente.\n\n" +
+                    "Le identità si disperdono nel limen.\n\n" +
                     "Non c'è più confine tra loro."
                 );
                 setTimeout(() => {
@@ -8382,18 +8367,10 @@ class Game {
         if (this.fragments >= 5 && this.revelationTriggered && this.stability > 50) {
             setTimeout(() => {
                 this.showNarrativeEvent(
-                    "INTEGRAZIONE
-
-" +
-                    "Neve accetta tutti i suoi frammenti.
-
-" +
-                    "Anche Lumen.
-
-" +
-                    "Il limen si dissolve.
-
-" +
+                    "INTEGRAZIONE\n\n" +
+                    "Neve accetta tutti i suoi frammenti.\n\n" +
+                    "Anche Lumen.\n\n" +
+                    "Il limen si dissolve.\n\n" +
                     "Diventa... una."
                 );
                 setTimeout(() => {
