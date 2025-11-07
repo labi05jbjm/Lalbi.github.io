@@ -1027,16 +1027,32 @@ class Game {
         const t = TRANSLATIONS[currentLang];
 
         // Update menu buttons
-        this.elements.newGameBtn.querySelector('.btn-text').textContent = t.menu_new;
-        if (this.elements.continueBtn.style.display !== 'none') {
-            this.elements.continueBtn.querySelector('.btn-text').textContent = t.menu_continue;
+        if (this.elements.newGameBtn) {
+            const btn = this.elements.newGameBtn.querySelector('.btn-text');
+            if (btn) btn.textContent = t.menu_new;
         }
-        this.elements.optionsBtn.querySelector('.btn-text').textContent = t.menu_options;
-        this.elements.aboutGameBtn.querySelector('.btn-text').textContent = t.menu_about;
+        if (this.elements.continueBtn && this.elements.continueBtn.style.display !== 'none') {
+            const btn = this.elements.continueBtn.querySelector('.btn-text');
+            if (btn) btn.textContent = t.menu_continue;
+        }
+        if (this.elements.optionsBtn) {
+            const btn = this.elements.optionsBtn.querySelector('.btn-text');
+            if (btn) btn.textContent = t.menu_options;
+        }
+        if (this.elements.aboutGameBtn) {
+            const btn = this.elements.aboutGameBtn.querySelector('.btn-text');
+            if (btn) btn.textContent = t.menu_about;
+        }
 
         // Update action buttons
-        this.elements.endTurnBtn.querySelector('.btn-text').textContent = t.end_turn;
-        this.elements.discardBtn.querySelector('.btn-text').textContent = t.discard;
+        if (this.elements.endTurnBtn) {
+            const btn = this.elements.endTurnBtn.querySelector('.btn-text');
+            if (btn) btn.textContent = t.end_turn;
+        }
+        if (this.elements.discardBtn) {
+            const btn = this.elements.discardBtn.querySelector('.btn-text');
+            if (btn) btn.textContent = t.discard;
+        }
     }
 
     // === GAME FLOW ===
