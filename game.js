@@ -860,12 +860,24 @@ class GamepadManager {
     }
 
     scrollIntoView(element) {
+        // FIX M: Solo scroll se elemento è fuori viewport (evita scroll forzati)
         if (element && element.scrollIntoView) {
-            element.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'nearest'
-            });
+            const rect = element.getBoundingClientRect();
+            const isVisible = (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+
+            // Solo scroll se non completamente visibile
+            if (!isVisible) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'nearest'
+                });
+            }
         }
     }
 

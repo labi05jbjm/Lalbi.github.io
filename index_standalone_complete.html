@@ -874,7 +874,7 @@ body {
     position: absolute;
     top: 20px;
     right: 20px;
-    width: 250px;
+    width: min(250px, calc(100vw - 40px)); /* FIX J: Era 250px fisso, ora responsive */
     z-index: 50;
 }
 
@@ -1032,7 +1032,7 @@ body {
     position: absolute;
     bottom: 20px;
     left: 20px;
-    width: 350px;
+    width: min(350px, calc(100vw - 40px)); /* FIX I: Era 350px fisso, overflow su 320-360px screens */
     max-height: 200px;
     background: rgba(26, 20, 16, 0.85);
     border: 2px solid var(--border-card);
@@ -1367,6 +1367,7 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     filter: url(#rough-edges);
+    position: relative; /* FIX N: Necessario per anchor ::before arrow */
 }
 
 .menu-button:hover,
@@ -1954,6 +1955,7 @@ body.game-started #event-log {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: left;
+    position: relative; /* FIX N: Necessario per anchor ::before arrow */
 }
 
 .choice-option:hover {
@@ -2902,6 +2904,12 @@ body.glitch-phase-5 .glitch-overlay::before {
         height: 170px;
     }
 
+    /* FIX L: Riduce slot width per far stare 4 slot da 185px (740px + gap = 785px overflow) */
+    .card-slot {
+        width: 160px;
+        height: 250px;
+    }
+
     .therapist-portrait {
         width: 100px;
         height: 100px;
@@ -2949,6 +2957,12 @@ body.glitch-phase-5 .glitch-overlay::before {
         width: 80px;
         height: 115px;
         font-size: 11px;
+    }
+
+    /* FIX L: Riduce ulteriormente slot width per mobile (max 768px) */
+    .card-slot {
+        width: 140px;
+        height: 220px;
     }
 
     .card-stat {
@@ -3519,8 +3533,31 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 
 /* Media query in funzione dell'ALTEZZA (non solo larghezza) */
 @media (max-height: 800px) {
+  /* FIX K: Previene accavallamenti su 1366×768 e schermi low-height */
   .game-table { height: clamp(380px, 52dvh, 560px); }
   .menu-content { padding: clamp(12px, 2.5vh, 24px); }
+
+  /* Riduce spacing verticale per evitare overlap */
+  .hand-container {
+    height: 150px;
+    bottom: -10px;
+  }
+
+  .action-buttons {
+    bottom: 140px; /* Ridotto da 160px */
+  }
+
+  .sacrifice-zone {
+    bottom: 180px; /* Ridotto da 200px */
+  }
+
+  .therapist-section {
+    top: clamp(5px, 3vh, 10px); /* Più compatto in alto */
+  }
+
+  .opponent-field, .player-field {
+    height: 260px; /* Ridotto da 300px per risparmiare spazio */
+  }
 }
 
 /* === MOBILE FIXES === */
@@ -4768,12 +4805,24 @@ class GamepadManager {
     }
 
     scrollIntoView(element) {
+        // FIX M: Solo scroll se elemento è fuori viewport (evita scroll forzati)
         if (element && element.scrollIntoView) {
-            element.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'nearest'
-            });
+            const rect = element.getBoundingClientRect();
+            const isVisible = (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+
+            // Solo scroll se non completamente visibile
+            if (!isVisible) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'nearest'
+                });
+            }
         }
     }
 
