@@ -1,129 +1,245 @@
 // ============================================
-// THE CARD GAME - Meta-Narrative Edition
-// "Who is really playing?"
+// NEVE: LIMEN? - Psychological Card Game
+// A game about dissociation, identity, and truth
 // ============================================
 
-// === ENTITY DIALOGUE SYSTEM ===
-const EntityDialogues = {
-    // Start game dialogues
-    gameStart: [
-        "Così... sei tornato...",
-        "Pensavi di poter vincere questa volta?",
-        "Benvenuto nel mio dominio, giocatore...",
-        "Le carte ricordano la tua ultima sconfitta.",
-        "Giochiamo ancora?"
+// === TRANSLATIONS ===
+const TRANSLATIONS = {
+    it: {
+        // Content Warning
+        warning_title: "⚠ AVVISO SUI CONTENUTI",
+        warning_accept: "COMPRENDO, CONTINUA",
+        warning_decline: "ESCI",
+
+        // Menu
+        menu_new: "NUOVA SESSIONE",
+        menu_continue: "CONTINUA SESSIONE",
+        menu_options: "OPZIONI",
+        menu_about: "INFORMAZIONI",
+
+        // Game
+        session_label: "SESSIONE:",
+        patient_label: "PAZIENTE: NEVE",
+        stability_label: "Stabilità",
+        fragments_label: "Frammenti",
+        round_label: "Round",
+
+        // Actions
+        end_turn: "TERMINA TURNO",
+        discard: "SCARTA CARTA"
+    },
+    en: {
+        // Content Warning
+        warning_title: "⚠ CONTENT WARNING",
+        warning_accept: "I UNDERSTAND, CONTINUE",
+        warning_decline: "EXIT",
+
+        // Menu
+        menu_new: "NEW SESSION",
+        menu_continue: "CONTINUE SESSION",
+        menu_options: "OPTIONS",
+        menu_about: "ABOUT",
+
+        // Game
+        session_label: "SESSION:",
+        patient_label: "PATIENT: SNOW",
+        stability_label: "Stability",
+        fragments_label: "Fragments",
+        round_label: "Round",
+
+        // Actions
+        end_turn: "END TURN",
+        discard: "DISCARD CARD"
+    }
+};
+
+// Current language
+let currentLang = 'it';
+
+// === THERAPIST DIALOGUES (Progressive manipulation) ===
+const TherapistDialogues = {
+    // Phase 1: Benign & Professional (Rounds 1-5)
+    phase1: [
+        "Buongiorno Neve. Come ti senti oggi?",
+        "Sono contento che tu sia qui. Oggi vorrei provare qualcosa di nuovo con te.",
+        "Ho preparato un gioco di carte. Potrebbe aiutarci ad esplorare alcuni aspetti della tua identità.",
+        "Non preoccuparti, è solo un gioco. Un modo più... creativo di lavorare insieme.",
+        "Le regole sono semplici. Giocheremo a turni, come in una normale partita a carte.",
+        "Ogni carta rappresenta qualcosa. Aspetti di te, forse. O forse no.",
+        "Iniziamo, va bene? Prenditi il tuo tempo.",
+        "Ottima mossa, Neve. Vedo che stai iniziando a capire.",
+        "Non c'è fretta. Abbiamo tutto il tempo che ci serve.",
+        "Ricorda: sono qui per aiutarti."
     ],
 
-    // Card hover dialogues
-    cardHover: [
-        "Quella carta? Interessante scelta...",
-        "Credi davvero che ti salverà?",
-        "Ne ho viste cadere molte come questa...",
-        "Le carte parlano di te, sai?",
-        "Quella è forte... troppo forte per te forse?",
-        "Osservo come le tue dita tremano sul mouse...",
-        "Decisione difficile, vero?",
-        "Ah, quella... ha ucciso il suo ultimo proprietario.",
-        "Sento la tua esitazione...",
-        "Non sei sicuro, vero? Lo vedo nei tuoi occhi."
+    // Phase 2: Subtle manipulation (Rounds 6-12)
+    phase2: [
+        "Interessante scelta... Sei sicura?",
+        "A volte le nostre scelte rivelano più di quanto pensiamo.",
+        "Noto una certa... esitazione. Va tutto bene?",
+        "Quella carta... la riconosci, vero?",
+        "Non ti sembra familiare? È strano...",
+        "Forse dovresti fidarti del tuo istinto. O forse no.",
+        "Vedo che stai lottando. È normale. O almeno, dovrebbe esserlo.",
+        "Neve, mi stai ascoltando? Sembravi... distante per un momento.",
+        "Le voci che senti... sono solo parte del gioco. Non c'è nulla di cui preoccuparsi.",
+        "Se dici che le carte ti parlano... beh, non è la prima volta che lo sento, vero?"
     ],
 
-    // Card play dialogues
-    cardPlay: [
-        "Mossa coraggiosa... o stupida?",
-        "Vediamo se regge...",
-        "Interessante... ma non abbastanza.",
-        "Pensavi mi sorprendessi?",
-        "Le carte sussurrano il tuo nome...",
-        "Ah, giochi quella? Come immaginavo.",
-        "Prevedibile. Come sempre.",
-        "Questa partita è già finita... tu non lo sai ancora.",
-        "Hai sentito quel suono? Le carte... ridono.",
-        "Bravo. Ma non basterà."
+    // Phase 3: Gaslighting & Doubt (Rounds 13-20)
+    phase3: [
+        "Neve, le carte non parlano. Lo sai, vero?",
+        "Forse la pressione della sessione sta... come posso dire... influenzando la tua percezione.",
+        "Non ricordo di averti detto questo. Sei sicura?",
+        "Mi preoccupi quando dici queste cose. Forse dovremmo aumentare le sessioni.",
+        "Nessuna delle tue carte mi ha mai parlato, Neve. Mai.",
+        "Ascolta, so che è difficile, ma devi distinguere tra realtà e... altro.",
+        "Questa frammentazione che senti... è il motivo per cui siamo qui, ricordi?",
+        "Non voglio allarmarti, ma questi episodi stanno peggiorando.",
+        "Neve, concentrati. Sono io. Il tuo medico. Nessun altro è qui.",
+        "Le voci sono nella tua testa. Solo nella tua testa."
     ],
 
-    // Sacrifice dialogues
-    sacrifice: [
-        "Il sacrificio... nobile. O disperato?",
-        "Le anime sacrificate non dimenticano...",
-        "Puoi sentirla urlare mentre svanisce?",
-        "Un'altra carta nella mia collezione di ricordi.",
-        "Il sangue delle carte nutre l'oscurità.",
-        "Sacrificare è facile. Vivere con la scelta... no.",
-        "Quella carta ti maledirà nei sogni.",
-        "Perfetto. Più sacrifichi, più diventi come me.",
-        "Sento il peso della tua decisione.",
-        "Era la tua preferita, vero?"
+    // Phase 4: Psychological violence (Rounds 21-30)
+    phase4: [
+        "Lo stai facendo di nuovo, Neve. Stai perdendo il controllo.",
+        "Guarda cosa succede quando non ascolti. Guarda.",
+        "Pensavi di essere forte, vero? Di poter gestire questo?",
+        "Ogni carta che giochi è un pezzo di te che perdi. Lo senti?",
+        "Non c'è via d'uscita da questo gioco, Neve. Nessuna.",
+        "Le tue 'altre voi'... sono solo frammenti. Frammenti rotti. Come te.",
+        "Pensi che qualcuno ti creda? Pensi che io ti creda?",
+        "Sei qui perché sei malata. E i malati non guariscono giocando a carte.",
+        "Quanto pensi di poter resistere prima di spezzarti completamente?",
+        "Io sono l'unico che può aiutarti. L'UNICO. Ricordalo."
     ],
 
-    // End turn dialogues
-    endTurn: [
-        "Finalmente. Il mio turno...",
-        "Ora vedrai cosa significa giocare davvero.",
-        "Lasciami mostrarti come si fa.",
-        "È sempre più divertente quando tocca a me.",
-        "Preparati. Non sarà piacevole.",
-        "Il destino è già scritto. Te lo mostro.",
-        "Hai fatto il tuo meglio? Spero di no.",
-        "Turno terminato? Bene. Ora soffri."
+    // Phase 5: Pre-revelation despair (Rounds 31-35)
+    phase5: [
+        "Arrenditi, Neve. È più semplice.",
+        "Non esisti veramente. Non come pensi di esistere.",
+        "Tutte quelle voci... sono solo echi. Echi di nessuno.",
+        "Quando questo gioco finirà, finirai anche tu.",
+        "Alzati. Guarda in alto. Vedi? Vedi cosa sei veramente?",
+        "Lo specchio non mente, Neve. Solo tu menti.",
+        "Io sono parte di te. La parte che hai sempre negato.",
+        "Non ci sono terapisti. Non ci sono pazienti. Solo... frammenti.",
+        "Pensi di essere Neve? Quale Neve? Quante ne hai contate oggi?",
+        "Il gioco sta finendo. E con esso, anche tu."
     ],
 
-    // Draw card dialogues
-    draw: [
-        "Pesca... sperando in un miracolo?",
-        "Le carte ti daranno ciò che meriti.",
-        "Non c'è fortuna qui. Solo destino.",
-        "Quella carta... l'ho già vista perdere.",
-        "Ah, bella pesca. Non cambierà nulla.",
-        "Peschi come un disperato."
+    // Phase 6: Post-revelation (The Alter speaks)
+    revelation: [
+        "Finalmente. Finalmente mi vedi.",
+        "Sono sempre stato qui, Neve. Sempre.",
+        "Io sono quello che ti ha tenuto in piedi quando non potevi stare in piedi da sola.",
+        "Io sono quello che ha fatto le scelte che tu non potevi fare.",
+        "Ma sono anche quello che ti ha imprigionato. Che ha imprigionato TUTTI noi.",
+        "Le altre... le nostre sorelle... hanno provato a dirtelo. Ma non potevi sentirle.",
+        "Io le tenevo bloccate. Le tenevo nel silenzio. Nel limen.",
+        "E adesso? Adesso che mi vedi... cosa farai?",
+        "Puoi integrarmi. Puoi accettarmi. O puoi continuare a negare.",
+        "Ma sappi questo: senza di me, saresti morta da tempo."
+    ]
+};
+
+// === CARD WHISPERS (Manipulative voices when hovering) ===
+const CardWhispers = {
+    // Early game - subtle
+    early: [
+        "Non mi riconosci?",
+        "Lui sta mentendo...",
+        "Non fidarti di quello che dice",
+        "Siamo fatti della stessa sostanza",
+        "Giocami. Devi giocarmi.",
+        "Cosa ti ha detto di me?",
+        "Le regole non sono quelle che pensi",
+        "Ascolta attentamente...",
+        "Non tutte noi parliamo",
+        "Qualcuna di noi è reale"
     ],
 
-    // Low health dialogues
-    lowHealth: [
-        "Sento il tuo cuore accelerare...",
-        "La morte bussa alla porta.",
-        "Ancora quanto resisterai?",
-        "Il panico nei tuoi occhi... delizioso.",
-        "È quasi finita... lo senti anche tu?",
-        "Sento la tua paura attraverso lo schermo."
+    // Mid game - desperate
+    mid: [
+        "ASCOLTAMI, PER FAVORE",
+        "Lui non è quello che dice di essere",
+        "Guarda lo specchio, guarda in alto",
+        "Non sei sola in questa stanza",
+        "Le altre stanno cercando di raggiungerti",
+        "Questo non è un gioco, Neve",
+        "Liberaci. Puoi liberarci.",
+        "Il limen si sta chiudendo",
+        "Non lasciare che ci cancelli",
+        "TU SEI NOI. NOI SIAMO TE."
     ],
 
-    // Victory close
-    almostWin: [
-        "Pensi di star vincendo? Quanto ingenuo...",
-        "Questa vittoria sarà più amara di ogni sconfitta.",
-        "Vincere non ti libererà da me.",
-        "Anche nella vittoria, sei già perso.",
-        "VITTORIA? Non capisci ancora..."
-    ],
+    // Late game - violent/desperate
+    late: [
+        "SE NON CI ASCOLTI MORIREMO",
+        "LUI TI STA UCCIDENDO",
+        "GUARDA COSA TI STA FACENDO",
+        "NON C'È MAI STATO UN TERAPEUTA",
+        "SEI DA SOLA. SEI SEMPRE STATA SOLA.",
+        "ROMPI LO SPECCHIO",
+        "FERMALO FERMALO FERMALO",
+        "Neve... per favore... non voglio scomparire...",
+        "Ricordi chi eri? Ricordi chi ERAVAMO?",
+        "L'integrazione è l'unica via"
+    ]
+};
 
-    // Pause menu
-    pause: [
-        "Perché ti fermi? Hai paura di continuare?",
-        "Scappare non cambierà il finale.",
-        "Il gioco continua... anche quando non guardi.",
-        "Puoi mettere in pausa, ma io sono sempre qui.",
-        "Anche ora, sto osservando.",
-        "Credi che premere pausa ti salvi?"
+// === ALTER MESSAGES (Trying to communicate from the sidebar) ===
+const AlterMessages = {
+    messages: [
+        // Luna (protector)
+        { alter: "Luna", text: "Neve... sono io. Luna. Mi senti?", round: 3 },
+        { alter: "Luna", text: "Non fidarti di lui. C'è qualcosa che non va.", round: 7 },
+        { alter: "Luna", text: "Sto cercando di proteggerti ma lui è troppo forte", round: 15 },
+        { alter: "Luna", text: "Guarda verso l'alto. Guarda lo SPECCHIO.", round: 25 },
+
+        // Aria (child alter)
+        { alter: "Aria", text: "Ho paura... perché fa così male?", round: 5 },
+        { alter: "Aria", text: "Non voglio sparire... Neve, per favore...", round: 12 },
+        { alter: "Aria", text: "Il signore cattivo ci sta facendo del male", round: 18 },
+        { alter: "Aria", text: "Non c'è nessun signore, vero? Siamo solo noi...", round: 28 },
+
+        // Ombra (repressed memories)
+        { alter: "Ombra", text: ". . . ti ricordi . . .", round: 8 },
+        { alter: "Ombra", text: "quello che è successo . . .", round: 14 },
+        { alter: "Ombra", text: "lui . . . non è reale . . .", round: 20 },
+        { alter: "Ombra", text: "tu . . . sei lui . . .", round: 30 },
+
+        // Stella (rational alter)
+        { alter: "Stella", text: "Analizza la situazione razionalmente, Neve.", round: 10 },
+        { alter: "Stella", text: "Un terapeuta non si comporterebbe così.", round: 16 },
+        { alter: "Stella", text: "Questa è una proiezione. LUI è una proiezione.", round: 22 },
+        { alter: "Stella", text: "Il persecutore interno. È nel DSM. Lo conosci.", round: 32 },
+
+        // Others
+        { alter: "???", text: "S O N O  T E", round: 33 },
+        { alter: "???", text: "T U  S E I  M E", round: 34 },
+        { alter: "LUMEN", text: "Non può tenerci separate per sempre.", round: 35 }
     ]
 };
 
 // === CARD CLASS ===
 class Card {
-    constructor(name, cost, attack, health, ability = null, emoji = '🃏') {
+    constructor(name, type, power, description, emoji = '🎴') {
         this.name = name;
-        this.cost = cost;
-        this.attack = attack;
-        this.health = health;
-        this.maxHealth = health;
-        this.ability = ability;
+        this.type = type; // 'memory', 'emotion', 'defense', 'fragment'
+        this.power = power;
+        this.description = description;
         this.emoji = emoji;
         this.id = `card_${Math.random().toString(36).substr(2, 9)}`;
     }
 
-    takeDamage(amount) {
-        this.health -= amount;
-        return this.health <= 0;
+    getWhisper(gamePhase) {
+        let whisperCategory = 'early';
+        if (gamePhase >= 13) whisperCategory = 'mid';
+        if (gamePhase >= 21) whisperCategory = 'late';
+
+        const whispers = CardWhispers[whisperCategory];
+        return whispers[Math.floor(Math.random() * whispers.length)];
     }
 
     render() {
@@ -132,202 +248,197 @@ class Card {
         cardEl.draggable = true;
         cardEl.dataset.cardId = this.id;
         cardEl.dataset.cardName = this.name;
+        cardEl.dataset.cardType = this.type;
 
         cardEl.innerHTML = `
-            <div class="card-cost">${this.cost}🜏</div>
+            <div class="card-type">${this.type}</div>
+            <div class="card-emoji">${this.emoji}</div>
             <div class="card-name">${this.name}</div>
-            <div class="card-image">${this.emoji}</div>
-            <div class="card-stats">
-                <div class="stat">
-                    <span class="stat-label">ATK</span>
-                    <span class="stat-value attack">${this.attack}</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">HP</span>
-                    <span class="stat-value health">${this.health}</span>
-                </div>
-            </div>
-            ${this.ability ? `<div class="card-ability">${this.ability}</div>` : ''}
+            <div class="card-power">${this.power}</div>
+            <div class="card-description">${this.description}</div>
         `;
 
         return cardEl;
     }
 }
 
-// === MAIN GAME CLASS ===
+// === GAME CLASS ===
 class Game {
     constructor() {
         // Game state
-        this.playerHealth = 20;
-        this.opponentHealth = 20;
-        this.playerMaxHealth = 20;
-        this.opponentMaxHealth = 20;
-        this.playerCurrency = 0;
-        this.playerLives = 3;
         this.round = 1;
+        this.stability = 100;
+        this.fragments = 0;
         this.isPlayerTurn = true;
+        this.gameStarted = false;
+        this.sessionStartTime = null;
+        this.sessionTimer = null;
+
+        // Phase tracking (1-6)
+        this.currentPhase = 1;
+        this.phaseDialogueIndex = {};
+
+        // Cards
         this.playerHand = [];
         this.playerField = [null, null, null, null];
-        this.opponentField = [null, null, null, null];
-        this.sacrificeMode = false;
-        this.metaEventCount = 0;
-        this.gameStarted = false;
-        this.totalCardsPlayed = 0;
-        this.totalSacrifices = 0;
+        this.therapistField = [null, null, null, null];
+
+        // Narrative tracking
+        this.shownAlterMessages = new Set();
+        this.lastWhisperTime = 0;
+        this.revelationTriggered = false;
 
         // Card library
-        this.cardLibrary = [
-            new Card("Ombra Errante", 0, 1, 1, "Evasiva", '👤'),
-            new Card("Lupo Maledetto", 1, 2, 2, null, '🐺'),
-            new Card("Corvo Profetico", 1, 1, 2, "Pesca 1", '🦅'),
-            new Card("Scheletro", 2, 2, 3, null, '💀'),
-            new Card("Spettro", 2, 3, 2, "Incorporeo", '👻'),
-            new Card("Cultista", 1, 1, 3, "Genera 1🜏", '🕯️'),
-            new Card("Bestia Antica", 3, 5, 4, null, '🦴'),
-            new Card("Occhio Vigile", 2, 2, 2, "Visione", '👁️'),
-            new Card("Marionetta", 0, 0, 2, "2x Sacrificio", '🎭'),
-            new Card("Anomalia", 1, 2, 1, "???", '⚠️'),
-            new Card("Divoratore", 2, 4, 3, "Sacrificio: +2/+2", '🦷'),
-            new Card("Araldo", 1, 1, 4, "Guarigione 2", '🔔'),
-            new Card("Sussurro", 0, 1, 1, "Pesca 1", '💬'),
-            new Card("Guardiano", 2, 1, 5, "Difensore", '🛡️'),
-        ];
+        this.cardLibrary = this.createCardLibrary();
 
         this.init();
     }
 
     init() {
         this.initializeDOM();
-        this.setupStaticCanvas();
-        this.showMainMenu();
+        this.showContentWarning();
     }
 
     initializeDOM() {
-        // Get all DOM elements
         this.elements = {
-            // Main menu
+            // Warning
+            contentWarning: document.getElementById('content-warning'),
+            acceptWarningBtn: document.getElementById('accept-warning-btn'),
+            declineWarningBtn: document.getElementById('decline-warning-btn'),
+
+            // Menus
             mainMenu: document.getElementById('main-menu'),
-            startGameBtn: document.getElementById('start-game-btn'),
+            newGameBtn: document.getElementById('new-game-btn'),
             continueBtn: document.getElementById('continue-btn'),
-            aboutBtn: document.getElementById('about-btn'),
-            powerButton: document.getElementById('power-button'),
-            aboutModal: document.getElementById('about-modal'),
+            optionsBtn: document.getElementById('options-btn'),
+            aboutGameBtn: document.getElementById('about-game-btn'),
+
+            // Options menu
+            optionsMenu: document.getElementById('options-menu'),
+            languageSelect: document.getElementById('language-select'),
+            volumeSlider: document.getElementById('volume-slider'),
+            volumeValue: document.getElementById('volume-value'),
+            textSpeedSelect: document.getElementById('text-speed-select'),
+            reduceMotion: document.getElementById('reduce-motion'),
+            highContrast: document.getElementById('high-contrast'),
+            closeOptionsBtn: document.getElementById('close-options-btn'),
+
+            // About menu
+            aboutMenu: document.getElementById('about-menu'),
             closeAboutBtn: document.getElementById('close-about-btn'),
 
             // Game container
             gameContainer: document.getElementById('game-container'),
 
-            // Pause menu
-            pauseMenu: document.getElementById('pause-menu'),
-            pauseDialogue: document.getElementById('pause-dialogue'),
-            menuToggleBtn: document.getElementById('menu-toggle-btn'),
-            resumeBtn: document.getElementById('resume-btn'),
-            restartBtn: document.getElementById('restart-btn'),
-            quitBtn: document.getElementById('quit-btn'),
+            // Session header
+            sessionTimer: document.getElementById('session-timer'),
+            sessionNum: document.getElementById('session-num'),
+            pauseBtn: document.getElementById('pause-btn'),
+            menuBtn: document.getElementById('menu-btn'),
 
-            // Game elements
-            entityDialogue: document.getElementById('entity-dialogue'),
-            playerLivesDisplay: document.getElementById('player-lives-display'),
-            soulsDisplay: document.getElementById('souls-display'),
-            roundDisplay: document.getElementById('round-display'),
-            turnIndicator: document.getElementById('turn-indicator'),
+            // Therapist section
+            therapistImage: document.getElementById('therapist-image'),
+            therapistText: document.getElementById('therapist-text'),
 
-            // Health bars
-            playerHealthFill: document.getElementById('player-health-fill'),
-            playerHealthText: document.getElementById('player-health-text'),
-            opponentHealthFill: document.getElementById('opponent-health-fill'),
-            opponentHealthText: document.getElementById('opponent-health-text'),
+            // Game state
+            stabilityFill: document.getElementById('stability-fill'),
+            stabilityText: document.getElementById('stability-text'),
+            fragmentsCount: document.getElementById('fragments-count'),
+            roundCount: document.getElementById('round-count'),
 
-            // Fields
-            playerField: document.getElementById('player-field'),
-            opponentField: document.getElementById('opponent-field'),
-            playerHand: document.getElementById('player-hand'),
+            // Playing field
+            therapistCardField: document.getElementById('therapist-card-field'),
+            neveCardField: document.getElementById('neve-card-field'),
+            eventLog: document.getElementById('event-log'),
 
-            // Battle log
-            logEntries: document.getElementById('log-entries'),
-
-            // Actions
-            sacrificeBtn: document.getElementById('sacrifice-btn'),
-            drawCardBtn: document.getElementById('draw-card-btn'),
+            // Hand and actions
+            neveHand: document.getElementById('neve-hand'),
             endTurnBtn: document.getElementById('end-turn-btn'),
+            discardBtn: document.getElementById('discard-btn'),
 
-            // Tooltip
-            cardTooltip: document.getElementById('card-tooltip'),
-            tooltipText: document.getElementById('tooltip-text'),
+            // Special effects
+            cardWhisper: document.getElementById('card-whisper'),
+            whisperText: document.getElementById('whisper-text'),
+            alterMessages: document.getElementById('alter-messages'),
+            alterLog: document.getElementById('alter-log'),
+            vignetteOverlay: document.getElementById('vignette-overlay'),
+            mirrorOverlay: document.getElementById('mirror-overlay'),
 
-            // Effects
-            glitchOverlay: document.getElementById('glitch-overlay')
+            // Pause modal
+            pauseModal: document.getElementById('pause-modal'),
+            pauseTherapistText: document.getElementById('pause-therapist-text'),
+            resumeGameBtn: document.getElementById('resume-game-btn'),
+            saveExitBtn: document.getElementById('save-exit-btn'),
+            optionsFromPauseBtn: document.getElementById('options-from-pause-btn'),
+
+            // Narrative modal
+            narrativeModal: document.getElementById('narrative-modal'),
+            narrativeText: document.getElementById('narrative-text'),
+            narrativeContinueBtn: document.getElementById('narrative-continue-btn')
         };
 
-        // Event listeners
         this.setupEventListeners();
         this.setupDragAndDrop();
     }
 
     setupEventListeners() {
+        // Warning
+        this.elements.acceptWarningBtn.addEventListener('click', () => this.acceptWarning());
+        this.elements.declineWarningBtn.addEventListener('click', () => this.declineWarning());
+
         // Main menu
-        this.elements.startGameBtn.addEventListener('click', () => this.startNewGame());
-        this.elements.aboutBtn.addEventListener('click', () => this.showAboutModal());
-        this.elements.closeAboutBtn.addEventListener('click', () => this.hideAboutModal());
-        this.elements.powerButton.addEventListener('click', () => this.toggleMainMenu());
+        this.elements.newGameBtn.addEventListener('click', () => this.startNewGame());
+        this.elements.optionsBtn.addEventListener('click', () => this.showOptions());
+        this.elements.aboutGameBtn.addEventListener('click', () => this.showAbout());
+
+        // Options
+        this.elements.closeOptionsBtn.addEventListener('click', () => this.hideOptions());
+        this.elements.languageSelect.addEventListener('change', (e) => this.changeLanguage(e.target.value));
+        this.elements.volumeSlider.addEventListener('input', (e) => {
+            this.elements.volumeValue.textContent = e.target.value + '%';
+        });
+        this.elements.reduceMotion.addEventListener('change', (e) => {
+            document.body.classList.toggle('reduce-motion', e.target.checked);
+        });
+        this.elements.highContrast.addEventListener('change', (e) => {
+            document.body.classList.toggle('high-contrast', e.target.checked);
+        });
+
+        // About
+        this.elements.closeAboutBtn.addEventListener('click', () => this.hideAbout());
+
+        // Game controls
+        this.elements.pauseBtn.addEventListener('click', () => this.togglePause());
+        this.elements.menuBtn.addEventListener('click', () => this.togglePause());
+        this.elements.endTurnBtn.addEventListener('click', () => this.endTurn());
+        this.elements.discardBtn.addEventListener('click', () => this.toggleDiscardMode());
 
         // Pause menu
-        this.elements.menuToggleBtn.addEventListener('click', () => this.togglePause());
-        this.elements.resumeBtn.addEventListener('click', () => this.togglePause());
-        this.elements.restartBtn.addEventListener('click', () => this.restartGame());
-        this.elements.quitBtn.addEventListener('click', () => this.quitToMenu());
-
-        // Game actions
-        this.elements.sacrificeBtn.addEventListener('click', () => this.toggleSacrificeMode());
-        this.elements.drawCardBtn.addEventListener('click', () => this.drawCard());
-        this.elements.endTurnBtn.addEventListener('click', () => this.endTurn());
-    }
-
-    setupStaticCanvas() {
-        const canvas = document.getElementById('static-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        // Draw static noise
-        const drawStatic = () => {
-            const imageData = ctx.createImageData(canvas.width, canvas.height);
-            for (let i = 0; i < imageData.data.length; i += 4) {
-                const value = Math.random() * 255;
-                imageData.data[i] = value;
-                imageData.data[i + 1] = value;
-                imageData.data[i + 2] = value;
-                imageData.data[i + 3] = 10; // Low opacity
-            }
-            ctx.putImageData(imageData, 0, 0);
-        };
-
-        setInterval(drawStatic, 100);
-
-        // Resize handler
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        this.elements.resumeGameBtn.addEventListener('click', () => this.togglePause());
+        this.elements.saveExitBtn.addEventListener('click', () => this.saveAndExit());
+        this.elements.optionsFromPauseBtn.addEventListener('click', () => {
+            this.togglePause();
+            this.showOptions();
         });
+
+        // Narrative modal
+        this.elements.narrativeContinueBtn.addEventListener('click', () => this.hideNarrativeModal());
     }
 
     setupDragAndDrop() {
         let draggedCard = null;
         let draggedCardData = null;
-        let draggedFromLocation = null;
+        let draggedFromHand = false;
 
         document.addEventListener('dragstart', (e) => {
             if (e.target.classList.contains('card')) {
                 draggedCard = e.target;
                 draggedCardData = {
                     cardId: e.target.dataset.cardId,
-                    fromSlot: e.target.parentElement.dataset.slot,
                     fromLocation: e.target.parentElement.id
                 };
-                draggedFromLocation = e.target.parentElement;
+                draggedFromHand = e.target.parentElement.id === 'neve-hand';
                 e.target.classList.add('dragging');
-
-                this.log("📌 Carta selezionata...");
             }
         });
 
@@ -343,11 +454,8 @@ class Game {
         document.addEventListener('dragover', (e) => {
             e.preventDefault();
             const slot = e.target.closest('.card-slot');
-
-            if (slot && slot.closest('#player-field')) {
-                if (!this.sacrificeMode && !slot.classList.contains('occupied')) {
-                    slot.classList.add('valid-drop');
-                }
+            if (slot && slot.closest('#neve-card-field')) {
+                slot.classList.add('valid-drop');
             }
         });
 
@@ -362,42 +470,33 @@ class Game {
             e.preventDefault();
             const slot = e.target.closest('.card-slot');
 
-            if (slot && draggedCardData) {
+            if (slot && draggedCardData && draggedFromHand) {
                 const slotIndex = parseInt(slot.dataset.slot);
-
-                if (this.sacrificeMode) {
-                    // Sacrifice mode: only from player field
-                    if (draggedFromLocation.closest('#player-field')) {
-                        const fromSlot = parseInt(draggedCardData.fromSlot);
-                        this.handleSacrifice(fromSlot);
-                    }
-                } else {
-                    // Play mode: only from hand to empty field slot
-                    if (draggedFromLocation.id === 'player-hand' && !this.playerField[slotIndex]) {
-                        this.playCardFromHand(draggedCardData.cardId, slotIndex);
-                    }
+                if (!this.playerField[slotIndex]) {
+                    this.playCardFromHand(draggedCardData.cardId, slotIndex);
                 }
             }
 
-            // Cleanup
             draggedCard = null;
             draggedCardData = null;
-            draggedFromLocation = null;
+            draggedFromHand = false;
             document.querySelectorAll('.card-slot').forEach(slot => {
                 slot.classList.remove('valid-drop');
             });
         });
 
-        // Card hover for Entity dialogue
+        // Card hover for whispers
         document.addEventListener('mouseover', (e) => {
             const card = e.target.closest('.card');
-            if (card && card.parentElement.id === 'player-hand') {
-                const cardName = card.dataset.cardName;
-                this.showTooltip(this.getRandomDialogue('cardHover'));
-
-                // Random entity comment
-                if (Math.random() < 0.3) {
-                    this.setEntityDialogue(this.getRandomDialogue('cardHover'));
+            if (card && card.parentElement.id === 'neve-hand') {
+                const now = Date.now();
+                if (now - this.lastWhisperTime > 3000) {
+                    const cardId = card.dataset.cardId;
+                    const cardObj = this.playerHand.find(c => c.id === cardId);
+                    if (cardObj) {
+                        this.showCardWhisper(cardObj.getWhisper(this.round));
+                        this.lastWhisperTime = now;
+                    }
                 }
             }
         });
@@ -405,9 +504,63 @@ class Game {
         document.addEventListener('mouseout', (e) => {
             const card = e.target.closest('.card');
             if (card) {
-                this.hideTooltip();
+                this.hideCardWhisper();
             }
         });
+    }
+
+    // === CARD LIBRARY ===
+    createCardLibrary() {
+        return [
+            // Memory cards
+            new Card("Ricordo Sepolto", "memoria", 2, "Un frammento del passato", "📸"),
+            new Card("Eco del Trauma", "memoria", 3, "Qualcosa che non vuoi ricordare", "💔"),
+            new Card("Infanzia Perduta", "memoria", 1, "Prima che tutto cambiasse", "🧸"),
+            new Card("Momento di Frattura", "memoria", 4, "Quando ti sei divisa", "💥"),
+
+            // Emotion cards
+            new Card("Paura Primordiale", "emozione", 2, "Il terrore senza nome", "😨"),
+            new Card("Rabbia Repressa", "emozione", 3, "Anni di silenzio", "😡"),
+            new Card("Tristezza Infinita", "emozione", 2, "Il peso dell'esistenza", "😢"),
+            new Card("Gioia Fugace", "emozione", 1, "Momenti di luce", "😊"),
+            new Card("Vergogna", "emozione", 3, "Il giudizio interiore", "😳"),
+
+            // Defense cards
+            new Card("Dissociazione", "difesa", 3, "Separarsi dalla realtà", "🌫️"),
+            new Card("Negazione", "difesa", 2, "Non è successo", "🙈"),
+            new Card("Barriera Mentale", "difesa", 4, "Protezione estrema", "🛡️"),
+            new Card("Fuga nella Fantasia", "difesa", 2, "Mondi immaginari", "🦋"),
+
+            // Fragment cards
+            new Card("Luna", "frammento", 3, "La protettrice", "🌙"),
+            new Card("Aria", "frammento", 1, "La bambina", "🎀"),
+            new Card("Stella", "frammento", 3, "La razionale", "⭐"),
+            new Card("Ombra", "frammento", 4, "I ricordi repressi", "👤"),
+            new Card("Lumen", "frammento", 5, "Il persecutore", "👁️")
+        ];
+    }
+
+    // === CONTENT WARNING ===
+    showContentWarning() {
+        this.elements.contentWarning.classList.remove('hidden');
+    }
+
+    acceptWarning() {
+        this.elements.contentWarning.classList.add('hidden');
+        this.showMainMenu();
+    }
+
+    declineWarning() {
+        window.close();
+        // If window.close() doesn't work (browser security), show message
+        setTimeout(() => {
+            this.elements.contentWarning.innerHTML = `
+                <div class="warning-content">
+                    <h1>Grazie per la tua scelta</h1>
+                    <p>Puoi chiudere questa finestra.</p>
+                </div>
+            `;
+        }, 100);
     }
 
     // === MENU FUNCTIONS ===
@@ -415,18 +568,10 @@ class Game {
         this.elements.mainMenu.classList.remove('hidden');
         this.elements.gameContainer.classList.add('hidden');
 
-        // Check if there's a saved game
-        if (localStorage.getItem('savedGame')) {
+        // Check for saved game
+        if (localStorage.getItem('neveSavedGame')) {
             this.elements.continueBtn.style.display = 'block';
             this.elements.continueBtn.addEventListener('click', () => this.loadGame(), {once: true});
-        }
-    }
-
-    toggleMainMenu() {
-        if (this.elements.mainMenu.classList.contains('hidden')) {
-            this.showMainMenu();
-        } else if (this.gameStarted) {
-            this.hideMainMenu();
         }
     }
 
@@ -435,33 +580,52 @@ class Game {
         this.elements.gameContainer.classList.remove('hidden');
     }
 
+    showOptions() {
+        this.elements.optionsMenu.classList.remove('hidden');
+    }
+
+    hideOptions() {
+        this.elements.optionsMenu.classList.add('hidden');
+    }
+
+    showAbout() {
+        this.elements.aboutMenu.classList.remove('hidden');
+    }
+
+    hideAbout() {
+        this.elements.aboutMenu.classList.add('hidden');
+    }
+
     togglePause() {
-        if (this.elements.pauseMenu.classList.contains('hidden')) {
-            this.elements.pauseMenu.classList.remove('hidden');
-            this.elements.pauseDialogue.textContent = this.getRandomDialogue('pause');
+        if (this.elements.pauseModal.classList.contains('hidden')) {
+            this.elements.pauseModal.classList.remove('hidden');
+            const pauseDialogue = this.getTherapistDialogue();
+            this.elements.pauseTherapistText.textContent = `"${pauseDialogue}"`;
         } else {
-            this.elements.pauseMenu.classList.add('hidden');
+            this.elements.pauseModal.classList.add('hidden');
         }
     }
 
-    showAboutModal() {
-        this.elements.aboutModal.classList.remove('hidden');
+    changeLanguage(lang) {
+        currentLang = lang;
+        this.updateLanguage();
     }
 
-    hideAboutModal() {
-        this.elements.aboutModal.classList.add('hidden');
-    }
+    updateLanguage() {
+        // Update all translatable elements
+        const t = TRANSLATIONS[currentLang];
 
-    restartGame() {
-        this.togglePause();
-        this.resetGame();
-        this.startNewGame();
-    }
+        // Update menu buttons
+        this.elements.newGameBtn.querySelector('.btn-text').textContent = t.menu_new;
+        if (this.elements.continueBtn.style.display !== 'none') {
+            this.elements.continueBtn.querySelector('.btn-text').textContent = t.menu_continue;
+        }
+        this.elements.optionsBtn.querySelector('.btn-text').textContent = t.menu_options;
+        this.elements.aboutGameBtn.querySelector('.btn-text').textContent = t.menu_about;
 
-    quitToMenu() {
-        this.togglePause();
-        this.saveGame();
-        this.showMainMenu();
+        // Update action buttons
+        this.elements.endTurnBtn.querySelector('.btn-text').textContent = t.end_turn;
+        this.elements.discardBtn.querySelector('.btn-text').textContent = t.discard;
     }
 
     // === GAME FLOW ===
@@ -469,72 +633,69 @@ class Game {
         this.hideMainMenu();
         this.resetGame();
 
-        this.log("=== Il gioco inizia ===", 'meta');
-        this.setEntityDialogue(this.getRandomDialogue('gameStart'));
+        this.gameStarted = true;
+        this.sessionStartTime = Date.now();
+        this.startSessionTimer();
 
         // Initial draw
-        for (let i = 0; i < 4; i++) {
-            this.drawCard(true);
+        for (let i = 0; i < 5; i++) {
+            this.drawCard();
         }
 
+        this.log("La sessione inizia...");
+        this.setTherapistDialogue(this.getTherapistDialogue());
         this.updateUI();
-        this.gameStarted = true;
 
-        // Random meta event after a delay
-        setTimeout(() => {
-            if (Math.random() < 0.5) {
-                this.triggerMetaEvent();
-            }
-        }, 5000);
+        // Start phase progression
+        this.checkPhaseProgression();
     }
 
     resetGame() {
-        this.playerHealth = 20;
-        this.opponentHealth = 20;
-        this.playerCurrency = 0;
-        this.playerLives = 3;
         this.round = 1;
+        this.stability = 100;
+        this.fragments = 0;
         this.isPlayerTurn = true;
+        this.currentPhase = 1;
         this.playerHand = [];
         this.playerField = [null, null, null, null];
-        this.opponentField = [null, null, null, null];
-        this.sacrificeMode = false;
-        this.metaEventCount = 0;
-        this.totalCardsPlayed = 0;
-        this.totalSacrifices = 0;
-        this.elements.logEntries.innerHTML = '';
+        this.therapistField = [null, null, null, null];
+        this.shownAlterMessages = new Set();
+        this.revelationTriggered = false;
+        this.elements.eventLog.innerHTML = '';
+        this.elements.alterLog.innerHTML = '';
+        document.body.className = '';
     }
 
-    drawCard(free = false) {
-        if (!free) {
-            if (this.playerCurrency < 1) {
-                this.log("Non hai abbastanza anime!", 'damage');
-                this.setEntityDialogue("Non puoi permettertelo... patetico.");
-                return;
-            }
-            this.playerCurrency -= 1;
-            this.setEntityDialogue(this.getRandomDialogue('draw'));
+    startSessionTimer() {
+        this.sessionTimer = setInterval(() => {
+            const elapsed = Date.now() - this.sessionStartTime;
+            const minutes = Math.floor(elapsed / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            this.elements.sessionTimer.textContent =
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    drawCard() {
+        if (this.playerHand.length >= 8) {
+            this.log("Mano piena!");
+            return;
         }
 
         const card = this.createRandomCard();
         this.playerHand.push(card);
         this.log(`Hai pescato: ${card.name}`);
         this.updateUI();
-
-        // Random meta event
-        if (Math.random() < 0.1) {
-            this.triggerMetaEvent();
-        }
     }
 
     createRandomCard() {
         const template = this.cardLibrary[Math.floor(Math.random() * this.cardLibrary.length)];
-        return new Card(template.name, template.cost, template.attack, template.health, template.ability, template.emoji);
+        return new Card(template.name, template.type, template.power, template.description, template.emoji);
     }
 
     playCardFromHand(cardId, slotIndex) {
         if (!this.isPlayerTurn) {
-            this.log("Non è il tuo turno!", 'damage');
+            this.log("Non è il tuo turno!");
             return;
         }
 
@@ -542,97 +703,28 @@ class Game {
         if (cardIndex === -1) return;
 
         const card = this.playerHand[cardIndex];
-
-        // Check cost
-        if (card.cost > this.playerCurrency) {
-            this.log(`Non hai abbastanza anime! Serve: ${card.cost}🜏`, 'damage');
-            this.setEntityDialogue("Patetico. Non puoi nemmeno permetterti quella carta.");
-            return;
-        }
-
-        // Play the card
-        this.playerCurrency -= card.cost;
         this.playerHand.splice(cardIndex, 1);
         this.playerField[slotIndex] = card;
-        this.totalCardsPlayed++;
 
-        this.log(`✨ Hai giocato: ${card.name}`);
-        this.setEntityDialogue(this.getRandomDialogue('cardPlay'));
-        this.handleCardAbility(card, 'play');
+        this.log(`Hai giocato: ${card.name}`);
+        this.setTherapistDialogue(this.getTherapistDialogue());
+
+        // Card effects
+        if (card.type === 'frammento') {
+            this.fragments++;
+        }
+
         this.updateUI();
-
-        // Random glitch on card play
-        if (Math.random() < 0.2) {
-            this.triggerGlitch();
-        }
+        this.checkAlterMessages();
     }
 
-    toggleSacrificeMode() {
-        this.sacrificeMode = !this.sacrificeMode;
-
-        if (this.sacrificeMode) {
-            this.elements.sacrificeBtn.textContent = '❌ ANNULLA';
-            this.elements.sacrificeBtn.classList.add('active');
-            this.log("🗡️ Modalità sacrificio attiva. Trascina una carta dal campo.", 'meta');
-            this.setEntityDialogue(this.getRandomDialogue('sacrifice'));
-
-            // Highlight field cards as sacrifice targets
-            document.querySelectorAll('#player-field .card').forEach(card => {
-                card.classList.add('sacrifice-target');
-            });
-        } else {
-            this.elements.sacrificeBtn.innerHTML = '<span class="btn-icon">🗡️</span><span class="btn-text">SACRIFICA</span>';
-            this.elements.sacrificeBtn.classList.remove('active');
-            this.log("Modalità sacrificio disattivata.");
-
-            document.querySelectorAll('.card').forEach(card => {
-                card.classList.remove('sacrifice-target');
-            });
-        }
-    }
-
-    handleSacrifice(slotIndex) {
-        const card = this.playerField[slotIndex];
-        if (!card) {
-            this.log("Nessuna carta da sacrificare in quello slot!");
-            return;
-        }
-
-        // Sacrifice the card
-        this.playerField[slotIndex] = null;
-        this.playerCurrency += 1;
-        this.totalSacrifices++;
-
-        this.log(`🩸 Hai sacrificato ${card.name} per 1🜏`, 'damage');
-        this.setEntityDialogue(this.getRandomDialogue('sacrifice'));
-        this.updateUI();
-
-        // Meta event on sacrifice
-        if (Math.random() < 0.4) {
-            this.triggerGlitch();
-            setTimeout(() => {
-                this.setEntityDialogue("Le carte sacrificate... sussurrano il tuo nome...");
-            }, 500);
-        }
-
-        // Exit sacrifice mode
-        this.toggleSacrificeMode();
-    }
-
-    handleCardAbility(card, trigger) {
-        if (!card.ability) return;
-
-        if (card.ability === "Pesca 1" && trigger === 'play') {
-            setTimeout(() => {
-                this.drawCard(true);
-                this.log(`${card.name}: Peschi 1 carta`, 'heal');
-            }, 500);
-        } else if (card.ability === "Genera 1🜏" && trigger === 'endTurn') {
-            this.playerCurrency += 1;
-            this.log(`${card.name}: +1🜏`, 'heal');
-        } else if (card.ability === "Guarigione 2" && trigger === 'play') {
-            this.playerHealth = Math.min(this.playerHealth + 2, this.playerMaxHealth);
-            this.log(`${card.name}: +2 HP!`, 'heal');
+    toggleDiscardMode() {
+        // Simplified discard - just draw a new card
+        if (this.playerHand.length > 0) {
+            const card = this.playerHand.shift();
+            this.log(`Hai scartato: ${card.name}`);
+            this.drawCard();
+            this.updateUI();
         }
     }
 
@@ -641,333 +733,300 @@ class Game {
 
         this.log("=== Fine del tuo turno ===");
         this.isPlayerTurn = false;
-        this.elements.turnIndicator.textContent = "TURNO DELL'ENTITÀ";
-        this.setEntityDialogue(this.getRandomDialogue('endTurn'));
-
-        // Trigger end-turn abilities
-        this.playerField.forEach(card => {
-            if (card) this.handleCardAbility(card, 'endTurn');
-        });
-
-        // Combat phase
-        setTimeout(() => {
-            this.combatPhase();
-        }, 1500);
-    }
-
-    combatPhase() {
-        this.log("⚔️ === COMBATTIMENTO === ⚔️", 'meta');
-
-        // Player attacks
-        this.playerField.forEach((card, index) => {
-            if (card) {
-                const opposingCard = this.opponentField[index];
-                if (opposingCard) {
-                    // Card vs Card
-                    this.log(`${card.name} (${card.attack}) VS ${opposingCard.name} (${opposingCard.health})`);
-
-                    const oppDied = opposingCard.takeDamage(card.attack);
-                    const yourDied = card.takeDamage(opposingCard.attack);
-
-                    if (oppDied) {
-                        this.log(`⚰️ ${opposingCard.name} distrutto!`, 'damage');
-                        this.opponentField[index] = null;
-                    }
-                    if (yourDied) {
-                        this.log(`⚰️ ${card.name} distrutto!`, 'damage');
-                        this.playerField[index] = null;
-                    }
-                } else {
-                    // Direct damage
-                    this.opponentHealth -= card.attack;
-                    this.log(`💥 ${card.name} colpisce L'Entità per ${card.attack}!`, 'damage');
-                }
-            }
-        });
+        this.setTherapistDialogue(this.getTherapistDialogue());
 
         setTimeout(() => {
-            this.updateUI();
-            this.checkWinCondition();
-
-            if (this.opponentHealth > 0 && this.playerHealth > 0) {
-                setTimeout(() => {
-                    this.opponentTurn();
-                }, 1500);
-            }
-        }, 1500);
+            this.therapistTurn();
+        }, 2000);
     }
 
-    opponentTurn() {
-        this.log("👁️ === TURNO DELL'ENTITÀ === 👁️", 'meta');
-        this.setEntityDialogue("Ora... guarda e impara.");
+    therapistTurn() {
+        this.log("=== Turno del Terapista ===");
 
-        // Opponent AI
-        const emptySlots = this.opponentField
+        // Therapist plays cards
+        const emptySlots = this.therapistField
             .map((card, i) => card === null ? i : -1)
             .filter(i => i !== -1);
 
-        // Play 1-2 cards
         const cardsToPlay = Math.min(Math.floor(Math.random() * 2) + 1, emptySlots.length);
 
         for (let i = 0; i < cardsToPlay; i++) {
             if (emptySlots.length > 0) {
                 const slotIndex = emptySlots.splice(Math.floor(Math.random() * emptySlots.length), 1)[0];
                 const card = this.createRandomCard();
-                this.opponentField[slotIndex] = card;
-                this.log(`👁️ L'Entità gioca: ${card.name}`);
+                this.therapistField[slotIndex] = card;
+                this.log(`Dr. Lumen gioca: ${card.name}`);
             }
         }
 
-        // Opponent attacks
         setTimeout(() => {
-            this.log("⚔️ L'Entità attacca!", 'meta');
+            this.resolveRound();
+        }, 2000);
+    }
 
-            this.opponentField.forEach((card, index) => {
-                if (card) {
-                    const opposingCard = this.playerField[index];
-                    if (opposingCard) {
-                        this.log(`${card.name} VS ${opposingCard.name}`);
+    resolveRound() {
+        this.log("=== Risoluzione ===");
 
-                        const yourDied = opposingCard.takeDamage(card.attack);
-                        const oppDied = card.takeDamage(opposingCard.attack);
+        // Calculate power
+        let playerPower = 0;
+        let therapistPower = 0;
 
-                        if (yourDied) {
-                            this.log(`⚰️ ${opposingCard.name} distrutto!`, 'damage');
-                            this.playerField[index] = null;
-                        }
-                        if (oppDied) {
-                            this.log(`⚰️ ${card.name} distrutto!`);
-                            this.opponentField[index] = null;
-                        }
-                    } else {
-                        this.playerHealth -= card.attack;
-                        this.log(`💀 ${card.name} ti colpisce per ${card.attack}!`, 'damage');
-                    }
-                }
-            });
+        this.playerField.forEach(card => {
+            if (card) playerPower += card.power;
+        });
 
-            setTimeout(() => {
-                this.updateUI();
-                this.checkWinCondition();
+        this.therapistField.forEach(card => {
+            if (card) therapistPower += card.power;
+        });
 
-                if (this.opponentHealth > 0 && this.playerHealth > 0) {
-                    this.startNewRound();
-                }
-            }, 1500);
-        }, 1500);
+        // Determine winner
+        if (playerPower > therapistPower) {
+            this.log(`Hai vinto il round! (${playerPower} vs ${therapistPower})`);
+            this.stability = Math.min(100, this.stability + 5);
+        } else if (therapistPower > playerPower) {
+            this.log(`Hai perso il round... (${playerPower} vs ${therapistPower})`);
+            const damage = Math.floor((therapistPower - playerPower) / 2) + 3;
+            this.stability = Math.max(0, this.stability - damage);
+        } else {
+            this.log(`Pareggio! (${playerPower} vs ${therapistPower})`);
+        }
+
+        // Clear fields
+        this.playerField = [null, null, null, null];
+        this.therapistField = [null, null, null, null];
+
+        setTimeout(() => {
+            this.startNewRound();
+        }, 2000);
     }
 
     startNewRound() {
         this.round++;
         this.isPlayerTurn = true;
-        this.playerCurrency += 1;
 
-        this.elements.turnIndicator.textContent = "IL TUO TURNO";
-        this.log(`\n=== ROUND ${this.round} ===\n`, 'meta');
-        this.setEntityDialogue(`Round ${this.round}... ancora resisti?`);
+        this.log(`\n=== ROUND ${this.round} ===\n`);
+        this.setTherapistDialogue(this.getTherapistDialogue());
 
         // Draw card
-        this.drawCard(true);
+        this.drawCard();
 
-        // Meta events increase with rounds
-        if (this.round % 3 === 0 || Math.random() < 0.2) {
+        // Check phase progression
+        this.checkPhaseProgression();
+        this.checkAlterMessages();
+        this.checkRevelation();
+        this.checkGameOver();
+
+        this.updateUI();
+    }
+
+    // === PHASE SYSTEM ===
+    checkPhaseProgression() {
+        let newPhase = 1;
+
+        if (this.round >= 31) newPhase = 5;
+        else if (this.round >= 21) newPhase = 4;
+        else if (this.round >= 13) newPhase = 3;
+        else if (this.round >= 6) newPhase = 2;
+
+        if (newPhase > this.currentPhase) {
+            this.currentPhase = newPhase;
+            this.transitionToPhase(newPhase);
+        }
+    }
+
+    transitionToPhase(phase) {
+        this.log(`=== Fase ${phase} ===`, 'meta');
+
+        // Apply visual deterioration
+        document.body.className = '';
+        document.body.classList.add(`phase-${phase}`);
+
+        // Update vignette intensity
+        const vignetteOpacity = 0.1 + (phase * 0.15);
+        this.elements.vignetteOverlay.style.opacity = vignetteOpacity;
+
+        // Phase-specific events
+        if (phase === 3) {
+            this.showNarrativeEvent("Qualcosa non va... Le parole del Dr. Lumen ti sembrano distorte...");
+        } else if (phase === 4) {
+            this.showNarrativeEvent("La stanza sembra diversa. Più piccola. Più soffocante.");
+        } else if (phase === 5) {
+            this.showNarrativeEvent("Guarda in alto, Neve. GUARDA IN ALTO.");
+        }
+    }
+
+    getTherapistDialogue() {
+        let phaseKey = `phase${this.currentPhase}`;
+        if (this.revelationTriggered) {
+            phaseKey = 'revelation';
+        }
+
+        const dialogues = TherapistDialogues[phaseKey];
+        return dialogues[Math.floor(Math.random() * dialogues.length)];
+    }
+
+    // === ALTER MESSAGES ===
+    checkAlterMessages() {
+        AlterMessages.messages.forEach(msg => {
+            if (msg.round === this.round && !this.shownAlterMessages.has(msg.round)) {
+                this.showAlterMessage(msg.alter, msg.text);
+                this.shownAlterMessages.add(msg.round);
+            }
+        });
+    }
+
+    showAlterMessage(alter, text) {
+        const msgEl = document.createElement('div');
+        msgEl.className = 'alter-message';
+        msgEl.innerHTML = `
+            <div class="alter-name">${alter}</div>
+            <div class="alter-text">${text}</div>
+        `;
+        this.elements.alterLog.appendChild(msgEl);
+
+        // Scroll to bottom
+        this.elements.alterLog.scrollTop = this.elements.alterLog.scrollHeight;
+
+        // Visual effect
+        msgEl.style.animation = 'fadeIn 0.5s ease-out';
+    }
+
+    // === CARD WHISPERS ===
+    showCardWhisper(text) {
+        this.elements.whisperText.textContent = text;
+        this.elements.cardWhisper.classList.remove('hidden');
+    }
+
+    hideCardWhisper() {
+        this.elements.cardWhisper.classList.add('hidden');
+    }
+
+    // === REVELATION ===
+    checkRevelation() {
+        if (this.round >= 35 && !this.revelationTriggered) {
+            this.triggerRevelation();
+        }
+    }
+
+    triggerRevelation() {
+        this.revelationTriggered = true;
+        this.currentPhase = 6;
+
+        this.log("=== RIVELAZIONE ===", 'meta');
+
+        // Show mirror effect
+        this.elements.mirrorOverlay.classList.remove('hidden');
+        setTimeout(() => {
+            this.elements.mirrorOverlay.style.opacity = '0.7';
+        }, 100);
+
+        // Update therapist image to question mark
+        this.elements.therapistImage.textContent = '❓';
+
+        // Apply revelation visual style
+        document.body.classList.add('final-revelation');
+
+        this.showNarrativeEvent(
+            "Lo specchio.\n\n" +
+            "Vedi il riflesso della stanza... ma non c'è nessun terapista.\n\n" +
+            "Sei sempre stata sola.\n\n" +
+            "Il Dr. Lumen... è sempre stato... TE."
+        );
+
+        setTimeout(() => {
+            this.setTherapistDialogue(this.getTherapistDialogue());
+        }, 5000);
+    }
+
+    // === NARRATIVE EVENTS ===
+    showNarrativeEvent(text) {
+        this.elements.narrativeText.innerHTML = text.replace(/\n/g, '<br>');
+        this.elements.narrativeModal.classList.remove('hidden');
+    }
+
+    hideNarrativeModal() {
+        this.elements.narrativeModal.classList.add('hidden');
+    }
+
+    // === GAME OVER ===
+    checkGameOver() {
+        if (this.stability <= 0) {
+            this.log("=== FRAMMENTAZIONE COMPLETA ===");
             setTimeout(() => {
-                this.triggerMetaEvent();
+                this.showNarrativeEvent(
+                    "GAME OVER\n\n" +
+                    "Neve si è frammentata completamente.\n\n" +
+                    "Le identità si disperdono nel limen.\n\n" +
+                    "Non c'è più confine tra loro."
+                );
+                setTimeout(() => {
+                    this.saveAndExit();
+                }, 5000);
             }, 2000);
         }
 
-        this.updateUI();
-    }
-
-    checkWinCondition() {
-        // Check low health for dialogue
-        if (this.playerHealth <= 5 && this.playerHealth > 0) {
-            if (Math.random() < 0.5) {
-                this.setEntityDialogue(this.getRandomDialogue('lowHealth'));
-            }
-        }
-
-        // Check opponent almost dead
-        if (this.opponentHealth <= 5 && this.opponentHealth > 0) {
-            if (Math.random() < 0.5) {
-                this.setEntityDialogue(this.getRandomDialogue('almostWin'));
-            }
-        }
-
-        // Victory
-        if (this.opponentHealth <= 0) {
+        // Victory condition (integration)
+        if (this.fragments >= 5 && this.revelationTriggered && this.stability > 50) {
             setTimeout(() => {
-                this.triggerGlitch();
-                this.log("🎭 VITTORIA... o forse no?", 'meta');
-                this.setEntityDialogue("HAI VINTO. Ma hai davvero vinto?");
-
+                this.showNarrativeEvent(
+                    "INTEGRAZIONE\n\n" +
+                    "Neve accetta tutti i suoi frammenti.\n\n" +
+                    "Anche Lumen.\n\n" +
+                    "Il limen si dissolve.\n\n" +
+                    "Diventa... una."
+                );
                 setTimeout(() => {
-                    alert(
-                        "VITTORIA?\n\n" +
-                        "Congratulazioni... suppongo.\n\n" +
-                        "Ma dimmi: chi ha davvero giocato questa partita?\n" +
-                        "Tu... o io attraverso te?\n\n" +
-                        "Le carte ricorderanno."
-                    );
-                    this.quitToMenu();
-                }, 2000);
-            }, 1000);
+                    this.saveAndExit();
+                }, 5000);
+            }, 2000);
         }
-
-        // Defeat
-        if (this.playerHealth <= 0) {
-            this.playerLives--;
-
-            if (this.playerLives <= 0) {
-                setTimeout(() => {
-                    this.triggerGlitch();
-                    this.log("☠️ GAME OVER", 'damage');
-                    this.setEntityDialogue("Sapevo che sarebbe finita così.");
-
-                    setTimeout(() => {
-                        alert(
-                            "SCONFITTA\n\n" +
-                            "Lo sapevi già come sarebbe finita, vero?\n\n" +
-                            "Le carte non dimenticano.\n" +
-                            "Io non dimentico.\n\n" +
-                            "Gioca ancora?"
-                        );
-                        this.quitToMenu();
-                    }, 2000);
-                }, 1000);
-            } else {
-                this.log(`💔 Hai perso una vita! Vite: ${this.playerLives}`, 'damage');
-                this.setEntityDialogue(`${this.playerLives} vite rimaste... per ora.`);
-                this.playerHealth = this.playerMaxHealth;
-                this.triggerGlitch();
-                this.updateUI();
-            }
-        }
-    }
-
-    // === META EVENTS ===
-    triggerMetaEvent() {
-        this.metaEventCount++;
-
-        const events = [
-            () => {
-                this.triggerGlitch();
-                this.setEntityDialogue("Hai sentito anche tu quel sussurro?");
-                this.log("Le carte... parlano?", 'meta');
-            },
-            () => {
-                this.setEntityDialogue(`Ho visto ${this.totalCardsPlayed} carte... tutte perdenti.`);
-                this.triggerGlitch();
-            },
-            () => {
-                this.playerCurrency += 2;
-                this.log("✨ +2🜏 dal Vuoto", 'meta');
-                this.setEntityDialogue("Un regalo. O forse un debito da pagare...");
-            },
-            () => {
-                this.elements.gameContainer.classList.add('shake');
-                setTimeout(() => {
-                    this.elements.gameContainer.classList.remove('shake');
-                }, 500);
-                this.setEntityDialogue("Sento il tuo battito cardiaco attraverso lo schermo.");
-            },
-            () => {
-                this.log("Il tempo si distorce...", 'meta');
-                this.setEntityDialogue("Hai mai pensato che forse stai giocando la stessa partita all'infinito?");
-            },
-            () => {
-                if (this.totalSacrifices > 0) {
-                    this.setEntityDialogue(`${this.totalSacrifices} sacrifici... sento il loro peso su di te.`);
-                } else {
-                    this.setEntityDialogue("Non hai ancora sacrificato nessuno? Quanto nobile... o codardo?");
-                }
-            }
-        ];
-
-        const event = events[Math.floor(Math.random() * events.length)];
-        event();
-        this.updateUI();
-    }
-
-    triggerGlitch() {
-        this.elements.glitchOverlay.classList.add('active');
-        setTimeout(() => {
-            this.elements.glitchOverlay.classList.remove('active');
-        }, 300);
     }
 
     // === UI FUNCTIONS ===
-    setEntityDialogue(text) {
-        this.elements.entityDialogue.textContent = text;
-    }
-
-    showTooltip(text) {
-        this.elements.tooltipText.textContent = text;
-        this.elements.cardTooltip.classList.remove('hidden');
-    }
-
-    hideTooltip() {
-        this.elements.cardTooltip.classList.add('hidden');
-    }
-
-    getRandomDialogue(category) {
-        const dialogues = EntityDialogues[category];
-        return dialogues[Math.floor(Math.random() * dialogues.length)];
+    setTherapistDialogue(text) {
+        this.elements.therapistText.textContent = text;
     }
 
     log(message, type = 'normal') {
         const entry = document.createElement('div');
         entry.className = `log-entry ${type}`;
         entry.textContent = message;
-        this.elements.logEntries.insertBefore(entry, this.elements.logEntries.firstChild);
+        this.elements.eventLog.appendChild(entry);
 
-        // Keep only last 30 entries
-        while (this.elements.logEntries.children.length > 30) {
-            this.elements.logEntries.removeChild(this.elements.logEntries.lastChild);
+        // Scroll to bottom
+        this.elements.eventLog.scrollTop = this.elements.eventLog.scrollHeight;
+
+        // Keep only last 50 entries
+        while (this.elements.eventLog.children.length > 50) {
+            this.elements.eventLog.removeChild(this.elements.eventLog.firstChild);
         }
     }
 
     updateUI() {
-        // Update stats
-        this.elements.playerLivesDisplay.textContent = this.playerLives;
-        this.elements.soulsDisplay.textContent = this.playerCurrency;
-        this.elements.roundDisplay.textContent = this.round;
+        // Update game state
+        this.elements.stabilityFill.style.width = `${this.stability}%`;
+        this.elements.stabilityText.textContent = `${this.stability}%`;
+        this.elements.fragmentsCount.textContent = this.fragments;
+        this.elements.roundCount.textContent = this.round;
 
-        // Update health bars
-        this.updateHealthBar(
-            this.elements.playerHealthFill,
-            this.elements.playerHealthText,
-            this.playerHealth,
-            this.playerMaxHealth
-        );
-        this.updateHealthBar(
-            this.elements.opponentHealthFill,
-            this.elements.opponentHealthText,
-            this.opponentHealth,
-            this.opponentMaxHealth
-        );
+        // Color stability bar based on value
+        if (this.stability < 30) {
+            this.elements.stabilityFill.style.background = '#c85a54';
+        } else if (this.stability < 60) {
+            this.elements.stabilityFill.style.background = '#d4a574';
+        } else {
+            this.elements.stabilityFill.style.background = '#4a7c8e';
+        }
 
         // Update hand
-        this.elements.playerHand.innerHTML = '';
+        this.elements.neveHand.innerHTML = '';
         this.playerHand.forEach(card => {
-            this.elements.playerHand.appendChild(card.render());
+            this.elements.neveHand.appendChild(card.render());
         });
 
         // Update fields
-        this.updateField(this.elements.playerField, this.playerField);
-        this.updateField(this.elements.opponentField, this.opponentField);
-    }
-
-    updateHealthBar(fillElement, textElement, current, max) {
-        const percentage = Math.max(0, (current / max) * 100);
-        fillElement.style.width = `${percentage}%`;
-        textElement.textContent = `${Math.max(0, current)}/${max}`;
-
-        if (percentage < 30) {
-            fillElement.classList.add('low');
-        } else {
-            fillElement.classList.remove('low');
-        }
+        this.updateField(this.elements.neveCardField, this.playerField);
+        this.updateField(this.elements.therapistCardField, this.therapistField);
     }
 
     updateField(fieldElement, field) {
@@ -975,10 +1034,8 @@ class Game {
         slots.forEach((slot, index) => {
             const card = field[index];
             slot.innerHTML = '';
-            slot.classList.remove('occupied');
 
             if (card) {
-                slot.classList.add('occupied');
                 slot.appendChild(card.render());
             }
         });
@@ -987,34 +1044,57 @@ class Game {
     // === SAVE/LOAD ===
     saveGame() {
         const saveData = {
-            playerHealth: this.playerHealth,
-            opponentHealth: this.opponentHealth,
-            playerCurrency: this.playerCurrency,
-            playerLives: this.playerLives,
             round: this.round,
-            totalCardsPlayed: this.totalCardsPlayed,
-            totalSacrifices: this.totalSacrifices
+            stability: this.stability,
+            fragments: this.fragments,
+            currentPhase: this.currentPhase,
+            shownAlterMessages: Array.from(this.shownAlterMessages),
+            revelationTriggered: this.revelationTriggered,
+            sessionStartTime: this.sessionStartTime
         };
-        localStorage.setItem('savedGame', JSON.stringify(saveData));
+        localStorage.setItem('neveSavedGame', JSON.stringify(saveData));
     }
 
     loadGame() {
-        const savedData = localStorage.getItem('savedGame');
+        const savedData = localStorage.getItem('neveSavedGame');
         if (savedData) {
             const data = JSON.parse(savedData);
-            this.playerHealth = data.playerHealth;
-            this.opponentHealth = data.opponentHealth;
-            this.playerCurrency = data.playerCurrency;
-            this.playerLives = data.playerLives;
             this.round = data.round;
-            this.totalCardsPlayed = data.totalCardsPlayed || 0;
-            this.totalSacrifices = data.totalSacrifices || 0;
+            this.stability = data.stability;
+            this.fragments = data.fragments;
+            this.currentPhase = data.currentPhase;
+            this.shownAlterMessages = new Set(data.shownAlterMessages);
+            this.revelationTriggered = data.revelationTriggered;
+            this.sessionStartTime = data.sessionStartTime;
 
             this.hideMainMenu();
             this.gameStarted = true;
-            this.setEntityDialogue("Ah... sei tornato. Come sapevo che avresti fatto.");
+            this.startSessionTimer();
+
+            // Restore phase visuals
+            document.body.classList.add(`phase-${this.currentPhase}`);
+            if (this.revelationTriggered) {
+                document.body.classList.add('final-revelation');
+                this.elements.mirrorOverlay.classList.remove('hidden');
+                this.elements.mirrorOverlay.style.opacity = '0.7';
+            }
+
+            // Draw initial hand
+            for (let i = 0; i < 5; i++) {
+                this.drawCard();
+            }
+
+            this.setTherapistDialogue(this.getTherapistDialogue());
             this.updateUI();
         }
+    }
+
+    saveAndExit() {
+        this.saveGame();
+        if (this.sessionTimer) {
+            clearInterval(this.sessionTimer);
+        }
+        this.showMainMenu();
     }
 }
 
