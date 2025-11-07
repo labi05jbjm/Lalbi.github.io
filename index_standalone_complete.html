@@ -2374,6 +2374,113 @@ body.glitch-phase-5 .glitch-overlay::before {
         opacity: 0.8;
     }
 }
+
+/* ================================================
+   UNLOCK NOTIFICATIONS & PROGRESSION UI
+   ================================================ */
+
+/* Unlock notification popup */
+.unlock-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: linear-gradient(135deg, #2d2416 0%, #1a1410 100%);
+    border: 4px solid var(--accent-warm);
+    border-radius: 16px;
+    padding: 40px 60px;
+    text-align: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.9),
+        inset 0 0 60px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(212, 165, 116, 0.5);
+    pointer-events: none;
+}
+
+.unlock-notification.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.unlock-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: unlock-icon-bounce 0.8s ease;
+}
+
+@keyframes unlock-icon-bounce {
+    0% { transform: scale(0) rotate(-180deg); }
+    50% { transform: scale(1.2) rotate(10deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+.unlock-title {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--accent-warm);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+    animation: unlock-text-glow 1s ease infinite;
+}
+
+@keyframes unlock-text-glow {
+    0%, 100% {
+        text-shadow:
+            2px 2px 8px rgba(0, 0, 0, 0.8),
+            0 0 10px rgba(212, 165, 116, 0.3);
+    }
+    50% {
+        text-shadow:
+            2px 2px 8px rgba(0, 0, 0, 0.8),
+            0 0 20px rgba(212, 165, 116, 0.6),
+            0 0 30px rgba(212, 165, 116, 0.4);
+    }
+}
+
+.unlock-subtitle {
+    font-size: 20px;
+    color: var(--text-light);
+    font-style: italic;
+    opacity: 0.9;
+}
+
+/* Card locked overlay */
+.card.locked {
+    position: relative;
+    filter: grayscale(100%) brightness(0.4);
+    cursor: not-allowed;
+}
+
+.card.locked::after {
+    content: '🔒';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    z-index: 10;
+    opacity: 0.7;
+}
+
+/* Evolution stars */
+.card.evolved .card-name::after {
+    content: ' ★';
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+.card.evolved-2 .card-name::after {
+    content: ' ★★';
+}
+
+.card.evolved-3 .card-name::after {
+    content: ' ★★★';
+}
     </style>
 </head>
 <body>
@@ -3768,11 +3875,32 @@ class Game {
         this.endingReached = false;
         this.choiceHistory = []; // Track player choices for endings
 
+        // Progression Systems
+        this.unlockedCards = new Set(); // IDs of unlocked cards
+        this.evolvedCards = new Map(); // cardId -> evolution level (1-3)
+        this.achievements = new Map(); // achievementId -> unlocked (boolean)
+        this.newGamePlusLevel = 0; // 0 = first playthrough, 1+ = NG+
+        this.discoveredEasterEggs = new Set(); // IDs of found easter eggs
+        this.metAlters = new Set(); // IDs of alter encounters
+        this.seenEndings = new Set(); // IDs of endings reached
+        this.totalPlaytime = 0; // Total playtime across all runs
+        this.statistics = {
+            totalGamesPlayed: 0,
+            totalCardsPlayed: 0,
+            totalDamageDealt: 0,
+            totalDamageTaken: 0,
+            totalSacrifices: 0,
+            highestRound: 0,
+            fastestWin: 0,
+            perfectRounds: 0
+        };
+
         this.init();
     }
 
     init() {
         this.initializeDOM();
+        this.initializeUnlocks(); // Load progression data
         this.showContentWarning();
     }
 
@@ -6015,6 +6143,9 @@ class Game {
         // Autosave every 3 rounds
         this.checkAutosave();
 
+        // Random events (20% chance)
+        this.triggerRandomEvent();
+
         // Draw card
         this.drawCard();
 
@@ -6394,6 +6525,13 @@ class Game {
                 this.triggerEnding(endingType);
             }, 2000);
         }
+
+        // === PROGRESSION CHECKS ===
+        // Check for card unlocks
+        this.checkCardUnlocks();
+
+        // Check all achievements
+        this.checkAllAchievements();
     }
 
     updateField(fieldElement, field) {
@@ -6976,6 +7114,15 @@ class Game {
         if (this.endingReached) return;
 
         this.endingReached = true;
+
+        // Register ending for progression
+        this.seenEndings.add(endingType);
+        this.statistics.totalGamesPlayed++;
+        if (this.round > this.statistics.highestRound) {
+            this.statistics.highestRound = this.round;
+        }
+        this.saveProgression();
+
         this.glitchLevel = endingType === 'liberation' || endingType === 'awakening' ? 0 : 5;
         this.applyGlitchEffects();
 
@@ -7089,6 +7236,494 @@ class Game {
         };
 
         showNextLine();
+    }
+
+    // ========================================
+    // PROGRESSION SYSTEMS (Unlock, Evolution, Achievements)
+    // ========================================
+
+    /**
+     * Initialize default unlocked cards (starter deck)
+     */
+    initializeUnlocks() {
+        // Start with 10 basic cards unlocked
+        const starterCards = [
+            'gioconda', 'notte_stellata', 'urlo', 'persistenza_memoria', 'guernica',
+            'david', 'venere_milo', 'pensatore', 'pieta', 'discobolo'
+        ];
+
+        starterCards.forEach(cardId => {
+            this.unlockedCards.add(cardId);
+        });
+
+        // Load from localStorage if exists
+        const savedUnlocks = localStorage.getItem('neveUnlocks');
+        if (savedUnlocks) {
+            try {
+                const data = JSON.parse(savedUnlocks);
+                if (data.unlockedCards) {
+                    data.unlockedCards.forEach(id => this.unlockedCards.add(id));
+                }
+                if (data.evolvedCards) {
+                    this.evolvedCards = new Map(data.evolvedCards);
+                }
+                if (data.achievements) {
+                    this.achievements = new Map(data.achievements);
+                }
+                if (data.discoveredEasterEggs) {
+                    data.discoveredEasterEggs.forEach(id => this.discoveredEasterEggs.add(id));
+                }
+                if (data.metAlters) {
+                    data.metAlters.forEach(id => this.metAlters.add(id));
+                }
+                if (data.seenEndings) {
+                    data.seenEndings.forEach(id => this.seenEndings.add(id));
+                }
+                if (data.newGamePlusLevel !== undefined) {
+                    this.newGamePlusLevel = data.newGamePlusLevel;
+                }
+                if (data.totalPlaytime) {
+                    this.totalPlaytime = data.totalPlaytime;
+                }
+                if (data.statistics) {
+                    this.statistics = { ...this.statistics, ...data.statistics };
+                }
+            } catch (e) {
+                console.error('Failed to load unlocks:', e);
+            }
+        }
+    }
+
+    /**
+     * Save progression data to localStorage (persistent across runs)
+     */
+    saveProgression() {
+        const progressionData = {
+            unlockedCards: Array.from(this.unlockedCards),
+            evolvedCards: Array.from(this.evolvedCards.entries()),
+            achievements: Array.from(this.achievements.entries()),
+            discoveredEasterEggs: Array.from(this.discoveredEasterEggs),
+            metAlters: Array.from(this.metAlters),
+            seenEndings: Array.from(this.seenEndings),
+            newGamePlusLevel: this.newGamePlusLevel,
+            totalPlaytime: this.totalPlaytime,
+            statistics: this.statistics
+        };
+
+        localStorage.setItem('neveUnlocks', JSON.stringify(progressionData));
+    }
+
+    /**
+     * Unlock a card and show notification
+     * @param {string} cardId - ID of card to unlock
+     * @param {string} reason - Reason for unlock (for notification)
+     */
+    unlockCard(cardId) {
+        if (this.unlockedCards.has(cardId)) return false;
+
+        this.unlockedCards.add(cardId);
+        this.saveProgression();
+
+        // Show unlock notification
+        this.showUnlockNotification('carta', cardId);
+        this.log(`[ 🔓 CARTA SBLOCCATA: ${cardId.toUpperCase()} ]`, "meta");
+
+        // Check achievement
+        this.checkAchievement('collector');
+
+        return true;
+    }
+
+    /**
+     * Check and unlock cards based on conditions
+     */
+    checkCardUnlocks() {
+        // Round-based unlocks
+        if (this.round >= 5) this.unlockCard('nascita_venere');
+        if (this.round >= 10) this.unlockCard('creazione_adamo');
+        if (this.round >= 15) this.unlockCard('ultima_cena');
+        if (this.round >= 20) this.unlockCard('giudizio_universale');
+
+        // Stability-based unlocks
+        if (this.stability <= 30 && this.round >= 8) {
+            this.unlockCard('inferno');
+            this.unlockCard('saturno');
+        }
+
+        // Awareness-based unlocks
+        if (this.awareness >= 50) this.unlockCard('tradimento_immagini');
+        if (this.awareness >= 80) this.unlockCard('numero_13');
+
+        // Metanarrative unlocks
+        if (this.selfAwareMode) {
+            this.unlockCard('occhio_provvidenza');
+            this.unlockCard('laocoonte');
+        }
+
+        if (this.fourthWallBroken) {
+            this.unlockCard('colosseo');
+            this.unlockCard('apollo_belvedere');
+        }
+
+        // Fragment-based unlocks
+        if (this.fragments >= 50) this.unlockCard('giardini_delizie');
+        if (this.fragments >= 100) this.unlockCard('tour_babel');
+
+        // Ending unlocks (from previous runs)
+        if (this.seenEndings.has('liberation')) {
+            this.unlockCard('vittoria_samotracia');
+        }
+        if (this.seenEndings.has('fragmentation')) {
+            this.unlockCard('fontana');
+        }
+        if (this.seenEndings.has('awakening')) {
+            this.unlockCard('origine_mondo');
+        }
+    }
+
+    /**
+     * Evolve a card (increase its power)
+     * @param {string} cardId - Card to evolve
+     * @returns {boolean} Success
+     */
+    evolveCard(cardId) {
+        const currentLevel = this.evolvedCards.get(cardId) || 0;
+        if (currentLevel >= 3) {
+            this.log("[ Questa carta è già al livello massimo ]", "meta");
+            return false;
+        }
+
+        const cost = (currentLevel + 1) * 20; // 20, 40, 60 fragments
+        if (this.fragments < cost) {
+            this.log(`[ Servono ${cost} frammenti per evolvere questa carta ]`, "meta");
+            return false;
+        }
+
+        this.fragments -= cost;
+        this.evolvedCards.set(cardId, currentLevel + 1);
+        this.saveProgression();
+
+        this.showUnlockNotification('evoluzione', cardId, currentLevel + 1);
+        this.log(`[ ⬆️ CARTA EVOLUTA: ${cardId.toUpperCase()} → LV.${currentLevel + 1} ]`, "meta");
+
+        return true;
+    }
+
+    /**
+     * Get card stats with evolution bonus
+     * @param {Object} card - Base card
+     * @returns {Object} Card with evolution bonuses
+     */
+    applyEvolutionBonus(card) {
+        const evolutionLevel = this.evolvedCards.get(card.id) || 0;
+        if (evolutionLevel === 0) return card;
+
+        // Evolution bonus: +1 ATK/HP per level
+        const evolvedCard = { ...card };
+        evolvedCard.attack += evolutionLevel;
+        evolvedCard.health += evolutionLevel;
+        evolvedCard.name = `${card.name} ★${evolutionLevel}`;
+
+        return evolvedCard;
+    }
+
+    /**
+     * Show unlock notification overlay
+     * @param {string} type - 'carta', 'achievement', 'evoluzione', 'easter_egg'
+     * @param {string} id - ID of unlocked item
+     * @param {number} level - Evolution level (if applicable)
+     */
+    showUnlockNotification(type, id, level = 0) {
+        const notification = document.createElement('div');
+        notification.className = 'unlock-notification';
+
+        let icon = '🔓';
+        let title = '';
+        let subtitle = '';
+
+        switch (type) {
+            case 'carta':
+                icon = '🎴';
+                title = 'CARTA SBLOCCATA';
+                subtitle = id.replace(/_/g, ' ').toUpperCase();
+                break;
+            case 'achievement':
+                icon = '🏆';
+                title = 'ACHIEVEMENT SBLOCCATO';
+                subtitle = id.replace(/_/g, ' ').toUpperCase();
+                break;
+            case 'evoluzione':
+                icon = '⬆️';
+                title = 'CARTA EVOLUTA';
+                subtitle = `${id.replace(/_/g, ' ').toUpperCase()} → LV.${level}`;
+                break;
+            case 'easter_egg':
+                icon = '🥚';
+                title = 'SEGRETO SCOPERTO';
+                subtitle = id.replace(/_/g, ' ').toUpperCase();
+                break;
+        }
+
+        notification.innerHTML = `
+            <div class="unlock-icon">${icon}</div>
+            <div class="unlock-title">${title}</div>
+            <div class="unlock-subtitle">${subtitle}</div>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => notification.classList.add('visible'), 100);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.classList.remove('visible');
+            setTimeout(() => notification.remove(), 500);
+        }, 3000);
+    }
+
+    /**
+     * Check if a card is unlocked
+     * @param {string} cardId - Card ID to check
+     * @returns {boolean}
+     */
+    isCardUnlocked(cardId) {
+        return this.unlockedCards.has(cardId);
+    }
+
+    // ========================================
+    // ACHIEVEMENT SYSTEM
+    // ========================================
+
+    /**
+     * Define all achievements
+     * @returns {Array} Achievement definitions
+     */
+    getAchievementDefinitions() {
+        return [
+            { id: 'first_blood', name: 'Primo Sangue', desc: 'Vinci il primo scontro', icon: '⚔️' },
+            { id: 'collector', name: 'Collezionista', desc: 'Sblocca 20 carte', icon: '🎴' },
+            { id: 'master_collector', name: 'Master Collezionista', desc: 'Sblocca tutte le carte', icon: '👑' },
+            { id: 'evolutionist', name: 'Evoluzionista', desc: 'Evolvi 5 carte', icon: '⬆️' },
+            { id: 'survivor', name: 'Sopravvissuto', desc: 'Raggiungi il Round 20', icon: '🛡️' },
+            { id: 'veteran', name: 'Veterano', desc: 'Raggiungi il Round 30', icon: '⭐' },
+            { id: 'fragile', name: 'Fragilit&agrave;', desc: 'Scendi sotto 10% stabilit&agrave; e sopravvivi', icon: '💔' },
+            { id: 'aware', name: 'Consapevole', desc: 'Raggiungi 100% awareness', icon: '👁️' },
+            { id: 'fourth_wall', name: 'Rottura', desc: 'Rompi la quarta parete', icon: '🪞' },
+            { id: 'boss_slayer', name: 'Uccisore di Dei', desc: 'Sconfiggi Lumen il Persecutore', icon: '🏆' },
+            { id: 'all_endings', name: 'Tutti i Finali', desc: 'Vedi tutti i 5 ending', icon: '🎭' },
+            { id: 'speed_runner', name: 'Speed Runner', desc: 'Vinci in meno di 15 minuti', icon: '⚡' },
+            { id: 'no_sacrifice', name: 'Pacifista', desc: 'Vinci senza sacrificare carte', icon: '☮️' },
+            { id: 'fragment_hoarder', name: 'Accumulatore', desc: 'Raggiungi 200 frammenti', icon: '💎' },
+            { id: 'easter_egg_hunter', name: 'Cacciatore di Segreti', desc: 'Trova tutti gli easter egg', icon: '🥚' },
+            { id: 'alter_friend', name: 'Amico degli Alter', desc: 'Incontra tutti gli alter', icon: '🤝' },
+            { id: 'new_game_master', name: 'Master NG+', desc: 'Completa New Game+ 3', icon: '♾️' },
+            { id: 'perfect_round', name: 'Round Perfetto', desc: 'Vinci un round senza subire danni', icon: '💯' },
+            { id: 'dedication', name: 'Dedizione', desc: 'Gioca per 5 ore totali', icon: '⏰' },
+            { id: 'secret_master', name: '???', desc: 'Scopri il segreto finale', icon: '❓' }
+        ];
+    }
+
+    /**
+     * Check and unlock achievements
+     * @param {string} achievementId - ID to check
+     */
+    checkAchievement(achievementId) {
+        if (this.achievements.has(achievementId)) return;
+
+        let unlock = false;
+
+        switch (achievementId) {
+            case 'first_blood':
+                unlock = this.statistics.totalCardsPlayed > 0;
+                break;
+            case 'collector':
+                unlock = this.unlockedCards.size >= 20;
+                break;
+            case 'master_collector':
+                unlock = this.unlockedCards.size >= 100; // All cards
+                break;
+            case 'evolutionist':
+                unlock = this.evolvedCards.size >= 5;
+                break;
+            case 'survivor':
+                unlock = this.round >= 20;
+                break;
+            case 'veteran':
+                unlock = this.round >= 30;
+                break;
+            case 'fragile':
+                unlock = this.stability < 10 && this.round >= 5;
+                break;
+            case 'aware':
+                unlock = this.awareness >= 100;
+                break;
+            case 'fourth_wall':
+                unlock = this.fourthWallBroken;
+                break;
+            case 'boss_slayer':
+                unlock = this.seenEndings.has('liberation');
+                break;
+            case 'all_endings':
+                unlock = this.seenEndings.size >= 5;
+                break;
+            case 'no_sacrifice':
+                unlock = this.statistics.totalSacrifices === 0 && this.seenEndings.size > 0;
+                break;
+            case 'fragment_hoarder':
+                unlock = this.fragments >= 200;
+                break;
+            case 'easter_egg_hunter':
+                unlock = this.discoveredEasterEggs.size >= 10;
+                break;
+            case 'alter_friend':
+                unlock = this.metAlters.size >= 7;
+                break;
+            case 'new_game_master':
+                unlock = this.newGamePlusLevel >= 3;
+                break;
+            case 'perfect_round':
+                unlock = this.statistics.perfectRounds > 0;
+                break;
+            case 'dedication':
+                unlock = this.totalPlaytime >= 5 * 60 * 60 * 1000; // 5 hours in ms
+                break;
+        }
+
+        if (unlock) {
+            this.achievements.set(achievementId, true);
+            this.saveProgression();
+            this.showUnlockNotification('achievement', achievementId);
+            this.log(`[ 🏆 ACHIEVEMENT: ${achievementId.toUpperCase()} ]`, "meta");
+        }
+    }
+
+    /**
+     * Check all achievements (called frequently)
+     */
+    checkAllAchievements() {
+        this.getAchievementDefinitions().forEach(ach => {
+            this.checkAchievement(ach.id);
+        });
+    }
+
+    // ========================================
+    // NEW GAME+ & EVENTS & EASTER EGGS
+    // ========================================
+
+    /**
+     * Start New Game+ (increases difficulty, unlocks special content)
+     */
+    startNewGamePlus() {
+        this.newGamePlusLevel++;
+        this.saveProgression();
+
+        // NG+ bonuses
+        const ngBonus = this.newGamePlusLevel;
+
+        // Carry over unlocks and achievements
+        // Therapist cards get +1 ATK/HP per NG+ level
+        // Player gets bonus fragments at start
+        this.fragments = ngBonus * 30;
+
+        this.log(`[ ♾️ NEW GAME+ ${ngBonus} INIZIATO ]`, "meta");
+        this.showUnlockNotification('achievement', `new_game_plus_${ngBonus}`);
+    }
+
+    /**
+     * Apply NG+ difficulty modifiers
+     */
+    applyNGPlusModifiers(card, isTherapist = false) {
+        if (this.newGamePlusLevel === 0) return card;
+
+        const modifiedCard = { ...card };
+        if (isTherapist) {
+            // Therapist cards stronger in NG+
+            modifiedCard.attack += this.newGamePlusLevel;
+            modifiedCard.health += this.newGamePlusLevel;
+        }
+        return modifiedCard;
+    }
+
+    /**
+     * Random events during gameplay
+     */
+    triggerRandomEvent() {
+        // 20% chance per round to trigger event
+        if (Math.random() > 0.2) return;
+
+        const events = [
+            { id: 'memory_fragment', name: 'Frammento di Memoria', effect: () => this.fragments += 10, text: 'Un frammento di memoria ti dona 10 frammenti.' },
+            { id: 'stability_boost', name: 'Momento di Lucidità', effect: () => this.stability = Math.min(100, this.stability + 15), text: 'Un momento di lucidità. +15% stabilità.' },
+            { id: 'awareness_spike', name: 'Rivelazione', effect: () => this.awareness += 20, text: 'Una rivelazione improvvisa. +20 awareness.' },
+            { id: 'card_evolution', name: 'Illuminazione', effect: () => { if(this.playerHand.length > 0) { const card = this.playerHand[0]; this.evolveCard(card.id); }}, text: 'Illuminazione! Una carta nella tua mano evolve.' },
+            { id: 'glitch_storm', name: 'Tempesta di Glitch', effect: () => this.glitchLevel = Math.min(5, this.glitchLevel + 1), text: 'La realtà si frammenta ulteriormente...' },
+            { id: 'alter_whisper', name: 'Sussu rro dell\'Alter', effect: () => this.triggerAlterEncounter(), text: 'Una voce interna ti chiama...' }
+        ];
+
+        const event = events[Math.floor(Math.random() * events.length)];
+        event.effect();
+        this.log(`[ 🎲 EVENTO: ${event.name} - ${event.text} ]`, "meta");
+    }
+
+    /**
+     * Trigger alter encounter
+     */
+    triggerAlterEncounter() {
+        const alters = [
+            { id: 'lumen_protector', name: 'Lumen il Protettore', dialogue: 'Non temere. Sono qui per proteggerti.' },
+            { id: 'child_neve', name: 'Neve Bambina', dialogue: 'Perché non possiamo semplicemente giocare?' },
+            { id: 'memoria', name: 'Memoria', dialogue: 'Ricordi chi eri? Ricordi... me?' },
+            { id: 'shadow', name: 'Ombra', dialogue: 'Io sono ciò che non vuoi vedere.' },
+            { id: 'mirror', name: 'Specchio', dialogue: 'Guarda. Riconosci questo volto?' },
+            { id: 'void', name: 'Vuoto', dialogue: '...' },
+            { id: 'hope', name: 'Speranza', dialogue: 'C\'è ancora una via d\'uscita. Insieme.' }
+        ];
+
+        // Pick unmet alter or random
+        const unmetAlters = alters.filter(a => !this.metAlters.has(a.id));
+        const alter = unmetAlters.length > 0
+            ? unmetAlters[Math.floor(Math.random() * unmetAlters.length)]
+            : alters[Math.floor(Math.random() * alters.length)];
+
+        if (!this.metAlters.has(alter.id)) {
+            this.metAlters.add(alter.id);
+            this.saveProgression();
+            this.showUnlockNotification('easter_egg', alter.name);
+        }
+
+        // Show alter message
+        this.addAlterMessage(alter.name, alter.dialogue);
+        this.checkAchievement('alter_friend');
+    }
+
+    /**
+     * Check for easter eggs
+     */
+    discoverEasterEgg(eggId) {
+        if (this.discoveredEasterEggs.has(eggId)) return;
+
+        this.discoveredEasterEggs.add(eggId);
+        this.saveProgression();
+
+        const easterEggs = {
+            'konami_code': 'Il codice segreto funziona ancora...',
+            'hidden_message_1': 'Hai trovato il messaggio nascosto nei CSS.',
+            'card_666': 'La carta n. 666... non dovrebbe esistere.',
+            'perfect_stability': 'Hai mantenuto 100% stabilità per 10 round.',
+            'zero_stability': 'Sei caduto a 0% e sei sopravvissuto.',
+            'dev_console': 'Hai aperto la console sviluppatore. Curioso?',
+            'limen_reverse': 'LIMEN → NEML. Lo specchio mente.',
+            'glitch_language': 'Hai decodificato i caratteri glitch.',
+            'meta_loop': 'Hai scoperto il loop. C\'è sempre stato un loop.',
+            'secret_ending_hint': 'Non tutto è come sembra. Guarda oltre il gioco.'
+        };
+
+        const message = easterEggs[eggId] || 'Hai scoperto un segreto.';
+
+        this.showUnlockNotification('easter_egg', eggId);
+        this.log(`[ 🥚 EASTER EGG: ${message} ]`, "meta");
+        this.checkAchievement('easter_egg_hunter');
     }
 
     saveAndExit() {

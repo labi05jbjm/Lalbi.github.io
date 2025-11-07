@@ -2364,3 +2364,110 @@ body.glitch-phase-5 .glitch-overlay::before {
         opacity: 0.8;
     }
 }
+
+/* ================================================
+   UNLOCK NOTIFICATIONS & PROGRESSION UI
+   ================================================ */
+
+/* Unlock notification popup */
+.unlock-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: linear-gradient(135deg, #2d2416 0%, #1a1410 100%);
+    border: 4px solid var(--accent-warm);
+    border-radius: 16px;
+    padding: 40px 60px;
+    text-align: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.9),
+        inset 0 0 60px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(212, 165, 116, 0.5);
+    pointer-events: none;
+}
+
+.unlock-notification.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.unlock-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: unlock-icon-bounce 0.8s ease;
+}
+
+@keyframes unlock-icon-bounce {
+    0% { transform: scale(0) rotate(-180deg); }
+    50% { transform: scale(1.2) rotate(10deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+.unlock-title {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--accent-warm);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+    animation: unlock-text-glow 1s ease infinite;
+}
+
+@keyframes unlock-text-glow {
+    0%, 100% {
+        text-shadow:
+            2px 2px 8px rgba(0, 0, 0, 0.8),
+            0 0 10px rgba(212, 165, 116, 0.3);
+    }
+    50% {
+        text-shadow:
+            2px 2px 8px rgba(0, 0, 0, 0.8),
+            0 0 20px rgba(212, 165, 116, 0.6),
+            0 0 30px rgba(212, 165, 116, 0.4);
+    }
+}
+
+.unlock-subtitle {
+    font-size: 20px;
+    color: var(--text-light);
+    font-style: italic;
+    opacity: 0.9;
+}
+
+/* Card locked overlay */
+.card.locked {
+    position: relative;
+    filter: grayscale(100%) brightness(0.4);
+    cursor: not-allowed;
+}
+
+.card.locked::after {
+    content: '🔒';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    z-index: 10;
+    opacity: 0.7;
+}
+
+/* Evolution stars */
+.card.evolved .card-name::after {
+    content: ' ★';
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+.card.evolved-2 .card-name::after {
+    content: ' ★★';
+}
+
+.card.evolved-3 .card-name::after {
+    content: ' ★★★';
+}
