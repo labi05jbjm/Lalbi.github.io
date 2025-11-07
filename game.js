@@ -392,6 +392,21 @@ class Game {
         this.shownAlterMessages = new Set();
         this.lastWhisperTime = 0;
         this.revelationTriggered = false;
+        this.askedQuestions = new Set();
+
+        // Intro sequence
+        this.introStep = 0;
+        this.inIntroSequence = false;
+
+        // Player stats (for choice effects)
+        this.trust = 50;
+        this.awareness = 0;
+        this.metaAwareness = false;
+
+        // Card selection mode
+        this.cardSelectionMode = false;
+        this.selectedCard = null;
+        this.selectedSlot = null;
 
         // Sacrifice system
         this.sacrificeMode = false;
@@ -402,6 +417,7 @@ class Game {
 
         // Card library
         this.cardLibrary = this.createCardLibrary();
+        this.therapistCardLibrary = this.createTherapistCardLibrary();
 
         this.init();
     }
@@ -689,6 +705,57 @@ class Game {
             const card = e.target.closest('.card');
             if (card) {
                 this.hideCardWhisper();
+            }
+        });
+
+        // Click-to-select system for cards
+        document.addEventListener('click', (e) => {
+            const card = e.target.closest('.card');
+            const slot = e.target.closest('.card-slot');
+
+            // Click on card in hand - select it
+            if (card && card.parentElement.id === 'neve-hand' && !this.sacrificeMode) {
+                if (!this.isPlayerTurn) {
+                    this.log("Non è il tuo turno!");
+                    return;
+                }
+
+                // Deselect if already selected
+                if (this.selectedCard && this.selectedCard.id === card.dataset.cardId) {
+                    this.selectedCard = null;
+                    card.classList.remove('selected');
+                    // Remove selectable class from all slots
+                    document.querySelectorAll('.card-slot').forEach(s => s.classList.remove('selectable'));
+                    return;
+                }
+
+                // Select new card
+                this.selectedCard = this.playerHand.find(c => c.id === card.dataset.cardId);
+                if (this.selectedCard) {
+                    // Remove previous selections
+                    document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+
+                    // Highlight empty slots
+                    document.querySelectorAll('#neve-card-field .card-slot').forEach(s => {
+                        if (!this.playerField[parseInt(s.dataset.slot)]) {
+                            s.classList.add('selectable');
+                        }
+                    });
+                }
+            }
+
+            // Click on empty slot - place selected card
+            if (slot && slot.closest('#neve-card-field') && this.selectedCard && !this.sacrificeMode) {
+                const slotIndex = parseInt(slot.dataset.slot);
+                if (!this.playerField[slotIndex]) {
+                    this.playCardFromHand(this.selectedCard.id, slotIndex);
+
+                    // Deselect
+                    this.selectedCard = null;
+                    document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
+                    document.querySelectorAll('.card-slot').forEach(s => s.classList.remove('selectable'));
+                }
             }
         });
     }
@@ -1013,6 +1080,43 @@ class Game {
         ];
     }
 
+    createTherapistCardLibrary() {
+        // Therapist uses STATUE cards (Ancient sculptures, monuments)
+        return [
+            // More statue cards will be added here
+            new Card(
+                "Discobolo",
+                "impulso",
+                3, 3, 1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Discobolus_Lancelotti_Massimo.jpg/400px-Discobolus_Lancelotti_Massimo.jpg",
+                "Myron, 460 a.C.",
+                "Perfezione fisica",
+                "Il lanciatore perfetto, congelato nell'attimo prima del lancio. La ricerca dell'equilibrio impossibile.",
+                []
+            ),
+            new Card(
+                "Venere di Milo",
+                "velo",
+                2, 4, 1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Venus_de_Milo_Louvre_Ma399_n4.jpg/400px-Venus_de_Milo_Louvre_Ma399_n4.jpg",
+                "Alexandros, 130 a.C.",
+                "Bellezza mutilata",
+                "Le braccia mancanti. La perfezione incompleta. Ciò che non può essere riparato.",
+                [{icon: "🛡️", desc: "Difesa +1 quando attaccata"}]
+            ),
+            new Card(
+                "Pensatore",
+                "voce",
+                1, 5, 1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Le_penseur_de_la_Porte_de_lEnfer_%28mus%C3%A9e_Rodin%29_%284528252054%29.jpg/400px-Le_penseur_de_la_Porte_de_lEnfer_%28mus%C3%A9e_Rodin%29_%284528252054%29.jpg",
+                "Rodin, 1904",
+                "Contemplazione infinita",
+                "Chinato su se stesso, intrappolato nel pensiero eterno. La mente che divora se stessa.",
+                []
+            )
+        ];
+    }
+
     // === CONTENT WARNING ===
     showContentWarning() {
         this.elements.contentWarning.classList.remove('hidden');
@@ -1122,21 +1226,119 @@ class Game {
         this.hideMainMenu();
         this.resetGame();
 
-        this.gameStarted = true;
+        // Start with intro sequence
+        document.body.classList.add('intro-phase');
+        this.inIntroSequence = true;
+        this.introStep = 0;
+
+        // Show only table and therapist
         this.sessionStartTime = Date.now();
         this.startSessionTimer();
+
+        // Start intro dialogue after a moment
+        setTimeout(() => {
+            this.showIntroDialogue();
+        }, 1000);
+    }
+
+    // === INTRO SEQUENCE ===
+    showIntroDialogue() {
+        const step = IntroSequence[this.introStep];
+        if (!step) {
+            // Intro finished, start game
+            this.finishIntro();
+            return;
+        }
+
+        // Create dialogue element if doesn't exist
+        let dialogueEl = document.querySelector('.intro-dialogue');
+        if (!dialogueEl) {
+            dialogueEl = document.createElement('div');
+            dialogueEl.className = 'intro-dialogue';
+            document.body.appendChild(dialogueEl);
+        }
+
+        // Set therapist dialogue
+        this.setTherapistDialogue(step.text);
+
+        // Show choices or continue button
+        if (step.choices) {
+            // Multiple choice
+            dialogueEl.innerHTML = `
+                <div class="intro-dialogue-text">${step.speaker}: "${step.text}"</div>
+                <div class="choice-container">
+                    ${step.choices.map((choice, i) => `
+                        <div class="choice-option" data-choice="${i}">
+                            ${choice.text}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Add event listeners to choices
+            dialogueEl.querySelectorAll('.choice-option').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    const choiceIndex = parseInt(e.target.dataset.choice);
+                    this.handleChoice(step.choices[choiceIndex]);
+                });
+            });
+        } else {
+            // Simple continue
+            dialogueEl.innerHTML = `
+                <div class="intro-dialogue-text">${step.speaker}: "${step.text}"</div>
+                <button class="intro-dialogue-continue">${step.continueText || 'Continua'}</button>
+            `;
+
+            dialogueEl.querySelector('.intro-dialogue-continue').addEventListener('click', () => {
+                this.introStep++;
+                this.showIntroDialogue();
+            });
+        }
+    }
+
+    handleChoice(choice) {
+        // Apply effects
+        if (choice.effect) {
+            if (choice.effect.stability) this.stability += choice.effect.stability;
+            if (choice.effect.fragments) this.fragments += choice.effect.fragments;
+            if (choice.effect.trust) this.trust += choice.effect.trust;
+            if (choice.effect.awareness) this.awareness += choice.effect.awareness;
+            if (choice.effect.metaAwareness) this.metaAwareness = true;
+        }
+
+        // Continue to next step
+        this.introStep++;
+        this.showIntroDialogue();
+    }
+
+    finishIntro() {
+        // Remove intro dialogue
+        const dialogueEl = document.querySelector('.intro-dialogue');
+        if (dialogueEl) {
+            dialogueEl.style.opacity = '0';
+            setTimeout(() => dialogueEl.remove(), 500);
+        }
+
+        // Transition to game
+        document.body.classList.remove('intro-phase');
+        document.body.classList.add('game-started');
+        this.inIntroSequence = false;
+        this.gameStarted = true;
+
+        // Set initial dialogue
+        this.setTherapistDialogue("Bene. Iniziamo.");
 
         // Initial draw
         for (let i = 0; i < 5; i++) {
             this.drawCard();
         }
 
-        this.log("La sessione inizia...");
-        this.setTherapistDialogue(this.getTherapistDialogue());
-        this.updateUI();
-
-        // Start phase progression
-        this.checkPhaseProgression();
+        // Show UI elements with animation
+        setTimeout(() => {
+            this.log("La sessione di gioco inizia...");
+            this.updateUI();
+            this.checkPhaseProgression();
+        }, 1500);
     }
 
     resetGame() {
@@ -1179,6 +1381,22 @@ class Game {
 
     createRandomCard() {
         const template = this.cardLibrary[Math.floor(Math.random() * this.cardLibrary.length)];
+        return new Card(
+            template.name,
+            template.type,
+            template.attack,
+            template.health,
+            template.bloodCost,
+            template.artworkUrl,
+            template.artist,
+            template.shortDesc,
+            template.longDesc,
+            template.sigils
+        );
+    }
+
+    createRandomTherapistCard() {
+        const template = this.therapistCardLibrary[Math.floor(Math.random() * this.therapistCardLibrary.length)];
         return new Card(
             template.name,
             template.type,
@@ -1296,7 +1514,7 @@ class Game {
     therapistTurn() {
         this.log("=== Turno del Terapista ===");
 
-        // Therapist plays cards
+        // Therapist plays cards (STATUES)
         const emptySlots = this.therapistField
             .map((card, i) => card === null ? i : -1)
             .filter(i => i !== -1);
@@ -1306,7 +1524,7 @@ class Game {
         for (let i = 0; i < cardsToPlay; i++) {
             if (emptySlots.length > 0) {
                 const slotIndex = emptySlots.splice(Math.floor(Math.random() * emptySlots.length), 1)[0];
-                const card = this.createRandomCard();
+                const card = this.createRandomTherapistCard();
                 this.therapistField[slotIndex] = card;
                 this.log(`Dr. Lumen gioca: ${card.name}`);
             }
@@ -1446,8 +1664,86 @@ class Game {
         // Check phase progression
         this.checkPhaseProgression();
         this.checkAlterMessages();
+        this.checkDialogueQuestions();
         this.checkRevelation();
         this.checkGameOver();
+
+        this.updateUI();
+    }
+
+    // === DIALOGUE QUESTIONS SYSTEM ===
+    checkDialogueQuestions() {
+        // Check if there's a question for this round
+        const question = DialogueQuestions.find(q => q.round === this.round && !this.askedQuestions.has(q.round));
+
+        if (question) {
+            this.askedQuestions.add(question.round);
+            setTimeout(() => {
+                this.showDialogueQuestion(question);
+            }, 2000);
+        }
+    }
+
+    showDialogueQuestion(question) {
+        // Create or get dialogue element
+        let dialogueEl = document.querySelector('.intro-dialogue');
+        if (!dialogueEl) {
+            dialogueEl = document.createElement('div');
+            dialogueEl.className = 'intro-dialogue';
+            document.body.appendChild(dialogueEl);
+        }
+
+        // Set therapist dialogue
+        this.setTherapistDialogue(question.text);
+
+        // Show choices
+        dialogueEl.innerHTML = `
+            <div class="intro-dialogue-text">${question.speaker}: "${question.text}"</div>
+            <div class="choice-container">
+                ${question.choices.map((choice, i) => `
+                    <div class="choice-option" data-choice="${i}">
+                        ${choice.text}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        dialogueEl.style.opacity = '1';
+
+        // Add event listeners to choices
+        dialogueEl.querySelectorAll('.choice-option').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const choiceIndex = parseInt(e.target.dataset.choice);
+                this.handleGameplayChoice(question.choices[choiceIndex], dialogueEl);
+            });
+        });
+    }
+
+    handleGameplayChoice(choice, dialogueEl) {
+        // Apply effects
+        if (choice.effect) {
+            if (choice.effect.stability) this.stability = Math.max(0, Math.min(100, this.stability + choice.effect.stability));
+            if (choice.effect.fragments) this.fragments += choice.effect.fragments;
+            if (choice.effect.trust) this.trust += choice.effect.trust;
+            if (choice.effect.awareness) this.awareness += choice.effect.awareness;
+            if (choice.effect.metaAwareness) this.metaAwareness = true;
+
+            // Log significant changes
+            if (choice.effect.stability) {
+                this.log(`[Stabilità ${choice.effect.stability > 0 ? '+' : ''}${choice.effect.stability}]`);
+            }
+            if (choice.effect.fragments) {
+                this.log(`[Frammenti +${choice.effect.fragments}]`);
+            }
+        }
+
+        // Hide dialogue
+        dialogueEl.style.opacity = '0';
+        setTimeout(() => {
+            if (dialogueEl.parentNode) {
+                dialogueEl.remove();
+            }
+        }, 500);
 
         this.updateUI();
     }
