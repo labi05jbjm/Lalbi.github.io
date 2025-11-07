@@ -3394,3 +3394,81 @@ button:active {
         transition-duration: 0.01ms !important;
     }
 }
+/* ——— NO-SCROLL & OVERLAY FULLSCREEN STABILI ——— */
+html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+#game-container,
+.menu-overlay,
+.narrative-modal,
+.card-details-modal {
+  height: 100dvh !important;      /* niente 100vh “ballerino” su mobile */
+  overflow: clip !important;       /* nessuno scroll sugli overlay */
+}
+
+/* ——— MENU: dimensioni compattate e sempre “una schermata” ——— */
+.menu-overlay {
+  padding-block: clamp(16px, 4vh, 40px) !important;
+  padding-inline: 20px !important;
+}
+.menu-content {
+  max-width: min(700px, 90vw);
+  max-height: calc(100dvh - clamp(64px, 12vh, 160px));
+  overflow: clip;
+  padding: clamp(16px, 3.5vh, 40px);
+}
+.menu-title { font-size: clamp(22px, 4vw, 34px) !important; }
+.menu-button {
+  position: relative;                                /* ancora la freccia ::before */
+  font-size: clamp(14px, 2.2vw, 18px) !important;
+  padding: clamp(10px, 1.6vh, 16px) !important;
+}
+
+/* ——— GAME TABLE & HUD ——— */
+.game-table { height: clamp(420px, 55dvh, 600px); }
+.opponent-field, .player-field { height: clamp(160px, 24vh, 220px); }
+.card-slot {
+  width: clamp(90px, 22vw, 150px);
+  height: clamp(140px, 22vh, 220px);
+}
+
+/* Mano più compatta e non “affondata” */
+.hand-container {
+  height: clamp(160px, 30dvh, 300px);
+  bottom: clamp(-20px, -5dvh, -80px);
+}
+
+/* Allinea le quote verticali per evitare collisioni */
+.action-buttons   { bottom: clamp(120px, 22dvh, 240px); }
+.sacrifice-zone   { bottom: clamp(160px, 26dvh, 280px); width: min(90vw, 500px); }
+.card-whisper     { bottom: clamp(140px, 24dvh, 300px); }
+
+/* Pannelli laterali fluidi */
+#event-log           { width: clamp(220px, 28vw, 350px); }
+#stability-container { width: clamp(180px, 20vw, 250px); }
+
+/* Sezioni “therapist” sicure su mobile/low-height */
+.therapist-section { width: min(90vw, 600px); top: clamp(8px, 5vh, 5%); }
+.therapist-hand    { top: clamp(10px, 6vh, 60px); }
+
+/* Intro / Narrative modal */
+.intro-dialogue { bottom: clamp(20px, 18vh, 150px); max-width: min(90vw, 800px); }
+.narrative-modal .narrative-content { max-height: calc(100dvh - 12vh); overflow: auto; }
+
+/* Tooltip/focus accessibili di default */
+:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+/* Content Warning come “vera” modale sopra il menu (non interstitial bloccante) */
+#content-warning.content-warning.menu-overlay {
+  background: rgba(0,0,0,0.65);
+  z-index: 650;
+  align-items: center; justify-content: center;
+}
+#content-warning .warning-content {
+  max-width: min(640px, 90vw);
+  max-height: min(80dvh, 640px);
+}
+
+/* Media query in funzione dell’ALTEZZA (non solo larghezza) */
+@media (max-height: 800px) {
+  .game-table { height: clamp(380px, 52dvh, 560px); }
+  .menu-content { padding: clamp(12px, 2.5vh, 24px); }
+}
