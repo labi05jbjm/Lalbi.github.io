@@ -979,6 +979,7 @@ class Game {
 
         // Cards
         this.playerHand = [];
+        this.therapistHand = []; // Therapist's hand (visible face-down)
         this.playerField = [null, null, null, null];
         this.therapistField = [null, null, null, null];
 
@@ -1077,6 +1078,7 @@ class Game {
 
             // Hand and actions
             neveHand: document.getElementById('neve-hand'),
+            therapistHand: document.getElementById('therapist-hand'),
             endTurnBtn: document.getElementById('end-turn-btn'),
             discardBtn: document.getElementById('discard-btn'),
 
@@ -2981,21 +2983,70 @@ class Game {
     therapistTurn() {
         this.log("=== Turno del Terapista ===");
 
-        // Therapist plays cards (STATUES)
+        // Therapist draws cards if hand is low
+        while (this.therapistHand.length < 5) {
+            const card = this.createRandomTherapistCard();
+            this.therapistHand.push(card);
+        }
+
+        // AI: Select cards to play based on difficulty/round
         const emptySlots = this.therapistField
             .map((card, i) => card === null ? i : -1)
             .filter(i => i !== -1);
 
-        const cardsToPlay = Math.min(Math.floor(Math.random() * 2) + 1, emptySlots.length);
+        // Difficulty scaling: plays more cards in later rounds
+        let cardsToPlay = 1;
+        if (this.round >= 10) cardsToPlay = 2;
+        if (this.round >= 20) cardsToPlay = Math.min(3, emptySlots.length);
+        cardsToPlay = Math.min(cardsToPlay, emptySlots.length, this.therapistHand.length);
+
+        // AI: Choose best cards (higher attack/health in later rounds)
+        const sortedHand = [...this.therapistHand].sort((a, b) => {
+            const scoreA = a.attack + a.health;
+            const scoreB = b.attack + b.health;
+            // Early rounds: play weaker cards
+            // Late rounds: play stronger cards
+            return this.round < 15 ? scoreA - scoreB : scoreB - scoreA;
+        });
 
         for (let i = 0; i < cardsToPlay; i++) {
-            if (emptySlots.length > 0) {
-                const slotIndex = emptySlots.splice(Math.floor(Math.random() * emptySlots.length), 1)[0];
-                const card = this.createRandomTherapistCard();
-                this.therapistField[slotIndex] = card;
-                this.log(`Dr. Lumen gioca: ${card.name}`);
+            if (emptySlots.length > 0 && this.therapistHand.length > 0) {
+                const card = sortedHand[i];
+                const handIndex = this.therapistHand.indexOf(card);
+                if (handIndex !== -1) {
+                    this.therapistHand.splice(handIndex, 1);
+
+                    // Choose slot (prioritize matching with player cards for combat)
+                    let slotIndex;
+                    if (this.round >= 15) {
+                        // Late game: tactical placement
+                        slotIndex = emptySlots.find(s => this.playerField[s] !== null) || emptySlots[0];
+                    } else {
+                        // Early game: random placement
+                        slotIndex = emptySlots[Math.floor(Math.random() * emptySlots.length)];
+                    }
+
+                    const slotIndexPos = emptySlots.indexOf(slotIndex);
+                    if (slotIndexPos !== -1) emptySlots.splice(slotIndexPos, 1);
+
+                    this.therapistField[slotIndex] = card;
+                    this.log(`Dr. Lumen gioca: ${card.name}`);
+
+                    // Animation: flip card when played
+                    setTimeout(() => {
+                        const cardElements = document.querySelectorAll('#therapist-card-field .card');
+                        cardElements.forEach(el => {
+                            if (el.dataset.cardId === card.id) {
+                                el.classList.add('playing');
+                                setTimeout(() => el.classList.remove('playing'), 600);
+                            }
+                        });
+                    }, 100);
+                }
             }
         }
+
+        this.updateUI();
 
         setTimeout(() => {
             this.resolveRound();
@@ -3023,19 +3074,41 @@ class Game {
             }
         }
 
-        // Clear dead cards
-        this.playerField = this.playerField.map(card => {
+        // Animate and clear dead cards
+        this.playerField = this.playerField.map((card, index) => {
             if (card && card.health <= 0) {
                 this.log(`${card.name} è stato distrutto!`);
                 this.applyDeathSigils(card, true);
+
+                // Animation: card destroyed
+                setTimeout(() => {
+                    const cardElements = document.querySelectorAll('#neve-card-field .card');
+                    cardElements.forEach(el => {
+                        if (el.dataset.cardId === card.id) {
+                            el.classList.add('destroyed');
+                        }
+                    });
+                }, 100);
+
                 return null;
             }
             return card;
         });
 
-        this.therapistField = this.therapistField.map(card => {
+        this.therapistField = this.therapistField.map((card, index) => {
             if (card && card.health <= 0) {
                 this.log(`${card.name} nemico è stato distrutto!`);
+
+                // Animation: card destroyed
+                setTimeout(() => {
+                    const cardElements = document.querySelectorAll('#therapist-card-field .card');
+                    cardElements.forEach(el => {
+                        if (el.dataset.cardId === card.id) {
+                            el.classList.add('destroyed');
+                        }
+                    });
+                }, 100);
+
                 return null;
             }
             return card;
@@ -3083,11 +3156,44 @@ class Game {
 
         this.log(`${playerCard.name} (${playerCard.attack}⚔️/${playerCard.health}❤️) VS ${therapistCard.name} (${therapistCard.attack}⚔️/${therapistCard.health}❤️)`);
 
+        // Animate combat clash
+        setTimeout(() => {
+            const cardElements = document.querySelectorAll('.card');
+            cardElements.forEach(el => {
+                if (el.dataset.cardId === playerCard.id || el.dataset.cardId === therapistCard.id) {
+                    el.classList.add('clashing');
+                    setTimeout(() => el.classList.remove('clashing'), 600);
+                }
+            });
+        }, 100);
+
         if (damageToTherapist > 0) {
             this.log(`→ ${therapistCard.name} subisce ${damageToTherapist} danni`);
+
+            // Animate damage
+            setTimeout(() => {
+                const cardElements = document.querySelectorAll('#therapist-card-field .card');
+                cardElements.forEach(el => {
+                    if (el.dataset.cardId === therapistCard.id) {
+                        el.classList.add('taking-damage');
+                        setTimeout(() => el.classList.remove('taking-damage'), 500);
+                    }
+                });
+            }, 300);
         }
         if (damageToPlayer > 0) {
             this.log(`→ ${playerCard.name} subisce ${damageToPlayer} danni`);
+
+            // Animate damage
+            setTimeout(() => {
+                const cardElements = document.querySelectorAll('#neve-card-field .card');
+                cardElements.forEach(el => {
+                    if (el.dataset.cardId === playerCard.id) {
+                        el.classList.add('taking-damage');
+                        setTimeout(() => el.classList.remove('taking-damage'), 500);
+                    }
+                });
+            }, 300);
         }
     }
 
@@ -3468,11 +3574,23 @@ class Game {
             this.elements.stabilityFill.style.background = '#4a7c8e';
         }
 
-        // Update hand
+        // Update player hand
         this.elements.neveHand.innerHTML = '';
-        this.playerHand.forEach(card => {
-            this.elements.neveHand.appendChild(card.render());
+        this.playerHand.forEach((card, index) => {
+            const cardElement = card.render();
+            cardElement.classList.add('drawing');
+            this.elements.neveHand.appendChild(cardElement);
         });
+
+        // Update therapist hand (face down cards)
+        if (this.elements.therapistHand) {
+            this.elements.therapistHand.innerHTML = '';
+            this.therapistHand.forEach((card, index) => {
+                const cardElement = card.render();
+                cardElement.classList.add('face-down');
+                this.elements.therapistHand.appendChild(cardElement);
+            });
+        }
 
         // Update fields
         this.updateField(this.elements.neveCardField, this.playerField);
