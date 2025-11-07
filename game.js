@@ -382,9 +382,7 @@ class Game {
 
             // Session header
             sessionTimer: document.getElementById('session-timer'),
-            sessionNum: document.getElementById('session-num'),
             pauseBtn: document.getElementById('pause-btn'),
-            menuBtn: document.getElementById('menu-btn'),
 
             // Therapist section
             therapistImage: document.getElementById('therapist-image'),
@@ -476,7 +474,6 @@ class Game {
 
         // Game controls
         this.elements.pauseBtn.addEventListener('click', () => this.togglePause());
-        this.elements.menuBtn.addEventListener('click', () => this.togglePause());
         this.elements.endTurnBtn.addEventListener('click', () => this.endTurn());
         this.elements.discardBtn.addEventListener('click', () => this.toggleDiscardMode());
 
