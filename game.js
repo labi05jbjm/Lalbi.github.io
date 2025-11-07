@@ -331,6 +331,13 @@ class Game {
         this.lastWhisperTime = 0;
         this.revelationTriggered = false;
 
+        // Sacrifice system
+        this.sacrificeMode = false;
+        this.sacrificeTargetCard = null;
+        this.sacrificeTargetSlot = null;
+        this.sacrificedCards = [];
+        this.requiredSacrifices = 0;
+
         // Card library
         this.cardLibrary = this.createCardLibrary();
 
@@ -417,11 +424,28 @@ class Game {
             // Narrative modal
             narrativeModal: document.getElementById('narrative-modal'),
             narrativeText: document.getElementById('narrative-text'),
-            narrativeContinueBtn: document.getElementById('narrative-continue-btn')
+            narrativeContinueBtn: document.getElementById('narrative-continue-btn'),
+
+            // Card details modal
+            cardDetailsModal: document.getElementById('card-details-modal'),
+            modalArtwork: document.getElementById('modal-artwork'),
+            modalTitle: document.getElementById('modal-title'),
+            modalArtist: document.getElementById('modal-artist'),
+            modalAttack: document.getElementById('modal-attack'),
+            modalHealth: document.getElementById('modal-health'),
+            modalBlood: document.getElementById('modal-blood'),
+            modalDescription: document.getElementById('modal-description'),
+            modalSigils: document.getElementById('modal-sigils'),
+            closeCardDetailsBtn: document.getElementById('close-card-details'),
+
+            // Sacrifice zone
+            sacrificeZone: document.getElementById('sacrifice-zone'),
+            sacrificeSlots: document.querySelectorAll('.sacrifice-slot')
         };
 
         this.setupEventListeners();
         this.setupDragAndDrop();
+        this.setupSacrificeSystem();
     }
 
     setupEventListeners() {
@@ -466,6 +490,24 @@ class Game {
 
         // Narrative modal
         this.elements.narrativeContinueBtn.addEventListener('click', () => this.hideNarrativeModal());
+
+        // Card details modal
+        this.elements.closeCardDetailsBtn.addEventListener('click', () => this.hideCardDetails());
+        this.elements.cardDetailsModal.addEventListener('click', (e) => {
+            if (e.target === this.elements.cardDetailsModal) {
+                this.hideCardDetails();
+            }
+        });
+
+        // Card info button clicks (delegated)
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('card-details-btn')) {
+                e.preventDefault();
+                e.stopPropagation();
+                const cardId = e.target.dataset.cardId;
+                this.showCardDetails(cardId);
+            }
+        });
     }
 
     setupDragAndDrop() {
@@ -549,6 +591,121 @@ class Game {
             if (card) {
                 this.hideCardWhisper();
             }
+        });
+    }
+
+    setupSacrificeSystem() {
+        // Handle drag-and-drop to sacrifice zone
+        this.elements.sacrificeSlots.forEach((slot, index) => {
+            slot.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                if (this.sacrificeMode) {
+                    slot.classList.add('valid-drop');
+                }
+            });
+
+            slot.addEventListener('dragleave', () => {
+                slot.classList.remove('valid-drop');
+            });
+
+            slot.addEventListener('drop', (e) => {
+                e.preventDefault();
+                slot.classList.remove('valid-drop');
+
+                if (!this.sacrificeMode) return;
+
+                // Get the dragged card from field
+                const cardElement = document.querySelector('.card.dragging');
+                if (!cardElement) return;
+
+                const cardId = cardElement.dataset.cardId;
+                const fromFieldSlot = cardElement.closest('.card-slot');
+
+                if (!fromFieldSlot || !fromFieldSlot.closest('#neve-card-field')) {
+                    this.log("Puoi sacrificare solo carte dal tuo campo!");
+                    return;
+                }
+
+                const fieldIndex = parseInt(fromFieldSlot.dataset.slot);
+                const card = this.playerField[fieldIndex];
+
+                if (!card) return;
+
+                // Check if already sacrificed
+                if (this.sacrificedCards.some(sc => sc.id === card.id)) {
+                    this.log("Hai già sacrificato questa carta!");
+                    return;
+                }
+
+                // Add to sacrificed cards
+                this.sacrificedCards.push(card);
+                this.playerField[fieldIndex] = null;
+
+                // Show card in sacrifice slot
+                slot.innerHTML = '';
+                const miniCard = document.createElement('div');
+                miniCard.className = 'sacrificed-card';
+                miniCard.innerHTML = `<div style="font-size: 10px;">${card.name}</div>`;
+                slot.appendChild(miniCard);
+
+                this.log(`Hai sacrificato: ${card.name}`);
+
+                // Check if we have enough sacrifices
+                if (this.sacrificedCards.length >= this.requiredSacrifices) {
+                    this.completeSacrifice();
+                } else {
+                    this.log(`Sacrifici necessari: ${this.sacrificedCards.length}/${this.requiredSacrifices}`);
+                }
+
+                this.updateUI();
+            });
+        });
+    }
+
+    startSacrificeMode(card, slotIndex) {
+        this.sacrificeMode = true;
+        this.sacrificeTargetCard = card;
+        this.sacrificeTargetSlot = slotIndex;
+        this.sacrificedCards = [];
+        this.requiredSacrifices = card.bloodCost;
+
+        this.elements.sacrificeZone.classList.add('active');
+        this.log(`Devi sacrificare ${this.requiredSacrifices} carte per giocare ${card.name}`);
+    }
+
+    completeSacrifice() {
+        // Play the target card
+        this.playerField[this.sacrificeTargetSlot] = this.sacrificeTargetCard;
+        this.log(`Hai giocato: ${this.sacrificeTargetCard.name}`);
+
+        // Card effects
+        if (this.sacrificeTargetCard.type === 'voce') {
+            this.fragments++;
+        }
+
+        // Apply sigil effects that trigger on sacrifice
+        if (this.sacrificeTargetCard.sigils.some(s => s.icon === '🩸')) {
+            this.sacrificeTargetCard.attack += this.sacrificedCards.length;
+            this.log(`${this.sacrificeTargetCard.name} guadagna +${this.sacrificedCards.length} ATK dai sacrifici!`);
+        }
+
+        this.cancelSacrificeMode();
+        this.setTherapistDialogue(this.getTherapistDialogue());
+        this.updateUI();
+        this.checkAlterMessages();
+    }
+
+    cancelSacrificeMode() {
+        this.sacrificeMode = false;
+        this.sacrificeTargetCard = null;
+        this.sacrificeTargetSlot = null;
+        this.sacrificedCards = [];
+        this.requiredSacrifices = 0;
+        this.elements.sacrificeZone.classList.remove('active');
+
+        // Clear sacrifice slots
+        this.elements.sacrificeSlots.forEach(slot => {
+            slot.innerHTML = '';
         });
     }
 
@@ -907,7 +1064,18 @@ class Game {
 
     createRandomCard() {
         const template = this.cardLibrary[Math.floor(Math.random() * this.cardLibrary.length)];
-        return new Card(template.name, template.type, template.power, template.description, template.emoji);
+        return new Card(
+            template.name,
+            template.type,
+            template.attack,
+            template.health,
+            template.bloodCost,
+            template.artworkUrl,
+            template.artist,
+            template.shortDesc,
+            template.longDesc,
+            template.sigils
+        );
     }
 
     playCardFromHand(cardId, slotIndex) {
@@ -920,6 +1088,25 @@ class Game {
         if (cardIndex === -1) return;
 
         const card = this.playerHand[cardIndex];
+
+        // Check if card requires blood sacrifice
+        if (card.bloodCost > 0) {
+            // Count cards on field available for sacrifice
+            const availableForSacrifice = this.playerField.filter(c => c !== null).length;
+
+            if (availableForSacrifice < card.bloodCost) {
+                this.log(`Sacrifici insufficienti! Serve ${card.bloodCost}, disponibili ${availableForSacrifice}`);
+                return;
+            }
+
+            // Remove card from hand and start sacrifice mode
+            this.playerHand.splice(cardIndex, 1);
+            this.startSacrificeMode(card, slotIndex);
+            this.updateUI();
+            return;
+        }
+
+        // No blood cost, play directly
         this.playerHand.splice(cardIndex, 1);
         this.playerField[slotIndex] = card;
 
@@ -931,8 +1118,42 @@ class Game {
             this.fragments++;
         }
 
+        // Apply play sigils
+        this.applyPlaySigils(card);
+
         this.updateUI();
         this.checkAlterMessages();
+    }
+
+    applyPlaySigils(card) {
+        // ⭐ Draw 2 cards when played
+        if (card.sigils.some(s => s.icon === '⭐')) {
+            this.log(`${card.name} ti fa pescare 2 carte!`);
+            this.drawCard();
+            this.drawCard();
+        }
+
+        // 🌙 Heal 1 HP to all allies
+        if (card.sigils.some(s => s.icon === '🌙')) {
+            this.log(`${card.name} cura tutte le carte alleate!`);
+            this.playerField.forEach(c => {
+                if (c && c.id !== card.id) {
+                    c.health += 1;
+                }
+            });
+        }
+
+        // 👁️ Destroy all enemies with <3 HP
+        if (card.sigils.some(s => s.icon === '👁️')) {
+            this.log(`${card.name} distrugge tutti i nemici deboli!`);
+            this.therapistField = this.therapistField.map(c => {
+                if (c && c.health < 3) {
+                    this.log(`→ ${c.name} è stato distrutto!`);
+                    return null;
+                }
+                return c;
+            });
+        }
     }
 
     toggleDiscardMode() {
@@ -984,37 +1205,117 @@ class Game {
     resolveRound() {
         this.log("=== Risoluzione ===");
 
-        // Calculate power
-        let playerPower = 0;
-        let therapistPower = 0;
+        // Apply combat between opposing cards (slot by slot)
+        for (let i = 0; i < 4; i++) {
+            const playerCard = this.playerField[i];
+            const therapistCard = this.therapistField[i];
 
-        this.playerField.forEach(card => {
-            if (card) playerPower += card.power;
-        });
-
-        this.therapistField.forEach(card => {
-            if (card) therapistPower += card.power;
-        });
-
-        // Determine winner
-        if (playerPower > therapistPower) {
-            this.log(`Hai vinto il round! (${playerPower} vs ${therapistPower})`);
-            this.stability = Math.min(100, this.stability + 5);
-        } else if (therapistPower > playerPower) {
-            this.log(`Hai perso il round... (${playerPower} vs ${therapistPower})`);
-            const damage = Math.floor((therapistPower - playerPower) / 2) + 3;
-            this.stability = Math.max(0, this.stability - damage);
-        } else {
-            this.log(`Pareggio! (${playerPower} vs ${therapistPower})`);
+            if (playerCard && therapistCard) {
+                this.resolveCombat(playerCard, therapistCard, i);
+            } else if (playerCard && !therapistCard) {
+                // Player card attacks directly
+                this.log(`${playerCard.name} attacca direttamente!`);
+                this.stability = Math.min(100, this.stability + playerCard.attack);
+            } else if (!playerCard && therapistCard) {
+                // Therapist card attacks directly
+                this.log(`${therapistCard.name} ti attacca!`);
+                this.stability = Math.max(0, this.stability - therapistCard.attack);
+            }
         }
 
-        // Clear fields
-        this.playerField = [null, null, null, null];
-        this.therapistField = [null, null, null, null];
+        // Clear dead cards
+        this.playerField = this.playerField.map(card => {
+            if (card && card.health <= 0) {
+                this.log(`${card.name} è stato distrutto!`);
+                this.applyDeathSigils(card, true);
+                return null;
+            }
+            return card;
+        });
+
+        this.therapistField = this.therapistField.map(card => {
+            if (card && card.health <= 0) {
+                this.log(`${card.name} nemico è stato distrutto!`);
+                return null;
+            }
+            return card;
+        });
 
         setTimeout(() => {
+            // Clear remaining cards after round
+            this.playerField = [null, null, null, null];
+            this.therapistField = [null, null, null, null];
             this.startNewRound();
-        }, 2000);
+        }, 3000);
+    }
+
+    resolveCombat(playerCard, therapistCard, slotIndex) {
+        let playerAttack = playerCard.attack;
+        let therapistAttack = therapistCard.attack;
+
+        // Apply attack sigils
+        // 💥 Double attack against 'velo' type
+        if (playerCard.sigils.some(s => s.icon === '💥') && therapistCard.type === 'velo') {
+            playerAttack *= 2;
+            this.log(`${playerCard.name} raddoppia l'attacco contro ${therapistCard.name}!`);
+        }
+
+        // 🛡️ Defense +1 when attacked
+        let therapistDefense = 0;
+        if (therapistCard.sigils.some(s => s.icon === '🛡️')) {
+            therapistDefense = 1;
+            this.log(`${therapistCard.name} si difende!`);
+        }
+
+        // ⚔️ Instant kill cards with ≤3 HP
+        if (playerCard.sigils.some(s => s.icon === '⚔️') && therapistCard.health <= 3) {
+            this.log(`${playerCard.name} uccide istantaneamente ${therapistCard.name}!`);
+            therapistCard.health = 0;
+            return;
+        }
+
+        // Apply damage
+        const damageToTherapist = Math.max(0, playerAttack - therapistDefense);
+        const damageToPlayer = therapistAttack;
+
+        therapistCard.health -= damageToTherapist;
+        playerCard.health -= damageToPlayer;
+
+        this.log(`${playerCard.name} (${playerCard.attack}⚔️/${playerCard.health}❤️) VS ${therapistCard.name} (${therapistCard.attack}⚔️/${therapistCard.health}❤️)`);
+
+        if (damageToTherapist > 0) {
+            this.log(`→ ${therapistCard.name} subisce ${damageToTherapist} danni`);
+        }
+        if (damageToPlayer > 0) {
+            this.log(`→ ${playerCard.name} subisce ${damageToPlayer} danni`);
+        }
+    }
+
+    applyDeathSigils(card, isPlayerCard) {
+        // 🎭 Create a copy when dies
+        if (card.sigils.some(s => s.icon === '🎭') && isPlayerCard) {
+            this.log(`${card.name} crea una copia di se stessa!`);
+            const copy = this.createCardCopy(card);
+            // Add copy to hand
+            if (this.playerHand.length < 8) {
+                this.playerHand.push(copy);
+            }
+        }
+    }
+
+    createCardCopy(card) {
+        return new Card(
+            card.name,
+            card.type,
+            card.attack,
+            card.health,
+            card.bloodCost,
+            card.artworkUrl,
+            card.artist,
+            card.shortDesc,
+            card.longDesc,
+            card.sigils
+        );
     }
 
     startNewRound() {
@@ -1168,6 +1469,55 @@ class Game {
 
     hideNarrativeModal() {
         this.elements.narrativeModal.classList.add('hidden');
+    }
+
+    // === CARD DETAILS MODAL ===
+    showCardDetails(cardId) {
+        // Find the card in hand, player field, or therapist field
+        let card = this.playerHand.find(c => c.id === cardId);
+        if (!card) {
+            card = this.playerField.find(c => c && c.id === cardId);
+        }
+        if (!card) {
+            card = this.therapistField.find(c => c && c.id === cardId);
+        }
+
+        if (!card) return;
+
+        // Populate modal with card data
+        this.elements.modalArtwork.style.backgroundImage = `url('${card.artworkUrl}')`;
+        this.elements.modalTitle.textContent = card.name;
+        this.elements.modalArtist.textContent = card.artist;
+        this.elements.modalAttack.textContent = card.attack;
+        this.elements.modalHealth.textContent = card.health;
+        this.elements.modalBlood.textContent = card.bloodCost > 0 ? `${card.bloodCost}🩸` : 'Nessuno';
+        this.elements.modalDescription.textContent = card.longDesc;
+
+        // Populate sigils
+        this.elements.modalSigils.innerHTML = '';
+        if (card.sigils.length > 0) {
+            const sigilsTitle = document.createElement('h3');
+            sigilsTitle.textContent = 'Sigilli:';
+            sigilsTitle.style.marginBottom = '15px';
+            this.elements.modalSigils.appendChild(sigilsTitle);
+
+            card.sigils.forEach(sigil => {
+                const sigilEl = document.createElement('div');
+                sigilEl.className = 'sigil-detail';
+                sigilEl.innerHTML = `
+                    <span class="sigil-icon">${sigil.icon}</span>
+                    <span class="sigil-description">${sigil.desc}</span>
+                `;
+                this.elements.modalSigils.appendChild(sigilEl);
+            });
+        }
+
+        // Show modal
+        this.elements.cardDetailsModal.classList.remove('hidden');
+    }
+
+    hideCardDetails() {
+        this.elements.cardDetailsModal.classList.add('hidden');
     }
 
     // === GAME OVER ===

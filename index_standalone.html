@@ -160,10 +160,10 @@ body {
 
 /* === CARD SLOTS === */
 .card-slot {
-    width: 140px;
-    height: 180px;
-    border: 2px dashed rgba(244, 235, 224, 0.2);
-    border-radius: 8px;
+    width: 170px;
+    height: 250px;
+    border: 3px dashed rgba(244, 235, 224, 0.2);
+    border-radius: 12px;
     background: rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
     position: relative;
@@ -214,20 +214,30 @@ body {
 /* === CARD (3D) === */
 .card {
     position: absolute;
-    width: 130px;
-    height: 180px;
-    background: var(--bg-card);
-    border: 3px solid var(--border-dark);
-    border-radius: 8px;
+    width: 160px;
+    height: 240px;
+    background: transparent;
+    border: none;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform-style: preserve-3d;
     pointer-events: all;
-    box-shadow:
-        0 4px 8px rgba(0, 0, 0, 0.4),
-        inset 0 0 20px rgba(0, 0, 0, 0.05);
-    filter: url(#rough-edges) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     backface-visibility: hidden;
+}
+
+.card-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2a2416 0%, #1a1410 100%);
+    border: 4px solid #8a7a6a;
+    border-radius: 12px;
+    box-shadow:
+        0 8px 16px rgba(0, 0, 0, 0.6),
+        inset 0 0 40px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(244, 235, 224, 0.1);
+    overflow: hidden;
+    filter: url(#rough-edges);
 }
 
 /* Hand card positioning (fan effect) */
@@ -298,76 +308,200 @@ body {
     z-index: 1000;
 }
 
-/* === CARD CONTENT === */
-.card-type {
+/* === CARD ARTWORK === */
+.card-artwork {
     position: absolute;
     top: 8px;
     left: 8px;
-    font-size: 9px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-muted);
-    font-family: 'Montserrat', sans-serif;
+    right: 8px;
+    height: 140px;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid rgba(138, 122, 106, 0.5);
+    border-radius: 6px;
+    overflow: hidden;
 }
 
-.card-emoji {
+.artwork-overlay {
     position: absolute;
-    top: 35px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 48px;
-    filter:
-        drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3))
-        url(#rough-paper);
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 60%,
+        rgba(26, 20, 16, 0.8) 100%
+    );
+    pointer-events: none;
 }
 
-.card-name {
+/* === BLOOD COST === */
+.blood-cost {
     position: absolute;
-    top: 95px;
+    top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
-    text-align: center;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text-dark);
-    line-height: 1.2;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+    display: flex;
+    gap: 4px;
+    z-index: 10;
 }
 
-.card-power {
+.blood-drop {
+    font-size: 20px;
+    filter: drop-shadow(0 2px 4px rgba(138, 74, 58, 0.8));
+    animation: blood-pulse 2s ease-in-out infinite;
+}
+
+@keyframes blood-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* === CARD STATS === */
+.card-info-bar {
     position: absolute;
-    bottom: 35px;
+    top: 155px;
+    left: 8px;
+    right: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.card-stat {
+    flex: 1;
+    background: rgba(26, 20, 16, 0.9);
+    border: 2px solid var(--accent-warm);
+    border-radius: 6px;
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.card-stat.attack {
+    border-color: #c85a54;
+}
+
+.card-stat.health {
+    border-color: #6a8a9a;
+}
+
+.stat-icon {
+    font-size: 14px;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--text-light);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* === CARD SIGILS === */
+.card-sigils {
+    position: absolute;
+    top: 185px;
     left: 50%;
     transform: translateX(-50%);
-    width: 40px;
-    height: 40px;
-    background: var(--accent-warm);
+    display: flex;
+    gap: 6px;
+    z-index: 5;
+}
+
+.sigil {
+    width: 28px;
+    height: 28px;
+    background: rgba(212, 165, 116, 0.9);
     border: 2px solid var(--border-dark);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    font-weight: 900;
-    color: var(--text-dark);
+    font-size: 16px;
+    cursor: help;
     box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.3),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+        0 2px 4px rgba(0, 0, 0, 0.4),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.card-description {
+.sigil:hover {
+    transform: scale(1.2);
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.6),
+        0 0 12px rgba(212, 165, 116, 0.5);
+}
+
+/* === CARD NAME PLATE === */
+.card-name-plate {
     position: absolute;
     bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
+    left: 8px;
+    right: 8px;
+    background: rgba(26, 20, 16, 0.95);
+    border: 2px solid var(--accent-warm);
+    border-radius: 6px;
+    padding: 6px 8px;
     text-align: center;
-    font-size: 9px;
+}
+
+.card-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-light);
+    line-height: 1.2;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    margin-bottom: 2px;
+}
+
+.card-artist {
+    font-size: 8px;
     font-style: italic;
     color: var(--text-muted);
-    line-height: 1.1;
+    line-height: 1;
+}
+
+/* === CARD TYPE TAG === */
+.card-type-tag {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(138, 74, 58, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    padding: 3px 6px;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    z-index: 10;
+}
+
+/* === CARD DETAILS BUTTON === */
+.card-details-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    background: rgba(106, 138, 154, 0.9);
+    border: 2px solid var(--border-dark);
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.card-details-btn:hover {
+    background: var(--accent-cold);
+    transform: scale(1.15);
+    box-shadow: 0 0 12px rgba(106, 138, 154, 0.6);
 }
 
 /* === CARD WHISPERS === */
@@ -1012,6 +1146,236 @@ body.high-contrast {
     --accent-warm: #ffaa00;
 }
 
+/* === CARD DETAILS MODAL === */
+.card-details-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fade-in 0.3s ease;
+}
+
+.card-details-content {
+    background: var(--bg-wood);
+    border: 4px solid var(--accent-warm);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    filter: url(#rough-edges);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.9),
+        inset 0 0 60px rgba(0, 0, 0, 0.3);
+}
+
+.card-details-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.card-details-artwork {
+    width: 300px;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    border: 4px solid var(--accent-warm);
+    border-radius: 12px;
+    flex-shrink: 0;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.6),
+        inset 0 0 40px rgba(0, 0, 0, 0.2);
+}
+
+.card-details-info {
+    flex: 1;
+}
+
+.card-details-title {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--accent-warm);
+    margin-bottom: 8px;
+}
+
+.card-details-artist {
+    font-size: 16px;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+.card-details-stats {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card-details-stat {
+    background: rgba(26, 20, 16, 0.8);
+    border: 2px solid var(--accent-warm);
+    border-radius: 8px;
+    padding: 12px 20px;
+    text-align: center;
+}
+
+.card-details-stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.card-details-stat-value {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--text-light);
+}
+
+.card-details-description {
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 4px solid var(--accent-whisper);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.card-details-description p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+.card-details-sigils-section {
+    margin-top: 20px;
+}
+
+.card-details-sigils-title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent-warm);
+    margin-bottom: 12px;
+}
+
+.card-details-sigil {
+    background: rgba(212, 165, 116, 0.2);
+    border-left: 3px solid var(--accent-warm);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.card-details-sigil-icon {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    background: rgba(212, 165, 116, 0.9);
+    border: 2px solid var(--border-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-details-sigil-desc {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.card-details-close-btn {
+    width: 100%;
+    margin-top: 30px;
+}
+
+/* === SACRIFICE ZONE === */
+.sacrifice-zone {
+    position: fixed;
+    bottom: 280px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    height: 120px;
+    background: rgba(138, 74, 58, 0.3);
+    border: 3px dashed rgba(200, 90, 84, 0.6);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    z-index: 80;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    filter: url(#rough-edges);
+}
+
+.sacrifice-zone.active {
+    opacity: 1;
+    pointer-events: all;
+    animation: sacrifice-glow 2s ease-in-out infinite;
+}
+
+@keyframes sacrifice-glow {
+    0%, 100% {
+        box-shadow:
+            0 0 20px rgba(200, 90, 84, 0.3),
+            inset 0 0 40px rgba(138, 74, 58, 0.2);
+    }
+    50% {
+        box-shadow:
+            0 0 40px rgba(200, 90, 84, 0.6),
+            inset 0 0 60px rgba(138, 74, 58, 0.4);
+    }
+}
+
+.sacrifice-slot {
+    width: 140px;
+    height: 90px;
+    border: 2px dashed rgba(200, 90, 84, 0.5);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    transition: all 0.2s ease;
+}
+
+.sacrifice-slot.filled {
+    border-color: var(--accent-danger);
+    background: rgba(138, 74, 58, 0.4);
+}
+
+.sacrifice-zone-label {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #c85a54;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 1200px) {
     .game-table {
@@ -1023,8 +1387,13 @@ body.high-contrast {
     }
 
     .card {
-        width: 110px;
-        height: 150px;
+        width: 140px;
+        height: 210px;
+    }
+
+    .card-slot {
+        width: 150px;
+        height: 220px;
     }
 }
     </style>
@@ -1204,6 +1573,38 @@ body.high-contrast {
         </div>
     </div>
 
+    <!-- CARD DETAILS MODAL -->
+    <div id="card-details-modal" class="card-details-modal hidden">
+        <div class="card-details-content">
+            <div class="card-details-header">
+                <div id="modal-artwork" class="card-details-artwork"></div>
+                <div class="card-details-info">
+                    <h2 id="modal-title" class="card-details-title"></h2>
+                    <p id="modal-artist" class="card-details-artist"></p>
+                    <div class="card-details-stats">
+                        <div class="card-details-stat">
+                            <div class="card-details-stat-label">Attacco</div>
+                            <div id="modal-attack" class="card-details-stat-value">0</div>
+                        </div>
+                        <div class="card-details-stat">
+                            <div class="card-details-stat-label">Salute</div>
+                            <div id="modal-health" class="card-details-stat-value">0</div>
+                        </div>
+                        <div class="card-details-stat">
+                            <div class="card-details-stat-label">Costo</div>
+                            <div id="modal-blood" class="card-details-stat-value">0🩸</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-details-description">
+                <p id="modal-description"></p>
+            </div>
+            <div id="modal-sigils" class="card-details-sigils-section"></div>
+            <button id="close-card-details" class="menu-button card-details-close-btn">CHIUDI</button>
+        </div>
+    </div>
+
     <!-- GAME CONTAINER (3D Scene) -->
     <div id="game-container" class="game-container hidden">
         <div class="scene-3d">
@@ -1213,6 +1614,14 @@ body.high-contrast {
                     <span id="session-timer">00:00</span>
                 </div>
                 <button id="pause-btn" class="session-info" style="cursor: pointer; border: none;">⏸ PAUSA</button>
+            </div>
+
+            <!-- Sacrifice Zone -->
+            <div id="sacrifice-zone" class="sacrifice-zone">
+                <div class="sacrifice-zone-label">ZONA SACRIFICIO</div>
+                <div class="sacrifice-slot" data-sacrifice="0"></div>
+                <div class="sacrifice-slot" data-sacrifice="1"></div>
+                <div class="sacrifice-slot" data-sacrifice="2"></div>
             </div>
 
             <!-- Patient Info (Top Left) -->
@@ -1299,6 +1708,7 @@ body.high-contrast {
         </div>
     </div>
 
+</body>
     <script>
 // ============================================
 // NEVE: LIMEN? - Psychological Card Game
@@ -1525,12 +1935,17 @@ const AlterMessages = {
 
 // === CARD CLASS ===
 class Card {
-    constructor(name, type, power, description, emoji = '🎴') {
+    constructor(name, type, attack, health, bloodCost, artworkUrl, artist, shortDesc, longDesc, sigils = []) {
         this.name = name;
-        this.type = type; // 'memory', 'emotion', 'defense', 'fragment'
-        this.power = power;
-        this.description = description;
-        this.emoji = emoji;
+        this.type = type;
+        this.attack = attack;
+        this.health = health;
+        this.bloodCost = bloodCost; // Number of sacrifices needed
+        this.artworkUrl = artworkUrl;
+        this.artist = artist;
+        this.shortDesc = shortDesc; // Breve descrizione sulla carta
+        this.longDesc = longDesc; // Descrizione completa nel modal
+        this.sigils = sigils; // Array di sigilli/abilità speciali
         this.id = `card_${Math.random().toString(36).substr(2, 9)}`;
     }
 
@@ -1550,13 +1965,52 @@ class Card {
         cardEl.dataset.cardId = this.id;
         cardEl.dataset.cardName = this.name;
         cardEl.dataset.cardType = this.type;
+        cardEl.dataset.bloodCost = this.bloodCost;
+
+        // Blood cost indicator
+        let bloodCostHTML = '';
+        if (this.bloodCost > 0) {
+            bloodCostHTML = `<div class="blood-cost">`;
+            for (let i = 0; i < this.bloodCost; i++) {
+                bloodCostHTML += `<span class="blood-drop">🩸</span>`;
+            }
+            bloodCostHTML += `</div>`;
+        }
+
+        // Sigils
+        let sigilsHTML = '';
+        if (this.sigils.length > 0) {
+            sigilsHTML = `<div class="card-sigils">`;
+            this.sigils.forEach(sigil => {
+                sigilsHTML += `<span class="sigil" title="${sigil.desc}">${sigil.icon}</span>`;
+            });
+            sigilsHTML += `</div>`;
+        }
 
         cardEl.innerHTML = `
-            <div class="card-type">${this.type}</div>
-            <div class="card-emoji">${this.emoji}</div>
-            <div class="card-name">${this.name}</div>
-            <div class="card-power">${this.power}</div>
-            <div class="card-description">${this.description}</div>
+            <div class="card-frame">
+                ${bloodCostHTML}
+                <div class="card-artwork" style="background-image: url('${this.artworkUrl}')">
+                    <div class="artwork-overlay"></div>
+                </div>
+                <div class="card-info-bar">
+                    <div class="card-stat attack">
+                        <span class="stat-icon">⚔️</span>
+                        <span class="stat-value">${this.attack}</span>
+                    </div>
+                    <div class="card-stat health">
+                        <span class="stat-icon">❤️</span>
+                        <span class="stat-value">${this.health}</span>
+                    </div>
+                </div>
+                ${sigilsHTML}
+                <div class="card-name-plate">
+                    <div class="card-name">${this.name}</div>
+                    <div class="card-artist">${this.artist}</div>
+                </div>
+                <div class="card-type-tag">${this.type}</div>
+                <button class="card-details-btn" data-card-id="${this.id}">ℹ️</button>
+            </div>
         `;
 
         return cardEl;
@@ -1588,6 +2042,13 @@ class Game {
         this.shownAlterMessages = new Set();
         this.lastWhisperTime = 0;
         this.revelationTriggered = false;
+
+        // Sacrifice system
+        this.sacrificeMode = false;
+        this.sacrificeTargetCard = null;
+        this.sacrificeTargetSlot = null;
+        this.sacrificedCards = [];
+        this.requiredSacrifices = 0;
 
         // Card library
         this.cardLibrary = this.createCardLibrary();
@@ -1675,11 +2136,28 @@ class Game {
             // Narrative modal
             narrativeModal: document.getElementById('narrative-modal'),
             narrativeText: document.getElementById('narrative-text'),
-            narrativeContinueBtn: document.getElementById('narrative-continue-btn')
+            narrativeContinueBtn: document.getElementById('narrative-continue-btn'),
+
+            // Card details modal
+            cardDetailsModal: document.getElementById('card-details-modal'),
+            modalArtwork: document.getElementById('modal-artwork'),
+            modalTitle: document.getElementById('modal-title'),
+            modalArtist: document.getElementById('modal-artist'),
+            modalAttack: document.getElementById('modal-attack'),
+            modalHealth: document.getElementById('modal-health'),
+            modalBlood: document.getElementById('modal-blood'),
+            modalDescription: document.getElementById('modal-description'),
+            modalSigils: document.getElementById('modal-sigils'),
+            closeCardDetailsBtn: document.getElementById('close-card-details'),
+
+            // Sacrifice zone
+            sacrificeZone: document.getElementById('sacrifice-zone'),
+            sacrificeSlots: document.querySelectorAll('.sacrifice-slot')
         };
 
         this.setupEventListeners();
         this.setupDragAndDrop();
+        this.setupSacrificeSystem();
     }
 
     setupEventListeners() {
@@ -1724,6 +2202,24 @@ class Game {
 
         // Narrative modal
         this.elements.narrativeContinueBtn.addEventListener('click', () => this.hideNarrativeModal());
+
+        // Card details modal
+        this.elements.closeCardDetailsBtn.addEventListener('click', () => this.hideCardDetails());
+        this.elements.cardDetailsModal.addEventListener('click', (e) => {
+            if (e.target === this.elements.cardDetailsModal) {
+                this.hideCardDetails();
+            }
+        });
+
+        // Card info button clicks (delegated)
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('card-details-btn')) {
+                e.preventDefault();
+                e.stopPropagation();
+                const cardId = e.target.dataset.cardId;
+                this.showCardDetails(cardId);
+            }
+        });
     }
 
     setupDragAndDrop() {
@@ -1810,34 +2306,323 @@ class Game {
         });
     }
 
+    setupSacrificeSystem() {
+        // Handle drag-and-drop to sacrifice zone
+        this.elements.sacrificeSlots.forEach((slot, index) => {
+            slot.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                if (this.sacrificeMode) {
+                    slot.classList.add('valid-drop');
+                }
+            });
+
+            slot.addEventListener('dragleave', () => {
+                slot.classList.remove('valid-drop');
+            });
+
+            slot.addEventListener('drop', (e) => {
+                e.preventDefault();
+                slot.classList.remove('valid-drop');
+
+                if (!this.sacrificeMode) return;
+
+                // Get the dragged card from field
+                const cardElement = document.querySelector('.card.dragging');
+                if (!cardElement) return;
+
+                const cardId = cardElement.dataset.cardId;
+                const fromFieldSlot = cardElement.closest('.card-slot');
+
+                if (!fromFieldSlot || !fromFieldSlot.closest('#neve-card-field')) {
+                    this.log("Puoi sacrificare solo carte dal tuo campo!");
+                    return;
+                }
+
+                const fieldIndex = parseInt(fromFieldSlot.dataset.slot);
+                const card = this.playerField[fieldIndex];
+
+                if (!card) return;
+
+                // Check if already sacrificed
+                if (this.sacrificedCards.some(sc => sc.id === card.id)) {
+                    this.log("Hai già sacrificato questa carta!");
+                    return;
+                }
+
+                // Add to sacrificed cards
+                this.sacrificedCards.push(card);
+                this.playerField[fieldIndex] = null;
+
+                // Show card in sacrifice slot
+                slot.innerHTML = '';
+                const miniCard = document.createElement('div');
+                miniCard.className = 'sacrificed-card';
+                miniCard.innerHTML = `<div style="font-size: 10px;">${card.name}</div>`;
+                slot.appendChild(miniCard);
+
+                this.log(`Hai sacrificato: ${card.name}`);
+
+                // Check if we have enough sacrifices
+                if (this.sacrificedCards.length >= this.requiredSacrifices) {
+                    this.completeSacrifice();
+                } else {
+                    this.log(`Sacrifici necessari: ${this.sacrificedCards.length}/${this.requiredSacrifices}`);
+                }
+
+                this.updateUI();
+            });
+        });
+    }
+
+    startSacrificeMode(card, slotIndex) {
+        this.sacrificeMode = true;
+        this.sacrificeTargetCard = card;
+        this.sacrificeTargetSlot = slotIndex;
+        this.sacrificedCards = [];
+        this.requiredSacrifices = card.bloodCost;
+
+        this.elements.sacrificeZone.classList.add('active');
+        this.log(`Devi sacrificare ${this.requiredSacrifices} carte per giocare ${card.name}`);
+    }
+
+    completeSacrifice() {
+        // Play the target card
+        this.playerField[this.sacrificeTargetSlot] = this.sacrificeTargetCard;
+        this.log(`Hai giocato: ${this.sacrificeTargetCard.name}`);
+
+        // Card effects
+        if (this.sacrificeTargetCard.type === 'voce') {
+            this.fragments++;
+        }
+
+        // Apply sigil effects that trigger on sacrifice
+        if (this.sacrificeTargetCard.sigils.some(s => s.icon === '🩸')) {
+            this.sacrificeTargetCard.attack += this.sacrificedCards.length;
+            this.log(`${this.sacrificeTargetCard.name} guadagna +${this.sacrificedCards.length} ATK dai sacrifici!`);
+        }
+
+        this.cancelSacrificeMode();
+        this.setTherapistDialogue(this.getTherapistDialogue());
+        this.updateUI();
+        this.checkAlterMessages();
+    }
+
+    cancelSacrificeMode() {
+        this.sacrificeMode = false;
+        this.sacrificeTargetCard = null;
+        this.sacrificeTargetSlot = null;
+        this.sacrificedCards = [];
+        this.requiredSacrifices = 0;
+        this.elements.sacrificeZone.classList.remove('active');
+
+        // Clear sacrifice slots
+        this.elements.sacrificeSlots.forEach(slot => {
+            slot.innerHTML = '';
+        });
+    }
+
     // === CARD LIBRARY ===
     createCardLibrary() {
         return [
-            // Echo cards (mysterious past)
-            new Card("La Porta Chiusa", "eco", 2, "Qualcosa dietro...", "🚪"),
-            new Card("L'Urlo Silente", "eco", 3, "Non riesci a sentirlo", "💔"),
-            new Card("La Bambola Rotta", "eco", 1, "Occhi di vetro", "🪆"),
-            new Card("Il Vetro", "eco", 4, "Riflesso frantumato", "🪞"),
+            // LOW COST CARDS (0 blood)
+            new Card(
+                "Ophelia",
+                "eco",
+                1,
+                2,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/John_Everett_Millais_-_Ophelia_-_Google_Art_Project.jpg/1024px-John_Everett_Millais_-_Ophelia_-_Google_Art_Project.jpg",
+                "Millais, 1851",
+                "Voce bambina",
+                "Una giovane figura galleggia tra i fiori, cantando canzoni dimenticate. I suoi occhi cercano qualcosa che non può più vedere. La voce di chi era prima della frattura.",
+                []
+            ),
 
-            // Impulse cards (inner forces)
-            new Card("L'Ombra", "impulso", 2, "Ti segue sempre", "👤"),
-            new Card("Il Fuoco Freddo", "impulso", 3, "Brucia senza fiamma", "🔥"),
-            new Card("L'Abisso", "impulso", 2, "Guarda dentro", "🕳️"),
-            new Card("La Luce Tremante", "impulso", 1, "Quasi spenta", "💫"),
-            new Card("Lo Specchio Velato", "impulso", 3, "Non guardarti", "🪞"),
+            new Card(
+                "Ragazza con l'Orecchino",
+                "velo",
+                1,
+                3,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg",
+                "Vermeer, 1665",
+                "Innocenza velata",
+                "Lo sguardo penetra oltre la superficie. Cosa nasconde dietro quegli occhi? Un segreto, una domanda, un'identità non ancora frammentata.",
+                [{icon: "🛡️", desc: "Difesa +1 quando attaccata"}]
+            ),
 
-            // Veil cards (protection)
-            new Card("Il Limen", "velo", 3, "Tra qui e là", "🌫️"),
-            new Card("La Nebbia", "velo", 2, "Copre tutto", "🌁"),
-            new Card("Il Muro", "velo", 4, "Alto e solido", "🧱"),
-            new Card("Il Sogno", "velo", 2, "Non svegliarti", "💭"),
+            new Card(
+                "Notte Stellata",
+                "impulso",
+                2,
+                1,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1024px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+                "Van Gogh, 1889",
+                "Vortice mentale",
+                "Il cielo gira su se stesso, le stelle danzano in spirali impossibili. La realtà si piega, si torce, diventa altro. È questo che vede Neve quando chiude gli occhi?",
+                []
+            ),
 
-            // Voice cards (cryptic entities)
-            new Card("Voce Notturna", "voce", 3, "...ti proteggo...", "🌙"),
-            new Card("Il Pianto", "voce", 1, "Qualcuno piange", "😢"),
-            new Card("Voce Fredda", "voce", 3, "...calcola... pensa...", "⭐"),
-            new Card("Il Silenzio", "voce", 4, "...           ...", "🤫"),
-            new Card("Il Vuoto", "voce", 5, "Ti osservo", "👁️")
+            new Card(
+                "Christina's World",
+                "eco",
+                1,
+                4,
+                0,
+                "https://upload.wikimedia.org/wikipedia/en/a/a2/Christinasworld.jpg",
+                "Wyeth, 1948",
+                "Isolamento",
+                "Una figura sola in un campo infinito. La casa è lontana, irraggiungibile. Trascinare il proprio corpo verso qualcosa che non si può mai toccare.",
+                []
+            ),
+
+            // MEDIUM COST CARDS (1 blood)
+            new Card(
+                "L'Urlo",
+                "impulso",
+                3,
+                2,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/800px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
+                "Munch, 1893",
+                "Angoscia pura",
+                "Il grido silenzioso che nessuno sente. Le mani sul volto, la bocca aperta, il mondo che si distorce intorno. L'eco dell'urlo che Neve non può esprimere.",
+                [{icon: "💥", desc: "Attacco raddoppiato contro carte 'velo'"}]
+            ),
+
+            new Card(
+                "Il Bacio",
+                "velo",
+                2,
+                4,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Gustav_Klimt_016.jpg/800px-Gustav_Klimt_016.jpg",
+                "Klimt, 1908",
+                "Connessione perduta",
+                "Due figure si fondono, si abbracciano, diventano una. Ma Neve ricorda cosa significa essere connessa a se stessa? O è solo un sogno dorato di unità?",
+                [{icon: "🔗", desc: "Lega due carte alleate: condividono la salute"}]
+            ),
+
+            new Card(
+                "Nighthawks",
+                "eco",
+                2,
+                3,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Nighthawks_by_Edward_Hopper_1942.jpg/1024px-Nighthawks_by_Edward_Hopper_1942.jpg",
+                "Hopper, 1942",
+                "Solitudine notturna",
+                "Persone sole insieme. Ognuna nella propria bolla di vetro, separate dalla luce al neon. La terapia è così? Neve e il dottore, soli insieme nella notte?",
+                []
+            ),
+
+            new Card(
+                "La Persistenza della Memoria",
+                "impulso",
+                4,
+                1,
+                1,
+                "https://upload.wikimedia.org/wikipedia/en/d/dd/The_Persistence_of_Memory.jpg",
+                "Dalí, 1931",
+                "Tempo distorto",
+                "Gli orologi si sciolgono, il tempo non ha più senso. I minuti diventano ore, le ore secondi. Quanto dura davvero una sessione di terapia? Quanto dura un ricordo?",
+                [{icon: "⏰", desc: "Salta il turno dell'avversario"}]
+            ),
+
+            // HIGH COST CARDS (2 blood)
+            new Card(
+                "Saturno Divora suo Figlio",
+                "impulso",
+                5,
+                3,
+                2,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Francisco_de_Goya%2C_Saturno_devorando_a_su_hijo_%281819-1823%29.jpg/800px-Francisco_de_Goya%2C_Saturno_devorando_a_su_hijo_%281819-1823%29.jpg",
+                "Goya, 1823",
+                "Auto-distruzione",
+                "Il padre divora i propri figli. L'Alter dominante consuma le altre identità. Lumen che divora Luna, Aria, Stella. Il cannibalismo della psiche.",
+                [{icon: "🩸", desc: "Guadagna ATK +1 per ogni carta sacrificata"}]
+            ),
+
+            new Card(
+                "Il Giardino delle Delizie",
+                "voce",
+                3,
+                5,
+                2,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/The_Garden_of_earthly_delights.jpg/1024px-The_Garden_of_earthly_delights.jpg",
+                "Bosch, 1510",
+                "Frammentazione",
+                "Centinaia di figure, scene sovrapposte, realtà multiple. È così che si sente Neve? Tante vite, tante identità, tutte che accadono contemporaneamente in mondi diversi?",
+                [{icon: "🎭", desc: "Crea una copia di se stessa quando muore"}]
+            ),
+
+            new Card(
+                "Judith e Oloferne",
+                "impulso",
+                6,
+                2,
+                2,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Caravaggio_Judith_Beheading_Holofernes.jpg/800px-Caravaggio_Judith_Beheading_Holofernes.jpg",
+                "Caravaggio, 1599",
+                "Violenza necessaria",
+                "Per liberarsi del tiranno, serve violenza. Judith decapita Oloferne. Neve deve decapitare Lumen? La protettrice deve distruggere il persecutore?",
+                [{icon: "⚔️", desc: "Uccide istantaneamente carte con 3 o meno HP"}]
+            ),
+
+            // SPECIAL VOICE CARDS (1 blood, bonus fragments)
+            new Card(
+                "La Dama con l'Ermellino",
+                "voce",
+                2,
+                3,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Lady_with_an_Ermine_-_Leonardo_da_Vinci_-_Google_Art_Project.jpg/800px-Lady_with_an_Ermine_-_Leonardo_da_Vinci_-_Google_Art_Project.jpg",
+                "Da Vinci, 1490",
+                "Luna - La Protettrice",
+                "Calma, composta, intelligente. Tiene in braccio l'ermellino come Neve vorrebbe tenere al sicuro le sue altre identità. Lo sguardo vigile di chi protegge.",
+                [{icon: "🌙", desc: "Cura 1 HP a tutte le carte alleate"}]
+            ),
+
+            new Card(
+                "L'Angelus",
+                "voce",
+                1,
+                5,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/JEAN-FRAN%C3%87OIS_MILLET_-_El_%C3%81ngelus_%28Museo_de_Orsay%2C_1857-1859._%C3%93leo_sobre_lienzo%2C_55.5_x_66_cm%29.jpg/1024px-JEAN-FRAN%C3%87OIS_MILLET_-_El_%C3%81ngelus_%28Museo_de_Orsay%2C_1857-1859._%C3%93leo_sobre_lienzo%2C_55.5_x_66_cm%29.jpg",
+                "Millet, 1859",
+                "Aria - L'Innocente",
+                "Due figure in preghiera al tramonto. La semplicità, la purezza, il rituale quotidiano. Aria prima del trauma, prima che tutto cambiasse.",
+                [{icon: "🎀", desc: "Non può essere attaccata per 1 turno"}]
+            ),
+
+            new Card(
+                "La Zattera della Medusa",
+                "voce",
+                4,
+                2,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg/1024px-JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg",
+                "Géricault, 1819",
+                "Stella - La Sopravvissuta",
+                "Dopo il naufragio, alcuni sopravvivono. Razionali, calcolatori, fanno ciò che è necessario. Stella che analizza, che pianifica, che mantiene Neve in vita.",
+                [{icon: "⭐", desc: "Pesca 2 carte quando giocata"}]
+            ),
+
+            // ULTIMATE CARD (3 blood)
+            new Card(
+                "Guernica",
+                "voce",
+                7,
+                4,
+                3,
+                "https://upload.wikimedia.org/wikipedia/en/7/74/PicassoGuernica.jpg",
+                "Picasso, 1937",
+                "Il Vuoto - Lumen Rivelato",
+                "Il caos della guerra, corpi frammentati, grida silenti. Tutto è rotto, tutto è distrutto. Questa è la mente di Neve quando Lumen controlla. Il persecutore finale.",
+                [{icon: "👁️", desc: "Distrugge tutte le carte nemiche con meno di 3 HP"}]
+            )
         ];
     }
 
@@ -1991,7 +2776,18 @@ class Game {
 
     createRandomCard() {
         const template = this.cardLibrary[Math.floor(Math.random() * this.cardLibrary.length)];
-        return new Card(template.name, template.type, template.power, template.description, template.emoji);
+        return new Card(
+            template.name,
+            template.type,
+            template.attack,
+            template.health,
+            template.bloodCost,
+            template.artworkUrl,
+            template.artist,
+            template.shortDesc,
+            template.longDesc,
+            template.sigils
+        );
     }
 
     playCardFromHand(cardId, slotIndex) {
@@ -2004,6 +2800,25 @@ class Game {
         if (cardIndex === -1) return;
 
         const card = this.playerHand[cardIndex];
+
+        // Check if card requires blood sacrifice
+        if (card.bloodCost > 0) {
+            // Count cards on field available for sacrifice
+            const availableForSacrifice = this.playerField.filter(c => c !== null).length;
+
+            if (availableForSacrifice < card.bloodCost) {
+                this.log(`Sacrifici insufficienti! Serve ${card.bloodCost}, disponibili ${availableForSacrifice}`);
+                return;
+            }
+
+            // Remove card from hand and start sacrifice mode
+            this.playerHand.splice(cardIndex, 1);
+            this.startSacrificeMode(card, slotIndex);
+            this.updateUI();
+            return;
+        }
+
+        // No blood cost, play directly
         this.playerHand.splice(cardIndex, 1);
         this.playerField[slotIndex] = card;
 
@@ -2015,8 +2830,42 @@ class Game {
             this.fragments++;
         }
 
+        // Apply play sigils
+        this.applyPlaySigils(card);
+
         this.updateUI();
         this.checkAlterMessages();
+    }
+
+    applyPlaySigils(card) {
+        // ⭐ Draw 2 cards when played
+        if (card.sigils.some(s => s.icon === '⭐')) {
+            this.log(`${card.name} ti fa pescare 2 carte!`);
+            this.drawCard();
+            this.drawCard();
+        }
+
+        // 🌙 Heal 1 HP to all allies
+        if (card.sigils.some(s => s.icon === '🌙')) {
+            this.log(`${card.name} cura tutte le carte alleate!`);
+            this.playerField.forEach(c => {
+                if (c && c.id !== card.id) {
+                    c.health += 1;
+                }
+            });
+        }
+
+        // 👁️ Destroy all enemies with <3 HP
+        if (card.sigils.some(s => s.icon === '👁️')) {
+            this.log(`${card.name} distrugge tutti i nemici deboli!`);
+            this.therapistField = this.therapistField.map(c => {
+                if (c && c.health < 3) {
+                    this.log(`→ ${c.name} è stato distrutto!`);
+                    return null;
+                }
+                return c;
+            });
+        }
     }
 
     toggleDiscardMode() {
@@ -2068,37 +2917,117 @@ class Game {
     resolveRound() {
         this.log("=== Risoluzione ===");
 
-        // Calculate power
-        let playerPower = 0;
-        let therapistPower = 0;
+        // Apply combat between opposing cards (slot by slot)
+        for (let i = 0; i < 4; i++) {
+            const playerCard = this.playerField[i];
+            const therapistCard = this.therapistField[i];
 
-        this.playerField.forEach(card => {
-            if (card) playerPower += card.power;
-        });
-
-        this.therapistField.forEach(card => {
-            if (card) therapistPower += card.power;
-        });
-
-        // Determine winner
-        if (playerPower > therapistPower) {
-            this.log(`Hai vinto il round! (${playerPower} vs ${therapistPower})`);
-            this.stability = Math.min(100, this.stability + 5);
-        } else if (therapistPower > playerPower) {
-            this.log(`Hai perso il round... (${playerPower} vs ${therapistPower})`);
-            const damage = Math.floor((therapistPower - playerPower) / 2) + 3;
-            this.stability = Math.max(0, this.stability - damage);
-        } else {
-            this.log(`Pareggio! (${playerPower} vs ${therapistPower})`);
+            if (playerCard && therapistCard) {
+                this.resolveCombat(playerCard, therapistCard, i);
+            } else if (playerCard && !therapistCard) {
+                // Player card attacks directly
+                this.log(`${playerCard.name} attacca direttamente!`);
+                this.stability = Math.min(100, this.stability + playerCard.attack);
+            } else if (!playerCard && therapistCard) {
+                // Therapist card attacks directly
+                this.log(`${therapistCard.name} ti attacca!`);
+                this.stability = Math.max(0, this.stability - therapistCard.attack);
+            }
         }
 
-        // Clear fields
-        this.playerField = [null, null, null, null];
-        this.therapistField = [null, null, null, null];
+        // Clear dead cards
+        this.playerField = this.playerField.map(card => {
+            if (card && card.health <= 0) {
+                this.log(`${card.name} è stato distrutto!`);
+                this.applyDeathSigils(card, true);
+                return null;
+            }
+            return card;
+        });
+
+        this.therapistField = this.therapistField.map(card => {
+            if (card && card.health <= 0) {
+                this.log(`${card.name} nemico è stato distrutto!`);
+                return null;
+            }
+            return card;
+        });
 
         setTimeout(() => {
+            // Clear remaining cards after round
+            this.playerField = [null, null, null, null];
+            this.therapistField = [null, null, null, null];
             this.startNewRound();
-        }, 2000);
+        }, 3000);
+    }
+
+    resolveCombat(playerCard, therapistCard, slotIndex) {
+        let playerAttack = playerCard.attack;
+        let therapistAttack = therapistCard.attack;
+
+        // Apply attack sigils
+        // 💥 Double attack against 'velo' type
+        if (playerCard.sigils.some(s => s.icon === '💥') && therapistCard.type === 'velo') {
+            playerAttack *= 2;
+            this.log(`${playerCard.name} raddoppia l'attacco contro ${therapistCard.name}!`);
+        }
+
+        // 🛡️ Defense +1 when attacked
+        let therapistDefense = 0;
+        if (therapistCard.sigils.some(s => s.icon === '🛡️')) {
+            therapistDefense = 1;
+            this.log(`${therapistCard.name} si difende!`);
+        }
+
+        // ⚔️ Instant kill cards with ≤3 HP
+        if (playerCard.sigils.some(s => s.icon === '⚔️') && therapistCard.health <= 3) {
+            this.log(`${playerCard.name} uccide istantaneamente ${therapistCard.name}!`);
+            therapistCard.health = 0;
+            return;
+        }
+
+        // Apply damage
+        const damageToTherapist = Math.max(0, playerAttack - therapistDefense);
+        const damageToPlayer = therapistAttack;
+
+        therapistCard.health -= damageToTherapist;
+        playerCard.health -= damageToPlayer;
+
+        this.log(`${playerCard.name} (${playerCard.attack}⚔️/${playerCard.health}❤️) VS ${therapistCard.name} (${therapistCard.attack}⚔️/${therapistCard.health}❤️)`);
+
+        if (damageToTherapist > 0) {
+            this.log(`→ ${therapistCard.name} subisce ${damageToTherapist} danni`);
+        }
+        if (damageToPlayer > 0) {
+            this.log(`→ ${playerCard.name} subisce ${damageToPlayer} danni`);
+        }
+    }
+
+    applyDeathSigils(card, isPlayerCard) {
+        // 🎭 Create a copy when dies
+        if (card.sigils.some(s => s.icon === '🎭') && isPlayerCard) {
+            this.log(`${card.name} crea una copia di se stessa!`);
+            const copy = this.createCardCopy(card);
+            // Add copy to hand
+            if (this.playerHand.length < 8) {
+                this.playerHand.push(copy);
+            }
+        }
+    }
+
+    createCardCopy(card) {
+        return new Card(
+            card.name,
+            card.type,
+            card.attack,
+            card.health,
+            card.bloodCost,
+            card.artworkUrl,
+            card.artist,
+            card.shortDesc,
+            card.longDesc,
+            card.sigils
+        );
     }
 
     startNewRound() {
@@ -2252,6 +3181,55 @@ class Game {
 
     hideNarrativeModal() {
         this.elements.narrativeModal.classList.add('hidden');
+    }
+
+    // === CARD DETAILS MODAL ===
+    showCardDetails(cardId) {
+        // Find the card in hand, player field, or therapist field
+        let card = this.playerHand.find(c => c.id === cardId);
+        if (!card) {
+            card = this.playerField.find(c => c && c.id === cardId);
+        }
+        if (!card) {
+            card = this.therapistField.find(c => c && c.id === cardId);
+        }
+
+        if (!card) return;
+
+        // Populate modal with card data
+        this.elements.modalArtwork.style.backgroundImage = `url('${card.artworkUrl}')`;
+        this.elements.modalTitle.textContent = card.name;
+        this.elements.modalArtist.textContent = card.artist;
+        this.elements.modalAttack.textContent = card.attack;
+        this.elements.modalHealth.textContent = card.health;
+        this.elements.modalBlood.textContent = card.bloodCost > 0 ? `${card.bloodCost}🩸` : 'Nessuno';
+        this.elements.modalDescription.textContent = card.longDesc;
+
+        // Populate sigils
+        this.elements.modalSigils.innerHTML = '';
+        if (card.sigils.length > 0) {
+            const sigilsTitle = document.createElement('h3');
+            sigilsTitle.textContent = 'Sigilli:';
+            sigilsTitle.style.marginBottom = '15px';
+            this.elements.modalSigils.appendChild(sigilsTitle);
+
+            card.sigils.forEach(sigil => {
+                const sigilEl = document.createElement('div');
+                sigilEl.className = 'sigil-detail';
+                sigilEl.innerHTML = `
+                    <span class="sigil-icon">${sigil.icon}</span>
+                    <span class="sigil-description">${sigil.desc}</span>
+                `;
+                this.elements.modalSigils.appendChild(sigilEl);
+            });
+        }
+
+        // Show modal
+        this.elements.cardDetailsModal.classList.remove('hidden');
+    }
+
+    hideCardDetails() {
+        this.elements.cardDetailsModal.classList.add('hidden');
     }
 
     // === GAME OVER ===
