@@ -383,6 +383,33 @@ body {
     z-index: 8;
 }
 
+/* FIX V: Hand fan layout per carte 9+ (prima mancavano) */
+#neve-hand .card:nth-child(9) {
+    transform: translateX(400px) translateY(20px) rotate(28deg);
+    z-index: 9;
+}
+
+#neve-hand .card:nth-child(10) {
+    transform: translateX(470px) translateY(25px) rotate(32deg);
+    z-index: 10;
+}
+
+#neve-hand .card:nth-child(11) {
+    transform: translateX(530px) translateY(30px) rotate(36deg);
+    z-index: 11;
+}
+
+#neve-hand .card:nth-child(12) {
+    transform: translateX(580px) translateY(35px) rotate(40deg);
+    z-index: 12;
+}
+
+/* Fallback per carte 13+: stack su posizione finale per evitare overflow */
+#neve-hand .card:nth-child(n+13) {
+    transform: translateX(620px) translateY(40px) rotate(42deg);
+    z-index: 13;
+}
+
 /* Card hover in hand */
 #neve-hand .card:hover {
     transform: translateX(var(--card-x, 0)) translateY(-80px) rotate(0deg) scale(1.15) !important;
@@ -402,6 +429,12 @@ body {
 #neve-hand .card:nth-child(6) { --card-x: 140px; }
 #neve-hand .card:nth-child(7) { --card-x: 240px; }
 #neve-hand .card:nth-child(8) { --card-x: 320px; }
+/* FIX V: --card-x per carte 9+ (per hover corretto) */
+#neve-hand .card:nth-child(9) { --card-x: 400px; }
+#neve-hand .card:nth-child(10) { --card-x: 470px; }
+#neve-hand .card:nth-child(11) { --card-x: 530px; }
+#neve-hand .card:nth-child(12) { --card-x: 580px; }
+#neve-hand .card:nth-child(n+13) { --card-x: 620px; }
 
 /* Card being dragged */
 .card.dragging {
@@ -413,7 +446,7 @@ body {
 /* === THERAPIST HAND (Opponent cards, face down) === */
 .therapist-hand-container {
     position: fixed;
-    top: 50px;
+    top: clamp(10px, 6vh, 60px); /* FIX X: Era 50px fisso, ora responsive per evitare overlap header */
     left: 50%;
     transform: translateX(-50%);
     z-index: 50;
@@ -745,7 +778,7 @@ body {
     top: 5%;
     left: 50%;
     transform: translateX(-50%);
-    width: 600px;
+    width: min(90vw, 600px); /* FIX H: Era 600px fisso, ora responsive */
     text-align: center;
     z-index: 50;
 }
@@ -1403,13 +1436,14 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100dvh; /* FIX Y: Era 100vh, ora 100dvh per mobile UI bars */
     background: rgba(0, 0, 0, 0.95);
     z-index: 600;
     display: flex;
     align-items: center;
     justify-content: center;
     animation: fade-in 1s ease;
+    overflow: hidden; /* Previene scroll */
 }
 
 @keyframes fade-in {
@@ -1418,9 +1452,11 @@ body {
 }
 
 .narrative-content {
-    max-width: 800px;
+    max-width: min(90vw, 800px); /* FIX Y: Responsive */
+    max-height: calc(100dvh - 12vh); /* FIX Y: Limita altezza per mobile */
+    overflow-y: auto; /* Scroll interno se necessario */
     text-align: center;
-    padding: 60px;
+    padding: clamp(30px, 6vh, 60px); /* FIX Y: Responsive padding */
 }
 
 .narrative-text {
@@ -1844,17 +1880,17 @@ body.game-started #event-log {
 /* === INTRO DIALOGUE BOX === */
 .intro-dialogue {
     position: fixed;
-    bottom: 150px;
+    bottom: clamp(20px, 18vh, 150px); /* FIX T: Era 150px fisso, ora responsive per evitare overlap con hand */
     left: 50%;
     transform: translateX(-50%);
-    width: 80%;
+    width: min(90vw, 800px); /* Più responsive */
     max-width: 900px;
     background: rgba(26, 20, 16, 0.95);
     border: 4px solid var(--accent-warm);
     border-radius: 12px;
-    padding: 30px 40px;
+    padding: clamp(20px, 3vh, 40px) clamp(20px, 4vw, 40px); /* Responsive padding */
     z-index: 500;
-    box-shadow: 
+    box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.8),
         inset 0 0 40px rgba(0, 0, 0, 0.3);
 }
@@ -3407,17 +3443,18 @@ button:active {
         transition-duration: 0.01ms !important;
     }
 }
+}
 /* ——— NO-SCROLL & OVERLAY FULLSCREEN STABILI ——— */
 html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 #game-container,
 .menu-overlay,
 .narrative-modal,
 .card-details-modal {
-  height: 100dvh !important;      /* niente 100vh “ballerino” su mobile */
+  height: 100dvh !important;      /* niente 100vh "ballerino" su mobile */
   overflow: clip !important;       /* nessuno scroll sugli overlay */
 }
 
-/* ——— MENU: dimensioni compattate e sempre “una schermata” ——— */
+/* ——— MENU: dimensioni compattate e sempre "una schermata" ——— */
 .menu-overlay {
   padding-block: clamp(16px, 4vh, 40px) !important;
   padding-inline: 20px !important;
@@ -3443,7 +3480,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   height: clamp(140px, 22vh, 220px);
 }
 
-/* Mano più compatta e non “affondata” */
+/* Mano più compatta e non "affondata" */
 .hand-container {
   height: clamp(160px, 30dvh, 300px);
   bottom: clamp(-20px, -5dvh, -80px);
@@ -3458,7 +3495,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 #event-log           { width: clamp(220px, 28vw, 350px); }
 #stability-container { width: clamp(180px, 20vw, 250px); }
 
-/* Sezioni “therapist” sicure su mobile/low-height */
+/* Sezioni "therapist" sicure su mobile/low-height */
 .therapist-section { width: min(90vw, 600px); top: clamp(8px, 5vh, 5%); }
 .therapist-hand    { top: clamp(10px, 6vh, 60px); }
 
@@ -3469,7 +3506,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 /* Tooltip/focus accessibili di default */
 :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 
-/* Content Warning come “vera” modale sopra il menu (non interstitial bloccante) */
+/* Content Warning come "vera" modale sopra il menu (non interstitial bloccante) */
 #content-warning.content-warning.menu-overlay {
   background: rgba(0,0,0,0.65);
   z-index: 650;
@@ -3480,7 +3517,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   max-height: min(80dvh, 640px);
 }
 
-/* Media query in funzione dell’ALTEZZA (non solo larghezza) */
+/* Media query in funzione dell'ALTEZZA (non solo larghezza) */
 @media (max-height: 800px) {
   .game-table { height: clamp(380px, 52dvh, 560px); }
   .menu-content { padding: clamp(12px, 2.5vh, 24px); }
@@ -9916,137 +9953,5 @@ class AccessibilityManager {
 
 
 </script>
-    <script>
-/* ——— FIX PACK JS ——— */
-(function () {
-  const g = window.game;
-  if (!g) return;
-
-  /* 1) Salvataggi: allinea le chiavi (“Continua”) */
-  const _saveGame = g.saveGame?.bind(g);
-  g.saveGame = function () {
-    _saveGame && _saveGame();
-    try {
-      const autosave = localStorage.getItem('neveSavedGame_autosave');
-      if (autosave) localStorage.setItem('neveSavedGame', autosave);
-    } catch (e) {}
-  };
-  const _loadGame = g.loadGame?.bind(g);
-  g.loadGame = function () {
-    try {
-      const raw = localStorage.getItem('neveSavedGame') || localStorage.getItem('neveSavedGame_autosave');
-      if (raw) {
-        const data = JSON.parse(raw);
-        this.applySave?.(data);
-        return true;
-      }
-    } catch (e) {}
-    return _loadGame ? _loadGame() : false;
-  };
-
-  /* 2) Merge statistiche corretto */
-  const _applySave = g.applySave?.bind(g);
-  g.applySave = function (data = {}) {
-    if (data.statistics) this.statistics = { ...(this.statistics || {}), ...data.statistics };
-    return _applySave ? _applySave(data) : undefined;
-  };
-
-  /* 3) Tastiera: frecce/Invio/Esc mappati al GamepadManager */
-  window.addEventListener('keydown', (e) => {
-    const m = g.gamepadManager;
-    if (!m) return;
-    switch (e.key) {
-      case 'ArrowUp':   m.navigate?.('up');    e.preventDefault(); break;
-      case 'ArrowDown': m.navigate?.('down');  e.preventDefault(); break;
-      case 'ArrowLeft': m.navigate?.('left');  e.preventDefault(); break;
-      case 'ArrowRight':m.navigate?.('right'); e.preventDefault(); break;
-      case 'Enter':
-      case ' ':         m.confirmAction?.();   e.preventDefault(); break;
-      case 'Escape':    g.togglePause?.();     e.preventDefault(); break;
-    }
-  }, { passive: false });
-
-  /* 4) Sacrifici anche con click/tap (oltre al drag) */
-  const _startSacrifice = g.startSacrificeMode?.bind(g);
-  g.startSacrificeMode = function (required = 1) {
-    _startSacrifice && _startSacrifice(required);
-    const handler = (ev) => {
-      if (!this.sacrificeMode) return;
-      const el = ev.target.closest('.card.in-play, .card.on-board');
-      if (!el) return;
-      const id = el.getAttribute('data-card-id') || el.id;
-      this.markCardForSacrifice?.(id);
-      // Se hai un contatore interno di selezioni, completa quando arriva a 'required'
-      if (this.sacrificeSelectedCount >= required) this.completeSacrifice?.();
-    };
-    this._sacrificeClickHandler = handler;
-    this.elements?.gameContainer?.addEventListener('click', handler);
-  };
-  const _completeSacrifice = g.completeSacrifice?.bind(g);
-  g.completeSacrifice = function () {
-    if (this._sacrificeClickHandler && this.elements?.gameContainer) {
-      this.elements.gameContainer.removeEventListener('click', this._sacrificeClickHandler);
-      this._sacrificeClickHandler = null;
-    }
-    return _completeSacrifice ? _completeSacrifice() : undefined;
-  };
-
-  /* 5) Tooltip accessibili (focusin/focusout) */
-  document.addEventListener('focusin', (e) => {
-    const t = e.target.closest('[data-tooltip]');
-    if (t && g.tooltip?.show) {
-      g.tooltip.show(t.getAttribute('data-tooltip'), t);
-      t.setAttribute('aria-describedby', 'global-tooltip');
-    }
-  });
-  document.addEventListener('focusout', () => g.tooltip?.hide && g.tooltip.hide());
-
-  /* 6) Slider volume → audio reale */
-  const vol = document.querySelector('#volume-range, input[name="volume"], .volume-range');
-  if (vol && g.audio?.setVolume) vol.addEventListener('input', (e) => g.audio.setVolume(e.target.value / 100));
-
-  /* 7) Riduci animazioni centralizzato */
-  if (g.accessibility?.applySettings) {
-    const _apply = g.accessibility.applySettings.bind(g.accessibility);
-    g.accessibility.applySettings = function () {
-      document.body.classList.toggle('reduce-motion', !!this.settings?.reducedMotion);
-      return _apply();
-    };
-  }
-
-  /* 8) Event log parlante */
-  const log = document.querySelector('#event-log');
-  if (log) { log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite'); }
-
-  /* 9) Niente scroll “automatico” dal gamepad */
-  if (g.gamepadManager) g.gamepadManager.scrollIntoView = function () { /* no-op */ };
-
-  /* 10) Opzioni/Informazioni apribili dal menu iniziale (warning → modale) */
-  const _showCW = g.showContentWarning?.bind(g);
-  g.showContentWarning = function () {
-    this.showMainMenu?.();                              // mostra il menu subito
-    _showCW && _showCW();                               // poi sovrapponi il warning
-    this.elements?.contentWarning?.classList.add('menu-overlay'); // stesso layer system
-  };
-
-  /* 11) Rileva e disattiva duplicati di ID (cause di overlay “sbagliati”) */
-  (function hideDuplicateIds(){
-    const seen = new Map();
-    document.querySelectorAll('[id]').forEach(el => {
-      const id = el.id;
-      if (!id) return;
-      if (seen.has(id)) {
-        // Nascondi le copie successive per evitare conflitti negli handler
-        el.setAttribute('data-duplicate', 'true');
-        el.style.display = 'none';
-      } else {
-        seen.set(id, el);
-      }
-    });
-  })();
-
-})();
-</script>
-
 </body>
 </html>

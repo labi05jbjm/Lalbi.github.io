@@ -376,6 +376,33 @@ body {
     z-index: 8;
 }
 
+/* FIX V: Hand fan layout per carte 9+ (prima mancavano) */
+#neve-hand .card:nth-child(9) {
+    transform: translateX(400px) translateY(20px) rotate(28deg);
+    z-index: 9;
+}
+
+#neve-hand .card:nth-child(10) {
+    transform: translateX(470px) translateY(25px) rotate(32deg);
+    z-index: 10;
+}
+
+#neve-hand .card:nth-child(11) {
+    transform: translateX(530px) translateY(30px) rotate(36deg);
+    z-index: 11;
+}
+
+#neve-hand .card:nth-child(12) {
+    transform: translateX(580px) translateY(35px) rotate(40deg);
+    z-index: 12;
+}
+
+/* Fallback per carte 13+: stack su posizione finale per evitare overflow */
+#neve-hand .card:nth-child(n+13) {
+    transform: translateX(620px) translateY(40px) rotate(42deg);
+    z-index: 13;
+}
+
 /* Card hover in hand */
 #neve-hand .card:hover {
     transform: translateX(var(--card-x, 0)) translateY(-80px) rotate(0deg) scale(1.15) !important;
@@ -395,6 +422,12 @@ body {
 #neve-hand .card:nth-child(6) { --card-x: 140px; }
 #neve-hand .card:nth-child(7) { --card-x: 240px; }
 #neve-hand .card:nth-child(8) { --card-x: 320px; }
+/* FIX V: --card-x per carte 9+ (per hover corretto) */
+#neve-hand .card:nth-child(9) { --card-x: 400px; }
+#neve-hand .card:nth-child(10) { --card-x: 470px; }
+#neve-hand .card:nth-child(11) { --card-x: 530px; }
+#neve-hand .card:nth-child(12) { --card-x: 580px; }
+#neve-hand .card:nth-child(n+13) { --card-x: 620px; }
 
 /* Card being dragged */
 .card.dragging {
@@ -406,7 +439,7 @@ body {
 /* === THERAPIST HAND (Opponent cards, face down) === */
 .therapist-hand-container {
     position: fixed;
-    top: 50px;
+    top: clamp(10px, 6vh, 60px); /* FIX X: Era 50px fisso, ora responsive per evitare overlap header */
     left: 50%;
     transform: translateX(-50%);
     z-index: 50;
@@ -738,7 +771,7 @@ body {
     top: 5%;
     left: 50%;
     transform: translateX(-50%);
-    width: 600px;
+    width: min(90vw, 600px); /* FIX H: Era 600px fisso, ora responsive */
     text-align: center;
     z-index: 50;
 }
@@ -1396,13 +1429,14 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100dvh; /* FIX Y: Era 100vh, ora 100dvh per mobile UI bars */
     background: rgba(0, 0, 0, 0.95);
     z-index: 600;
     display: flex;
     align-items: center;
     justify-content: center;
     animation: fade-in 1s ease;
+    overflow: hidden; /* Previene scroll */
 }
 
 @keyframes fade-in {
@@ -1411,9 +1445,11 @@ body {
 }
 
 .narrative-content {
-    max-width: 800px;
+    max-width: min(90vw, 800px); /* FIX Y: Responsive */
+    max-height: calc(100dvh - 12vh); /* FIX Y: Limita altezza per mobile */
+    overflow-y: auto; /* Scroll interno se necessario */
     text-align: center;
-    padding: 60px;
+    padding: clamp(30px, 6vh, 60px); /* FIX Y: Responsive padding */
 }
 
 .narrative-text {
@@ -1837,17 +1873,17 @@ body.game-started #event-log {
 /* === INTRO DIALOGUE BOX === */
 .intro-dialogue {
     position: fixed;
-    bottom: 150px;
+    bottom: clamp(20px, 18vh, 150px); /* FIX T: Era 150px fisso, ora responsive per evitare overlap con hand */
     left: 50%;
     transform: translateX(-50%);
-    width: 80%;
+    width: min(90vw, 800px); /* Più responsive */
     max-width: 900px;
     background: rgba(26, 20, 16, 0.95);
     border: 4px solid var(--accent-warm);
     border-radius: 12px;
-    padding: 30px 40px;
+    padding: clamp(20px, 3vh, 40px) clamp(20px, 4vw, 40px); /* Responsive padding */
     z-index: 500;
-    box-shadow: 
+    box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.8),
         inset 0 0 40px rgba(0, 0, 0, 0.3);
 }
