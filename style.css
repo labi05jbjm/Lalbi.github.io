@@ -152,7 +152,7 @@ body {
     left: 50%;
     transform: translateX(-50%) translateZ(30px);
     width: 70%;
-    height: 200px;
+    height: 300px; /* FIX G: Era 200px, slot sono 290px */
     display: flex;
     gap: 12px;
     justify-content: center;
@@ -168,7 +168,7 @@ body {
     left: 50%;
     transform: translateX(-50%) translateZ(40px);
     width: 70%;
-    height: 200px;
+    height: 300px; /* FIX G: Era 200px, slot sono 290px */
     display: flex;
     gap: 12px;
     justify-content: center;
@@ -279,11 +279,11 @@ body {
 /* === HAND (Fan of cards) === */
 .hand-container {
     position: fixed;
-    bottom: -80px;
+    bottom: -20px; /* FIX D: Era -80px, troppo affondata */
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    height: 300px;
+    height: 180px; /* FIX D: Era 300px, troppo alta */
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -1026,7 +1026,7 @@ body {
 /* === ACTION BUTTONS === */
 .action-buttons {
     position: absolute;
-    bottom: 250px;
+    bottom: 160px; /* FIX E: Era 250px, evita overlap con sacrifice-zone */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -1092,7 +1092,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100dvh; /* FIX F: Era 100vh, ora usa dynamic viewport height */
     /* Muro galleria d'arte con toni freddi */
     background: linear-gradient(135deg, #445566 0%, #334455 50%, #223344 100%);
     /* Texture muro */
@@ -1113,7 +1113,7 @@ body {
     padding: 40px 20px;
     /* Effetto spotlight radiale centrato */
     position: relative;
-    overflow-y: auto;
+    overflow: hidden; /* FIX A: Era overflow-y: auto, causava scroll indesiderato */
 }
 
 /* Sub-menus (options, about) DEVONO stare sopra main-menu */
@@ -1195,12 +1195,15 @@ body {
     position: relative;
     background: var(--bg-wood);
     border: 4px solid var(--border-dark);
-    padding: 50px;
+    padding: 30px; /* FIX C: Era 50px, troppo grande */
     text-align: center;
     filter: url(#rough-edges);
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.8),
         inset 0 0 60px rgba(0, 0, 0, 0.3);
+    max-width: 90%; /* Responsive */
+    max-height: 85dvh; /* Limita altezza su schermi bassi */
+    overflow-y: auto; /* Scroll interno se necessario */
 }
 
 /* GLASS OVERLAY (Vetro con riflessi) */
@@ -1709,10 +1712,12 @@ body.high-contrast {
 /* === SACRIFICE ZONE === */
 .sacrifice-zone {
     position: fixed;
-    bottom: 280px;
+    bottom: 200px; /* FIX E: Era 280px, evita overlap con action-buttons */
     left: 50%;
     transform: translateX(-50%);
-    width: 500px;
+    width: auto; /* FIX W: Era 500px fisso */
+    max-width: 90%; /* FIX W: Responsive per mobile */
+    min-width: 400px; /* Minimo ragionevole */
     height: 120px;
     background: rgba(138, 74, 58, 0.3);
     border: 3px dashed rgba(200, 90, 84, 0.6);
@@ -1721,6 +1726,7 @@ body.high-contrast {
     align-items: center;
     justify-content: center;
     gap: 15px;
+    padding: 0 20px; /* FIX W: Spazio interno per contenuti */
     z-index: 80;
     opacity: 0;
     pointer-events: none;
@@ -3394,17 +3400,18 @@ button:active {
         transition-duration: 0.01ms !important;
     }
 }
+}
 /* ——— NO-SCROLL & OVERLAY FULLSCREEN STABILI ——— */
 html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 #game-container,
 .menu-overlay,
 .narrative-modal,
 .card-details-modal {
-  height: 100dvh !important;      /* niente 100vh “ballerino” su mobile */
+  height: 100dvh !important;      /* niente 100vh "ballerino" su mobile */
   overflow: clip !important;       /* nessuno scroll sugli overlay */
 }
 
-/* ——— MENU: dimensioni compattate e sempre “una schermata” ——— */
+/* ——— MENU: dimensioni compattate e sempre "una schermata" ——— */
 .menu-overlay {
   padding-block: clamp(16px, 4vh, 40px) !important;
   padding-inline: 20px !important;
@@ -3430,7 +3437,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   height: clamp(140px, 22vh, 220px);
 }
 
-/* Mano più compatta e non “affondata” */
+/* Mano più compatta e non "affondata" */
 .hand-container {
   height: clamp(160px, 30dvh, 300px);
   bottom: clamp(-20px, -5dvh, -80px);
@@ -3445,7 +3452,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 #event-log           { width: clamp(220px, 28vw, 350px); }
 #stability-container { width: clamp(180px, 20vw, 250px); }
 
-/* Sezioni “therapist” sicure su mobile/low-height */
+/* Sezioni "therapist" sicure su mobile/low-height */
 .therapist-section { width: min(90vw, 600px); top: clamp(8px, 5vh, 5%); }
 .therapist-hand    { top: clamp(10px, 6vh, 60px); }
 
@@ -3456,7 +3463,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 /* Tooltip/focus accessibili di default */
 :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 
-/* Content Warning come “vera” modale sopra il menu (non interstitial bloccante) */
+/* Content Warning come "vera" modale sopra il menu (non interstitial bloccante) */
 #content-warning.content-warning.menu-overlay {
   background: rgba(0,0,0,0.65);
   z-index: 650;
@@ -3467,8 +3474,18 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   max-height: min(80dvh, 640px);
 }
 
-/* Media query in funzione dell’ALTEZZA (non solo larghezza) */
+/* Media query in funzione dell'ALTEZZA (non solo larghezza) */
 @media (max-height: 800px) {
   .game-table { height: clamp(380px, 52dvh, 560px); }
   .menu-content { padding: clamp(12px, 2.5vh, 24px); }
+}
+
+/* === MOBILE FIXES === */
+@media (max-width: 500px) {
+    .sacrifice-zone {
+        min-width: 280px; /* FIX W: Ridotto per schermi piccoli */
+        max-width: 95%;
+        height: 100px;
+        font-size: 14px;
+    }
 }

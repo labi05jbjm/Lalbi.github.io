@@ -1772,6 +1772,7 @@ class Game {
             contentWarning: document.getElementById('content-warning'),
             acceptWarningBtn: document.getElementById('accept-warning-btn'),
             declineWarningBtn: document.getElementById('decline-warning-btn'),
+            skipWarningLink: document.getElementById('skip-warning-link'),
 
             // Menus
             mainMenu: document.getElementById('main-menu'),
@@ -1873,6 +1874,12 @@ class Game {
         }
         if (this.elements.declineWarningBtn) {
             this.elements.declineWarningBtn.addEventListener('click', () => this.declineWarning());
+        }
+        if (this.elements.skipWarningLink) {
+            this.elements.skipWarningLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.acceptWarning(); // FIX B: Permette di saltare warning
+            });
         }
 
         // Main menu

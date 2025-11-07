@@ -159,7 +159,7 @@ body {
     left: 50%;
     transform: translateX(-50%) translateZ(30px);
     width: 70%;
-    height: 200px;
+    height: 300px; /* FIX G: Era 200px, slot sono 290px */
     display: flex;
     gap: 12px;
     justify-content: center;
@@ -175,7 +175,7 @@ body {
     left: 50%;
     transform: translateX(-50%) translateZ(40px);
     width: 70%;
-    height: 200px;
+    height: 300px; /* FIX G: Era 200px, slot sono 290px */
     display: flex;
     gap: 12px;
     justify-content: center;
@@ -286,11 +286,11 @@ body {
 /* === HAND (Fan of cards) === */
 .hand-container {
     position: fixed;
-    bottom: -80px;
+    bottom: -20px; /* FIX D: Era -80px, troppo affondata */
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    height: 300px;
+    height: 180px; /* FIX D: Era 300px, troppo alta */
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -1033,7 +1033,7 @@ body {
 /* === ACTION BUTTONS === */
 .action-buttons {
     position: absolute;
-    bottom: 250px;
+    bottom: 160px; /* FIX E: Era 250px, evita overlap con sacrifice-zone */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -1099,7 +1099,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100dvh; /* FIX F: Era 100vh, ora usa dynamic viewport height */
     /* Muro galleria d'arte con toni freddi */
     background: linear-gradient(135deg, #445566 0%, #334455 50%, #223344 100%);
     /* Texture muro */
@@ -1120,7 +1120,7 @@ body {
     padding: 40px 20px;
     /* Effetto spotlight radiale centrato */
     position: relative;
-    overflow-y: auto;
+    overflow: hidden; /* FIX A: Era overflow-y: auto, causava scroll indesiderato */
 }
 
 /* Sub-menus (options, about) DEVONO stare sopra main-menu */
@@ -1202,12 +1202,15 @@ body {
     position: relative;
     background: var(--bg-wood);
     border: 4px solid var(--border-dark);
-    padding: 50px;
+    padding: 30px; /* FIX C: Era 50px, troppo grande */
     text-align: center;
     filter: url(#rough-edges);
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.8),
         inset 0 0 60px rgba(0, 0, 0, 0.3);
+    max-width: 90%; /* Responsive */
+    max-height: 85dvh; /* Limita altezza su schermi bassi */
+    overflow-y: auto; /* Scroll interno se necessario */
 }
 
 /* GLASS OVERLAY (Vetro con riflessi) */
@@ -1716,10 +1719,12 @@ body.high-contrast {
 /* === SACRIFICE ZONE === */
 .sacrifice-zone {
     position: fixed;
-    bottom: 280px;
+    bottom: 200px; /* FIX E: Era 280px, evita overlap con action-buttons */
     left: 50%;
     transform: translateX(-50%);
-    width: 500px;
+    width: auto; /* FIX W: Era 500px fisso */
+    max-width: 90%; /* FIX W: Responsive per mobile */
+    min-width: 400px; /* Minimo ragionevole */
     height: 120px;
     background: rgba(138, 74, 58, 0.3);
     border: 3px dashed rgba(200, 90, 84, 0.6);
@@ -1728,6 +1733,7 @@ body.high-contrast {
     align-items: center;
     justify-content: center;
     gap: 15px;
+    padding: 0 20px; /* FIX W: Spazio interno per contenuti */
     z-index: 80;
     opacity: 0;
     pointer-events: none;
@@ -3480,6 +3486,16 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   .menu-content { padding: clamp(12px, 2.5vh, 24px); }
 }
 
+/* === MOBILE FIXES === */
+@media (max-width: 500px) {
+    .sacrifice-zone {
+        min-width: 280px; /* FIX W: Ridotto per schermi piccoli */
+        max-width: 95%;
+        height: 100px;
+        font-size: 14px;
+    }
+}
+
 </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3540,10 +3556,13 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
                     Sconsigliato a persone sotto i 18 anni o con sensibilità a questi temi.
                 </p>
             </div>
-            <div style="display: flex; gap: 15px; margin-top: 40px;">
+            <div style="display: flex; gap: 15px; margin-top: 40px; flex-wrap: wrap; justify-content: center;">
                 <button id="accept-warning-btn" class="menu-button" style="background: var(--accent-warm); color: var(--text-dark);">COMPRENDO, CONTINUA</button>
                 <button id="decline-warning-btn" class="menu-button" style="background: var(--accent-danger);">ESCI</button>
             </div>
+            <p style="margin-top: 20px; font-size: 12px; opacity: 0.7;">
+                <a href="#" id="skip-warning-link" style="color: var(--text-muted); text-decoration: underline;">Salta avviso (ho già letto)</a>
+            </p>
         </div>
     </div>
 
@@ -5624,6 +5643,7 @@ class Game {
             contentWarning: document.getElementById('content-warning'),
             acceptWarningBtn: document.getElementById('accept-warning-btn'),
             declineWarningBtn: document.getElementById('decline-warning-btn'),
+            skipWarningLink: document.getElementById('skip-warning-link'),
 
             // Menus
             mainMenu: document.getElementById('main-menu'),
@@ -5725,6 +5745,12 @@ class Game {
         }
         if (this.elements.declineWarningBtn) {
             this.elements.declineWarningBtn.addEventListener('click', () => this.declineWarning());
+        }
+        if (this.elements.skipWarningLink) {
+            this.elements.skipWarningLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.acceptWarning(); // FIX B: Permette di saltare warning
+            });
         }
 
         // Main menu
