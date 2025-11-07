@@ -7,18 +7,41 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Vignette overlay for psychological deterioration -->
-    <div id="vignette-overlay" class="vignette-overlay"></div>
+    <!-- SVG FILTERS (Hand-drawn effects) -->
+    <svg id="svg-filters" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <!-- Rough edges filter -->
+            <filter id="rough-edges">
+                <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise"/>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
 
-    <!-- Mirror reflection overlay (finale) -->
+            <!-- Rough paper texture -->
+            <filter id="rough-paper">
+                <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise"/>
+                <feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1">
+                    <feDistantLight azimuth="45" elevation="60"/>
+                </feDiffuseLighting>
+            </filter>
+
+            <!-- Ink spread effect -->
+            <filter id="ink-spread">
+                <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="2" result="turbulence"/>
+                <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Overlays -->
+    <div id="vignette-overlay" class="vignette-overlay"></div>
     <div id="mirror-overlay" class="mirror-overlay hidden"></div>
 
-    <!-- Content Warning -->
-    <div id="content-warning" class="content-warning hidden">
-        <div class="warning-content">
+    <!-- CONTENT WARNING -->
+    <div id="content-warning" class="content-warning menu-overlay hidden">
+        <div class="menu-content warning-content">
             <h1 class="warning-title">⚠ AVVISO SUI CONTENUTI</h1>
             <div class="warning-text">
                 <p><strong>Questo gioco contiene rappresentazioni esplicite di:</strong></p>
@@ -29,69 +52,59 @@
                     <li>Temi di autolesionismo e ideazione suicidaria</li>
                     <li>Frammentazione dell'identità e dissociazione</li>
                 </ul>
-                <p class="warning-note"><strong>Nota:</strong> Questo è un'opera di fiction. Se stai vivendo una crisi, contatta un servizio di supporto psicologico.</p>
-                <p class="warning-age">Sconsigliato a persone sotto i 18 anni o con sensibilità a questi temi.</p>
+                <p style="margin-top: 20px; font-size: 14px; font-style: italic;">
+                    <strong>Nota:</strong> Questo è un'opera di fiction interattiva.<br>
+                    Se stai vivendo una crisi, contatta un servizio di supporto psicologico.
+                </p>
+                <p style="margin-top: 10px; font-size: 13px; color: var(--accent-danger);">
+                    Sconsigliato a persone sotto i 18 anni o con sensibilità a questi temi.
+                </p>
             </div>
-            <div class="warning-buttons">
-                <button id="accept-warning-btn" class="warning-btn accept">COMPRENDO, CONTINUA</button>
-                <button id="decline-warning-btn" class="warning-btn decline">ESCI</button>
+            <div style="display: flex; gap: 15px; margin-top: 40px;">
+                <button id="accept-warning-btn" class="menu-button" style="background: var(--accent-warm); color: var(--text-dark);">COMPRENDO, CONTINUA</button>
+                <button id="decline-warning-btn" class="menu-button" style="background: var(--accent-danger);">ESCI</button>
             </div>
         </div>
     </div>
 
     <!-- MAIN MENU -->
-    <div id="main-menu" class="main-menu hidden">
-        <div class="menu-container">
-            <div class="menu-header">
-                <h1 class="game-title">Neve: Limen?</h1>
-                <p class="game-subtitle">"Il confine tra realtà e frammentazione"</p>
-            </div>
+    <div id="main-menu" class="main-menu menu-overlay hidden">
+        <div class="menu-content">
+            <h1 class="menu-title">NEVE: LIMEN?</h1>
+            <p style="margin-bottom: 40px; font-style: italic; color: var(--text-muted);">"Il confine tra realtà e frammentazione"</p>
 
-            <div class="menu-content">
-                <div class="menu-buttons">
-                    <button id="new-game-btn" class="menu-btn primary">
-                        <span class="btn-text">NUOVA SESSIONE</span>
-                    </button>
-                    <button id="continue-btn" class="menu-btn secondary" style="display: none;">
-                        <span class="btn-text">CONTINUA SESSIONE</span>
-                    </button>
-                    <button id="options-btn" class="menu-btn secondary">
-                        <span class="btn-text">OPZIONI</span>
-                    </button>
-                    <button id="about-game-btn" class="menu-btn secondary">
-                        <span class="btn-text">INFORMAZIONI</span>
-                    </button>
-                </div>
+            <button id="new-game-btn" class="menu-button">NUOVA SESSIONE</button>
+            <button id="continue-btn" class="menu-button" style="display: none;">CONTINUA SESSIONE</button>
+            <button id="options-btn" class="menu-button">OPZIONI</button>
+            <button id="about-game-btn" class="menu-button">INFORMAZIONI</button>
 
-                <div class="menu-footer">
-                    <p class="version-text">v1.0 | "Ogni identità è un limen"</p>
-                </div>
-            </div>
+            <p style="margin-top: 40px; font-size: 12px; color: var(--text-muted);">
+                v1.0 | "Ogni identità è un limen"
+            </p>
         </div>
     </div>
 
     <!-- OPTIONS MENU -->
-    <div id="options-menu" class="modal hidden">
-        <div class="modal-content options-content">
-            <h2>OPZIONI</h2>
+    <div id="options-menu" class="options-menu menu-overlay hidden">
+        <div class="menu-content" style="max-width: 500px;">
+            <h2 class="menu-title" style="font-size: 36px;">OPZIONI</h2>
 
-            <div class="option-group">
-                <label class="option-label">Lingua / Language</label>
-                <select id="language-select" class="option-select">
+            <div style="text-align: left; margin: 30px 0;">
+                <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--text-muted);">Lingua / Language</label>
+                <select id="language-select" style="width: 100%; padding: 12px; background: rgba(26, 20, 16, 0.8); border: 2px solid var(--border-card); color: var(--text-light); border-radius: 4px; font-size: 14px;">
                     <option value="it">Italiano</option>
                     <option value="en">English</option>
                 </select>
             </div>
 
-            <div class="option-group">
-                <label class="option-label">Volume Effetti</label>
-                <input type="range" id="volume-slider" class="option-slider" min="0" max="100" value="70">
-                <span id="volume-value">70%</span>
+            <div style="text-align: left; margin: 30px 0;">
+                <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--text-muted);">Volume Effetti: <span id="volume-value">70%</span></label>
+                <input type="range" id="volume-slider" min="0" max="100" value="70" style="width: 100%;">
             </div>
 
-            <div class="option-group">
-                <label class="option-label">Velocità Testo</label>
-                <select id="text-speed-select" class="option-select">
+            <div style="text-align: left; margin: 30px 0;">
+                <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--text-muted);">Velocità Testo</label>
+                <select id="text-speed-select" style="width: 100%; padding: 12px; background: rgba(26, 20, 16, 0.8); border: 2px solid var(--border-card); color: var(--text-light); border-radius: 4px; font-size: 14px;">
                     <option value="slow">Lenta</option>
                     <option value="normal" selected>Normale</option>
                     <option value="fast">Veloce</option>
@@ -99,107 +112,127 @@
                 </select>
             </div>
 
-            <div class="option-group">
-                <label class="option-label">Accessibilità</label>
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="reduce-motion"> Riduci animazioni intense
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="high-contrast"> Alto contrasto
-                    </label>
-                </div>
+            <div style="text-align: left; margin: 30px 0;">
+                <label style="display: flex; align-items: center; font-size: 14px; cursor: pointer;">
+                    <input type="checkbox" id="reduce-motion" style="margin-right: 10px;">
+                    <span>Riduci Animazioni (Accessibilità)</span>
+                </label>
             </div>
 
-            <button id="close-options-btn" class="modal-btn">CHIUDI</button>
+            <div style="text-align: left; margin: 30px 0;">
+                <label style="display: flex; align-items: center; font-size: 14px; cursor: pointer;">
+                    <input type="checkbox" id="high-contrast" style="margin-right: 10px;">
+                    <span>Alto Contrasto</span>
+                </label>
+            </div>
+
+            <button id="close-options-btn" class="menu-button">CHIUDI</button>
         </div>
     </div>
 
     <!-- ABOUT MENU -->
-    <div id="about-menu" class="modal hidden">
-        <div class="modal-content about-content">
-            <h2>Neve: Limen?</h2>
-            <div class="about-text">
-                <p><em>"Limen"</em> - dal latino: soglia, confine, limite.</p>
-                <br>
-                <p>Questo è un gioco narrativo psicologico che esplora la frammentazione dell'identità attraverso il Disturbo Dissociativo dell'Identità (DID).</p>
-                <br>
-                <p>Neve si trova nella sua sessione di terapia settimanale. Questa volta, il suo terapista le propone un gioco di carte...</p>
-                <br>
-                <p class="about-warning"><strong>Attenzione:</strong> Questo gioco tratta temi psicologici intensi e disturbanti. Non è adatto a tutti.</p>
-                <br>
-                <p class="about-credits">
-                    <strong>Design & Sviluppo:</strong> [Nome]<br>
-                    <strong>Durata stimata:</strong> 4-6 ore<br>
-                    <strong>Genere:</strong> Psychological Horror, Narrative Game
+    <div id="about-menu" class="about-menu menu-overlay hidden">
+        <div class="menu-content" style="max-width: 700px;">
+            <h2 class="menu-title" style="font-size: 36px;">INFORMAZIONI</h2>
+
+            <div style="text-align: left; line-height: 1.8; margin: 30px 0;">
+                <p style="margin-bottom: 20px;">
+                    <strong>"Neve: Limen?"</strong> è un'esperienza interattiva narrativa che esplora i temi della dissociazione,
+                    dell'identità frammentata e della manipolazione psicologica attraverso le meccaniche di un gioco di carte.
+                </p>
+
+                <p style="margin-bottom: 20px;">
+                    Il gioco è ispirato da <em>Inscryption</em> per la sua natura metanarrativa e dalla rappresentazione
+                    clinica del Disturbo Dissociativo dell'Identità.
+                </p>
+
+                <p style="margin-bottom: 20px; font-size: 13px; font-style: italic; color: var(--text-muted);">
+                    <strong>Avvertenze:</strong> Questo gioco contiene rappresentazioni di abuso psicologico e manipolazione.
+                    Non è inteso come rappresentazione clinicamente accurata del DID, ma come esplorazione artistica di temi psicologici.
+                </p>
+
+                <p style="margin-top: 30px; font-size: 12px; color: var(--text-muted);">
+                    Sviluppato con ❤️ per esplorare le profondità della psiche umana.<br>
+                    © 2024 | Tutti i diritti riservati.
                 </p>
             </div>
-            <button id="close-about-btn" class="modal-btn">CHIUDI</button>
+
+            <button id="close-about-btn" class="menu-button">CHIUDI</button>
         </div>
     </div>
 
-    <!-- GAME CONTAINER -->
+    <!-- PAUSE MODAL -->
+    <div id="pause-modal" class="pause-modal menu-overlay hidden">
+        <div class="menu-content" style="max-width: 500px;">
+            <h2 class="menu-title" style="font-size: 36px;">PAUSA</h2>
+
+            <div style="margin: 30px 0; padding: 20px; background: rgba(0, 0, 0, 0.3); border-radius: 8px;">
+                <p id="pause-therapist-text" style="font-style: italic; text-align: center; font-size: 16px;"></p>
+            </div>
+
+            <button id="resume-game-btn" class="menu-button">RIPRENDI</button>
+            <button id="save-exit-btn" class="menu-button">SALVA ED ESCI</button>
+            <button id="options-from-pause-btn" class="menu-button">OPZIONI</button>
+        </div>
+    </div>
+
+    <!-- NARRATIVE MODAL -->
+    <div id="narrative-modal" class="narrative-modal hidden">
+        <div class="narrative-content">
+            <p id="narrative-text" class="narrative-text"></p>
+            <button id="narrative-continue-btn" class="menu-button">CONTINUA</button>
+        </div>
+    </div>
+
+    <!-- GAME CONTAINER (3D Scene) -->
     <div id="game-container" class="game-container hidden">
-        <!-- Session Info Header -->
-        <div class="session-header">
-            <div class="session-time">
-                <span class="time-label">SESSIONE:</span>
-                <span id="session-timer" class="time-value">00:00</span>
-            </div>
-            <div class="session-info">
-                <span class="patient-name">PAZIENTE: NEVE</span>
-                <span class="session-number">SESSIONE #<span id="session-num">47</span></span>
-            </div>
-            <div class="session-controls">
-                <button id="pause-btn" class="icon-btn">⏸</button>
-                <button id="menu-btn" class="icon-btn">☰</button>
-            </div>
-        </div>
-
-        <!-- Therapist Section -->
-        <div class="therapist-section">
-            <div class="therapist-portrait">
-                <div class="portrait-frame">
-                    <div id="therapist-image" class="portrait-img">👤</div>
+        <div class="scene-3d">
+            <!-- Session Header -->
+            <div class="session-header">
+                <div class="session-info">
+                    <span id="session-timer">00:00</span>
                 </div>
-                <div class="therapist-name">Dr. Lumen</div>
+                <button id="pause-btn" class="session-info" style="cursor: pointer; border: none;">⏸ PAUSA</button>
             </div>
 
-            <div class="dialogue-container">
-                <div class="dialogue-box therapist-dialogue">
-                    <div class="speaker-label">Dr. Lumen</div>
-                    <p id="therapist-text" class="dialogue-text">Buongiorno Neve. Come ti senti oggi?</p>
-                </div>
+            <!-- Patient Info (Top Left) -->
+            <div class="patient-info">
+                <div class="patient-label">PAZIENTE</div>
+                <div class="patient-name">NEVE</div>
             </div>
-        </div>
 
-        <!-- Game State Display -->
-        <div class="game-state-panel">
-            <div class="state-item">
-                <span class="state-label">Stabilità</span>
+            <!-- Stability Bar (Top Right) -->
+            <div class="stability-container">
+                <div class="stability-label">Stabilità</div>
                 <div class="stability-bar">
-                    <div id="stability-fill" class="stability-fill" style="width: 100%"></div>
+                    <div id="stability-fill" class="stability-fill" style="width: 100%;"></div>
+                    <div id="stability-text" class="stability-text">100%</div>
                 </div>
-                <span id="stability-text" class="state-value">100%</span>
             </div>
 
-            <div class="state-item">
-                <span class="state-label">Frammenti</span>
-                <span id="fragments-count" class="state-value">0</span>
+            <!-- Therapist Section (Top Center) -->
+            <div class="therapist-section">
+                <div class="therapist-portrait">
+                    <div id="therapist-image" class="portrait-img">👤</div>
+                    <div class="therapist-name">Dr. Lumen</div>
+                </div>
+                <div class="dialogue-box">
+                    <p id="therapist-text" class="dialogue-text">Buongiorno Neve...</p>
+                </div>
             </div>
 
-            <div class="state-item">
-                <span class="state-label">Round</span>
-                <span id="round-count" class="state-value">1</span>
-            </div>
-        </div>
+            <!-- 3D Table -->
+            <div class="game-table">
+                <!-- Opponent Field (Far side) -->
+                <div id="therapist-card-field" class="opponent-field">
+                    <div class="card-slot" data-slot="0"></div>
+                    <div class="card-slot" data-slot="1"></div>
+                    <div class="card-slot" data-slot="2"></div>
+                    <div class="card-slot" data-slot="3"></div>
+                </div>
 
-        <!-- Playing Field -->
-        <div class="playing-field">
-            <!-- Therapist's Field -->
-            <div class="field-section therapist-field">
-                <div class="field-label">Campo del Terapista</div>
-                <div id="therapist-card-field" class="card-field">
+                <!-- Player Field (Near side) -->
+                <div id="neve-card-field" class="player-field">
                     <div class="card-slot" data-slot="0"></div>
                     <div class="card-slot" data-slot="1"></div>
                     <div class="card-slot" data-slot="2"></div>
@@ -207,74 +240,42 @@
                 </div>
             </div>
 
-            <!-- Event Log -->
-            <div class="event-log-section">
-                <div class="log-header">TRASCRIZIONE SESSIONE</div>
-                <div id="event-log" class="event-log"></div>
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button id="end-turn-btn" class="action-btn">TERMINA TURNO</button>
+                <button id="discard-btn" class="action-btn">SCARTA</button>
             </div>
 
-            <!-- Neve's Field -->
-            <div class="field-section neve-field">
-                <div class="field-label">Il Tuo Campo</div>
-                <div id="neve-card-field" class="card-field">
-                    <div class="card-slot" data-slot="0"></div>
-                    <div class="card-slot" data-slot="1"></div>
-                    <div class="card-slot" data-slot="2"></div>
-                    <div class="card-slot" data-slot="3"></div>
+            <!-- Hand (Fan of cards) -->
+            <div class="hand-container">
+                <div id="neve-hand"></div>
+            </div>
+
+            <!-- Card Whisper (appears on hover) -->
+            <div id="card-whisper" class="card-whisper hidden">
+                <p id="whisper-text"></p>
+            </div>
+
+            <!-- Event Log (Bottom Left) -->
+            <div id="event-log" class="event-log"></div>
+
+            <!-- Game Stats (Bottom Right) -->
+            <div class="game-stats">
+                <div class="stat-box">
+                    <div class="stat-label">FRAMMENTI</div>
+                    <div id="fragments-count" class="stat-value">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">ROUND</div>
+                    <div id="round-count" class="stat-value">1</div>
                 </div>
             </div>
-        </div>
 
-        <!-- Neve's Hand -->
-        <div class="hand-section">
-            <div class="hand-label">LE TUE CARTE</div>
-            <div id="neve-hand" class="card-hand"></div>
-        </div>
-
-        <!-- Card Whispers (when hovering) -->
-        <div id="card-whisper" class="card-whisper hidden">
-            <div class="whisper-content">
-                <p id="whisper-text" class="whisper-text"></p>
+            <!-- Alter Messages Sidebar -->
+            <div id="alter-messages" class="alter-messages">
+                <div class="alter-header">[ . . . ]</div>
+                <div id="alter-log" class="alter-log"></div>
             </div>
-        </div>
-
-        <!-- Alter Communications (sidebar) -->
-        <div id="alter-messages" class="alter-messages">
-            <div class="alter-header">[ . . . ]</div>
-            <div id="alter-log" class="alter-log"></div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-            <button id="end-turn-btn" class="action-btn primary">
-                <span class="btn-text">TERMINA TURNO</span>
-            </button>
-            <button id="discard-btn" class="action-btn secondary">
-                <span class="btn-text">SCARTA CARTA</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Pause Menu -->
-    <div id="pause-modal" class="modal hidden">
-        <div class="modal-content pause-content">
-            <h2>SESSIONE IN PAUSA</h2>
-            <div class="therapist-pause-text">
-                <p id="pause-therapist-text">"Prenditi il tempo che ti serve, Neve. Sono qui per te."</p>
-            </div>
-            <div class="pause-buttons">
-                <button id="resume-game-btn" class="modal-btn">RIPRENDI</button>
-                <button id="save-exit-btn" class="modal-btn">SALVA E ESCI</button>
-                <button id="options-from-pause-btn" class="modal-btn">OPZIONI</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Narrative Event Modal (for key story moments) -->
-    <div id="narrative-modal" class="modal narrative-modal hidden">
-        <div class="modal-content narrative-content">
-            <div id="narrative-text" class="narrative-text"></div>
-            <button id="narrative-continue-btn" class="modal-btn">CONTINUA...</button>
         </div>
     </div>
 

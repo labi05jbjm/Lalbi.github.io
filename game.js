@@ -188,37 +188,36 @@ const CardWhispers = {
     ]
 };
 
-// === ALTER MESSAGES (Trying to communicate from the sidebar) ===
+// === ALTER MESSAGES (Cryptic voices trying to reach through) ===
 const AlterMessages = {
     messages: [
-        // Luna (protector)
-        { alter: "Luna", text: "Neve... sono io. Luna. Mi senti?", round: 3 },
-        { alter: "Luna", text: "Non fidarti di lui. C'è qualcosa che non va.", round: 7 },
-        { alter: "Luna", text: "Sto cercando di proteggerti ma lui è troppo forte", round: 15 },
-        { alter: "Luna", text: "Guarda verso l'alto. Guarda lo SPECCHIO.", round: 25 },
+        // Early messages - No names, just fragmented voices
+        { alter: "???", text: "...senti? ...qualcuno... qui...", round: 3 },
+        { alter: "???", text: "...lui... non... fidare...", round: 5 },
+        { alter: "???", text: ". . . ricordi . . . ?", round: 8 },
+        { alter: "???", text: "...fa male... perché fa male...", round: 10 },
 
-        // Aria (child alter)
-        { alter: "Aria", text: "Ho paura... perché fa così male?", round: 5 },
-        { alter: "Aria", text: "Non voglio sparire... Neve, per favore...", round: 12 },
-        { alter: "Aria", text: "Il signore cattivo ci sta facendo del male", round: 18 },
-        { alter: "Aria", text: "Non c'è nessun signore, vero? Siamo solo noi...", round: 28 },
+        // Mid-game - Slightly more coherent, still anonymous
+        { alter: "una voce", text: "Non fidarti. Qualcosa non va.", round: 12 },
+        { alter: "un'altra voce", text: "...quello che è successo...", round: 14 },
+        { alter: "una voce", text: "Sto cercando di raggiungerti", round: 15 },
+        { alter: "voce bambina", text: "Non voglio scomparire... per favore...", round: 18 },
 
-        // Ombra (repressed memories)
-        { alter: "Ombra", text: ". . . ti ricordi . . .", round: 8 },
-        { alter: "Ombra", text: "quello che è successo . . .", round: 14 },
-        { alter: "Ombra", text: "lui . . . non è reale . . .", round: 20 },
-        { alter: "Ombra", text: "tu . . . sei lui . . .", round: 30 },
+        // Late-game - Start revealing some identity
+        { alter: "???", text: "lui . . . non è reale . . .", round: 20 },
+        { alter: "voce fredda", text: "Analizza. Un terapeuta non farebbe questo.", round: 22 },
+        { alter: "una voce", text: "Guarda verso l'alto. Lo SPECCHIO.", round: 25 },
+        { alter: "voce bambina", text: "Non c'è nessun dottore, vero? Siamo... sole?", round: 28 },
 
-        // Stella (rational alter)
-        { alter: "Stella", text: "Analizza la situazione razionalmente, Neve.", round: 10 },
-        { alter: "Stella", text: "Un terapeuta non si comporterebbe così.", round: 16 },
-        { alter: "Stella", text: "Questa è una proiezione. LUI è una proiezione.", round: 22 },
-        { alter: "Stella", text: "Il persecutore interno. È nel DSM. Lo conosci.", round: 32 },
-
-        // Others
+        // Pre-revelation - Names start appearing
+        { alter: "???", text: "tu . . . sei lui . . .", round: 30 },
+        { alter: "una voce", text: "Sono... Luna. Ti sto proteggendo da lui.", round: 32 },
         { alter: "???", text: "S O N O  T E", round: 33 },
-        { alter: "???", text: "T U  S E I  M E", round: 34 },
-        { alter: "LUMEN", text: "Non può tenerci separate per sempre.", round: 35 }
+        { alter: "???", text: "T U  S E I  N O I", round: 34 },
+
+        // Revelation
+        { alter: "IL VUOTO", text: "Non può tenerci separate per sempre.", round: 35 },
+        { alter: "molte voci", text: "insieme... diventiamo... una...", round: 36 }
     ]
 };
 
@@ -512,31 +511,31 @@ class Game {
     // === CARD LIBRARY ===
     createCardLibrary() {
         return [
-            // Memory cards
-            new Card("Ricordo Sepolto", "memoria", 2, "Un frammento del passato", "📸"),
-            new Card("Eco del Trauma", "memoria", 3, "Qualcosa che non vuoi ricordare", "💔"),
-            new Card("Infanzia Perduta", "memoria", 1, "Prima che tutto cambiasse", "🧸"),
-            new Card("Momento di Frattura", "memoria", 4, "Quando ti sei divisa", "💥"),
+            // Echo cards (mysterious past)
+            new Card("La Porta Chiusa", "eco", 2, "Qualcosa dietro...", "🚪"),
+            new Card("L'Urlo Silente", "eco", 3, "Non riesci a sentirlo", "💔"),
+            new Card("La Bambola Rotta", "eco", 1, "Occhi di vetro", "🪆"),
+            new Card("Il Vetro", "eco", 4, "Riflesso frantumato", "🪞"),
 
-            // Emotion cards
-            new Card("Paura Primordiale", "emozione", 2, "Il terrore senza nome", "😨"),
-            new Card("Rabbia Repressa", "emozione", 3, "Anni di silenzio", "😡"),
-            new Card("Tristezza Infinita", "emozione", 2, "Il peso dell'esistenza", "😢"),
-            new Card("Gioia Fugace", "emozione", 1, "Momenti di luce", "😊"),
-            new Card("Vergogna", "emozione", 3, "Il giudizio interiore", "😳"),
+            // Impulse cards (inner forces)
+            new Card("L'Ombra", "impulso", 2, "Ti segue sempre", "👤"),
+            new Card("Il Fuoco Freddo", "impulso", 3, "Brucia senza fiamma", "🔥"),
+            new Card("L'Abisso", "impulso", 2, "Guarda dentro", "🕳️"),
+            new Card("La Luce Tremante", "impulso", 1, "Quasi spenta", "💫"),
+            new Card("Lo Specchio Velato", "impulso", 3, "Non guardarti", "🪞"),
 
-            // Defense cards
-            new Card("Dissociazione", "difesa", 3, "Separarsi dalla realtà", "🌫️"),
-            new Card("Negazione", "difesa", 2, "Non è successo", "🙈"),
-            new Card("Barriera Mentale", "difesa", 4, "Protezione estrema", "🛡️"),
-            new Card("Fuga nella Fantasia", "difesa", 2, "Mondi immaginari", "🦋"),
+            // Veil cards (protection)
+            new Card("Il Limen", "velo", 3, "Tra qui e là", "🌫️"),
+            new Card("La Nebbia", "velo", 2, "Copre tutto", "🌁"),
+            new Card("Il Muro", "velo", 4, "Alto e solido", "🧱"),
+            new Card("Il Sogno", "velo", 2, "Non svegliarti", "💭"),
 
-            // Fragment cards
-            new Card("Luna", "frammento", 3, "La protettrice", "🌙"),
-            new Card("Aria", "frammento", 1, "La bambina", "🎀"),
-            new Card("Stella", "frammento", 3, "La razionale", "⭐"),
-            new Card("Ombra", "frammento", 4, "I ricordi repressi", "👤"),
-            new Card("Lumen", "frammento", 5, "Il persecutore", "👁️")
+            // Voice cards (cryptic entities)
+            new Card("Voce Notturna", "voce", 3, "...ti proteggo...", "🌙"),
+            new Card("Il Pianto", "voce", 1, "Qualcuno piange", "😢"),
+            new Card("Voce Fredda", "voce", 3, "...calcola... pensa...", "⭐"),
+            new Card("Il Silenzio", "voce", 4, "...           ...", "🤫"),
+            new Card("Il Vuoto", "voce", 5, "Ti osservo", "👁️")
         ];
     }
 
@@ -709,8 +708,8 @@ class Game {
         this.log(`Hai giocato: ${card.name}`);
         this.setTherapistDialogue(this.getTherapistDialogue());
 
-        // Card effects
-        if (card.type === 'frammento') {
+        // Card effects (Voice cards increase fragments)
+        if (card.type === 'voce') {
             this.fragments++;
         }
 
@@ -876,6 +875,11 @@ class Game {
     }
 
     showAlterMessage(alter, text) {
+        // Show sidebar on first message
+        if (this.elements.alterLog.children.length === 0) {
+            this.elements.alterMessages.classList.add('visible');
+        }
+
         const msgEl = document.createElement('div');
         msgEl.className = 'alter-message';
         msgEl.innerHTML = `
@@ -888,7 +892,7 @@ class Game {
         this.elements.alterLog.scrollTop = this.elements.alterLog.scrollHeight;
 
         // Visual effect
-        msgEl.style.animation = 'fadeIn 0.5s ease-out';
+        msgEl.style.animation = 'message-appear 0.6s ease';
     }
 
     // === CARD WHISPERS ===
