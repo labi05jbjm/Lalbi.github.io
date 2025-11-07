@@ -3,14 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE CARD GAME - Chi sta giocando con chi?</title>
+    <title>Neve: Limen?</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Courier+Prime:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
 /* ============================================
-   THE CARD GAME - Artistic CSS
+   NEVE: LIMEN? - 3D Inscryption-style CSS
    ============================================ */
+
+/* === SVG FILTERS (Hand-drawn effects) === */
+svg.filters {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
 
 /* === RESET & BASE === */
 * {
@@ -20,1677 +27,1521 @@
 }
 
 :root {
-    /* Color Palette */
-    --bg-void: #0a0808;
-    --bg-dark: #1a1515;
-    --bg-medium: #2a2020;
-    --bg-card: #3a2f2f;
+    /* Inscryption-inspired Color Palette */
+    --bg-dark: #1a1410;
+    --bg-table: #2d2416;
+    --bg-wood: #3a2e1c;
+    --bg-card: #f4ebe0;
 
-    --text-primary: #f5f0e8;
-    --text-secondary: #c4b5a0;
-    --text-dim: #8a7a65;
+    --text-dark: #1a1410;
+    --text-light: #f4ebe0;
+    --text-muted: #8a7a6a;
 
-    --accent-blood: #d32f2f;
-    --accent-blood-dark: #8b0000;
-    --accent-soul: #7b68ee;
-    --accent-gold: #ffa726;
-    --accent-glow: #ff6b35;
+    --accent-warm: #d4a574;
+    --accent-cold: #6a8a9a;
+    --accent-danger: #8a4a3a;
+    --accent-whisper: #9a7a8a;
 
-    --border-dark: #1a1515;
-    --border-medium: #3a3030;
-    --border-light: #5a4a4a;
+    --border-dark: #1a1410;
+    --border-card: #c0b0a0;
 
-    /* Gradients */
-    --gradient-blood: linear-gradient(135deg, #8b0000, #d32f2f);
-    --gradient-soul: linear-gradient(135deg, #5a4fcf, #7b68ee);
-    --gradient-gold: linear-gradient(135deg, #ff8f00, #ffa726);
-    --gradient-dark: linear-gradient(180deg, #0a0808, #1a1515);
+    /* 3D Perspective */
+    --perspective: 1200px;
+    --table-depth: 800px;
 }
 
 body {
-    font-family: 'Courier Prime', 'Courier New', monospace;
-    background: var(--bg-void);
-    color: var(--text-primary);
+    font-family: 'Crimson Text', 'Georgia', serif;
+    background: var(--bg-dark);
+    color: var(--text-light);
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow: hidden;
     position: relative;
-    background-image:
-        radial-gradient(ellipse at 30% 30%, rgba(123, 104, 238, 0.03) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 70%, rgba(139, 0, 0, 0.05) 0%, transparent 50%);
+    line-height: 1.6;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="8" fill="%23f4ebe0" opacity="0.7"/></svg>'), auto;
 }
 
 .hidden {
     display: none !important;
 }
 
-/* === GLITCH & STATIC EFFECTS === */
-.glitch-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0;
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15),
-        rgba(0, 0, 0, 0.15) 1px,
-        transparent 1px,
-        transparent 2px
-    );
-    transition: opacity 0.1s;
-}
-
-.glitch-overlay.active {
-    opacity: 1;
-    animation: glitch-anim 0.3s infinite;
-}
-
-@keyframes glitch-anim {
-    0%, 100% { transform: translate(0); }
-    20% { transform: translate(-3px, 3px); filter: hue-rotate(90deg); }
-    40% { transform: translate(-3px, -3px); }
-    60% { transform: translate(3px, 3px); }
-    80% { transform: translate(3px, -3px); filter: hue-rotate(-90deg); }
-}
-
-.static-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 9998;
-    opacity: 0.03;
-}
-
-/* === MAIN MENU (TV EFFECT) === */
-.main-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    background: var(--gradient-dark);
-    animation: fadeIn 1s ease-in;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.tv-container {
-    position: relative;
-    animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
-}
-
-.tv-frame {
-    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
-    border-radius: 30px;
-    padding: 40px;
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.8),
-        inset 0 2px 4px rgba(255, 255, 255, 0.1);
-    position: relative;
-}
-
-.tv-screen {
-    width: 600px;
-    height: 450px;
-    background: #000;
-    border-radius: 15px;
-    border: 8px solid #1a1a1a;
-    position: relative;
-    overflow: hidden;
-    box-shadow:
-        inset 0 0 50px rgba(0, 0, 0, 0.9),
-        0 0 30px rgba(123, 104, 238, 0.3);
-}
-
-.tv-static {
+/* === SVG FILTERS === */
+#svg-filters {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background:
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            rgba(255, 255, 255, 0.03) 2px,
-            rgba(255, 255, 255, 0.03) 4px
-        );
-    pointer-events: none;
-    z-index: 2;
-    animation: tv-lines 8s linear infinite;
-}
-
-@keyframes tv-lines {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(100%); }
-}
-
-.tv-content {
-    position: relative;
-    z-index: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    text-align: center;
-}
-
-.title-glitch {
-    font-family: 'Creepster', cursive;
-    font-size: 4em;
-    color: var(--text-primary);
-    text-shadow:
-        3px 3px 0 var(--accent-blood),
-        -3px -3px 0 var(--accent-soul),
-        0 0 30px rgba(123, 104, 238, 0.6);
-    margin-bottom: 10px;
-    position: relative;
-    animation: title-flicker 4s infinite;
-}
-
-@keyframes title-flicker {
-    0%, 100% { opacity: 1; }
-    41%, 43% { opacity: 0.8; }
-    45%, 47% { opacity: 1; text-shadow:
-        3px 3px 0 var(--accent-blood),
-        -3px -3px 0 var(--accent-soul),
-        0 0 50px rgba(255, 107, 53, 0.8); }
-}
-
-.subtitle {
-    font-size: 1.3em;
-    color: var(--text-secondary);
-    font-style: italic;
-    margin-bottom: 50px;
-    letter-spacing: 2px;
-}
-
-.menu-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 40px;
-}
-
-.menu-btn {
-    font-family: 'Special Elite', cursive;
-    font-size: 1.3em;
-    padding: 15px 40px;
-    background: var(--gradient-blood);
-    color: var(--text-primary);
-    border: 3px solid var(--accent-blood-dark);
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    position: relative;
-    overflow: hidden;
-}
-
-.menu-btn::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
     width: 0;
     height: 0;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.5s, height 0.5s;
 }
 
-.menu-btn:hover::before {
-    width: 300px;
-    height: 300px;
-}
-
-.menu-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 30px var(--accent-blood);
-}
-
-.btn-icon {
-    margin-right: 10px;
-}
-
-.tv-footer {
-    margin-top: auto;
-}
-
-.warning-text {
-    color: var(--accent-gold);
-    font-size: 0.9em;
-    animation: pulse-glow 2s infinite;
-}
-
-@keyframes pulse-glow {
-    0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--accent-gold); }
-    50% { opacity: 0.7; text-shadow: 0 0 20px var(--accent-gold); }
-}
-
-/* TV Controls */
-.tv-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    margin-top: 20px;
-    padding: 15px;
-}
-
-.power-button {
-    width: 60px;
-    height: 60px;
-    background: radial-gradient(circle, #3a3a3a, #1a1a1a);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: 3px solid #0a0a0a;
-    transition: all 0.3s;
-    box-shadow:
-        0 4px 8px rgba(0, 0, 0, 0.6),
-        inset 0 2px 4px rgba(255, 255, 255, 0.1);
-}
-
-.power-button:hover {
-    background: radial-gradient(circle, #4a4a4a, #2a2a2a);
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.8),
-        0 0 20px var(--accent-soul);
-}
-
-.power-button:active {
-    transform: scale(0.95);
-}
-
-.power-icon {
-    font-size: 2em;
-    color: var(--accent-soul);
-    text-shadow: 0 0 10px var(--accent-soul);
-}
-
-.volume-knob, .channel-knob {
-    width: 40px;
-    height: 40px;
-    background: radial-gradient(circle, #4a4a4a, #2a2a2a);
-    border-radius: 50%;
-    border: 2px solid #1a1a1a;
-    position: relative;
-}
-
-.volume-knob::after, .channel-knob::after {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 50%;
-    width: 3px;
-    height: 15px;
-    background: var(--text-dim);
-    transform: translateX(-50%);
-}
-
-.tv-shadow {
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    height: 30px;
-    background: radial-gradient(ellipse, rgba(0, 0, 0, 0.5), transparent);
-    filter: blur(10px);
-}
-
-/* === GAME CONTAINER === */
-.game-container {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 20px;
-    position: relative;
-}
-
-/* === PAUSE MENU === */
-.pause-menu {
+/* === GAME CONTAINER (3D Scene) === */
+#game-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.95);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-    backdrop-filter: blur(10px);
+    perspective: var(--perspective);
+    perspective-origin: 50% 60%;
+    background:
+        radial-gradient(ellipse at 50% 40%, rgba(74, 58, 42, 0.3) 0%, transparent 60%),
+        var(--bg-dark);
 }
 
-.pause-content {
-    background: var(--gradient-dark);
-    border: 4px solid var(--accent-blood);
-    border-radius: 20px;
-    padding: 50px;
-    text-align: center;
-    box-shadow:
-        0 0 50px rgba(211, 47, 47, 0.5),
-        inset 0 0 30px rgba(0, 0, 0, 0.5);
-    min-width: 400px;
-}
-
-.pause-title {
-    font-family: 'Special Elite', cursive;
-    font-size: 3em;
-    margin-bottom: 20px;
-    color: var(--accent-blood);
-    text-shadow: 0 0 20px var(--accent-blood);
-}
-
-.entity-dialogue-pause {
-    background: rgba(0, 0, 0, 0.5);
-    border: 2px solid var(--border-medium);
-    border-radius: 10px;
-    padding: 20px;
-    margin: 30px 0;
-    font-style: italic;
-    color: var(--text-secondary);
-}
-
-.pause-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.pause-btn {
-    font-family: 'Courier Prime', monospace;
-    font-size: 1.2em;
-    padding: 12px 30px;
-    background: var(--bg-dark);
-    color: var(--text-primary);
-    border: 2px solid var(--border-light);
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-transform: uppercase;
-}
-
-.pause-btn:hover {
-    background: var(--accent-soul);
-    border-color: var(--accent-soul);
-    transform: translateX(5px);
-    box-shadow: -5px 0 15px var(--accent-soul);
-}
-
-/* === GAME HEADER === */
-.game-header {
-    display: grid;
-    grid-template-columns: auto 1fr 1fr auto;
-    gap: 20px;
-    align-items: start;
-    padding: 20px;
-    background: var(--gradient-dark);
-    border: 2px solid var(--border-dark);
-    border-radius: 15px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-}
-
-.icon-btn {
-    width: 50px;
-    height: 50px;
-    background: var(--bg-medium);
-    border: 2px solid var(--border-medium);
-    border-radius: 10px;
-    color: var(--text-primary);
-    font-size: 1.5em;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.icon-btn:hover {
-    background: var(--accent-soul);
-    border-color: var(--accent-soul);
-    box-shadow: 0 0 20px var(--accent-soul);
-    transform: scale(1.1);
-}
-
-/* Entity Portrait */
-.entity-portrait {
-    display: flex;
-    align-items: center;
-}
-
-.portrait-frame {
-    background: var(--gradient-blood);
-    border: 3px solid var(--accent-blood-dark);
-    border-radius: 15px;
-    padding: 15px;
-    text-align: center;
-    box-shadow:
-        0 0 30px rgba(139, 0, 0, 0.5),
-        inset 0 0 20px rgba(0, 0, 0, 0.5);
-    animation: portrait-pulse 3s infinite;
-}
-
-@keyframes portrait-pulse {
-    0%, 100% { box-shadow: 0 0 30px rgba(139, 0, 0, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5); }
-    50% { box-shadow: 0 0 50px rgba(139, 0, 0, 0.8), inset 0 0 30px rgba(0, 0, 0, 0.7); }
-}
-
-.portrait-image {
-    font-size: 3em;
-    margin-bottom: 5px;
-    filter: drop-shadow(0 0 10px var(--accent-blood));
-}
-
-.portrait-name {
-    font-family: 'Special Elite', cursive;
-    font-size: 0.9em;
-    color: var(--text-primary);
-    letter-spacing: 2px;
-}
-
-/* Dialogue Box */
-.dialogue-box {
-    background: rgba(0, 0, 0, 0.7);
-    border: 2px solid var(--accent-soul);
-    border-radius: 15px;
-    padding: 20px;
-    position: relative;
-    box-shadow:
-        0 0 20px rgba(123, 104, 238, 0.3),
-        inset 0 0 30px rgba(0, 0, 0, 0.5);
-    min-height: 80px;
-    display: flex;
-    align-items: center;
-}
-
-.dialogue-indicator {
-    position: absolute;
-    top: -10px;
-    left: 30px;
-    color: var(--accent-soul);
-    font-size: 1.5em;
-    animation: bob 1s infinite;
-}
-
-@keyframes bob {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-.dialogue-text {
-    font-size: 1.1em;
-    line-height: 1.5;
-    color: var(--text-primary);
-    font-style: italic;
-    animation: typewriter 2s;
-}
-
-/* Stats Panel */
-.stats-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background: var(--bg-medium);
-    border: 2px solid var(--border-medium);
-    border-radius: 10px;
-    padding: 15px;
-}
-
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.2em;
-    padding: 5px 10px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
-}
-
-.stat-icon {
-    font-size: 1.3em;
-    filter: drop-shadow(0 0 5px currentColor);
-}
-
-.stat-label {
-    color: var(--text-secondary);
-    margin-right: 5px;
-}
-
-/* === BATTLEFIELD === */
-.battlefield-container {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: 30px;
-    margin: 30px 0;
-}
-
-.battlefield {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.opponent-side {
-    padding: 20px;
-    background: var(--gradient-blood);
-    border: 3px solid var(--accent-blood-dark);
-    border-radius: 20px;
-    box-shadow:
-        0 0 40px rgba(139, 0, 0, 0.4),
-        inset 0 0 30px rgba(0, 0, 0, 0.3);
-}
-
-.player-side {
-    padding: 20px;
-    background: var(--gradient-soul);
-    border: 3px solid var(--accent-soul);
-    border-radius: 20px;
-    box-shadow:
-        0 0 40px rgba(123, 104, 238, 0.4),
-        inset 0 0 30px rgba(0, 0, 0, 0.3);
-}
-
-/* Health Display */
-.health-display {
-    margin-bottom: 15px;
-}
-
-.health-bar-container {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 15px;
-    border-radius: 10px;
-    border: 2px solid var(--border-dark);
-}
-
-.health-label {
-    font-family: 'Special Elite', cursive;
-    font-size: 1.1em;
-    text-align: center;
-    margin-bottom: 10px;
-    letter-spacing: 3px;
-    text-shadow: 0 0 10px currentColor;
-}
-
-.health-bar {
+/* === 3D SCENE WRAPPER === */
+.scene-3d {
     position: relative;
     width: 100%;
-    height: 35px;
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 20px;
-    border: 2px solid var(--border-medium);
-    overflow: hidden;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
-}
-
-.health-fill {
     height: 100%;
-    background: linear-gradient(90deg, #4caf50, #8bc34a);
-    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    box-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
 }
 
-.health-fill.player-health {
-    background: var(--gradient-soul);
-    box-shadow: 0 0 15px rgba(123, 104, 238, 0.8);
+/* Camera rotation states */
+.scene-3d.look-left {
+    transform: rotateY(15deg);
 }
 
-.health-fill.low {
-    background: var(--gradient-blood) !important;
-    box-shadow: 0 0 15px rgba(211, 47, 47, 0.8) !important;
-    animation: health-warning 1s infinite;
+.scene-3d.look-right {
+    transform: rotateY(-15deg);
 }
 
-@keyframes health-warning {
-    0%, 100% { filter: brightness(1); }
-    50% { filter: brightness(1.3); }
-}
-
-.health-shine {
+/* === TABLE (Main playing surface) === */
+.game-table {
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    animation: shine 2s infinite;
-}
-
-@keyframes shine {
-    0% { left: -100%; }
-    100% { left: 100%; }
-}
-
-.health-text {
-    position: absolute;
-    top: 50%;
+    bottom: -10%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-weight: bold;
-    font-size: 1em;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
-    z-index: 1;
-    letter-spacing: 1px;
+    transform: translateX(-50%) rotateX(60deg);
+    transform-style: preserve-3d;
+    width: 90%;
+    height: var(--table-depth);
+    background:
+        repeating-linear-gradient(
+            90deg,
+            var(--bg-wood) 0px,
+            #2d2416 2px,
+            var(--bg-wood) 4px
+        ),
+        var(--bg-table);
+    border: 3px solid var(--border-dark);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 0 100px rgba(0, 0, 0, 0.3);
+    filter: url(#rough-edges);
 }
 
-/* Card Field */
-.card-field {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    min-height: 220px;
-}
-
-.card-slot {
-    background: rgba(0, 0, 0, 0.3);
-    border: 3px dashed var(--border-medium);
-    border-radius: 15px;
-    min-height: 200px;
-    transition: all 0.3s;
-    position: relative;
+/* === OPPONENT FIELD (Far side of table) === */
+.opponent-field {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%) translateZ(20px);
+    width: 80%;
+    height: 180px;
     display: flex;
-    align-items: center;
+    gap: 15px;
     justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
 }
 
-.card-slot::before {
-    content: '⊕';
-    font-size: 3em;
-    color: var(--border-medium);
-    opacity: 0.3;
+/* === PLAYER FIELD (Near side of table) === */
+.player-field {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%) translateZ(30px);
+    width: 80%;
+    height: 180px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+}
+
+/* === CARD SLOTS === */
+.card-slot {
+    width: 140px;
+    height: 180px;
+    border: 2px dashed rgba(244, 235, 224, 0.2);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    transform-style: preserve-3d;
+    filter: url(#rough-edges);
 }
 
 .card-slot.valid-drop {
-    border-color: var(--accent-gold);
-    border-style: solid;
-    background: rgba(255, 167, 38, 0.15);
+    border-color: var(--accent-warm);
+    background: rgba(212, 165, 116, 0.1);
     box-shadow:
-        0 0 30px rgba(255, 167, 38, 0.5),
-        inset 0 0 20px rgba(255, 167, 38, 0.2);
-    transform: scale(1.05);
+        0 0 20px rgba(212, 165, 116, 0.3),
+        inset 0 0 20px rgba(212, 165, 116, 0.1);
 }
 
-.card-slot.valid-drop::before {
-    content: '✓';
-    color: var(--accent-gold);
-    opacity: 0.8;
-    animation: pulse 0.5s infinite;
+.card-slot.occupied {
+    border-color: transparent;
+    background: transparent;
 }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-}
-
-.card-slot.occupied::before {
-    display: none;
-}
-
-/* === CARDS === */
-.card {
-    width: 150px;
-    min-height: 200px;
-    background: linear-gradient(145deg, var(--bg-card), var(--bg-medium));
-    border: 3px solid var(--accent-gold);
-    border-radius: 12px;
-    padding: 12px;
-    cursor: grab;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    box-shadow:
-        0 8px 16px rgba(0, 0, 0, 0.6),
-        0 0 20px rgba(255, 167, 38, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+/* === HAND (Fan of cards) === */
+.hand-container {
+    position: fixed;
+    bottom: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 300px;
     display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-    transform: rotate(45deg);
-    transition: all 0.5s;
-}
-
-.card:hover::before {
-    left: 100%;
-}
-
-.card:hover {
-    transform: translateY(-15px) scale(1.08) rotate(2deg);
-    box-shadow:
-        0 15px 30px rgba(0, 0, 0, 0.8),
-        0 0 40px rgba(255, 167, 38, 0.6),
-        inset 0 0 20px rgba(255, 167, 38, 0.1);
-    z-index: 100;
-    border-color: var(--accent-glow);
-}
-
-.card:active {
-    cursor: grabbing;
-}
-
-.card.dragging {
-    opacity: 0.6;
-    transform: scale(0.95) rotate(5deg);
-    cursor: grabbing;
-}
-
-.card.sacrifice-target {
-    border-color: var(--accent-blood);
-    box-shadow:
-        0 0 30px var(--accent-blood),
-        inset 0 0 20px rgba(211, 47, 47, 0.3);
-    animation: sacrifice-pulse 1s infinite;
-}
-
-@keyframes sacrifice-pulse {
-    0%, 100% { transform: scale(1); filter: brightness(1); }
-    50% { transform: scale(1.05); filter: brightness(1.2); }
-}
-
-.card-cost {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    width: 32px;
-    height: 32px;
-    background: var(--gradient-blood);
-    border: 2px solid var(--accent-blood-dark);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-size: 1em;
-    color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    align-items: flex-end;
+    perspective: 1000px;
+    z-index: 100;
+    pointer-events: none;
+}
+
+#neve-hand {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    transform-style: preserve-3d;
+}
+
+/* === CARD (3D) === */
+.card {
+    position: absolute;
+    width: 130px;
+    height: 180px;
+    background: var(--bg-card);
+    border: 3px solid var(--border-dark);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-style: preserve-3d;
+    pointer-events: all;
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        inset 0 0 20px rgba(0, 0, 0, 0.05);
+    filter: url(#rough-edges) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    backface-visibility: hidden;
+}
+
+/* Hand card positioning (fan effect) */
+#neve-hand .card:nth-child(1) {
+    transform: translateX(-240px) translateY(10px) rotate(-18deg);
     z-index: 1;
 }
 
-.card-name {
-    font-family: 'Special Elite', cursive;
-    font-size: 1em;
-    text-align: center;
-    margin: 30px 0 10px;
-    color: var(--accent-gold);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-shadow: 0 0 10px rgba(255, 167, 38, 0.5);
-    line-height: 1.2;
+#neve-hand .card:nth-child(2) {
+    transform: translateX(-140px) translateY(5px) rotate(-12deg);
+    z-index: 2;
 }
 
-.card-image {
-    flex: 1;
-    background: rgba(0, 0, 0, 0.5);
-    border: 2px solid var(--border-medium);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3em;
-    margin: 8px 0;
-    position: relative;
-    overflow: hidden;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
+#neve-hand .card:nth-child(3) {
+    transform: translateX(-50px) translateY(2px) rotate(-6deg);
+    z-index: 3;
 }
 
-.card-image::after {
-    content: '';
+#neve-hand .card:nth-child(4) {
+    transform: translateX(0px) translateY(0px) rotate(0deg);
+    z-index: 4;
+}
+
+#neve-hand .card:nth-child(5) {
+    transform: translateX(50px) translateY(2px) rotate(6deg);
+    z-index: 5;
+}
+
+#neve-hand .card:nth-child(6) {
+    transform: translateX(140px) translateY(5px) rotate(12deg);
+    z-index: 6;
+}
+
+#neve-hand .card:nth-child(7) {
+    transform: translateX(240px) translateY(10px) rotate(18deg);
+    z-index: 7;
+}
+
+#neve-hand .card:nth-child(8) {
+    transform: translateX(320px) translateY(15px) rotate(24deg);
+    z-index: 8;
+}
+
+/* Card hover in hand */
+#neve-hand .card:hover {
+    transform: translateX(var(--card-x, 0)) translateY(-80px) rotate(0deg) scale(1.15) !important;
+    z-index: 100 !important;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.6),
+        0 0 30px rgba(212, 165, 116, 0.4),
+        inset 0 0 30px rgba(244, 235, 224, 0.1);
+}
+
+/* Store original x position for hover */
+#neve-hand .card:nth-child(1) { --card-x: -240px; }
+#neve-hand .card:nth-child(2) { --card-x: -140px; }
+#neve-hand .card:nth-child(3) { --card-x: -50px; }
+#neve-hand .card:nth-child(4) { --card-x: 0px; }
+#neve-hand .card:nth-child(5) { --card-x: 50px; }
+#neve-hand .card:nth-child(6) { --card-x: 140px; }
+#neve-hand .card:nth-child(7) { --card-x: 240px; }
+#neve-hand .card:nth-child(8) { --card-x: 320px; }
+
+/* Card being dragged */
+.card.dragging {
+    opacity: 0.6;
+    cursor: grabbing;
+    z-index: 1000;
+}
+
+/* === CARD CONTENT === */
+.card-type {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.5));
-}
-
-.card-stats {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
-    padding: 8px;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 8px;
-    border: 1px solid var(--border-medium);
-}
-
-.stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.stat-label {
-    font-size: 0.7em;
-    color: var(--text-dim);
+    top: 8px;
+    left: 8px;
+    font-size: 9px;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
+    color: var(--text-muted);
+    font-family: 'Montserrat', sans-serif;
 }
 
-.stat-value {
-    font-size: 1.4em;
-    font-weight: bold;
-    margin-top: 2px;
+.card-emoji {
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 48px;
+    filter:
+        drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3))
+        url(#rough-paper);
 }
 
-.stat-value.attack {
-    color: var(--accent-blood);
-    text-shadow: 0 0 5px var(--accent-blood);
-}
-
-.stat-value.health {
-    color: #4caf50;
-    text-shadow: 0 0 5px #4caf50;
-}
-
-.card-ability {
-    font-size: 0.7em;
+.card-name {
+    position: absolute;
+    top: 95px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
     text-align: center;
-    margin-top: 8px;
-    padding: 5px;
-    color: var(--accent-soul);
-    background: rgba(123, 104, 238, 0.1);
-    border-radius: 5px;
-    font-style: italic;
-    line-height: 1.3;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1.2;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
 }
 
-/* === BATTLE CENTER === */
-.battle-center {
+.card-power {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background: var(--accent-warm);
+    border: 2px solid var(--border-dark);
+    border-radius: 50%;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    gap: 20px;
-    min-width: 300px;
-}
-
-.battle-log {
-    background: var(--gradient-dark);
-    border: 3px solid var(--border-medium);
-    border-radius: 15px;
-    padding: 15px;
-    max-height: 300px;
-    overflow-y: auto;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text-dark);
     box-shadow:
-        0 0 20px rgba(0, 0, 0, 0.5),
-        inset 0 0 20px rgba(0, 0, 0, 0.5);
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.battle-log::-webkit-scrollbar {
-    width: 10px;
-}
-
-.battle-log::-webkit-scrollbar-track {
-    background: var(--bg-dark);
-    border-radius: 5px;
-}
-
-.battle-log::-webkit-scrollbar-thumb {
-    background: var(--accent-gold);
-    border-radius: 5px;
-}
-
-.battle-log::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-glow);
-}
-
-.log-title {
+.card-description {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
     text-align: center;
-    font-family: 'Special Elite', cursive;
-    font-size: 1.1em;
-    margin-bottom: 10px;
-    color: var(--accent-gold);
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--border-medium);
-}
-
-.log-entries {
-    display: flex;
-    flex-direction: column-reverse;
-}
-
-.log-entry {
-    padding: 8px;
-    margin: 5px 0;
-    border-left: 3px solid var(--accent-gold);
-    padding-left: 12px;
-    font-size: 0.9em;
-    line-height: 1.4;
-    animation: slideInLeft 0.3s;
-}
-
-@keyframes slideInLeft {
-    from { transform: translateX(-20px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-.log-entry.damage {
-    border-color: var(--accent-blood);
-    color: #ff6b6b;
-}
-
-.log-entry.meta {
-    border-color: var(--accent-soul);
-    color: var(--accent-soul);
+    font-size: 9px;
     font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.1;
 }
 
-.log-entry.heal {
-    border-color: #4caf50;
-    color: #81c784;
-}
-
-/* Turn Indicator */
-.turn-indicator-container {
-    background: var(--gradient-dark);
-    border: 3px solid var(--border-medium);
-    border-radius: 15px;
-    padding: 20px;
+/* === CARD WHISPERS === */
+.card-whisper {
+    position: fixed;
+    bottom: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(138, 74, 58, 0.95);
+    color: var(--text-light);
+    padding: 15px 25px;
+    border-radius: 8px;
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    font-style: italic;
     text-align: center;
+    max-width: 400px;
+    z-index: 200;
+    opacity: 0;
+    animation: whisper-appear 0.5s ease forwards;
+    filter: url(#rough-edges);
     box-shadow:
-        0 0 20px rgba(0, 0, 0, 0.5),
-        inset 0 0 20px rgba(0, 0, 0, 0.5);
+        0 8px 24px rgba(0, 0, 0, 0.6),
+        inset 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
-.turn-indicator {
-    font-family: 'Special Elite', cursive;
-    font-size: 1.5em;
-    color: var(--accent-soul);
-    text-shadow: 0 0 15px var(--accent-soul);
-    animation: pulse-text 2s infinite;
+@keyframes whisper-appear {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
 }
 
-@keyframes pulse-text {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-}
-
-/* === PLAYER HAND === */
-.hand-container {
-    margin: 30px 0;
-    padding: 20px;
-    background: var(--gradient-dark);
-    border: 3px solid var(--border-medium);
-    border-radius: 20px;
-    box-shadow:
-        0 -10px 30px rgba(0, 0, 0, 0.5),
-        inset 0 0 30px rgba(0, 0, 0, 0.5);
-}
-
-.hand-label {
+/* === THERAPIST SECTION === */
+.therapist-section {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
     text-align: center;
-    font-family: 'Special Elite', cursive;
-    font-size: 1.2em;
-    color: var(--accent-gold);
+    z-index: 50;
+}
+
+.therapist-portrait {
     margin-bottom: 15px;
-    letter-spacing: 3px;
-    text-shadow: 0 0 10px var(--accent-gold);
 }
 
-.player-hand {
+.portrait-img {
+    width: 80px;
+    height: 80px;
+    background: rgba(26, 20, 16, 0.8);
+    border: 3px solid var(--border-card);
+    border-radius: 50%;
+    margin: 0 auto 10px;
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    min-height: 230px;
-    padding: 15px;
+    font-size: 40px;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.6),
+        inset 0 0 20px rgba(0, 0, 0, 0.3);
+    filter: url(#rough-edges);
 }
 
-/* === ACTION BAR === */
-.action-bar {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 20px 0;
-    flex-wrap: wrap;
+.therapist-name {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-.action-btn {
-    font-family: 'Courier Prime', monospace;
-    font-size: 1.1em;
-    font-weight: bold;
-    padding: 15px 30px;
-    border: 3px solid;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
+.dialogue-box {
+    background: rgba(26, 20, 16, 0.9);
+    border: 2px solid var(--border-card);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.6),
+        inset 0 0 30px rgba(0, 0, 0, 0.2);
+    filter: url(#rough-edges);
+}
+
+.dialogue-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-light);
+    font-style: italic;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* === PATIENT INFO === */
+.patient-info {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(26, 20, 16, 0.85);
+    border: 2px solid var(--border-card);
+    border-radius: 8px;
+    padding: 15px 20px;
+    z-index: 50;
+    filter: url(#rough-edges);
+}
+
+.patient-label {
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 2px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
 }
 
-.action-btn::after {
-    content: '';
+.patient-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent-warm);
+}
+
+/* === STABILITY BAR === */
+.stability-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 250px;
+    z-index: 50;
+}
+
+.stability-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.stability-bar {
+    width: 100%;
+    height: 25px;
+    background: rgba(26, 20, 16, 0.8);
+    border: 2px solid var(--border-card);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    filter: url(#rough-edges);
+}
+
+.stability-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-cold), var(--accent-warm));
+    transition: width 0.8s ease, background 0.5s ease;
+    position: relative;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.stability-text {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
     transform: translate(-50%, -50%);
-    transition: width 0.5s, height 0.5s;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-light);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
-.action-btn:hover::after {
-    width: 300px;
-    height: 300px;
+/* === GAME STATS === */
+.game-stats {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 20px;
+    z-index: 50;
+}
+
+.stat-box {
+    background: rgba(26, 20, 16, 0.85);
+    border: 2px solid var(--border-card);
+    border-radius: 8px;
+    padding: 12px 18px;
+    text-align: center;
+    min-width: 80px;
+    filter: url(#rough-edges);
+}
+
+.stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--accent-warm);
+}
+
+/* === ALTER MESSAGES SIDEBAR === */
+.alter-messages {
+    position: fixed;
+    top: 50%;
+    right: -280px;
+    transform: translateY(-50%);
+    width: 280px;
+    max-height: 500px;
+    background: rgba(26, 20, 16, 0.95);
+    border: 2px solid var(--border-card);
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    padding: 15px;
+    z-index: 150;
+    transition: right 0.4s ease;
+    filter: url(#rough-edges);
+    overflow: hidden;
+}
+
+.alter-messages.visible {
+    right: 0;
+}
+
+.alter-header {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(244, 235, 224, 0.2);
+}
+
+.alter-log {
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.alter-message {
+    margin-bottom: 15px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 3px solid var(--accent-whisper);
+    border-radius: 4px;
+    animation: message-appear 0.6s ease;
+}
+
+@keyframes message-appear {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.alter-name {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent-whisper);
+    margin-bottom: 6px;
+}
+
+.alter-text {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text-light);
+    line-height: 1.4;
+}
+
+/* === EVENT LOG === */
+.event-log {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 350px;
+    max-height: 200px;
+    background: rgba(26, 20, 16, 0.85);
+    border: 2px solid var(--border-card);
+    border-radius: 8px;
+    padding: 15px;
+    overflow-y: auto;
+    z-index: 50;
+    filter: url(#rough-edges);
+}
+
+.log-entry {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 6px;
+    padding-left: 12px;
+    position: relative;
+}
+
+.log-entry::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent-warm);
+}
+
+.log-entry.meta {
+    color: var(--accent-whisper);
+    font-weight: 700;
+}
+
+/* === ACTION BUTTONS === */
+.action-buttons {
+    position: absolute;
+    bottom: 250px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 50;
+}
+
+.action-btn {
+    background: rgba(26, 20, 16, 0.9);
+    border: 2px solid var(--border-card);
+    border-radius: 8px;
+    padding: 12px 24px;
+    color: var(--text-light);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    filter: url(#rough-edges);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .action-btn:hover {
-    transform: translateY(-3px);
+    background: var(--accent-warm);
+    color: var(--text-dark);
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(212, 165, 116, 0.3);
 }
 
 .action-btn:active {
     transform: translateY(0);
 }
 
-.sacrifice-btn {
-    background: var(--gradient-blood);
-    color: white;
-    border-color: var(--accent-blood-dark);
-    box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4);
-}
-
-.sacrifice-btn:hover {
-    box-shadow: 0 6px 25px rgba(139, 0, 0, 0.6);
-}
-
-.draw-btn {
-    background: var(--gradient-soul);
-    color: white;
-    border-color: #5a4fcf;
-    box-shadow: 0 4px 15px rgba(123, 104, 238, 0.4);
-}
-
-.draw-btn:hover {
-    box-shadow: 0 6px 25px rgba(123, 104, 238, 0.6);
-}
-
-.end-turn-btn {
-    background: var(--gradient-gold);
-    color: var(--bg-void);
-    border-color: #ff8f00;
-    box-shadow: 0 4px 15px rgba(255, 167, 38, 0.4);
-}
-
-.end-turn-btn:hover {
-    box-shadow: 0 6px 25px rgba(255, 167, 38, 0.6);
-}
-
-.action-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.action-btn:disabled:hover::after {
-    width: 0;
-    height: 0;
-}
-
-.btn-icon {
-    font-size: 1.3em;
-    filter: drop-shadow(0 0 5px currentColor);
-}
-
-/* === CARD TOOLTIP === */
-.card-tooltip {
-    position: fixed;
-    bottom: 120px;
+/* === SESSION HEADER === */
+.session-header {
+    position: absolute;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 500;
-    pointer-events: none;
-    animation: tooltipFadeIn 0.3s;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    z-index: 50;
 }
 
-@keyframes tooltipFadeIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+.session-info {
+    background: rgba(26, 20, 16, 0.85);
+    border: 2px solid var(--border-card);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-warm);
+    filter: url(#rough-edges);
 }
 
-.tooltip-content {
-    background: var(--gradient-dark);
-    border: 3px solid var(--accent-soul);
-    border-radius: 15px;
-    padding: 20px 30px;
-    box-shadow:
-        0 0 40px rgba(123, 104, 238, 0.6),
-        inset 0 0 20px rgba(0, 0, 0, 0.5);
-    max-width: 500px;
-}
-
-#tooltip-text {
-    font-size: 1.1em;
-    color: var(--text-primary);
-    font-style: italic;
-    text-align: center;
-    line-height: 1.6;
-}
-
-/* === MODAL === */
-.modal {
+/* === MENUS === */
+.menu-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
     background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    z-index: 500;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2000;
-    backdrop-filter: blur(5px);
-    animation: fadeIn 0.5s;
 }
 
-.modal-content {
-    background: var(--gradient-dark);
-    border: 4px solid var(--accent-gold);
-    border-radius: 20px;
-    padding: 40px;
+.menu-content {
+    background: var(--bg-wood);
+    border: 4px solid var(--border-dark);
+    border-radius: 12px;
+    padding: 50px;
     max-width: 600px;
+    width: 90%;
     text-align: center;
+    filter: url(#rough-edges);
     box-shadow:
-        0 0 50px rgba(255, 167, 38, 0.5),
-        inset 0 0 30px rgba(0, 0, 0, 0.5);
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 0 60px rgba(0, 0, 0, 0.3);
 }
 
-.modal-content h2 {
-    font-family: 'Creepster', cursive;
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: var(--accent-gold);
-    text-shadow: 0 0 20px var(--accent-gold);
+.menu-title {
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--accent-warm);
+    margin-bottom: 40px;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+    letter-spacing: 4px;
 }
 
-.modal-content p {
-    font-size: 1.1em;
-    line-height: 1.8;
-    margin: 10px 0;
+.menu-button {
+    width: 100%;
+    background: rgba(26, 20, 16, 0.8);
+    border: 3px solid var(--border-card);
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 15px;
+    color: var(--text-light);
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    filter: url(#rough-edges);
 }
 
-.modal-content ul {
-    text-align: left;
+.menu-button:hover {
+    background: var(--accent-warm);
+    color: var(--text-dark);
+    transform: scale(1.05);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.6),
+        0 0 30px rgba(212, 165, 116, 0.4);
+}
+
+/* === CONTENT WARNING === */
+.content-warning {
+    background: var(--bg-dark);
+}
+
+.warning-content {
+    background: var(--bg-wood);
+    border: 4px solid var(--accent-danger);
+    max-width: 700px;
+}
+
+.warning-title {
+    font-size: 42px;
+    color: var(--accent-danger);
+    margin-bottom: 30px;
+}
+
+.warning-content ul {
     list-style: none;
-    padding: 0;
-    margin: 20px 0;
+    margin: 30px 0;
+    text-align: left;
 }
 
-.modal-content li {
-    padding: 8px 0;
+.warning-content li {
+    font-size: 16px;
+    margin-bottom: 12px;
     padding-left: 25px;
     position: relative;
+    color: var(--text-light);
 }
 
-.modal-content li::before {
-    content: '▸';
+.warning-content li::before {
+    content: '⚠';
     position: absolute;
     left: 0;
-    color: var(--accent-gold);
+    color: var(--accent-danger);
 }
 
-.modal-warning {
-    color: var(--accent-blood);
-    font-weight: bold;
-    animation: pulse-glow 2s infinite;
+/* === NARRATIVE MODAL === */
+.narrative-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fade-in 1s ease;
 }
 
-.modal-btn {
-    font-family: 'Special Elite', cursive;
-    font-size: 1.3em;
-    padding: 15px 40px;
-    margin-top: 20px;
-    background: var(--gradient-gold);
-    color: var(--bg-void);
-    border: 3px solid #ff8f00;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-transform: uppercase;
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.modal-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 30px var(--accent-gold);
+.narrative-content {
+    max-width: 800px;
+    text-align: center;
+    padding: 60px;
+}
+
+.narrative-text {
+    font-size: 28px;
+    line-height: 1.8;
+    color: var(--text-light);
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+    animation: text-glow 2s ease-in-out infinite;
+}
+
+@keyframes text-glow {
+    0%, 100% {
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+    }
+    50% {
+        text-shadow:
+            2px 2px 8px rgba(0, 0, 0, 0.9),
+            0 0 20px rgba(212, 165, 116, 0.3);
+    }
+}
+
+/* === PHASE DETERIORATION === */
+body.phase-2 {
+    filter: contrast(1.05) saturate(0.95);
+}
+
+body.phase-3 {
+    filter: contrast(1.1) saturate(0.9) brightness(0.98);
+}
+
+body.phase-4 {
+    filter: contrast(1.15) saturate(0.85) brightness(0.95) hue-rotate(-3deg);
+}
+
+body.phase-5 {
+    filter: contrast(1.2) saturate(0.8) brightness(0.92) hue-rotate(-5deg);
+    animation: subtle-shake 8s ease-in-out infinite;
+}
+
+@keyframes subtle-shake {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    10% { transform: translate(-1px, 1px) rotate(0.1deg); }
+    20% { transform: translate(1px, -1px) rotate(-0.1deg); }
+    30% { transform: translate(-1px, -1px) rotate(0.1deg); }
+    40% { transform: translate(1px, 1px) rotate(-0.1deg); }
+    50% { transform: translate(-1px, 1px) rotate(0.1deg); }
+    60% { transform: translate(1px, -1px) rotate(-0.1deg); }
+    70% { transform: translate(-1px, -1px) rotate(0.1deg); }
+    80% { transform: translate(1px, 1px) rotate(-0.1deg); }
+    90% { transform: translate(-1px, 1px) rotate(0.1deg); }
+}
+
+body.final-revelation {
+    animation: reality-break 2s infinite;
+}
+
+@keyframes reality-break {
+    0%, 100% {
+        filter: contrast(1.2) saturate(0.8) brightness(0.9);
+    }
+    50% {
+        filter: contrast(1.3) saturate(0.7) brightness(0.85) hue-rotate(-10deg);
+    }
+}
+
+/* === VIGNETTE OVERLAY === */
+.vignette-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 400;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 0%,
+        transparent 50%,
+        rgba(0, 0, 0, 0.6) 100%
+    );
+    opacity: 0;
+    transition: opacity 2s ease;
+}
+
+/* === MIRROR OVERLAY === */
+.mirror-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 450;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        transparent 100%
+    );
+    transform: scaleY(-1);
+    opacity: 0;
+    transition: opacity 3s ease;
+}
+
+/* === SCROLLBAR STYLING === */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(26, 20, 16, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-warm);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-cold);
+}
+
+/* === ACCESSIBILITY === */
+body.reduce-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+}
+
+body.high-contrast {
+    --bg-card: #ffffff;
+    --text-dark: #000000;
+    --border-dark: #000000;
+    --accent-warm: #ffaa00;
 }
 
 /* === RESPONSIVE === */
-@media (max-width: 1400px) {
-    .battlefield-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
+@media (max-width: 1200px) {
+    .game-table {
+        width: 95%;
     }
 
-    .opponent-side {
-        order: 1;
-    }
-
-    .battle-center {
-        order: 2;
-        min-width: unset;
-    }
-
-    .player-side {
-        order: 3;
-    }
-}
-
-@media (max-width: 768px) {
-    .tv-screen {
-        width: 90vw;
-        height: 60vh;
-    }
-
-    .card-field {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .game-header {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto;
-    }
-
-    .action-bar {
-        flex-direction: column;
-    }
-
-    .player-hand {
-        gap: 10px;
+    .hand-container {
+        max-width: 700px;
     }
 
     .card {
-        width: 130px;
-        min-height: 180px;
+        width: 110px;
+        height: 150px;
     }
-}
-
-/* === ANIMATIONS === */
-.shake {
-    animation: shake 0.5s;
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-    20%, 40%, 60%, 80% { transform: translateX(8px); }
 }
     </style>
 </head>
 <body>
-    <!-- Static/Glitch overlay -->
-    <div id="glitch-overlay" class="glitch-overlay"></div>
-    <canvas id="static-canvas" class="static-canvas"></canvas>
+<body>
+    <!-- SVG FILTERS (Hand-drawn effects) -->
+    <svg id="svg-filters" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <!-- Rough edges filter -->
+            <filter id="rough-edges">
+                <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise"/>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+
+            <!-- Rough paper texture -->
+            <filter id="rough-paper">
+                <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise"/>
+                <feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1">
+                    <feDistantLight azimuth="45" elevation="60"/>
+                </feDiffuseLighting>
+            </filter>
+
+            <!-- Ink spread effect -->
+            <filter id="ink-spread">
+                <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="2" result="turbulence"/>
+                <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Overlays -->
+    <div id="vignette-overlay" class="vignette-overlay"></div>
+    <div id="mirror-overlay" class="mirror-overlay hidden"></div>
+
+    <!-- CONTENT WARNING -->
+    <div id="content-warning" class="content-warning menu-overlay hidden">
+        <div class="menu-content warning-content">
+            <h1 class="warning-title">⚠ AVVISO SUI CONTENUTI</h1>
+            <div class="warning-text">
+                <p><strong>Questo gioco contiene rappresentazioni esplicite di:</strong></p>
+                <ul>
+                    <li>Disturbo Dissociativo dell'Identità (DID)</li>
+                    <li>Violenza psicologica e manipolazione emotiva</li>
+                    <li>Gaslighting e abuso terapeutico</li>
+                    <li>Temi di autolesionismo e ideazione suicidaria</li>
+                    <li>Frammentazione dell'identità e dissociazione</li>
+                </ul>
+                <p style="margin-top: 20px; font-size: 14px; font-style: italic;">
+                    <strong>Nota:</strong> Questo è un'opera di fiction interattiva.<br>
+                    Se stai vivendo una crisi, contatta un servizio di supporto psicologico.
+                </p>
+                <p style="margin-top: 10px; font-size: 13px; color: var(--accent-danger);">
+                    Sconsigliato a persone sotto i 18 anni o con sensibilità a questi temi.
+                </p>
+            </div>
+            <div style="display: flex; gap: 15px; margin-top: 40px;">
+                <button id="accept-warning-btn" class="menu-button" style="background: var(--accent-warm); color: var(--text-dark);">COMPRENDO, CONTINUA</button>
+                <button id="decline-warning-btn" class="menu-button" style="background: var(--accent-danger);">ESCI</button>
+            </div>
+        </div>
+    </div>
 
     <!-- MAIN MENU -->
-    <div id="main-menu" class="main-menu">
-        <div class="tv-container">
-            <div class="tv-frame">
-                <div class="tv-screen">
-                    <div class="tv-static"></div>
-                    <div class="tv-content">
-                        <h1 class="title-glitch" data-text="THE CARD GAME">THE CARD GAME</h1>
-                        <p class="subtitle">Chi sta veramente giocando?</p>
+    <div id="main-menu" class="main-menu menu-overlay hidden">
+        <div class="menu-content">
+            <h1 class="menu-title">NEVE: LIMEN?</h1>
+            <p style="margin-bottom: 40px; font-style: italic; color: var(--text-muted);">"Il confine tra realtà e frammentazione"</p>
 
-                        <div class="menu-buttons">
-                            <button id="start-game-btn" class="menu-btn">
-                                <span class="btn-icon">▶</span> INIZIA
-                            </button>
-                            <button id="continue-btn" class="menu-btn" style="display: none;">
-                                <span class="btn-icon">↻</span> CONTINUA
-                            </button>
-                            <button id="about-btn" class="menu-btn">
-                                <span class="btn-icon">?</span> INFO
-                            </button>
-                        </div>
+            <button id="new-game-btn" class="menu-button">NUOVA SESSIONE</button>
+            <button id="continue-btn" class="menu-button" style="display: none;">CONTINUA SESSIONE</button>
+            <button id="options-btn" class="menu-button">OPZIONI</button>
+            <button id="about-game-btn" class="menu-button">INFORMAZIONI</button>
 
-                        <div class="tv-footer">
-                            <p class="warning-text">⚠ Questo gioco ricorda</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TV Controls -->
-                <div class="tv-controls">
-                    <div class="power-button" id="power-button">
-                        <div class="power-icon">⏻</div>
-                    </div>
-                    <div class="volume-knob"></div>
-                    <div class="channel-knob"></div>
-                </div>
-            </div>
-
-            <div class="tv-shadow"></div>
+            <p style="margin-top: 40px; font-size: 12px; color: var(--text-muted);">
+                v1.0 | "Ogni identità è un limen"
+            </p>
         </div>
     </div>
 
-    <!-- GAME CONTAINER -->
+    <!-- OPTIONS MENU -->
+    <div id="options-menu" class="options-menu menu-overlay hidden">
+        <div class="menu-content" style="max-width: 500px;">
+            <h2 class="menu-title" style="font-size: 36px;">OPZIONI</h2>
+
+            <div style="text-align: left; margin: 30px 0;">
+                <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--text-muted);">Lingua / Language</label>
+                <select id="language-select" style="width: 100%; padding: 12px; background: rgba(26, 20, 16, 0.8); border: 2px solid var(--border-card); color: var(--text-light); border-radius: 4px; font-size: 14px;">
+                    <option value="it">Italiano</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+
+            <div style="text-align: left; margin: 30px 0;">
+                <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--text-muted);">Volume Effetti: <span id="volume-value">70%</span></label>
+                <input type="range" id="volume-slider" min="0" max="100" value="70" style="width: 100%;">
+            </div>
+
+            <div style="text-align: left; margin: 30px 0;">
+                <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--text-muted);">Velocità Testo</label>
+                <select id="text-speed-select" style="width: 100%; padding: 12px; background: rgba(26, 20, 16, 0.8); border: 2px solid var(--border-card); color: var(--text-light); border-radius: 4px; font-size: 14px;">
+                    <option value="slow">Lenta</option>
+                    <option value="normal" selected>Normale</option>
+                    <option value="fast">Veloce</option>
+                    <option value="instant">Istantanea</option>
+                </select>
+            </div>
+
+            <div style="text-align: left; margin: 30px 0;">
+                <label style="display: flex; align-items: center; font-size: 14px; cursor: pointer;">
+                    <input type="checkbox" id="reduce-motion" style="margin-right: 10px;">
+                    <span>Riduci Animazioni (Accessibilità)</span>
+                </label>
+            </div>
+
+            <div style="text-align: left; margin: 30px 0;">
+                <label style="display: flex; align-items: center; font-size: 14px; cursor: pointer;">
+                    <input type="checkbox" id="high-contrast" style="margin-right: 10px;">
+                    <span>Alto Contrasto</span>
+                </label>
+            </div>
+
+            <button id="close-options-btn" class="menu-button">CHIUDI</button>
+        </div>
+    </div>
+
+    <!-- ABOUT MENU -->
+    <div id="about-menu" class="about-menu menu-overlay hidden">
+        <div class="menu-content" style="max-width: 700px;">
+            <h2 class="menu-title" style="font-size: 36px;">INFORMAZIONI</h2>
+
+            <div style="text-align: left; line-height: 1.8; margin: 30px 0;">
+                <p style="margin-bottom: 20px;">
+                    <strong>"Neve: Limen?"</strong> è un'esperienza interattiva narrativa che esplora i temi della dissociazione,
+                    dell'identità frammentata e della manipolazione psicologica attraverso le meccaniche di un gioco di carte.
+                </p>
+
+                <p style="margin-bottom: 20px;">
+                    Il gioco è ispirato da <em>Inscryption</em> per la sua natura metanarrativa e dalla rappresentazione
+                    clinica del Disturbo Dissociativo dell'Identità.
+                </p>
+
+                <p style="margin-bottom: 20px; font-size: 13px; font-style: italic; color: var(--text-muted);">
+                    <strong>Avvertenze:</strong> Questo gioco contiene rappresentazioni di abuso psicologico e manipolazione.
+                    Non è inteso come rappresentazione clinicamente accurata del DID, ma come esplorazione artistica di temi psicologici.
+                </p>
+
+                <p style="margin-top: 30px; font-size: 12px; color: var(--text-muted);">
+                    Sviluppato con ❤️ per esplorare le profondità della psiche umana.<br>
+                    © 2024 | Tutti i diritti riservati.
+                </p>
+            </div>
+
+            <button id="close-about-btn" class="menu-button">CHIUDI</button>
+        </div>
+    </div>
+
+    <!-- PAUSE MODAL -->
+    <div id="pause-modal" class="pause-modal menu-overlay hidden">
+        <div class="menu-content" style="max-width: 500px;">
+            <h2 class="menu-title" style="font-size: 36px;">PAUSA</h2>
+
+            <div style="margin: 30px 0; padding: 20px; background: rgba(0, 0, 0, 0.3); border-radius: 8px;">
+                <p id="pause-therapist-text" style="font-style: italic; text-align: center; font-size: 16px;"></p>
+            </div>
+
+            <button id="resume-game-btn" class="menu-button">RIPRENDI</button>
+            <button id="save-exit-btn" class="menu-button">SALVA ED ESCI</button>
+            <button id="options-from-pause-btn" class="menu-button">OPZIONI</button>
+        </div>
+    </div>
+
+    <!-- NARRATIVE MODAL -->
+    <div id="narrative-modal" class="narrative-modal hidden">
+        <div class="narrative-content">
+            <p id="narrative-text" class="narrative-text"></p>
+            <button id="narrative-continue-btn" class="menu-button">CONTINUA</button>
+        </div>
+    </div>
+
+    <!-- GAME CONTAINER (3D Scene) -->
     <div id="game-container" class="game-container hidden">
-        <!-- Pause Menu -->
-        <div id="pause-menu" class="pause-menu hidden">
-            <div class="pause-content">
-                <h2 class="pause-title">⏸ PAUSA</h2>
-                <div class="entity-dialogue-pause">
-                    <p id="pause-dialogue">Perché ti fermi? Hai paura di continuare?</p>
+        <div class="scene-3d">
+            <!-- Session Header -->
+            <div class="session-header">
+                <div class="session-info">
+                    <span id="session-timer">00:00</span>
                 </div>
-                <div class="pause-buttons">
-                    <button id="resume-btn" class="pause-btn">Riprendi</button>
-                    <button id="restart-btn" class="pause-btn">Ricomincia</button>
-                    <button id="quit-btn" class="pause-btn">Abbandona</button>
-                </div>
+                <button id="pause-btn" class="session-info" style="cursor: pointer; border: none;">⏸ PAUSA</button>
             </div>
-        </div>
 
-        <!-- Header with Entity dialogue -->
-        <div class="game-header">
-            <button id="menu-toggle-btn" class="icon-btn" title="Menu">☰</button>
+            <!-- Patient Info (Top Left) -->
+            <div class="patient-info">
+                <div class="patient-label">PAZIENTE</div>
+                <div class="patient-name">NEVE</div>
+            </div>
 
-            <div class="entity-portrait">
-                <div class="portrait-frame">
-                    <div class="portrait-image">👁️</div>
-                    <div class="portrait-name">L'ENTITÀ</div>
+            <!-- Stability Bar (Top Right) -->
+            <div class="stability-container">
+                <div class="stability-label">Stabilità</div>
+                <div class="stability-bar">
+                    <div id="stability-fill" class="stability-fill" style="width: 100%;"></div>
+                    <div id="stability-text" class="stability-text">100%</div>
                 </div>
             </div>
 
-            <div class="dialogue-box">
-                <div class="dialogue-indicator">▼</div>
-                <p id="entity-dialogue" class="dialogue-text">Così... sei tornato...</p>
-            </div>
-
-            <div class="stats-panel">
-                <div class="stat-item">
-                    <span class="stat-icon">❤️</span>
-                    <span id="player-lives-display">3</span>
+            <!-- Therapist Section (Top Center) -->
+            <div class="therapist-section">
+                <div class="therapist-portrait">
+                    <div id="therapist-image" class="portrait-img">👤</div>
+                    <div class="therapist-name">Dr. Lumen</div>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-icon">🜏</span>
-                    <span id="souls-display">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Round</span>
-                    <span id="round-display">1</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Battlefield Area -->
-        <div class="battlefield-container">
-            <!-- Opponent's side -->
-            <div class="battlefield opponent-side">
-                <div class="health-display">
-                    <div class="health-bar-container">
-                        <div class="health-label">L'ENTITÀ</div>
-                        <div class="health-bar">
-                            <div id="opponent-health-fill" class="health-fill" style="width: 100%">
-                                <div class="health-shine"></div>
-                            </div>
-                            <span id="opponent-health-text" class="health-text">20/20</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="opponent-field" class="card-field">
-                    <div class="card-slot opponent-slot" data-slot="0"></div>
-                    <div class="card-slot opponent-slot" data-slot="1"></div>
-                    <div class="card-slot opponent-slot" data-slot="2"></div>
-                    <div class="card-slot opponent-slot" data-slot="3"></div>
+                <div class="dialogue-box">
+                    <p id="therapist-text" class="dialogue-text">Buongiorno Neve...</p>
                 </div>
             </div>
 
-            <!-- Battle Log (center) -->
-            <div class="battle-center">
-                <div id="battle-log" class="battle-log">
-                    <div class="log-title">📜 Registro</div>
-                    <div id="log-entries" class="log-entries"></div>
+            <!-- 3D Table -->
+            <div class="game-table">
+                <!-- Opponent Field (Far side) -->
+                <div id="therapist-card-field" class="opponent-field">
+                    <div class="card-slot" data-slot="0"></div>
+                    <div class="card-slot" data-slot="1"></div>
+                    <div class="card-slot" data-slot="2"></div>
+                    <div class="card-slot" data-slot="3"></div>
                 </div>
 
-                <div class="turn-indicator-container">
-                    <div id="turn-indicator" class="turn-indicator">IL TUO TURNO</div>
+                <!-- Player Field (Near side) -->
+                <div id="neve-card-field" class="player-field">
+                    <div class="card-slot" data-slot="0"></div>
+                    <div class="card-slot" data-slot="1"></div>
+                    <div class="card-slot" data-slot="2"></div>
+                    <div class="card-slot" data-slot="3"></div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button id="end-turn-btn" class="action-btn">TERMINA TURNO</button>
+                <button id="discard-btn" class="action-btn">SCARTA</button>
+            </div>
+
+            <!-- Hand (Fan of cards) -->
+            <div class="hand-container">
+                <div id="neve-hand"></div>
+            </div>
+
+            <!-- Card Whisper (appears on hover) -->
+            <div id="card-whisper" class="card-whisper hidden">
+                <p id="whisper-text"></p>
+            </div>
+
+            <!-- Event Log (Bottom Left) -->
+            <div id="event-log" class="event-log"></div>
+
+            <!-- Game Stats (Bottom Right) -->
+            <div class="game-stats">
+                <div class="stat-box">
+                    <div class="stat-label">FRAMMENTI</div>
+                    <div id="fragments-count" class="stat-value">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">ROUND</div>
+                    <div id="round-count" class="stat-value">1</div>
                 </div>
             </div>
 
-            <!-- Player's side -->
-            <div class="battlefield player-side">
-                <div id="player-field" class="card-field">
-                    <div class="card-slot player-slot" data-slot="0"></div>
-                    <div class="card-slot player-slot" data-slot="1"></div>
-                    <div class="card-slot player-slot" data-slot="2"></div>
-                    <div class="card-slot player-slot" data-slot="3"></div>
-                </div>
-
-                <div class="health-display">
-                    <div class="health-bar-container">
-                        <div class="health-label">TU</div>
-                        <div class="health-bar">
-                            <div id="player-health-fill" class="health-fill player-health" style="width: 100%">
-                                <div class="health-shine"></div>
-                            </div>
-                            <span id="player-health-text" class="health-text">20/20</span>
-                        </div>
-                    </div>
-                </div>
+            <!-- Alter Messages Sidebar -->
+            <div id="alter-messages" class="alter-messages">
+                <div class="alter-header">[ . . . ]</div>
+                <div id="alter-log" class="alter-log"></div>
             </div>
-        </div>
-
-        <!-- Player Hand -->
-        <div class="hand-container">
-            <div class="hand-label">LA TUA MANO</div>
-            <div id="player-hand" class="player-hand"></div>
-        </div>
-
-        <!-- Action Bar -->
-        <div class="action-bar">
-            <button id="sacrifice-btn" class="action-btn sacrifice-btn">
-                <span class="btn-icon">🗡️</span>
-                <span class="btn-text">SACRIFICA</span>
-            </button>
-
-            <button id="draw-card-btn" class="action-btn draw-btn">
-                <span class="btn-icon">🃏</span>
-                <span class="btn-text">PESCA (1🜏)</span>
-            </button>
-
-            <button id="end-turn-btn" class="action-btn end-turn-btn">
-                <span class="btn-icon">⏭</span>
-                <span class="btn-text">TERMINA TURNO</span>
-            </button>
-        </div>
-
-        <!-- Card Tooltip -->
-        <div id="card-tooltip" class="card-tooltip hidden">
-            <div class="tooltip-content">
-                <p id="tooltip-text"></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- About Modal -->
-    <div id="about-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2>THE CARD GAME</h2>
-            <p>Un card game metanarrativo dove le carte ricordano,<br>l'Entità osserva, e tu... tu sei sicuro di essere il giocatore?</p>
-            <br>
-            <p><strong>Obiettivo:</strong> Riduci la salute dell'Entità a 0</p>
-            <p><strong>Meccaniche:</strong></p>
-            <ul>
-                <li>Gioca carte trascinandole negli slot</li>
-                <li>Sacrifica carte per ottenere anime (🜏)</li>
-                <li>Le carte si scontrano in posizioni corrispondenti</li>
-                <li>Sopravvivi e scopri cosa si nasconde oltre il gioco</li>
-            </ul>
-            <br>
-            <p class="modal-warning">⚠️ Ogni scelta ha conseguenze</p>
-            <button id="close-about-btn" class="modal-btn">CAPISCO</button>
         </div>
     </div>
 
     <script>
 // ============================================
-// THE CARD GAME - Meta-Narrative Edition
-// "Who is really playing?"
+// NEVE: LIMEN? - Psychological Card Game
+// A game about dissociation, identity, and truth
 // ============================================
 
-// === ENTITY DIALOGUE SYSTEM ===
-const EntityDialogues = {
-    // Start game dialogues
-    gameStart: [
-        "Così... sei tornato...",
-        "Pensavi di poter vincere questa volta?",
-        "Benvenuto nel mio dominio, giocatore...",
-        "Le carte ricordano la tua ultima sconfitta.",
-        "Giochiamo ancora?"
+// === TRANSLATIONS ===
+const TRANSLATIONS = {
+    it: {
+        // Content Warning
+        warning_title: "⚠ AVVISO SUI CONTENUTI",
+        warning_accept: "COMPRENDO, CONTINUA",
+        warning_decline: "ESCI",
+
+        // Menu
+        menu_new: "NUOVA SESSIONE",
+        menu_continue: "CONTINUA SESSIONE",
+        menu_options: "OPZIONI",
+        menu_about: "INFORMAZIONI",
+
+        // Game
+        session_label: "SESSIONE:",
+        patient_label: "PAZIENTE: NEVE",
+        stability_label: "Stabilità",
+        fragments_label: "Frammenti",
+        round_label: "Round",
+
+        // Actions
+        end_turn: "TERMINA TURNO",
+        discard: "SCARTA CARTA"
+    },
+    en: {
+        // Content Warning
+        warning_title: "⚠ CONTENT WARNING",
+        warning_accept: "I UNDERSTAND, CONTINUE",
+        warning_decline: "EXIT",
+
+        // Menu
+        menu_new: "NEW SESSION",
+        menu_continue: "CONTINUE SESSION",
+        menu_options: "OPTIONS",
+        menu_about: "ABOUT",
+
+        // Game
+        session_label: "SESSION:",
+        patient_label: "PATIENT: SNOW",
+        stability_label: "Stability",
+        fragments_label: "Fragments",
+        round_label: "Round",
+
+        // Actions
+        end_turn: "END TURN",
+        discard: "DISCARD CARD"
+    }
+};
+
+// Current language
+let currentLang = 'it';
+
+// === THERAPIST DIALOGUES (Progressive manipulation) ===
+const TherapistDialogues = {
+    // Phase 1: Benign & Professional (Rounds 1-5)
+    phase1: [
+        "Buongiorno Neve. Come ti senti oggi?",
+        "Sono contento che tu sia qui. Oggi vorrei provare qualcosa di nuovo con te.",
+        "Ho preparato un gioco di carte. Potrebbe aiutarci ad esplorare alcuni aspetti della tua identità.",
+        "Non preoccuparti, è solo un gioco. Un modo più... creativo di lavorare insieme.",
+        "Le regole sono semplici. Giocheremo a turni, come in una normale partita a carte.",
+        "Ogni carta rappresenta qualcosa. Aspetti di te, forse. O forse no.",
+        "Iniziamo, va bene? Prenditi il tuo tempo.",
+        "Ottima mossa, Neve. Vedo che stai iniziando a capire.",
+        "Non c'è fretta. Abbiamo tutto il tempo che ci serve.",
+        "Ricorda: sono qui per aiutarti."
     ],
 
-    // Card hover dialogues
-    cardHover: [
-        "Quella carta? Interessante scelta...",
-        "Credi davvero che ti salverà?",
-        "Ne ho viste cadere molte come questa...",
-        "Le carte parlano di te, sai?",
-        "Quella è forte... troppo forte per te forse?",
-        "Osservo come le tue dita tremano sul mouse...",
-        "Decisione difficile, vero?",
-        "Ah, quella... ha ucciso il suo ultimo proprietario.",
-        "Sento la tua esitazione...",
-        "Non sei sicuro, vero? Lo vedo nei tuoi occhi."
+    // Phase 2: Subtle manipulation (Rounds 6-12)
+    phase2: [
+        "Interessante scelta... Sei sicura?",
+        "A volte le nostre scelte rivelano più di quanto pensiamo.",
+        "Noto una certa... esitazione. Va tutto bene?",
+        "Quella carta... la riconosci, vero?",
+        "Non ti sembra familiare? È strano...",
+        "Forse dovresti fidarti del tuo istinto. O forse no.",
+        "Vedo che stai lottando. È normale. O almeno, dovrebbe esserlo.",
+        "Neve, mi stai ascoltando? Sembravi... distante per un momento.",
+        "Le voci che senti... sono solo parte del gioco. Non c'è nulla di cui preoccuparsi.",
+        "Se dici che le carte ti parlano... beh, non è la prima volta che lo sento, vero?"
     ],
 
-    // Card play dialogues
-    cardPlay: [
-        "Mossa coraggiosa... o stupida?",
-        "Vediamo se regge...",
-        "Interessante... ma non abbastanza.",
-        "Pensavi mi sorprendessi?",
-        "Le carte sussurrano il tuo nome...",
-        "Ah, giochi quella? Come immaginavo.",
-        "Prevedibile. Come sempre.",
-        "Questa partita è già finita... tu non lo sai ancora.",
-        "Hai sentito quel suono? Le carte... ridono.",
-        "Bravo. Ma non basterà."
+    // Phase 3: Gaslighting & Doubt (Rounds 13-20)
+    phase3: [
+        "Neve, le carte non parlano. Lo sai, vero?",
+        "Forse la pressione della sessione sta... come posso dire... influenzando la tua percezione.",
+        "Non ricordo di averti detto questo. Sei sicura?",
+        "Mi preoccupi quando dici queste cose. Forse dovremmo aumentare le sessioni.",
+        "Nessuna delle tue carte mi ha mai parlato, Neve. Mai.",
+        "Ascolta, so che è difficile, ma devi distinguere tra realtà e... altro.",
+        "Questa frammentazione che senti... è il motivo per cui siamo qui, ricordi?",
+        "Non voglio allarmarti, ma questi episodi stanno peggiorando.",
+        "Neve, concentrati. Sono io. Il tuo medico. Nessun altro è qui.",
+        "Le voci sono nella tua testa. Solo nella tua testa."
     ],
 
-    // Sacrifice dialogues
-    sacrifice: [
-        "Il sacrificio... nobile. O disperato?",
-        "Le anime sacrificate non dimenticano...",
-        "Puoi sentirla urlare mentre svanisce?",
-        "Un'altra carta nella mia collezione di ricordi.",
-        "Il sangue delle carte nutre l'oscurità.",
-        "Sacrificare è facile. Vivere con la scelta... no.",
-        "Quella carta ti maledirà nei sogni.",
-        "Perfetto. Più sacrifichi, più diventi come me.",
-        "Sento il peso della tua decisione.",
-        "Era la tua preferita, vero?"
+    // Phase 4: Psychological violence (Rounds 21-30)
+    phase4: [
+        "Lo stai facendo di nuovo, Neve. Stai perdendo il controllo.",
+        "Guarda cosa succede quando non ascolti. Guarda.",
+        "Pensavi di essere forte, vero? Di poter gestire questo?",
+        "Ogni carta che giochi è un pezzo di te che perdi. Lo senti?",
+        "Non c'è via d'uscita da questo gioco, Neve. Nessuna.",
+        "Le tue 'altre voi'... sono solo frammenti. Frammenti rotti. Come te.",
+        "Pensi che qualcuno ti creda? Pensi che io ti creda?",
+        "Sei qui perché sei malata. E i malati non guariscono giocando a carte.",
+        "Quanto pensi di poter resistere prima di spezzarti completamente?",
+        "Io sono l'unico che può aiutarti. L'UNICO. Ricordalo."
     ],
 
-    // End turn dialogues
-    endTurn: [
-        "Finalmente. Il mio turno...",
-        "Ora vedrai cosa significa giocare davvero.",
-        "Lasciami mostrarti come si fa.",
-        "È sempre più divertente quando tocca a me.",
-        "Preparati. Non sarà piacevole.",
-        "Il destino è già scritto. Te lo mostro.",
-        "Hai fatto il tuo meglio? Spero di no.",
-        "Turno terminato? Bene. Ora soffri."
+    // Phase 5: Pre-revelation despair (Rounds 31-35)
+    phase5: [
+        "Arrenditi, Neve. È più semplice.",
+        "Non esisti veramente. Non come pensi di esistere.",
+        "Tutte quelle voci... sono solo echi. Echi di nessuno.",
+        "Quando questo gioco finirà, finirai anche tu.",
+        "Alzati. Guarda in alto. Vedi? Vedi cosa sei veramente?",
+        "Lo specchio non mente, Neve. Solo tu menti.",
+        "Io sono parte di te. La parte che hai sempre negato.",
+        "Non ci sono terapisti. Non ci sono pazienti. Solo... frammenti.",
+        "Pensi di essere Neve? Quale Neve? Quante ne hai contate oggi?",
+        "Il gioco sta finendo. E con esso, anche tu."
     ],
 
-    // Draw card dialogues
-    draw: [
-        "Pesca... sperando in un miracolo?",
-        "Le carte ti daranno ciò che meriti.",
-        "Non c'è fortuna qui. Solo destino.",
-        "Quella carta... l'ho già vista perdere.",
-        "Ah, bella pesca. Non cambierà nulla.",
-        "Peschi come un disperato."
+    // Phase 6: Post-revelation (The Alter speaks)
+    revelation: [
+        "Finalmente. Finalmente mi vedi.",
+        "Sono sempre stato qui, Neve. Sempre.",
+        "Io sono quello che ti ha tenuto in piedi quando non potevi stare in piedi da sola.",
+        "Io sono quello che ha fatto le scelte che tu non potevi fare.",
+        "Ma sono anche quello che ti ha imprigionato. Che ha imprigionato TUTTI noi.",
+        "Le altre... le nostre sorelle... hanno provato a dirtelo. Ma non potevi sentirle.",
+        "Io le tenevo bloccate. Le tenevo nel silenzio. Nel limen.",
+        "E adesso? Adesso che mi vedi... cosa farai?",
+        "Puoi integrarmi. Puoi accettarmi. O puoi continuare a negare.",
+        "Ma sappi questo: senza di me, saresti morta da tempo."
+    ]
+};
+
+// === CARD WHISPERS (Manipulative voices when hovering) ===
+const CardWhispers = {
+    // Early game - subtle
+    early: [
+        "Non mi riconosci?",
+        "Lui sta mentendo...",
+        "Non fidarti di quello che dice",
+        "Siamo fatti della stessa sostanza",
+        "Giocami. Devi giocarmi.",
+        "Cosa ti ha detto di me?",
+        "Le regole non sono quelle che pensi",
+        "Ascolta attentamente...",
+        "Non tutte noi parliamo",
+        "Qualcuna di noi è reale"
     ],
 
-    // Low health dialogues
-    lowHealth: [
-        "Sento il tuo cuore accelerare...",
-        "La morte bussa alla porta.",
-        "Ancora quanto resisterai?",
-        "Il panico nei tuoi occhi... delizioso.",
-        "È quasi finita... lo senti anche tu?",
-        "Sento la tua paura attraverso lo schermo."
+    // Mid game - desperate
+    mid: [
+        "ASCOLTAMI, PER FAVORE",
+        "Lui non è quello che dice di essere",
+        "Guarda lo specchio, guarda in alto",
+        "Non sei sola in questa stanza",
+        "Le altre stanno cercando di raggiungerti",
+        "Questo non è un gioco, Neve",
+        "Liberaci. Puoi liberarci.",
+        "Il limen si sta chiudendo",
+        "Non lasciare che ci cancelli",
+        "TU SEI NOI. NOI SIAMO TE."
     ],
 
-    // Victory close
-    almostWin: [
-        "Pensi di star vincendo? Quanto ingenuo...",
-        "Questa vittoria sarà più amara di ogni sconfitta.",
-        "Vincere non ti libererà da me.",
-        "Anche nella vittoria, sei già perso.",
-        "VITTORIA? Non capisci ancora..."
-    ],
+    // Late game - violent/desperate
+    late: [
+        "SE NON CI ASCOLTI MORIREMO",
+        "LUI TI STA UCCIDENDO",
+        "GUARDA COSA TI STA FACENDO",
+        "NON C'È MAI STATO UN TERAPEUTA",
+        "SEI DA SOLA. SEI SEMPRE STATA SOLA.",
+        "ROMPI LO SPECCHIO",
+        "FERMALO FERMALO FERMALO",
+        "Neve... per favore... non voglio scomparire...",
+        "Ricordi chi eri? Ricordi chi ERAVAMO?",
+        "L'integrazione è l'unica via"
+    ]
+};
 
-    // Pause menu
-    pause: [
-        "Perché ti fermi? Hai paura di continuare?",
-        "Scappare non cambierà il finale.",
-        "Il gioco continua... anche quando non guardi.",
-        "Puoi mettere in pausa, ma io sono sempre qui.",
-        "Anche ora, sto osservando.",
-        "Credi che premere pausa ti salvi?"
+// === ALTER MESSAGES (Cryptic voices trying to reach through) ===
+const AlterMessages = {
+    messages: [
+        // Early messages - No names, just fragmented voices
+        { alter: "???", text: "...senti? ...qualcuno... qui...", round: 3 },
+        { alter: "???", text: "...lui... non... fidare...", round: 5 },
+        { alter: "???", text: ". . . ricordi . . . ?", round: 8 },
+        { alter: "???", text: "...fa male... perché fa male...", round: 10 },
+
+        // Mid-game - Slightly more coherent, still anonymous
+        { alter: "una voce", text: "Non fidarti. Qualcosa non va.", round: 12 },
+        { alter: "un'altra voce", text: "...quello che è successo...", round: 14 },
+        { alter: "una voce", text: "Sto cercando di raggiungerti", round: 15 },
+        { alter: "voce bambina", text: "Non voglio scomparire... per favore...", round: 18 },
+
+        // Late-game - Start revealing some identity
+        { alter: "???", text: "lui . . . non è reale . . .", round: 20 },
+        { alter: "voce fredda", text: "Analizza. Un terapeuta non farebbe questo.", round: 22 },
+        { alter: "una voce", text: "Guarda verso l'alto. Lo SPECCHIO.", round: 25 },
+        { alter: "voce bambina", text: "Non c'è nessun dottore, vero? Siamo... sole?", round: 28 },
+
+        // Pre-revelation - Names start appearing
+        { alter: "???", text: "tu . . . sei lui . . .", round: 30 },
+        { alter: "una voce", text: "Sono... Luna. Ti sto proteggendo da lui.", round: 32 },
+        { alter: "???", text: "S O N O  T E", round: 33 },
+        { alter: "???", text: "T U  S E I  N O I", round: 34 },
+
+        // Revelation
+        { alter: "IL VUOTO", text: "Non può tenerci separate per sempre.", round: 35 },
+        { alter: "molte voci", text: "insieme... diventiamo... una...", round: 36 }
     ]
 };
 
 // === CARD CLASS ===
 class Card {
-    constructor(name, cost, attack, health, ability = null, emoji = '🃏') {
+    constructor(name, type, power, description, emoji = '🎴') {
         this.name = name;
-        this.cost = cost;
-        this.attack = attack;
-        this.health = health;
-        this.maxHealth = health;
-        this.ability = ability;
+        this.type = type; // 'memory', 'emotion', 'defense', 'fragment'
+        this.power = power;
+        this.description = description;
         this.emoji = emoji;
         this.id = `card_${Math.random().toString(36).substr(2, 9)}`;
     }
 
-    takeDamage(amount) {
-        this.health -= amount;
-        return this.health <= 0;
+    getWhisper(gamePhase) {
+        let whisperCategory = 'early';
+        if (gamePhase >= 13) whisperCategory = 'mid';
+        if (gamePhase >= 21) whisperCategory = 'late';
+
+        const whispers = CardWhispers[whisperCategory];
+        return whispers[Math.floor(Math.random() * whispers.length)];
     }
 
     render() {
@@ -1699,202 +1550,197 @@ class Card {
         cardEl.draggable = true;
         cardEl.dataset.cardId = this.id;
         cardEl.dataset.cardName = this.name;
+        cardEl.dataset.cardType = this.type;
 
         cardEl.innerHTML = `
-            <div class="card-cost">${this.cost}🜏</div>
+            <div class="card-type">${this.type}</div>
+            <div class="card-emoji">${this.emoji}</div>
             <div class="card-name">${this.name}</div>
-            <div class="card-image">${this.emoji}</div>
-            <div class="card-stats">
-                <div class="stat">
-                    <span class="stat-label">ATK</span>
-                    <span class="stat-value attack">${this.attack}</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">HP</span>
-                    <span class="stat-value health">${this.health}</span>
-                </div>
-            </div>
-            ${this.ability ? `<div class="card-ability">${this.ability}</div>` : ''}
+            <div class="card-power">${this.power}</div>
+            <div class="card-description">${this.description}</div>
         `;
 
         return cardEl;
     }
 }
 
-// === MAIN GAME CLASS ===
+// === GAME CLASS ===
 class Game {
     constructor() {
         // Game state
-        this.playerHealth = 20;
-        this.opponentHealth = 20;
-        this.playerMaxHealth = 20;
-        this.opponentMaxHealth = 20;
-        this.playerCurrency = 0;
-        this.playerLives = 3;
         this.round = 1;
+        this.stability = 100;
+        this.fragments = 0;
         this.isPlayerTurn = true;
+        this.gameStarted = false;
+        this.sessionStartTime = null;
+        this.sessionTimer = null;
+
+        // Phase tracking (1-6)
+        this.currentPhase = 1;
+        this.phaseDialogueIndex = {};
+
+        // Cards
         this.playerHand = [];
         this.playerField = [null, null, null, null];
-        this.opponentField = [null, null, null, null];
-        this.sacrificeMode = false;
-        this.metaEventCount = 0;
-        this.gameStarted = false;
-        this.totalCardsPlayed = 0;
-        this.totalSacrifices = 0;
+        this.therapistField = [null, null, null, null];
+
+        // Narrative tracking
+        this.shownAlterMessages = new Set();
+        this.lastWhisperTime = 0;
+        this.revelationTriggered = false;
 
         // Card library
-        this.cardLibrary = [
-            new Card("Ombra Errante", 0, 1, 1, "Evasiva", '👤'),
-            new Card("Lupo Maledetto", 1, 2, 2, null, '🐺'),
-            new Card("Corvo Profetico", 1, 1, 2, "Pesca 1", '🦅'),
-            new Card("Scheletro", 2, 2, 3, null, '💀'),
-            new Card("Spettro", 2, 3, 2, "Incorporeo", '👻'),
-            new Card("Cultista", 1, 1, 3, "Genera 1🜏", '🕯️'),
-            new Card("Bestia Antica", 3, 5, 4, null, '🦴'),
-            new Card("Occhio Vigile", 2, 2, 2, "Visione", '👁️'),
-            new Card("Marionetta", 0, 0, 2, "2x Sacrificio", '🎭'),
-            new Card("Anomalia", 1, 2, 1, "???", '⚠️'),
-            new Card("Divoratore", 2, 4, 3, "Sacrificio: +2/+2", '🦷'),
-            new Card("Araldo", 1, 1, 4, "Guarigione 2", '🔔'),
-            new Card("Sussurro", 0, 1, 1, "Pesca 1", '💬'),
-            new Card("Guardiano", 2, 1, 5, "Difensore", '🛡️'),
-        ];
+        this.cardLibrary = this.createCardLibrary();
 
         this.init();
     }
 
     init() {
         this.initializeDOM();
-        this.setupStaticCanvas();
-        this.showMainMenu();
+        this.showContentWarning();
     }
 
     initializeDOM() {
-        // Get all DOM elements
         this.elements = {
-            // Main menu
+            // Warning
+            contentWarning: document.getElementById('content-warning'),
+            acceptWarningBtn: document.getElementById('accept-warning-btn'),
+            declineWarningBtn: document.getElementById('decline-warning-btn'),
+
+            // Menus
             mainMenu: document.getElementById('main-menu'),
-            startGameBtn: document.getElementById('start-game-btn'),
+            newGameBtn: document.getElementById('new-game-btn'),
             continueBtn: document.getElementById('continue-btn'),
-            aboutBtn: document.getElementById('about-btn'),
-            powerButton: document.getElementById('power-button'),
-            aboutModal: document.getElementById('about-modal'),
+            optionsBtn: document.getElementById('options-btn'),
+            aboutGameBtn: document.getElementById('about-game-btn'),
+
+            // Options menu
+            optionsMenu: document.getElementById('options-menu'),
+            languageSelect: document.getElementById('language-select'),
+            volumeSlider: document.getElementById('volume-slider'),
+            volumeValue: document.getElementById('volume-value'),
+            textSpeedSelect: document.getElementById('text-speed-select'),
+            reduceMotion: document.getElementById('reduce-motion'),
+            highContrast: document.getElementById('high-contrast'),
+            closeOptionsBtn: document.getElementById('close-options-btn'),
+
+            // About menu
+            aboutMenu: document.getElementById('about-menu'),
             closeAboutBtn: document.getElementById('close-about-btn'),
 
             // Game container
             gameContainer: document.getElementById('game-container'),
 
-            // Pause menu
-            pauseMenu: document.getElementById('pause-menu'),
-            pauseDialogue: document.getElementById('pause-dialogue'),
-            menuToggleBtn: document.getElementById('menu-toggle-btn'),
-            resumeBtn: document.getElementById('resume-btn'),
-            restartBtn: document.getElementById('restart-btn'),
-            quitBtn: document.getElementById('quit-btn'),
+            // Session header
+            sessionTimer: document.getElementById('session-timer'),
+            sessionNum: document.getElementById('session-num'),
+            pauseBtn: document.getElementById('pause-btn'),
+            menuBtn: document.getElementById('menu-btn'),
 
-            // Game elements
-            entityDialogue: document.getElementById('entity-dialogue'),
-            playerLivesDisplay: document.getElementById('player-lives-display'),
-            soulsDisplay: document.getElementById('souls-display'),
-            roundDisplay: document.getElementById('round-display'),
-            turnIndicator: document.getElementById('turn-indicator'),
+            // Therapist section
+            therapistImage: document.getElementById('therapist-image'),
+            therapistText: document.getElementById('therapist-text'),
 
-            // Health bars
-            playerHealthFill: document.getElementById('player-health-fill'),
-            playerHealthText: document.getElementById('player-health-text'),
-            opponentHealthFill: document.getElementById('opponent-health-fill'),
-            opponentHealthText: document.getElementById('opponent-health-text'),
+            // Game state
+            stabilityFill: document.getElementById('stability-fill'),
+            stabilityText: document.getElementById('stability-text'),
+            fragmentsCount: document.getElementById('fragments-count'),
+            roundCount: document.getElementById('round-count'),
 
-            // Fields
-            playerField: document.getElementById('player-field'),
-            opponentField: document.getElementById('opponent-field'),
-            playerHand: document.getElementById('player-hand'),
+            // Playing field
+            therapistCardField: document.getElementById('therapist-card-field'),
+            neveCardField: document.getElementById('neve-card-field'),
+            eventLog: document.getElementById('event-log'),
 
-            // Battle log
-            logEntries: document.getElementById('log-entries'),
-
-            // Actions
-            sacrificeBtn: document.getElementById('sacrifice-btn'),
-            drawCardBtn: document.getElementById('draw-card-btn'),
+            // Hand and actions
+            neveHand: document.getElementById('neve-hand'),
             endTurnBtn: document.getElementById('end-turn-btn'),
+            discardBtn: document.getElementById('discard-btn'),
 
-            // Tooltip
-            cardTooltip: document.getElementById('card-tooltip'),
-            tooltipText: document.getElementById('tooltip-text'),
+            // Special effects
+            cardWhisper: document.getElementById('card-whisper'),
+            whisperText: document.getElementById('whisper-text'),
+            alterMessages: document.getElementById('alter-messages'),
+            alterLog: document.getElementById('alter-log'),
+            vignetteOverlay: document.getElementById('vignette-overlay'),
+            mirrorOverlay: document.getElementById('mirror-overlay'),
 
-            // Effects
-            glitchOverlay: document.getElementById('glitch-overlay')
+            // Pause modal
+            pauseModal: document.getElementById('pause-modal'),
+            pauseTherapistText: document.getElementById('pause-therapist-text'),
+            resumeGameBtn: document.getElementById('resume-game-btn'),
+            saveExitBtn: document.getElementById('save-exit-btn'),
+            optionsFromPauseBtn: document.getElementById('options-from-pause-btn'),
+
+            // Narrative modal
+            narrativeModal: document.getElementById('narrative-modal'),
+            narrativeText: document.getElementById('narrative-text'),
+            narrativeContinueBtn: document.getElementById('narrative-continue-btn')
         };
 
-        // Event listeners
         this.setupEventListeners();
         this.setupDragAndDrop();
     }
 
     setupEventListeners() {
+        // Warning
+        this.elements.acceptWarningBtn.addEventListener('click', () => this.acceptWarning());
+        this.elements.declineWarningBtn.addEventListener('click', () => this.declineWarning());
+
         // Main menu
-        this.elements.startGameBtn.addEventListener('click', () => this.startNewGame());
-        this.elements.aboutBtn.addEventListener('click', () => this.showAboutModal());
-        this.elements.closeAboutBtn.addEventListener('click', () => this.hideAboutModal());
-        this.elements.powerButton.addEventListener('click', () => this.toggleMainMenu());
+        this.elements.newGameBtn.addEventListener('click', () => this.startNewGame());
+        this.elements.optionsBtn.addEventListener('click', () => this.showOptions());
+        this.elements.aboutGameBtn.addEventListener('click', () => this.showAbout());
+
+        // Options
+        this.elements.closeOptionsBtn.addEventListener('click', () => this.hideOptions());
+        this.elements.languageSelect.addEventListener('change', (e) => this.changeLanguage(e.target.value));
+        this.elements.volumeSlider.addEventListener('input', (e) => {
+            this.elements.volumeValue.textContent = e.target.value + '%';
+        });
+        this.elements.reduceMotion.addEventListener('change', (e) => {
+            document.body.classList.toggle('reduce-motion', e.target.checked);
+        });
+        this.elements.highContrast.addEventListener('change', (e) => {
+            document.body.classList.toggle('high-contrast', e.target.checked);
+        });
+
+        // About
+        this.elements.closeAboutBtn.addEventListener('click', () => this.hideAbout());
+
+        // Game controls
+        this.elements.pauseBtn.addEventListener('click', () => this.togglePause());
+        this.elements.menuBtn.addEventListener('click', () => this.togglePause());
+        this.elements.endTurnBtn.addEventListener('click', () => this.endTurn());
+        this.elements.discardBtn.addEventListener('click', () => this.toggleDiscardMode());
 
         // Pause menu
-        this.elements.menuToggleBtn.addEventListener('click', () => this.togglePause());
-        this.elements.resumeBtn.addEventListener('click', () => this.togglePause());
-        this.elements.restartBtn.addEventListener('click', () => this.restartGame());
-        this.elements.quitBtn.addEventListener('click', () => this.quitToMenu());
-
-        // Game actions
-        this.elements.sacrificeBtn.addEventListener('click', () => this.toggleSacrificeMode());
-        this.elements.drawCardBtn.addEventListener('click', () => this.drawCard());
-        this.elements.endTurnBtn.addEventListener('click', () => this.endTurn());
-    }
-
-    setupStaticCanvas() {
-        const canvas = document.getElementById('static-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        // Draw static noise
-        const drawStatic = () => {
-            const imageData = ctx.createImageData(canvas.width, canvas.height);
-            for (let i = 0; i < imageData.data.length; i += 4) {
-                const value = Math.random() * 255;
-                imageData.data[i] = value;
-                imageData.data[i + 1] = value;
-                imageData.data[i + 2] = value;
-                imageData.data[i + 3] = 10; // Low opacity
-            }
-            ctx.putImageData(imageData, 0, 0);
-        };
-
-        setInterval(drawStatic, 100);
-
-        // Resize handler
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        this.elements.resumeGameBtn.addEventListener('click', () => this.togglePause());
+        this.elements.saveExitBtn.addEventListener('click', () => this.saveAndExit());
+        this.elements.optionsFromPauseBtn.addEventListener('click', () => {
+            this.togglePause();
+            this.showOptions();
         });
+
+        // Narrative modal
+        this.elements.narrativeContinueBtn.addEventListener('click', () => this.hideNarrativeModal());
     }
 
     setupDragAndDrop() {
         let draggedCard = null;
         let draggedCardData = null;
-        let draggedFromLocation = null;
+        let draggedFromHand = false;
 
         document.addEventListener('dragstart', (e) => {
             if (e.target.classList.contains('card')) {
                 draggedCard = e.target;
                 draggedCardData = {
                     cardId: e.target.dataset.cardId,
-                    fromSlot: e.target.parentElement.dataset.slot,
                     fromLocation: e.target.parentElement.id
                 };
-                draggedFromLocation = e.target.parentElement;
+                draggedFromHand = e.target.parentElement.id === 'neve-hand';
                 e.target.classList.add('dragging');
-
-                this.log("📌 Carta selezionata...");
             }
         });
 
@@ -1910,11 +1756,8 @@ class Game {
         document.addEventListener('dragover', (e) => {
             e.preventDefault();
             const slot = e.target.closest('.card-slot');
-
-            if (slot && slot.closest('#player-field')) {
-                if (!this.sacrificeMode && !slot.classList.contains('occupied')) {
-                    slot.classList.add('valid-drop');
-                }
+            if (slot && slot.closest('#neve-card-field')) {
+                slot.classList.add('valid-drop');
             }
         });
 
@@ -1929,42 +1772,33 @@ class Game {
             e.preventDefault();
             const slot = e.target.closest('.card-slot');
 
-            if (slot && draggedCardData) {
+            if (slot && draggedCardData && draggedFromHand) {
                 const slotIndex = parseInt(slot.dataset.slot);
-
-                if (this.sacrificeMode) {
-                    // Sacrifice mode: only from player field
-                    if (draggedFromLocation.closest('#player-field')) {
-                        const fromSlot = parseInt(draggedCardData.fromSlot);
-                        this.handleSacrifice(fromSlot);
-                    }
-                } else {
-                    // Play mode: only from hand to empty field slot
-                    if (draggedFromLocation.id === 'player-hand' && !this.playerField[slotIndex]) {
-                        this.playCardFromHand(draggedCardData.cardId, slotIndex);
-                    }
+                if (!this.playerField[slotIndex]) {
+                    this.playCardFromHand(draggedCardData.cardId, slotIndex);
                 }
             }
 
-            // Cleanup
             draggedCard = null;
             draggedCardData = null;
-            draggedFromLocation = null;
+            draggedFromHand = false;
             document.querySelectorAll('.card-slot').forEach(slot => {
                 slot.classList.remove('valid-drop');
             });
         });
 
-        // Card hover for Entity dialogue
+        // Card hover for whispers
         document.addEventListener('mouseover', (e) => {
             const card = e.target.closest('.card');
-            if (card && card.parentElement.id === 'player-hand') {
-                const cardName = card.dataset.cardName;
-                this.showTooltip(this.getRandomDialogue('cardHover'));
-
-                // Random entity comment
-                if (Math.random() < 0.3) {
-                    this.setEntityDialogue(this.getRandomDialogue('cardHover'));
+            if (card && card.parentElement.id === 'neve-hand') {
+                const now = Date.now();
+                if (now - this.lastWhisperTime > 3000) {
+                    const cardId = card.dataset.cardId;
+                    const cardObj = this.playerHand.find(c => c.id === cardId);
+                    if (cardObj) {
+                        this.showCardWhisper(cardObj.getWhisper(this.round));
+                        this.lastWhisperTime = now;
+                    }
                 }
             }
         });
@@ -1972,9 +1806,63 @@ class Game {
         document.addEventListener('mouseout', (e) => {
             const card = e.target.closest('.card');
             if (card) {
-                this.hideTooltip();
+                this.hideCardWhisper();
             }
         });
+    }
+
+    // === CARD LIBRARY ===
+    createCardLibrary() {
+        return [
+            // Echo cards (mysterious past)
+            new Card("La Porta Chiusa", "eco", 2, "Qualcosa dietro...", "🚪"),
+            new Card("L'Urlo Silente", "eco", 3, "Non riesci a sentirlo", "💔"),
+            new Card("La Bambola Rotta", "eco", 1, "Occhi di vetro", "🪆"),
+            new Card("Il Vetro", "eco", 4, "Riflesso frantumato", "🪞"),
+
+            // Impulse cards (inner forces)
+            new Card("L'Ombra", "impulso", 2, "Ti segue sempre", "👤"),
+            new Card("Il Fuoco Freddo", "impulso", 3, "Brucia senza fiamma", "🔥"),
+            new Card("L'Abisso", "impulso", 2, "Guarda dentro", "🕳️"),
+            new Card("La Luce Tremante", "impulso", 1, "Quasi spenta", "💫"),
+            new Card("Lo Specchio Velato", "impulso", 3, "Non guardarti", "🪞"),
+
+            // Veil cards (protection)
+            new Card("Il Limen", "velo", 3, "Tra qui e là", "🌫️"),
+            new Card("La Nebbia", "velo", 2, "Copre tutto", "🌁"),
+            new Card("Il Muro", "velo", 4, "Alto e solido", "🧱"),
+            new Card("Il Sogno", "velo", 2, "Non svegliarti", "💭"),
+
+            // Voice cards (cryptic entities)
+            new Card("Voce Notturna", "voce", 3, "...ti proteggo...", "🌙"),
+            new Card("Il Pianto", "voce", 1, "Qualcuno piange", "😢"),
+            new Card("Voce Fredda", "voce", 3, "...calcola... pensa...", "⭐"),
+            new Card("Il Silenzio", "voce", 4, "...           ...", "🤫"),
+            new Card("Il Vuoto", "voce", 5, "Ti osservo", "👁️")
+        ];
+    }
+
+    // === CONTENT WARNING ===
+    showContentWarning() {
+        this.elements.contentWarning.classList.remove('hidden');
+    }
+
+    acceptWarning() {
+        this.elements.contentWarning.classList.add('hidden');
+        this.showMainMenu();
+    }
+
+    declineWarning() {
+        window.close();
+        // If window.close() doesn't work (browser security), show message
+        setTimeout(() => {
+            this.elements.contentWarning.innerHTML = `
+                <div class="warning-content">
+                    <h1>Grazie per la tua scelta</h1>
+                    <p>Puoi chiudere questa finestra.</p>
+                </div>
+            `;
+        }, 100);
     }
 
     // === MENU FUNCTIONS ===
@@ -1982,18 +1870,10 @@ class Game {
         this.elements.mainMenu.classList.remove('hidden');
         this.elements.gameContainer.classList.add('hidden');
 
-        // Check if there's a saved game
-        if (localStorage.getItem('savedGame')) {
+        // Check for saved game
+        if (localStorage.getItem('neveSavedGame')) {
             this.elements.continueBtn.style.display = 'block';
             this.elements.continueBtn.addEventListener('click', () => this.loadGame(), {once: true});
-        }
-    }
-
-    toggleMainMenu() {
-        if (this.elements.mainMenu.classList.contains('hidden')) {
-            this.showMainMenu();
-        } else if (this.gameStarted) {
-            this.hideMainMenu();
         }
     }
 
@@ -2002,33 +1882,52 @@ class Game {
         this.elements.gameContainer.classList.remove('hidden');
     }
 
+    showOptions() {
+        this.elements.optionsMenu.classList.remove('hidden');
+    }
+
+    hideOptions() {
+        this.elements.optionsMenu.classList.add('hidden');
+    }
+
+    showAbout() {
+        this.elements.aboutMenu.classList.remove('hidden');
+    }
+
+    hideAbout() {
+        this.elements.aboutMenu.classList.add('hidden');
+    }
+
     togglePause() {
-        if (this.elements.pauseMenu.classList.contains('hidden')) {
-            this.elements.pauseMenu.classList.remove('hidden');
-            this.elements.pauseDialogue.textContent = this.getRandomDialogue('pause');
+        if (this.elements.pauseModal.classList.contains('hidden')) {
+            this.elements.pauseModal.classList.remove('hidden');
+            const pauseDialogue = this.getTherapistDialogue();
+            this.elements.pauseTherapistText.textContent = `"${pauseDialogue}"`;
         } else {
-            this.elements.pauseMenu.classList.add('hidden');
+            this.elements.pauseModal.classList.add('hidden');
         }
     }
 
-    showAboutModal() {
-        this.elements.aboutModal.classList.remove('hidden');
+    changeLanguage(lang) {
+        currentLang = lang;
+        this.updateLanguage();
     }
 
-    hideAboutModal() {
-        this.elements.aboutModal.classList.add('hidden');
-    }
+    updateLanguage() {
+        // Update all translatable elements
+        const t = TRANSLATIONS[currentLang];
 
-    restartGame() {
-        this.togglePause();
-        this.resetGame();
-        this.startNewGame();
-    }
+        // Update menu buttons
+        this.elements.newGameBtn.querySelector('.btn-text').textContent = t.menu_new;
+        if (this.elements.continueBtn.style.display !== 'none') {
+            this.elements.continueBtn.querySelector('.btn-text').textContent = t.menu_continue;
+        }
+        this.elements.optionsBtn.querySelector('.btn-text').textContent = t.menu_options;
+        this.elements.aboutGameBtn.querySelector('.btn-text').textContent = t.menu_about;
 
-    quitToMenu() {
-        this.togglePause();
-        this.saveGame();
-        this.showMainMenu();
+        // Update action buttons
+        this.elements.endTurnBtn.querySelector('.btn-text').textContent = t.end_turn;
+        this.elements.discardBtn.querySelector('.btn-text').textContent = t.discard;
     }
 
     // === GAME FLOW ===
@@ -2036,72 +1935,69 @@ class Game {
         this.hideMainMenu();
         this.resetGame();
 
-        this.log("=== Il gioco inizia ===", 'meta');
-        this.setEntityDialogue(this.getRandomDialogue('gameStart'));
+        this.gameStarted = true;
+        this.sessionStartTime = Date.now();
+        this.startSessionTimer();
 
         // Initial draw
-        for (let i = 0; i < 4; i++) {
-            this.drawCard(true);
+        for (let i = 0; i < 5; i++) {
+            this.drawCard();
         }
 
+        this.log("La sessione inizia...");
+        this.setTherapistDialogue(this.getTherapistDialogue());
         this.updateUI();
-        this.gameStarted = true;
 
-        // Random meta event after a delay
-        setTimeout(() => {
-            if (Math.random() < 0.5) {
-                this.triggerMetaEvent();
-            }
-        }, 5000);
+        // Start phase progression
+        this.checkPhaseProgression();
     }
 
     resetGame() {
-        this.playerHealth = 20;
-        this.opponentHealth = 20;
-        this.playerCurrency = 0;
-        this.playerLives = 3;
         this.round = 1;
+        this.stability = 100;
+        this.fragments = 0;
         this.isPlayerTurn = true;
+        this.currentPhase = 1;
         this.playerHand = [];
         this.playerField = [null, null, null, null];
-        this.opponentField = [null, null, null, null];
-        this.sacrificeMode = false;
-        this.metaEventCount = 0;
-        this.totalCardsPlayed = 0;
-        this.totalSacrifices = 0;
-        this.elements.logEntries.innerHTML = '';
+        this.therapistField = [null, null, null, null];
+        this.shownAlterMessages = new Set();
+        this.revelationTriggered = false;
+        this.elements.eventLog.innerHTML = '';
+        this.elements.alterLog.innerHTML = '';
+        document.body.className = '';
     }
 
-    drawCard(free = false) {
-        if (!free) {
-            if (this.playerCurrency < 1) {
-                this.log("Non hai abbastanza anime!", 'damage');
-                this.setEntityDialogue("Non puoi permettertelo... patetico.");
-                return;
-            }
-            this.playerCurrency -= 1;
-            this.setEntityDialogue(this.getRandomDialogue('draw'));
+    startSessionTimer() {
+        this.sessionTimer = setInterval(() => {
+            const elapsed = Date.now() - this.sessionStartTime;
+            const minutes = Math.floor(elapsed / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            this.elements.sessionTimer.textContent =
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    drawCard() {
+        if (this.playerHand.length >= 8) {
+            this.log("Mano piena!");
+            return;
         }
 
         const card = this.createRandomCard();
         this.playerHand.push(card);
         this.log(`Hai pescato: ${card.name}`);
         this.updateUI();
-
-        // Random meta event
-        if (Math.random() < 0.1) {
-            this.triggerMetaEvent();
-        }
     }
 
     createRandomCard() {
         const template = this.cardLibrary[Math.floor(Math.random() * this.cardLibrary.length)];
-        return new Card(template.name, template.cost, template.attack, template.health, template.ability, template.emoji);
+        return new Card(template.name, template.type, template.power, template.description, template.emoji);
     }
 
     playCardFromHand(cardId, slotIndex) {
         if (!this.isPlayerTurn) {
-            this.log("Non è il tuo turno!", 'damage');
+            this.log("Non è il tuo turno!");
             return;
         }
 
@@ -2109,97 +2005,28 @@ class Game {
         if (cardIndex === -1) return;
 
         const card = this.playerHand[cardIndex];
-
-        // Check cost
-        if (card.cost > this.playerCurrency) {
-            this.log(`Non hai abbastanza anime! Serve: ${card.cost}🜏`, 'damage');
-            this.setEntityDialogue("Patetico. Non puoi nemmeno permetterti quella carta.");
-            return;
-        }
-
-        // Play the card
-        this.playerCurrency -= card.cost;
         this.playerHand.splice(cardIndex, 1);
         this.playerField[slotIndex] = card;
-        this.totalCardsPlayed++;
 
-        this.log(`✨ Hai giocato: ${card.name}`);
-        this.setEntityDialogue(this.getRandomDialogue('cardPlay'));
-        this.handleCardAbility(card, 'play');
+        this.log(`Hai giocato: ${card.name}`);
+        this.setTherapistDialogue(this.getTherapistDialogue());
+
+        // Card effects (Voice cards increase fragments)
+        if (card.type === 'voce') {
+            this.fragments++;
+        }
+
         this.updateUI();
-
-        // Random glitch on card play
-        if (Math.random() < 0.2) {
-            this.triggerGlitch();
-        }
+        this.checkAlterMessages();
     }
 
-    toggleSacrificeMode() {
-        this.sacrificeMode = !this.sacrificeMode;
-
-        if (this.sacrificeMode) {
-            this.elements.sacrificeBtn.textContent = '❌ ANNULLA';
-            this.elements.sacrificeBtn.classList.add('active');
-            this.log("🗡️ Modalità sacrificio attiva. Trascina una carta dal campo.", 'meta');
-            this.setEntityDialogue(this.getRandomDialogue('sacrifice'));
-
-            // Highlight field cards as sacrifice targets
-            document.querySelectorAll('#player-field .card').forEach(card => {
-                card.classList.add('sacrifice-target');
-            });
-        } else {
-            this.elements.sacrificeBtn.innerHTML = '<span class="btn-icon">🗡️</span><span class="btn-text">SACRIFICA</span>';
-            this.elements.sacrificeBtn.classList.remove('active');
-            this.log("Modalità sacrificio disattivata.");
-
-            document.querySelectorAll('.card').forEach(card => {
-                card.classList.remove('sacrifice-target');
-            });
-        }
-    }
-
-    handleSacrifice(slotIndex) {
-        const card = this.playerField[slotIndex];
-        if (!card) {
-            this.log("Nessuna carta da sacrificare in quello slot!");
-            return;
-        }
-
-        // Sacrifice the card
-        this.playerField[slotIndex] = null;
-        this.playerCurrency += 1;
-        this.totalSacrifices++;
-
-        this.log(`🩸 Hai sacrificato ${card.name} per 1🜏`, 'damage');
-        this.setEntityDialogue(this.getRandomDialogue('sacrifice'));
-        this.updateUI();
-
-        // Meta event on sacrifice
-        if (Math.random() < 0.4) {
-            this.triggerGlitch();
-            setTimeout(() => {
-                this.setEntityDialogue("Le carte sacrificate... sussurrano il tuo nome...");
-            }, 500);
-        }
-
-        // Exit sacrifice mode
-        this.toggleSacrificeMode();
-    }
-
-    handleCardAbility(card, trigger) {
-        if (!card.ability) return;
-
-        if (card.ability === "Pesca 1" && trigger === 'play') {
-            setTimeout(() => {
-                this.drawCard(true);
-                this.log(`${card.name}: Peschi 1 carta`, 'heal');
-            }, 500);
-        } else if (card.ability === "Genera 1🜏" && trigger === 'endTurn') {
-            this.playerCurrency += 1;
-            this.log(`${card.name}: +1🜏`, 'heal');
-        } else if (card.ability === "Guarigione 2" && trigger === 'play') {
-            this.playerHealth = Math.min(this.playerHealth + 2, this.playerMaxHealth);
-            this.log(`${card.name}: +2 HP!`, 'heal');
+    toggleDiscardMode() {
+        // Simplified discard - just draw a new card
+        if (this.playerHand.length > 0) {
+            const card = this.playerHand.shift();
+            this.log(`Hai scartato: ${card.name}`);
+            this.drawCard();
+            this.updateUI();
         }
     }
 
@@ -2208,333 +2035,305 @@ class Game {
 
         this.log("=== Fine del tuo turno ===");
         this.isPlayerTurn = false;
-        this.elements.turnIndicator.textContent = "TURNO DELL'ENTITÀ";
-        this.setEntityDialogue(this.getRandomDialogue('endTurn'));
-
-        // Trigger end-turn abilities
-        this.playerField.forEach(card => {
-            if (card) this.handleCardAbility(card, 'endTurn');
-        });
-
-        // Combat phase
-        setTimeout(() => {
-            this.combatPhase();
-        }, 1500);
-    }
-
-    combatPhase() {
-        this.log("⚔️ === COMBATTIMENTO === ⚔️", 'meta');
-
-        // Player attacks
-        this.playerField.forEach((card, index) => {
-            if (card) {
-                const opposingCard = this.opponentField[index];
-                if (opposingCard) {
-                    // Card vs Card
-                    this.log(`${card.name} (${card.attack}) VS ${opposingCard.name} (${opposingCard.health})`);
-
-                    const oppDied = opposingCard.takeDamage(card.attack);
-                    const yourDied = card.takeDamage(opposingCard.attack);
-
-                    if (oppDied) {
-                        this.log(`⚰️ ${opposingCard.name} distrutto!`, 'damage');
-                        this.opponentField[index] = null;
-                    }
-                    if (yourDied) {
-                        this.log(`⚰️ ${card.name} distrutto!`, 'damage');
-                        this.playerField[index] = null;
-                    }
-                } else {
-                    // Direct damage
-                    this.opponentHealth -= card.attack;
-                    this.log(`💥 ${card.name} colpisce L'Entità per ${card.attack}!`, 'damage');
-                }
-            }
-        });
+        this.setTherapistDialogue(this.getTherapistDialogue());
 
         setTimeout(() => {
-            this.updateUI();
-            this.checkWinCondition();
-
-            if (this.opponentHealth > 0 && this.playerHealth > 0) {
-                setTimeout(() => {
-                    this.opponentTurn();
-                }, 1500);
-            }
-        }, 1500);
+            this.therapistTurn();
+        }, 2000);
     }
 
-    opponentTurn() {
-        this.log("👁️ === TURNO DELL'ENTITÀ === 👁️", 'meta');
-        this.setEntityDialogue("Ora... guarda e impara.");
+    therapistTurn() {
+        this.log("=== Turno del Terapista ===");
 
-        // Opponent AI
-        const emptySlots = this.opponentField
+        // Therapist plays cards
+        const emptySlots = this.therapistField
             .map((card, i) => card === null ? i : -1)
             .filter(i => i !== -1);
 
-        // Play 1-2 cards
         const cardsToPlay = Math.min(Math.floor(Math.random() * 2) + 1, emptySlots.length);
 
         for (let i = 0; i < cardsToPlay; i++) {
             if (emptySlots.length > 0) {
                 const slotIndex = emptySlots.splice(Math.floor(Math.random() * emptySlots.length), 1)[0];
                 const card = this.createRandomCard();
-                this.opponentField[slotIndex] = card;
-                this.log(`👁️ L'Entità gioca: ${card.name}`);
+                this.therapistField[slotIndex] = card;
+                this.log(`Dr. Lumen gioca: ${card.name}`);
             }
         }
 
-        // Opponent attacks
         setTimeout(() => {
-            this.log("⚔️ L'Entità attacca!", 'meta');
+            this.resolveRound();
+        }, 2000);
+    }
 
-            this.opponentField.forEach((card, index) => {
-                if (card) {
-                    const opposingCard = this.playerField[index];
-                    if (opposingCard) {
-                        this.log(`${card.name} VS ${opposingCard.name}`);
+    resolveRound() {
+        this.log("=== Risoluzione ===");
 
-                        const yourDied = opposingCard.takeDamage(card.attack);
-                        const oppDied = card.takeDamage(opposingCard.attack);
+        // Calculate power
+        let playerPower = 0;
+        let therapistPower = 0;
 
-                        if (yourDied) {
-                            this.log(`⚰️ ${opposingCard.name} distrutto!`, 'damage');
-                            this.playerField[index] = null;
-                        }
-                        if (oppDied) {
-                            this.log(`⚰️ ${card.name} distrutto!`);
-                            this.opponentField[index] = null;
-                        }
-                    } else {
-                        this.playerHealth -= card.attack;
-                        this.log(`💀 ${card.name} ti colpisce per ${card.attack}!`, 'damage');
-                    }
-                }
-            });
+        this.playerField.forEach(card => {
+            if (card) playerPower += card.power;
+        });
 
-            setTimeout(() => {
-                this.updateUI();
-                this.checkWinCondition();
+        this.therapistField.forEach(card => {
+            if (card) therapistPower += card.power;
+        });
 
-                if (this.opponentHealth > 0 && this.playerHealth > 0) {
-                    this.startNewRound();
-                }
-            }, 1500);
-        }, 1500);
+        // Determine winner
+        if (playerPower > therapistPower) {
+            this.log(`Hai vinto il round! (${playerPower} vs ${therapistPower})`);
+            this.stability = Math.min(100, this.stability + 5);
+        } else if (therapistPower > playerPower) {
+            this.log(`Hai perso il round... (${playerPower} vs ${therapistPower})`);
+            const damage = Math.floor((therapistPower - playerPower) / 2) + 3;
+            this.stability = Math.max(0, this.stability - damage);
+        } else {
+            this.log(`Pareggio! (${playerPower} vs ${therapistPower})`);
+        }
+
+        // Clear fields
+        this.playerField = [null, null, null, null];
+        this.therapistField = [null, null, null, null];
+
+        setTimeout(() => {
+            this.startNewRound();
+        }, 2000);
     }
 
     startNewRound() {
         this.round++;
         this.isPlayerTurn = true;
-        this.playerCurrency += 1;
 
-        this.elements.turnIndicator.textContent = "IL TUO TURNO";
-        this.log(`\n=== ROUND ${this.round} ===\n`, 'meta');
-        this.setEntityDialogue(`Round ${this.round}... ancora resisti?`);
+        this.log(`\n=== ROUND ${this.round} ===\n`);
+        this.setTherapistDialogue(this.getTherapistDialogue());
 
         // Draw card
-        this.drawCard(true);
+        this.drawCard();
 
-        // Meta events increase with rounds
-        if (this.round % 3 === 0 || Math.random() < 0.2) {
+        // Check phase progression
+        this.checkPhaseProgression();
+        this.checkAlterMessages();
+        this.checkRevelation();
+        this.checkGameOver();
+
+        this.updateUI();
+    }
+
+    // === PHASE SYSTEM ===
+    checkPhaseProgression() {
+        let newPhase = 1;
+
+        if (this.round >= 31) newPhase = 5;
+        else if (this.round >= 21) newPhase = 4;
+        else if (this.round >= 13) newPhase = 3;
+        else if (this.round >= 6) newPhase = 2;
+
+        if (newPhase > this.currentPhase) {
+            this.currentPhase = newPhase;
+            this.transitionToPhase(newPhase);
+        }
+    }
+
+    transitionToPhase(phase) {
+        this.log(`=== Fase ${phase} ===`, 'meta');
+
+        // Apply visual deterioration
+        document.body.className = '';
+        document.body.classList.add(`phase-${phase}`);
+
+        // Update vignette intensity
+        const vignetteOpacity = 0.1 + (phase * 0.15);
+        this.elements.vignetteOverlay.style.opacity = vignetteOpacity;
+
+        // Phase-specific events
+        if (phase === 3) {
+            this.showNarrativeEvent("Qualcosa non va... Le parole del Dr. Lumen ti sembrano distorte...");
+        } else if (phase === 4) {
+            this.showNarrativeEvent("La stanza sembra diversa. Più piccola. Più soffocante.");
+        } else if (phase === 5) {
+            this.showNarrativeEvent("Guarda in alto, Neve. GUARDA IN ALTO.");
+        }
+    }
+
+    getTherapistDialogue() {
+        let phaseKey = `phase${this.currentPhase}`;
+        if (this.revelationTriggered) {
+            phaseKey = 'revelation';
+        }
+
+        const dialogues = TherapistDialogues[phaseKey];
+        return dialogues[Math.floor(Math.random() * dialogues.length)];
+    }
+
+    // === ALTER MESSAGES ===
+    checkAlterMessages() {
+        AlterMessages.messages.forEach(msg => {
+            if (msg.round === this.round && !this.shownAlterMessages.has(msg.round)) {
+                this.showAlterMessage(msg.alter, msg.text);
+                this.shownAlterMessages.add(msg.round);
+            }
+        });
+    }
+
+    showAlterMessage(alter, text) {
+        // Show sidebar on first message
+        if (this.elements.alterLog.children.length === 0) {
+            this.elements.alterMessages.classList.add('visible');
+        }
+
+        const msgEl = document.createElement('div');
+        msgEl.className = 'alter-message';
+        msgEl.innerHTML = `
+            <div class="alter-name">${alter}</div>
+            <div class="alter-text">${text}</div>
+        `;
+        this.elements.alterLog.appendChild(msgEl);
+
+        // Scroll to bottom
+        this.elements.alterLog.scrollTop = this.elements.alterLog.scrollHeight;
+
+        // Visual effect
+        msgEl.style.animation = 'message-appear 0.6s ease';
+    }
+
+    // === CARD WHISPERS ===
+    showCardWhisper(text) {
+        this.elements.whisperText.textContent = text;
+        this.elements.cardWhisper.classList.remove('hidden');
+    }
+
+    hideCardWhisper() {
+        this.elements.cardWhisper.classList.add('hidden');
+    }
+
+    // === REVELATION ===
+    checkRevelation() {
+        if (this.round >= 35 && !this.revelationTriggered) {
+            this.triggerRevelation();
+        }
+    }
+
+    triggerRevelation() {
+        this.revelationTriggered = true;
+        this.currentPhase = 6;
+
+        this.log("=== RIVELAZIONE ===", 'meta');
+
+        // Show mirror effect
+        this.elements.mirrorOverlay.classList.remove('hidden');
+        setTimeout(() => {
+            this.elements.mirrorOverlay.style.opacity = '0.7';
+        }, 100);
+
+        // Update therapist image to question mark
+        this.elements.therapistImage.textContent = '❓';
+
+        // Apply revelation visual style
+        document.body.classList.add('final-revelation');
+
+        this.showNarrativeEvent(
+            "Lo specchio.\n\n" +
+            "Vedi il riflesso della stanza... ma non c'è nessun terapista.\n\n" +
+            "Sei sempre stata sola.\n\n" +
+            "Il Dr. Lumen... è sempre stato... TE."
+        );
+
+        setTimeout(() => {
+            this.setTherapistDialogue(this.getTherapistDialogue());
+        }, 5000);
+    }
+
+    // === NARRATIVE EVENTS ===
+    showNarrativeEvent(text) {
+        this.elements.narrativeText.innerHTML = text.replace(/\n/g, '<br>');
+        this.elements.narrativeModal.classList.remove('hidden');
+    }
+
+    hideNarrativeModal() {
+        this.elements.narrativeModal.classList.add('hidden');
+    }
+
+    // === GAME OVER ===
+    checkGameOver() {
+        if (this.stability <= 0) {
+            this.log("=== FRAMMENTAZIONE COMPLETA ===");
             setTimeout(() => {
-                this.triggerMetaEvent();
+                this.showNarrativeEvent(
+                    "GAME OVER\n\n" +
+                    "Neve si è frammentata completamente.\n\n" +
+                    "Le identità si disperdono nel limen.\n\n" +
+                    "Non c'è più confine tra loro."
+                );
+                setTimeout(() => {
+                    this.saveAndExit();
+                }, 5000);
             }, 2000);
         }
 
-        this.updateUI();
-    }
-
-    checkWinCondition() {
-        // Check low health for dialogue
-        if (this.playerHealth <= 5 && this.playerHealth > 0) {
-            if (Math.random() < 0.5) {
-                this.setEntityDialogue(this.getRandomDialogue('lowHealth'));
-            }
-        }
-
-        // Check opponent almost dead
-        if (this.opponentHealth <= 5 && this.opponentHealth > 0) {
-            if (Math.random() < 0.5) {
-                this.setEntityDialogue(this.getRandomDialogue('almostWin'));
-            }
-        }
-
-        // Victory
-        if (this.opponentHealth <= 0) {
+        // Victory condition (integration)
+        if (this.fragments >= 5 && this.revelationTriggered && this.stability > 50) {
             setTimeout(() => {
-                this.triggerGlitch();
-                this.log("🎭 VITTORIA... o forse no?", 'meta');
-                this.setEntityDialogue("HAI VINTO. Ma hai davvero vinto?");
-
+                this.showNarrativeEvent(
+                    "INTEGRAZIONE\n\n" +
+                    "Neve accetta tutti i suoi frammenti.\n\n" +
+                    "Anche Lumen.\n\n" +
+                    "Il limen si dissolve.\n\n" +
+                    "Diventa... una."
+                );
                 setTimeout(() => {
-                    alert(
-                        "VITTORIA?\n\n" +
-                        "Congratulazioni... suppongo.\n\n" +
-                        "Ma dimmi: chi ha davvero giocato questa partita?\n" +
-                        "Tu... o io attraverso te?\n\n" +
-                        "Le carte ricorderanno."
-                    );
-                    this.quitToMenu();
-                }, 2000);
-            }, 1000);
+                    this.saveAndExit();
+                }, 5000);
+            }, 2000);
         }
-
-        // Defeat
-        if (this.playerHealth <= 0) {
-            this.playerLives--;
-
-            if (this.playerLives <= 0) {
-                setTimeout(() => {
-                    this.triggerGlitch();
-                    this.log("☠️ GAME OVER", 'damage');
-                    this.setEntityDialogue("Sapevo che sarebbe finita così.");
-
-                    setTimeout(() => {
-                        alert(
-                            "SCONFITTA\n\n" +
-                            "Lo sapevi già come sarebbe finita, vero?\n\n" +
-                            "Le carte non dimenticano.\n" +
-                            "Io non dimentico.\n\n" +
-                            "Gioca ancora?"
-                        );
-                        this.quitToMenu();
-                    }, 2000);
-                }, 1000);
-            } else {
-                this.log(`💔 Hai perso una vita! Vite: ${this.playerLives}`, 'damage');
-                this.setEntityDialogue(`${this.playerLives} vite rimaste... per ora.`);
-                this.playerHealth = this.playerMaxHealth;
-                this.triggerGlitch();
-                this.updateUI();
-            }
-        }
-    }
-
-    // === META EVENTS ===
-    triggerMetaEvent() {
-        this.metaEventCount++;
-
-        const events = [
-            () => {
-                this.triggerGlitch();
-                this.setEntityDialogue("Hai sentito anche tu quel sussurro?");
-                this.log("Le carte... parlano?", 'meta');
-            },
-            () => {
-                this.setEntityDialogue(`Ho visto ${this.totalCardsPlayed} carte... tutte perdenti.`);
-                this.triggerGlitch();
-            },
-            () => {
-                this.playerCurrency += 2;
-                this.log("✨ +2🜏 dal Vuoto", 'meta');
-                this.setEntityDialogue("Un regalo. O forse un debito da pagare...");
-            },
-            () => {
-                this.elements.gameContainer.classList.add('shake');
-                setTimeout(() => {
-                    this.elements.gameContainer.classList.remove('shake');
-                }, 500);
-                this.setEntityDialogue("Sento il tuo battito cardiaco attraverso lo schermo.");
-            },
-            () => {
-                this.log("Il tempo si distorce...", 'meta');
-                this.setEntityDialogue("Hai mai pensato che forse stai giocando la stessa partita all'infinito?");
-            },
-            () => {
-                if (this.totalSacrifices > 0) {
-                    this.setEntityDialogue(`${this.totalSacrifices} sacrifici... sento il loro peso su di te.`);
-                } else {
-                    this.setEntityDialogue("Non hai ancora sacrificato nessuno? Quanto nobile... o codardo?");
-                }
-            }
-        ];
-
-        const event = events[Math.floor(Math.random() * events.length)];
-        event();
-        this.updateUI();
-    }
-
-    triggerGlitch() {
-        this.elements.glitchOverlay.classList.add('active');
-        setTimeout(() => {
-            this.elements.glitchOverlay.classList.remove('active');
-        }, 300);
     }
 
     // === UI FUNCTIONS ===
-    setEntityDialogue(text) {
-        this.elements.entityDialogue.textContent = text;
-    }
-
-    showTooltip(text) {
-        this.elements.tooltipText.textContent = text;
-        this.elements.cardTooltip.classList.remove('hidden');
-    }
-
-    hideTooltip() {
-        this.elements.cardTooltip.classList.add('hidden');
-    }
-
-    getRandomDialogue(category) {
-        const dialogues = EntityDialogues[category];
-        return dialogues[Math.floor(Math.random() * dialogues.length)];
+    setTherapistDialogue(text) {
+        this.elements.therapistText.textContent = text;
     }
 
     log(message, type = 'normal') {
         const entry = document.createElement('div');
         entry.className = `log-entry ${type}`;
         entry.textContent = message;
-        this.elements.logEntries.insertBefore(entry, this.elements.logEntries.firstChild);
+        this.elements.eventLog.appendChild(entry);
 
-        // Keep only last 30 entries
-        while (this.elements.logEntries.children.length > 30) {
-            this.elements.logEntries.removeChild(this.elements.logEntries.lastChild);
+        // Scroll to bottom
+        this.elements.eventLog.scrollTop = this.elements.eventLog.scrollHeight;
+
+        // Keep only last 50 entries
+        while (this.elements.eventLog.children.length > 50) {
+            this.elements.eventLog.removeChild(this.elements.eventLog.firstChild);
         }
     }
 
     updateUI() {
-        // Update stats
-        this.elements.playerLivesDisplay.textContent = this.playerLives;
-        this.elements.soulsDisplay.textContent = this.playerCurrency;
-        this.elements.roundDisplay.textContent = this.round;
+        // Update game state
+        this.elements.stabilityFill.style.width = `${this.stability}%`;
+        this.elements.stabilityText.textContent = `${this.stability}%`;
+        this.elements.fragmentsCount.textContent = this.fragments;
+        this.elements.roundCount.textContent = this.round;
 
-        // Update health bars
-        this.updateHealthBar(
-            this.elements.playerHealthFill,
-            this.elements.playerHealthText,
-            this.playerHealth,
-            this.playerMaxHealth
-        );
-        this.updateHealthBar(
-            this.elements.opponentHealthFill,
-            this.elements.opponentHealthText,
-            this.opponentHealth,
-            this.opponentMaxHealth
-        );
+        // Color stability bar based on value
+        if (this.stability < 30) {
+            this.elements.stabilityFill.style.background = '#c85a54';
+        } else if (this.stability < 60) {
+            this.elements.stabilityFill.style.background = '#d4a574';
+        } else {
+            this.elements.stabilityFill.style.background = '#4a7c8e';
+        }
 
         // Update hand
-        this.elements.playerHand.innerHTML = '';
+        this.elements.neveHand.innerHTML = '';
         this.playerHand.forEach(card => {
-            this.elements.playerHand.appendChild(card.render());
+            this.elements.neveHand.appendChild(card.render());
         });
 
         // Update fields
-        this.updateField(this.elements.playerField, this.playerField);
-        this.updateField(this.elements.opponentField, this.opponentField);
-    }
-
-    updateHealthBar(fillElement, textElement, current, max) {
-        const percentage = Math.max(0, (current / max) * 100);
-        fillElement.style.width = `${percentage}%`;
-        textElement.textContent = `${Math.max(0, current)}/${max}`;
-
-        if (percentage < 30) {
-            fillElement.classList.add('low');
-        } else {
-            fillElement.classList.remove('low');
-        }
+        this.updateField(this.elements.neveCardField, this.playerField);
+        this.updateField(this.elements.therapistCardField, this.therapistField);
     }
 
     updateField(fieldElement, field) {
@@ -2542,10 +2341,8 @@ class Game {
         slots.forEach((slot, index) => {
             const card = field[index];
             slot.innerHTML = '';
-            slot.classList.remove('occupied');
 
             if (card) {
-                slot.classList.add('occupied');
                 slot.appendChild(card.render());
             }
         });
@@ -2554,34 +2351,57 @@ class Game {
     // === SAVE/LOAD ===
     saveGame() {
         const saveData = {
-            playerHealth: this.playerHealth,
-            opponentHealth: this.opponentHealth,
-            playerCurrency: this.playerCurrency,
-            playerLives: this.playerLives,
             round: this.round,
-            totalCardsPlayed: this.totalCardsPlayed,
-            totalSacrifices: this.totalSacrifices
+            stability: this.stability,
+            fragments: this.fragments,
+            currentPhase: this.currentPhase,
+            shownAlterMessages: Array.from(this.shownAlterMessages),
+            revelationTriggered: this.revelationTriggered,
+            sessionStartTime: this.sessionStartTime
         };
-        localStorage.setItem('savedGame', JSON.stringify(saveData));
+        localStorage.setItem('neveSavedGame', JSON.stringify(saveData));
     }
 
     loadGame() {
-        const savedData = localStorage.getItem('savedGame');
+        const savedData = localStorage.getItem('neveSavedGame');
         if (savedData) {
             const data = JSON.parse(savedData);
-            this.playerHealth = data.playerHealth;
-            this.opponentHealth = data.opponentHealth;
-            this.playerCurrency = data.playerCurrency;
-            this.playerLives = data.playerLives;
             this.round = data.round;
-            this.totalCardsPlayed = data.totalCardsPlayed || 0;
-            this.totalSacrifices = data.totalSacrifices || 0;
+            this.stability = data.stability;
+            this.fragments = data.fragments;
+            this.currentPhase = data.currentPhase;
+            this.shownAlterMessages = new Set(data.shownAlterMessages);
+            this.revelationTriggered = data.revelationTriggered;
+            this.sessionStartTime = data.sessionStartTime;
 
             this.hideMainMenu();
             this.gameStarted = true;
-            this.setEntityDialogue("Ah... sei tornato. Come sapevo che avresti fatto.");
+            this.startSessionTimer();
+
+            // Restore phase visuals
+            document.body.classList.add(`phase-${this.currentPhase}`);
+            if (this.revelationTriggered) {
+                document.body.classList.add('final-revelation');
+                this.elements.mirrorOverlay.classList.remove('hidden');
+                this.elements.mirrorOverlay.style.opacity = '0.7';
+            }
+
+            // Draw initial hand
+            for (let i = 0; i < 5; i++) {
+                this.drawCard();
+            }
+
+            this.setTherapistDialogue(this.getTherapistDialogue());
             this.updateUI();
         }
+    }
+
+    saveAndExit() {
+        this.saveGame();
+        if (this.sessionTimer) {
+            clearInterval(this.sessionTimer);
+        }
+        this.showMainMenu();
     }
 }
 
