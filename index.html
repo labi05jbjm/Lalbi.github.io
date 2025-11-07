@@ -184,6 +184,38 @@
         </div>
     </div>
 
+    <!-- CARD DETAILS MODAL -->
+    <div id="card-details-modal" class="card-details-modal hidden">
+        <div class="card-details-content">
+            <div class="card-details-header">
+                <div id="modal-artwork" class="card-details-artwork"></div>
+                <div class="card-details-info">
+                    <h2 id="modal-title" class="card-details-title"></h2>
+                    <p id="modal-artist" class="card-details-artist"></p>
+                    <div class="card-details-stats">
+                        <div class="card-details-stat">
+                            <div class="card-details-stat-label">Attacco</div>
+                            <div id="modal-attack" class="card-details-stat-value">0</div>
+                        </div>
+                        <div class="card-details-stat">
+                            <div class="card-details-stat-label">Salute</div>
+                            <div id="modal-health" class="card-details-stat-value">0</div>
+                        </div>
+                        <div class="card-details-stat">
+                            <div class="card-details-stat-label">Costo</div>
+                            <div id="modal-blood" class="card-details-stat-value">0🩸</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-details-description">
+                <p id="modal-description"></p>
+            </div>
+            <div id="modal-sigils" class="card-details-sigils-section"></div>
+            <button id="close-card-details" class="menu-button card-details-close-btn">CHIUDI</button>
+        </div>
+    </div>
+
     <!-- GAME CONTAINER (3D Scene) -->
     <div id="game-container" class="game-container hidden">
         <div class="scene-3d">
@@ -193,6 +225,14 @@
                     <span id="session-timer">00:00</span>
                 </div>
                 <button id="pause-btn" class="session-info" style="cursor: pointer; border: none;">⏸ PAUSA</button>
+            </div>
+
+            <!-- Sacrifice Zone -->
+            <div id="sacrifice-zone" class="sacrifice-zone">
+                <div class="sacrifice-zone-label">ZONA SACRIFICIO</div>
+                <div class="sacrifice-slot" data-sacrifice="0"></div>
+                <div class="sacrifice-slot" data-sacrifice="1"></div>
+                <div class="sacrifice-slot" data-sacrifice="2"></div>
             </div>
 
             <!-- Patient Info (Top Left) -->

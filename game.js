@@ -223,12 +223,17 @@ const AlterMessages = {
 
 // === CARD CLASS ===
 class Card {
-    constructor(name, type, power, description, emoji = '🎴') {
+    constructor(name, type, attack, health, bloodCost, artworkUrl, artist, shortDesc, longDesc, sigils = []) {
         this.name = name;
-        this.type = type; // 'memory', 'emotion', 'defense', 'fragment'
-        this.power = power;
-        this.description = description;
-        this.emoji = emoji;
+        this.type = type;
+        this.attack = attack;
+        this.health = health;
+        this.bloodCost = bloodCost; // Number of sacrifices needed
+        this.artworkUrl = artworkUrl;
+        this.artist = artist;
+        this.shortDesc = shortDesc; // Breve descrizione sulla carta
+        this.longDesc = longDesc; // Descrizione completa nel modal
+        this.sigils = sigils; // Array di sigilli/abilità speciali
         this.id = `card_${Math.random().toString(36).substr(2, 9)}`;
     }
 
@@ -248,13 +253,52 @@ class Card {
         cardEl.dataset.cardId = this.id;
         cardEl.dataset.cardName = this.name;
         cardEl.dataset.cardType = this.type;
+        cardEl.dataset.bloodCost = this.bloodCost;
+
+        // Blood cost indicator
+        let bloodCostHTML = '';
+        if (this.bloodCost > 0) {
+            bloodCostHTML = `<div class="blood-cost">`;
+            for (let i = 0; i < this.bloodCost; i++) {
+                bloodCostHTML += `<span class="blood-drop">🩸</span>`;
+            }
+            bloodCostHTML += `</div>`;
+        }
+
+        // Sigils
+        let sigilsHTML = '';
+        if (this.sigils.length > 0) {
+            sigilsHTML = `<div class="card-sigils">`;
+            this.sigils.forEach(sigil => {
+                sigilsHTML += `<span class="sigil" title="${sigil.desc}">${sigil.icon}</span>`;
+            });
+            sigilsHTML += `</div>`;
+        }
 
         cardEl.innerHTML = `
-            <div class="card-type">${this.type}</div>
-            <div class="card-emoji">${this.emoji}</div>
-            <div class="card-name">${this.name}</div>
-            <div class="card-power">${this.power}</div>
-            <div class="card-description">${this.description}</div>
+            <div class="card-frame">
+                ${bloodCostHTML}
+                <div class="card-artwork" style="background-image: url('${this.artworkUrl}')">
+                    <div class="artwork-overlay"></div>
+                </div>
+                <div class="card-info-bar">
+                    <div class="card-stat attack">
+                        <span class="stat-icon">⚔️</span>
+                        <span class="stat-value">${this.attack}</span>
+                    </div>
+                    <div class="card-stat health">
+                        <span class="stat-icon">❤️</span>
+                        <span class="stat-value">${this.health}</span>
+                    </div>
+                </div>
+                ${sigilsHTML}
+                <div class="card-name-plate">
+                    <div class="card-name">${this.name}</div>
+                    <div class="card-artist">${this.artist}</div>
+                </div>
+                <div class="card-type-tag">${this.type}</div>
+                <button class="card-details-btn" data-card-id="${this.id}">ℹ️</button>
+            </div>
         `;
 
         return cardEl;
@@ -511,31 +555,205 @@ class Game {
     // === CARD LIBRARY ===
     createCardLibrary() {
         return [
-            // Echo cards (mysterious past)
-            new Card("La Porta Chiusa", "eco", 2, "Qualcosa dietro...", "🚪"),
-            new Card("L'Urlo Silente", "eco", 3, "Non riesci a sentirlo", "💔"),
-            new Card("La Bambola Rotta", "eco", 1, "Occhi di vetro", "🪆"),
-            new Card("Il Vetro", "eco", 4, "Riflesso frantumato", "🪞"),
+            // LOW COST CARDS (0 blood)
+            new Card(
+                "Ophelia",
+                "eco",
+                1,
+                2,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/John_Everett_Millais_-_Ophelia_-_Google_Art_Project.jpg/1024px-John_Everett_Millais_-_Ophelia_-_Google_Art_Project.jpg",
+                "Millais, 1851",
+                "Voce bambina",
+                "Una giovane figura galleggia tra i fiori, cantando canzoni dimenticate. I suoi occhi cercano qualcosa che non può più vedere. La voce di chi era prima della frattura.",
+                []
+            ),
 
-            // Impulse cards (inner forces)
-            new Card("L'Ombra", "impulso", 2, "Ti segue sempre", "👤"),
-            new Card("Il Fuoco Freddo", "impulso", 3, "Brucia senza fiamma", "🔥"),
-            new Card("L'Abisso", "impulso", 2, "Guarda dentro", "🕳️"),
-            new Card("La Luce Tremante", "impulso", 1, "Quasi spenta", "💫"),
-            new Card("Lo Specchio Velato", "impulso", 3, "Non guardarti", "🪞"),
+            new Card(
+                "Ragazza con l'Orecchino",
+                "velo",
+                1,
+                3,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg",
+                "Vermeer, 1665",
+                "Innocenza velata",
+                "Lo sguardo penetra oltre la superficie. Cosa nasconde dietro quegli occhi? Un segreto, una domanda, un'identità non ancora frammentata.",
+                [{icon: "🛡️", desc: "Difesa +1 quando attaccata"}]
+            ),
 
-            // Veil cards (protection)
-            new Card("Il Limen", "velo", 3, "Tra qui e là", "🌫️"),
-            new Card("La Nebbia", "velo", 2, "Copre tutto", "🌁"),
-            new Card("Il Muro", "velo", 4, "Alto e solido", "🧱"),
-            new Card("Il Sogno", "velo", 2, "Non svegliarti", "💭"),
+            new Card(
+                "Notte Stellata",
+                "impulso",
+                2,
+                1,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1024px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+                "Van Gogh, 1889",
+                "Vortice mentale",
+                "Il cielo gira su se stesso, le stelle danzano in spirali impossibili. La realtà si piega, si torce, diventa altro. È questo che vede Neve quando chiude gli occhi?",
+                []
+            ),
 
-            // Voice cards (cryptic entities)
-            new Card("Voce Notturna", "voce", 3, "...ti proteggo...", "🌙"),
-            new Card("Il Pianto", "voce", 1, "Qualcuno piange", "😢"),
-            new Card("Voce Fredda", "voce", 3, "...calcola... pensa...", "⭐"),
-            new Card("Il Silenzio", "voce", 4, "...           ...", "🤫"),
-            new Card("Il Vuoto", "voce", 5, "Ti osservo", "👁️")
+            new Card(
+                "Christina's World",
+                "eco",
+                1,
+                4,
+                0,
+                "https://upload.wikimedia.org/wikipedia/en/a/a2/Christinasworld.jpg",
+                "Wyeth, 1948",
+                "Isolamento",
+                "Una figura sola in un campo infinito. La casa è lontana, irraggiungibile. Trascinare il proprio corpo verso qualcosa che non si può mai toccare.",
+                []
+            ),
+
+            // MEDIUM COST CARDS (1 blood)
+            new Card(
+                "L'Urlo",
+                "impulso",
+                3,
+                2,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/800px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
+                "Munch, 1893",
+                "Angoscia pura",
+                "Il grido silenzioso che nessuno sente. Le mani sul volto, la bocca aperta, il mondo che si distorce intorno. L'eco dell'urlo che Neve non può esprimere.",
+                [{icon: "💥", desc: "Attacco raddoppiato contro carte 'velo'"}]
+            ),
+
+            new Card(
+                "Il Bacio",
+                "velo",
+                2,
+                4,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Gustav_Klimt_016.jpg/800px-Gustav_Klimt_016.jpg",
+                "Klimt, 1908",
+                "Connessione perduta",
+                "Due figure si fondono, si abbracciano, diventano una. Ma Neve ricorda cosa significa essere connessa a se stessa? O è solo un sogno dorato di unità?",
+                [{icon: "🔗", desc: "Lega due carte alleate: condividono la salute"}]
+            ),
+
+            new Card(
+                "Nighthawks",
+                "eco",
+                2,
+                3,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Nighthawks_by_Edward_Hopper_1942.jpg/1024px-Nighthawks_by_Edward_Hopper_1942.jpg",
+                "Hopper, 1942",
+                "Solitudine notturna",
+                "Persone sole insieme. Ognuna nella propria bolla di vetro, separate dalla luce al neon. La terapia è così? Neve e il dottore, soli insieme nella notte?",
+                []
+            ),
+
+            new Card(
+                "La Persistenza della Memoria",
+                "impulso",
+                4,
+                1,
+                1,
+                "https://upload.wikimedia.org/wikipedia/en/d/dd/The_Persistence_of_Memory.jpg",
+                "Dalí, 1931",
+                "Tempo distorto",
+                "Gli orologi si sciolgono, il tempo non ha più senso. I minuti diventano ore, le ore secondi. Quanto dura davvero una sessione di terapia? Quanto dura un ricordo?",
+                [{icon: "⏰", desc: "Salta il turno dell'avversario"}]
+            ),
+
+            // HIGH COST CARDS (2 blood)
+            new Card(
+                "Saturno Divora suo Figlio",
+                "impulso",
+                5,
+                3,
+                2,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Francisco_de_Goya%2C_Saturno_devorando_a_su_hijo_%281819-1823%29.jpg/800px-Francisco_de_Goya%2C_Saturno_devorando_a_su_hijo_%281819-1823%29.jpg",
+                "Goya, 1823",
+                "Auto-distruzione",
+                "Il padre divora i propri figli. L'Alter dominante consuma le altre identità. Lumen che divora Luna, Aria, Stella. Il cannibalismo della psiche.",
+                [{icon: "🩸", desc: "Guadagna ATK +1 per ogni carta sacrificata"}]
+            ),
+
+            new Card(
+                "Il Giardino delle Delizie",
+                "voce",
+                3,
+                5,
+                2,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/The_Garden_of_earthly_delights.jpg/1024px-The_Garden_of_earthly_delights.jpg",
+                "Bosch, 1510",
+                "Frammentazione",
+                "Centinaia di figure, scene sovrapposte, realtà multiple. È così che si sente Neve? Tante vite, tante identità, tutte che accadono contemporaneamente in mondi diversi?",
+                [{icon: "🎭", desc: "Crea una copia di se stessa quando muore"}]
+            ),
+
+            new Card(
+                "Judith e Oloferne",
+                "impulso",
+                6,
+                2,
+                2,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Caravaggio_Judith_Beheading_Holofernes.jpg/800px-Caravaggio_Judith_Beheading_Holofernes.jpg",
+                "Caravaggio, 1599",
+                "Violenza necessaria",
+                "Per liberarsi del tiranno, serve violenza. Judith decapita Oloferne. Neve deve decapitare Lumen? La protettrice deve distruggere il persecutore?",
+                [{icon: "⚔️", desc: "Uccide istantaneamente carte con 3 o meno HP"}]
+            ),
+
+            // SPECIAL VOICE CARDS (1 blood, bonus fragments)
+            new Card(
+                "La Dama con l'Ermellino",
+                "voce",
+                2,
+                3,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Lady_with_an_Ermine_-_Leonardo_da_Vinci_-_Google_Art_Project.jpg/800px-Lady_with_an_Ermine_-_Leonardo_da_Vinci_-_Google_Art_Project.jpg",
+                "Da Vinci, 1490",
+                "Luna - La Protettrice",
+                "Calma, composta, intelligente. Tiene in braccio l'ermellino come Neve vorrebbe tenere al sicuro le sue altre identità. Lo sguardo vigile di chi protegge.",
+                [{icon: "🌙", desc: "Cura 1 HP a tutte le carte alleate"}]
+            ),
+
+            new Card(
+                "L'Angelus",
+                "voce",
+                1,
+                5,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/JEAN-FRAN%C3%87OIS_MILLET_-_El_%C3%81ngelus_%28Museo_de_Orsay%2C_1857-1859._%C3%93leo_sobre_lienzo%2C_55.5_x_66_cm%29.jpg/1024px-JEAN-FRAN%C3%87OIS_MILLET_-_El_%C3%81ngelus_%28Museo_de_Orsay%2C_1857-1859._%C3%93leo_sobre_lienzo%2C_55.5_x_66_cm%29.jpg",
+                "Millet, 1859",
+                "Aria - L'Innocente",
+                "Due figure in preghiera al tramonto. La semplicità, la purezza, il rituale quotidiano. Aria prima del trauma, prima che tutto cambiasse.",
+                [{icon: "🎀", desc: "Non può essere attaccata per 1 turno"}]
+            ),
+
+            new Card(
+                "La Zattera della Medusa",
+                "voce",
+                4,
+                2,
+                1,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg/1024px-JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg",
+                "Géricault, 1819",
+                "Stella - La Sopravvissuta",
+                "Dopo il naufragio, alcuni sopravvivono. Razionali, calcolatori, fanno ciò che è necessario. Stella che analizza, che pianifica, che mantiene Neve in vita.",
+                [{icon: "⭐", desc: "Pesca 2 carte quando giocata"}]
+            ),
+
+            // ULTIMATE CARD (3 blood)
+            new Card(
+                "Guernica",
+                "voce",
+                7,
+                4,
+                3,
+                "https://upload.wikimedia.org/wikipedia/en/7/74/PicassoGuernica.jpg",
+                "Picasso, 1937",
+                "Il Vuoto - Lumen Rivelato",
+                "Il caos della guerra, corpi frammentati, grida silenti. Tutto è rotto, tutto è distrutto. Questa è la mente di Neve quando Lumen controlla. Il persecutore finale.",
+                [{icon: "👁️", desc: "Distrugge tutte le carte nemiche con meno di 3 HP"}]
+            )
         ];
     }
 
