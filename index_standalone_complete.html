@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Neve Portrait</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
+    <style>
 /* ============================================
    A NEVE PORTRAIT - 3D Inscryption-style CSS
    ============================================ */
@@ -1121,9 +1117,16 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px;
+    padding: 40px 20px;
     /* Effetto spotlight radiale centrato */
     position: relative;
+    overflow-y: auto;
+}
+
+/* Sub-menus (options, about) DEVONO stare sopra main-menu */
+#options-menu,
+#about-menu {
+    z-index: 600 !important;
 }
 
 .menu-overlay::before {
@@ -1302,12 +1305,15 @@ body {
 }
 
 .menu-title {
-    font-size: 48px;
+    font-size: 34px;
     font-weight: 900;
     color: var(--accent-warm);
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
-    letter-spacing: 4px;
+    letter-spacing: 2px;
+    word-wrap: break-word;
+    max-width: 100%;
+    line-height: 1.2;
 }
 
 .menu-button {
@@ -1876,6 +1882,19 @@ body.game-started #event-log {
 }
 
 /* === CHOICE SYSTEM === */
+.player-choice-container {
+    position: absolute;
+    bottom: 180px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 150;
+    width: 80%;
+    max-width: 700px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: all;
+}
+
 .choice-container {
     display: flex;
     flex-direction: column;
@@ -2681,7 +2700,8 @@ body.glitch-phase-5 .glitch-overlay::before {
 
 .tutorial-overlay.visible {
     opacity: 1;
-    pointer-events: all;
+    /* NON bloccare i click sull'overlay, solo sul popup */
+    pointer-events: none;
 }
 
 .tutorial-popup {
@@ -2691,6 +2711,8 @@ body.glitch-phase-5 .glitch-overlay::before {
     border-radius: 12px;
     padding: 30px;
     max-width: 400px;
+    /* Il popup invece è cliccabile */
+    pointer-events: all;
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.9),
         inset 0 0 40px rgba(0, 0, 0, 0.3),
@@ -2801,7 +2823,8 @@ body.glitch-phase-5 .glitch-overlay::before {
 
 .tutorial-highlight {
     position: relative;
-    z-index: 1999;
+    z-index: 2001 !important;
+    pointer-events: all !important;
     box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.6),
                 0 0 30px rgba(212, 165, 116, 0.8) !important;
     animation: tutorial-highlight-pulse 2s ease-in-out infinite;
@@ -3223,6 +3246,9 @@ button:focus-visible,
 }
 
 </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- SVG FILTERS (Hand-drawn effects) -->
@@ -6468,6 +6494,12 @@ class Game {
     // === CONTENT WARNING ===
     showContentWarning() {
         this.elements.contentWarning.classList.remove('hidden');
+        // Update gamepad focusable elements
+        setTimeout(() => {
+            this.gamepadManager.updateFocusableElements();
+            this.gamepadManager.currentFocus = null;
+            this.gamepadManager.navigate('down');
+        }, 50);
     }
 
     acceptWarning() {
@@ -6505,6 +6537,13 @@ class Game {
                 this.corruptMenu();
             }, 500);
         }
+
+        // Update gamepad focusable elements
+        setTimeout(() => {
+            this.gamepadManager.updateFocusableElements();
+            this.gamepadManager.currentFocus = null;
+            this.gamepadManager.navigate('down');
+        }, 50);
     }
 
     hideMainMenu() {
@@ -6514,6 +6553,12 @@ class Game {
 
     showOptions() {
         this.elements.optionsMenu.classList.remove('hidden');
+        // Update gamepad focusable elements
+        setTimeout(() => {
+            this.gamepadManager.updateFocusableElements();
+            this.gamepadManager.currentFocus = null;
+            this.gamepadManager.navigate('down'); // Auto-focus first button
+        }, 50);
     }
 
     hideOptions() {
@@ -6522,6 +6567,12 @@ class Game {
 
     showAbout() {
         this.elements.aboutMenu.classList.remove('hidden');
+        // Update gamepad focusable elements
+        setTimeout(() => {
+            this.gamepadManager.updateFocusableElements();
+            this.gamepadManager.currentFocus = null;
+            this.gamepadManager.navigate('down'); // Auto-focus first button
+        }, 50);
     }
 
     hideAbout() {
@@ -6533,6 +6584,12 @@ class Game {
             this.elements.pauseModal.classList.remove('hidden');
             const pauseDialogue = this.getTherapistDialogue();
             this.elements.pauseTherapistText.textContent = `"${pauseDialogue}"`;
+            // Update gamepad focusable elements
+            setTimeout(() => {
+                this.gamepadManager.updateFocusableElements();
+                this.gamepadManager.currentFocus = null;
+                this.gamepadManager.navigate('down');
+            }, 50);
         } else {
             this.elements.pauseModal.classList.add('hidden');
         }
@@ -6613,6 +6670,12 @@ class Game {
             return;
         }
 
+        // Hide persistent dialogue box to avoid duplicate text
+        const dialogueBox = document.querySelector('.dialogue-box');
+        if (dialogueBox) {
+            dialogueBox.style.display = 'none';
+        }
+
         // Create dialogue element if doesn't exist
         let dialogueEl = document.querySelector('.intro-dialogue');
         if (!dialogueEl) {
@@ -6621,14 +6684,24 @@ class Game {
             document.body.appendChild(dialogueEl);
         }
 
-        // Set therapist dialogue
+        // Set therapist dialogue (but it's hidden now)
         this.setTherapistDialogue(step.text);
 
-        // Show choices or continue button
+        // Show dialogue text only
+        dialogueEl.innerHTML = `<div class="intro-dialogue-text">${step.speaker}: "${step.text}"</div>`;
+        dialogueEl.style.opacity = '1';
+
+        // Show choices or continue button in player field area
+        let choiceContainer = document.querySelector('.player-choice-container');
+        if (!choiceContainer) {
+            choiceContainer = document.createElement('div');
+            choiceContainer.className = 'player-choice-container';
+            document.querySelector('.game-container').appendChild(choiceContainer);
+        }
+
         if (step.choices) {
-            // Multiple choice
-            dialogueEl.innerHTML = `
-                <div class="intro-dialogue-text">${step.speaker}: "${step.text}"</div>
+            // Multiple choice - render in player field area
+            choiceContainer.innerHTML = `
                 <div class="choice-container">
                     ${step.choices.map((choice, i) => `
                         <div class="choice-option" data-choice="${i}">
@@ -6639,24 +6712,25 @@ class Game {
             `;
 
             // Add event listeners to choices
-            dialogueEl.querySelectorAll('.choice-option').forEach(el => {
+            choiceContainer.querySelectorAll('.choice-option').forEach(el => {
                 el.addEventListener('click', (e) => {
                     const choiceIndex = parseInt(e.target.dataset.choice);
                     this.handleChoice(step.choices[choiceIndex]);
                 });
             });
         } else {
-            // Simple continue
-            dialogueEl.innerHTML = `
-                <div class="intro-dialogue-text">${step.speaker}: "${step.text}"</div>
+            // Simple continue button
+            choiceContainer.innerHTML = `
                 <button class="intro-dialogue-continue">${step.continueText || 'Continua'}</button>
             `;
 
-            dialogueEl.querySelector('.intro-dialogue-continue').addEventListener('click', () => {
+            choiceContainer.querySelector('.intro-dialogue-continue').addEventListener('click', () => {
                 this.introStep++;
                 this.showIntroDialogue();
             });
         }
+
+        choiceContainer.style.opacity = '1';
     }
 
     handleChoice(choice) {
@@ -6676,6 +6750,15 @@ class Game {
             if (choice.effect.metaAwareness) this.metaAwareness = true;
         }
 
+        // Clear choice container
+        const choiceContainer = document.querySelector('.player-choice-container');
+        if (choiceContainer) {
+            choiceContainer.style.opacity = '0';
+            setTimeout(() => {
+                choiceContainer.innerHTML = '';
+            }, 300);
+        }
+
         // Continue to next step
         this.introStep++;
         this.showIntroDialogue();
@@ -6687,6 +6770,12 @@ class Game {
         if (dialogueEl) {
             dialogueEl.style.opacity = '0';
             setTimeout(() => dialogueEl.remove(), 500);
+        }
+
+        // Restore persistent dialogue box
+        const dialogueBox = document.querySelector('.dialogue-box');
+        if (dialogueBox) {
+            dialogueBox.style.display = 'block';
         }
 
         // Transition to game
@@ -7294,7 +7383,9 @@ class Game {
         this.round++;
         this.isPlayerTurn = true;
 
-        this.log(`\n=== ROUND ${this.round} ===\n`);
+        this.log(`
+=== ROUND ${this.round} ===
+`);
         this.setTherapistDialogue(this.getTherapistDialogue());
 
         // Autosave every 3 rounds
@@ -7330,6 +7421,12 @@ class Game {
     }
 
     showDialogueQuestion(question) {
+        // Hide persistent dialogue box to avoid duplicate text
+        const dialogueBox = document.querySelector('.dialogue-box');
+        if (dialogueBox) {
+            dialogueBox.style.display = 'none';
+        }
+
         // Create or get dialogue element
         let dialogueEl = document.querySelector('.intro-dialogue');
         if (!dialogueEl) {
@@ -7338,12 +7435,22 @@ class Game {
             document.body.appendChild(dialogueEl);
         }
 
-        // Set therapist dialogue
+        // Set therapist dialogue (but it's hidden now)
         this.setTherapistDialogue(question.text);
 
-        // Show choices
-        dialogueEl.innerHTML = `
-            <div class="intro-dialogue-text">${question.speaker}: "${question.text}"</div>
+        // Show dialogue text only
+        dialogueEl.innerHTML = `<div class="intro-dialogue-text">${question.speaker}: "${question.text}"</div>`;
+        dialogueEl.style.opacity = '1';
+
+        // Show choices in player field area
+        let choiceContainer = document.querySelector('.player-choice-container');
+        if (!choiceContainer) {
+            choiceContainer = document.createElement('div');
+            choiceContainer.className = 'player-choice-container';
+            document.querySelector('.game-container').appendChild(choiceContainer);
+        }
+
+        choiceContainer.innerHTML = `
             <div class="choice-container">
                 ${question.choices.map((choice, i) => `
                     <div class="choice-option" data-choice="${i}">
@@ -7353,18 +7460,18 @@ class Game {
             </div>
         `;
 
-        dialogueEl.style.opacity = '1';
+        choiceContainer.style.opacity = '1';
 
         // Add event listeners to choices
-        dialogueEl.querySelectorAll('.choice-option').forEach(el => {
+        choiceContainer.querySelectorAll('.choice-option').forEach(el => {
             el.addEventListener('click', (e) => {
                 const choiceIndex = parseInt(e.target.dataset.choice);
-                this.handleGameplayChoice(question.choices[choiceIndex], dialogueEl);
+                this.handleGameplayChoice(question.choices[choiceIndex], dialogueEl, choiceContainer);
             });
         });
     }
 
-    handleGameplayChoice(choice, dialogueEl) {
+    handleGameplayChoice(choice, dialogueEl, choiceContainer) {
         // Apply effects
         if (choice.effect) {
             if (choice.effect.stability) this.stability = Math.max(0, Math.min(100, this.stability + choice.effect.stability));
@@ -7388,7 +7495,20 @@ class Game {
             if (dialogueEl.parentNode) {
                 dialogueEl.remove();
             }
+            // Restore persistent dialogue box
+            const dialogueBox = document.querySelector('.dialogue-box');
+            if (dialogueBox) {
+                dialogueBox.style.display = 'block';
+            }
         }, 500);
+
+        // Clear choice container
+        if (choiceContainer) {
+            choiceContainer.style.opacity = '0';
+            setTimeout(() => {
+                choiceContainer.innerHTML = '';
+            }, 300);
+        }
 
         this.updateUI();
     }
@@ -7506,9 +7626,15 @@ class Game {
         document.body.classList.add('final-revelation');
 
         this.showNarrativeEvent(
-            "Lo specchio.\n\n" +
-            "Vedi il riflesso della stanza... ma non c'è nessun terapista.\n\n" +
-            "Sei sempre stata sola.\n\n" +
+            "Lo specchio.
+
+" +
+            "Vedi il riflesso della stanza... ma non c'è nessun terapista.
+
+" +
+            "Sei sempre stata sola.
+
+" +
             "Il Dr. Lumen... è sempre stato... TE."
         );
 
@@ -7519,7 +7645,8 @@ class Game {
 
     // === NARRATIVE EVENTS ===
     showNarrativeEvent(text) {
-        this.elements.narrativeText.innerHTML = text.replace(/\n/g, '<br>');
+        this.elements.narrativeText.innerHTML = text.replace(/
+/g, '<br>');
         this.elements.narrativeModal.classList.remove('hidden');
     }
 
@@ -7582,9 +7709,15 @@ class Game {
             this.log("=== FRAMMENTAZIONE COMPLETA ===");
             setTimeout(() => {
                 this.showNarrativeEvent(
-                    "GAME OVER\n\n" +
-                    "Neve si è frammentata completamente.\n\n" +
-                    "Le identità si disperdono nel limen.\n\n" +
+                    "GAME OVER
+
+" +
+                    "Neve si è frammentata completamente.
+
+" +
+                    "Le identità si disperdono nel limen.
+
+" +
                     "Non c'è più confine tra loro."
                 );
                 setTimeout(() => {
@@ -7597,10 +7730,18 @@ class Game {
         if (this.fragments >= 5 && this.revelationTriggered && this.stability > 50) {
             setTimeout(() => {
                 this.showNarrativeEvent(
-                    "INTEGRAZIONE\n\n" +
-                    "Neve accetta tutti i suoi frammenti.\n\n" +
-                    "Anche Lumen.\n\n" +
-                    "Il limen si dissolve.\n\n" +
+                    "INTEGRAZIONE
+
+" +
+                    "Neve accetta tutti i suoi frammenti.
+
+" +
+                    "Anche Lumen.
+
+" +
+                    "Il limen si dissolve.
+
+" +
                     "Diventa... una."
                 );
                 setTimeout(() => {

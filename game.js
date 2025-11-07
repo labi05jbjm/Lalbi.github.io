@@ -2880,6 +2880,12 @@ class Game {
     // === CONTENT WARNING ===
     showContentWarning() {
         this.elements.contentWarning.classList.remove('hidden');
+        // Update gamepad focusable elements
+        setTimeout(() => {
+            this.gamepadManager.updateFocusableElements();
+            this.gamepadManager.currentFocus = null;
+            this.gamepadManager.navigate('down');
+        }, 50);
     }
 
     acceptWarning() {
@@ -2917,6 +2923,13 @@ class Game {
                 this.corruptMenu();
             }, 500);
         }
+
+        // Update gamepad focusable elements
+        setTimeout(() => {
+            this.gamepadManager.updateFocusableElements();
+            this.gamepadManager.currentFocus = null;
+            this.gamepadManager.navigate('down');
+        }, 50);
     }
 
     hideMainMenu() {
@@ -2926,6 +2939,12 @@ class Game {
 
     showOptions() {
         this.elements.optionsMenu.classList.remove('hidden');
+        // Update gamepad focusable elements
+        setTimeout(() => {
+            this.gamepadManager.updateFocusableElements();
+            this.gamepadManager.currentFocus = null;
+            this.gamepadManager.navigate('down'); // Auto-focus first button
+        }, 50);
     }
 
     hideOptions() {
@@ -2934,6 +2953,12 @@ class Game {
 
     showAbout() {
         this.elements.aboutMenu.classList.remove('hidden');
+        // Update gamepad focusable elements
+        setTimeout(() => {
+            this.gamepadManager.updateFocusableElements();
+            this.gamepadManager.currentFocus = null;
+            this.gamepadManager.navigate('down'); // Auto-focus first button
+        }, 50);
     }
 
     hideAbout() {
@@ -2945,6 +2970,12 @@ class Game {
             this.elements.pauseModal.classList.remove('hidden');
             const pauseDialogue = this.getTherapistDialogue();
             this.elements.pauseTherapistText.textContent = `"${pauseDialogue}"`;
+            // Update gamepad focusable elements
+            setTimeout(() => {
+                this.gamepadManager.updateFocusableElements();
+                this.gamepadManager.currentFocus = null;
+                this.gamepadManager.navigate('down');
+            }, 50);
         } else {
             this.elements.pauseModal.classList.add('hidden');
         }
@@ -3025,6 +3056,12 @@ class Game {
             return;
         }
 
+        // Hide persistent dialogue box to avoid duplicate text
+        const dialogueBox = document.querySelector('.dialogue-box');
+        if (dialogueBox) {
+            dialogueBox.style.display = 'none';
+        }
+
         // Create dialogue element if doesn't exist
         let dialogueEl = document.querySelector('.intro-dialogue');
         if (!dialogueEl) {
@@ -3033,14 +3070,24 @@ class Game {
             document.body.appendChild(dialogueEl);
         }
 
-        // Set therapist dialogue
+        // Set therapist dialogue (but it's hidden now)
         this.setTherapistDialogue(step.text);
 
-        // Show choices or continue button
+        // Show dialogue text only
+        dialogueEl.innerHTML = `<div class="intro-dialogue-text">${step.speaker}: "${step.text}"</div>`;
+        dialogueEl.style.opacity = '1';
+
+        // Show choices or continue button in player field area
+        let choiceContainer = document.querySelector('.player-choice-container');
+        if (!choiceContainer) {
+            choiceContainer = document.createElement('div');
+            choiceContainer.className = 'player-choice-container';
+            document.querySelector('.game-container').appendChild(choiceContainer);
+        }
+
         if (step.choices) {
-            // Multiple choice
-            dialogueEl.innerHTML = `
-                <div class="intro-dialogue-text">${step.speaker}: "${step.text}"</div>
+            // Multiple choice - render in player field area
+            choiceContainer.innerHTML = `
                 <div class="choice-container">
                     ${step.choices.map((choice, i) => `
                         <div class="choice-option" data-choice="${i}">
@@ -3051,24 +3098,25 @@ class Game {
             `;
 
             // Add event listeners to choices
-            dialogueEl.querySelectorAll('.choice-option').forEach(el => {
+            choiceContainer.querySelectorAll('.choice-option').forEach(el => {
                 el.addEventListener('click', (e) => {
                     const choiceIndex = parseInt(e.target.dataset.choice);
                     this.handleChoice(step.choices[choiceIndex]);
                 });
             });
         } else {
-            // Simple continue
-            dialogueEl.innerHTML = `
-                <div class="intro-dialogue-text">${step.speaker}: "${step.text}"</div>
+            // Simple continue button
+            choiceContainer.innerHTML = `
                 <button class="intro-dialogue-continue">${step.continueText || 'Continua'}</button>
             `;
 
-            dialogueEl.querySelector('.intro-dialogue-continue').addEventListener('click', () => {
+            choiceContainer.querySelector('.intro-dialogue-continue').addEventListener('click', () => {
                 this.introStep++;
                 this.showIntroDialogue();
             });
         }
+
+        choiceContainer.style.opacity = '1';
     }
 
     handleChoice(choice) {
@@ -3088,6 +3136,15 @@ class Game {
             if (choice.effect.metaAwareness) this.metaAwareness = true;
         }
 
+        // Clear choice container
+        const choiceContainer = document.querySelector('.player-choice-container');
+        if (choiceContainer) {
+            choiceContainer.style.opacity = '0';
+            setTimeout(() => {
+                choiceContainer.innerHTML = '';
+            }, 300);
+        }
+
         // Continue to next step
         this.introStep++;
         this.showIntroDialogue();
@@ -3099,6 +3156,12 @@ class Game {
         if (dialogueEl) {
             dialogueEl.style.opacity = '0';
             setTimeout(() => dialogueEl.remove(), 500);
+        }
+
+        // Restore persistent dialogue box
+        const dialogueBox = document.querySelector('.dialogue-box');
+        if (dialogueBox) {
+            dialogueBox.style.display = 'block';
         }
 
         // Transition to game
@@ -3742,6 +3805,12 @@ class Game {
     }
 
     showDialogueQuestion(question) {
+        // Hide persistent dialogue box to avoid duplicate text
+        const dialogueBox = document.querySelector('.dialogue-box');
+        if (dialogueBox) {
+            dialogueBox.style.display = 'none';
+        }
+
         // Create or get dialogue element
         let dialogueEl = document.querySelector('.intro-dialogue');
         if (!dialogueEl) {
@@ -3750,12 +3819,22 @@ class Game {
             document.body.appendChild(dialogueEl);
         }
 
-        // Set therapist dialogue
+        // Set therapist dialogue (but it's hidden now)
         this.setTherapistDialogue(question.text);
 
-        // Show choices
-        dialogueEl.innerHTML = `
-            <div class="intro-dialogue-text">${question.speaker}: "${question.text}"</div>
+        // Show dialogue text only
+        dialogueEl.innerHTML = `<div class="intro-dialogue-text">${question.speaker}: "${question.text}"</div>`;
+        dialogueEl.style.opacity = '1';
+
+        // Show choices in player field area
+        let choiceContainer = document.querySelector('.player-choice-container');
+        if (!choiceContainer) {
+            choiceContainer = document.createElement('div');
+            choiceContainer.className = 'player-choice-container';
+            document.querySelector('.game-container').appendChild(choiceContainer);
+        }
+
+        choiceContainer.innerHTML = `
             <div class="choice-container">
                 ${question.choices.map((choice, i) => `
                     <div class="choice-option" data-choice="${i}">
@@ -3765,18 +3844,18 @@ class Game {
             </div>
         `;
 
-        dialogueEl.style.opacity = '1';
+        choiceContainer.style.opacity = '1';
 
         // Add event listeners to choices
-        dialogueEl.querySelectorAll('.choice-option').forEach(el => {
+        choiceContainer.querySelectorAll('.choice-option').forEach(el => {
             el.addEventListener('click', (e) => {
                 const choiceIndex = parseInt(e.target.dataset.choice);
-                this.handleGameplayChoice(question.choices[choiceIndex], dialogueEl);
+                this.handleGameplayChoice(question.choices[choiceIndex], dialogueEl, choiceContainer);
             });
         });
     }
 
-    handleGameplayChoice(choice, dialogueEl) {
+    handleGameplayChoice(choice, dialogueEl, choiceContainer) {
         // Apply effects
         if (choice.effect) {
             if (choice.effect.stability) this.stability = Math.max(0, Math.min(100, this.stability + choice.effect.stability));
@@ -3800,7 +3879,20 @@ class Game {
             if (dialogueEl.parentNode) {
                 dialogueEl.remove();
             }
+            // Restore persistent dialogue box
+            const dialogueBox = document.querySelector('.dialogue-box');
+            if (dialogueBox) {
+                dialogueBox.style.display = 'block';
+            }
         }, 500);
+
+        // Clear choice container
+        if (choiceContainer) {
+            choiceContainer.style.opacity = '0';
+            setTimeout(() => {
+                choiceContainer.innerHTML = '';
+            }, 300);
+        }
 
         this.updateUI();
     }

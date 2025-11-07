@@ -1110,9 +1110,16 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px;
+    padding: 40px 20px;
     /* Effetto spotlight radiale centrato */
     position: relative;
+    overflow-y: auto;
+}
+
+/* Sub-menus (options, about) DEVONO stare sopra main-menu */
+#options-menu,
+#about-menu {
+    z-index: 600 !important;
 }
 
 .menu-overlay::before {
@@ -1291,12 +1298,15 @@ body {
 }
 
 .menu-title {
-    font-size: 48px;
+    font-size: 34px;
     font-weight: 900;
     color: var(--accent-warm);
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
-    letter-spacing: 4px;
+    letter-spacing: 2px;
+    word-wrap: break-word;
+    max-width: 100%;
+    line-height: 1.2;
 }
 
 .menu-button {
@@ -1865,6 +1875,19 @@ body.game-started #event-log {
 }
 
 /* === CHOICE SYSTEM === */
+.player-choice-container {
+    position: absolute;
+    bottom: 180px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 150;
+    width: 80%;
+    max-width: 700px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: all;
+}
+
 .choice-container {
     display: flex;
     flex-direction: column;
@@ -2670,7 +2693,8 @@ body.glitch-phase-5 .glitch-overlay::before {
 
 .tutorial-overlay.visible {
     opacity: 1;
-    pointer-events: all;
+    /* NON bloccare i click sull'overlay, solo sul popup */
+    pointer-events: none;
 }
 
 .tutorial-popup {
@@ -2680,6 +2704,8 @@ body.glitch-phase-5 .glitch-overlay::before {
     border-radius: 12px;
     padding: 30px;
     max-width: 400px;
+    /* Il popup invece è cliccabile */
+    pointer-events: all;
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.9),
         inset 0 0 40px rgba(0, 0, 0, 0.3),
@@ -2790,7 +2816,8 @@ body.glitch-phase-5 .glitch-overlay::before {
 
 .tutorial-highlight {
     position: relative;
-    z-index: 1999;
+    z-index: 2001 !important;
+    pointer-events: all !important;
     box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.6),
                 0 0 30px rgba(212, 165, 116, 0.8) !important;
     animation: tutorial-highlight-pulse 2s ease-in-out infinite;
