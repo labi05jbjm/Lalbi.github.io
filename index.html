@@ -3,89 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Card Game - Chi sta giocando con chi?</title>
+    <title>THE CARD GAME - Chi sta giocando con chi?</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Courier+Prime:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Glitch overlay for metanarrative effects -->
+    <!-- Static/Glitch overlay -->
     <div id="glitch-overlay" class="glitch-overlay"></div>
+    <canvas id="static-canvas" class="static-canvas"></canvas>
 
-    <!-- Main game container -->
-    <div id="game-container" class="game-container">
-        <!-- Header with mysterious messages -->
-        <div id="header" class="header">
-            <h1 id="game-title" class="glitch-text">THE CARD GAME</h1>
-            <div id="meta-message" class="meta-message"></div>
+    <!-- MAIN MENU -->
+    <div id="main-menu" class="main-menu">
+        <div class="tv-container">
+            <div class="tv-frame">
+                <div class="tv-screen">
+                    <div class="tv-static"></div>
+                    <div class="tv-content">
+                        <h1 class="title-glitch" data-text="THE CARD GAME">THE CARD GAME</h1>
+                        <p class="subtitle">Chi sta veramente giocando?</p>
+
+                        <div class="menu-buttons">
+                            <button id="start-game-btn" class="menu-btn">
+                                <span class="btn-icon">▶</span> INIZIA
+                            </button>
+                            <button id="continue-btn" class="menu-btn" style="display: none;">
+                                <span class="btn-icon">↻</span> CONTINUA
+                            </button>
+                            <button id="about-btn" class="menu-btn">
+                                <span class="btn-icon">?</span> INFO
+                            </button>
+                        </div>
+
+                        <div class="tv-footer">
+                            <p class="warning-text">⚠ Questo gioco ricorda</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TV Controls -->
+                <div class="tv-controls">
+                    <div class="power-button" id="power-button">
+                        <div class="power-icon">⏻</div>
+                    </div>
+                    <div class="volume-knob"></div>
+                    <div class="channel-knob"></div>
+                </div>
+            </div>
+
+            <div class="tv-shadow"></div>
+        </div>
+    </div>
+
+    <!-- GAME CONTAINER -->
+    <div id="game-container" class="game-container hidden">
+        <!-- Pause Menu -->
+        <div id="pause-menu" class="pause-menu hidden">
+            <div class="pause-content">
+                <h2 class="pause-title">⏸ PAUSA</h2>
+                <div class="entity-dialogue-pause">
+                    <p id="pause-dialogue">Perché ti fermi? Hai paura di continuare?</p>
+                </div>
+                <div class="pause-buttons">
+                    <button id="resume-btn" class="pause-btn">Riprendi</button>
+                    <button id="restart-btn" class="pause-btn">Ricomincia</button>
+                    <button id="quit-btn" class="pause-btn">Abbandona</button>
+                </div>
+            </div>
         </div>
 
-        <!-- Game state display -->
-        <div class="game-state">
-            <div class="player-info">
-                <span id="player-lives">❤️ Vite: 3</span>
-                <span id="player-currency">🜏 Anime: 0</span>
+        <!-- Header with Entity dialogue -->
+        <div class="game-header">
+            <button id="menu-toggle-btn" class="icon-btn" title="Menu">☰</button>
+
+            <div class="entity-portrait">
+                <div class="portrait-frame">
+                    <div class="portrait-image">👁️</div>
+                    <div class="portrait-name">L'ENTITÀ</div>
+                </div>
             </div>
-            <div class="round-info">
-                <span id="round-counter">Round 1</span>
-                <span id="turn-indicator">Il tuo turno</span>
+
+            <div class="dialogue-box">
+                <div class="dialogue-indicator">▼</div>
+                <p id="entity-dialogue" class="dialogue-text">Così... sei tornato...</p>
+            </div>
+
+            <div class="stats-panel">
+                <div class="stat-item">
+                    <span class="stat-icon">❤️</span>
+                    <span id="player-lives-display">3</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🜏</span>
+                    <span id="souls-display">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Round</span>
+                    <span id="round-display">1</span>
+                </div>
             </div>
         </div>
 
-        <!-- Opponent's field -->
-        <div class="battlefield opponent-field">
-            <div class="field-label">L'Entità</div>
-            <div id="opponent-field" class="card-slots">
-                <div class="card-slot" data-slot="0"></div>
-                <div class="card-slot" data-slot="1"></div>
-                <div class="card-slot" data-slot="2"></div>
-                <div class="card-slot" data-slot="3"></div>
+        <!-- Battlefield Area -->
+        <div class="battlefield-container">
+            <!-- Opponent's side -->
+            <div class="battlefield opponent-side">
+                <div class="health-display">
+                    <div class="health-bar-container">
+                        <div class="health-label">L'ENTITÀ</div>
+                        <div class="health-bar">
+                            <div id="opponent-health-fill" class="health-fill" style="width: 100%">
+                                <div class="health-shine"></div>
+                            </div>
+                            <span id="opponent-health-text" class="health-text">20/20</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="opponent-field" class="card-field">
+                    <div class="card-slot opponent-slot" data-slot="0"></div>
+                    <div class="card-slot opponent-slot" data-slot="1"></div>
+                    <div class="card-slot opponent-slot" data-slot="2"></div>
+                    <div class="card-slot opponent-slot" data-slot="3"></div>
+                </div>
             </div>
-            <div id="opponent-health" class="health-bar">
-                <div class="health-fill" style="width: 100%"></div>
-                <span class="health-text">20 / 20</span>
+
+            <!-- Battle Log (center) -->
+            <div class="battle-center">
+                <div id="battle-log" class="battle-log">
+                    <div class="log-title">📜 Registro</div>
+                    <div id="log-entries" class="log-entries"></div>
+                </div>
+
+                <div class="turn-indicator-container">
+                    <div id="turn-indicator" class="turn-indicator">IL TUO TURNO</div>
+                </div>
+            </div>
+
+            <!-- Player's side -->
+            <div class="battlefield player-side">
+                <div id="player-field" class="card-field">
+                    <div class="card-slot player-slot" data-slot="0"></div>
+                    <div class="card-slot player-slot" data-slot="1"></div>
+                    <div class="card-slot player-slot" data-slot="2"></div>
+                    <div class="card-slot player-slot" data-slot="3"></div>
+                </div>
+
+                <div class="health-display">
+                    <div class="health-bar-container">
+                        <div class="health-label">TU</div>
+                        <div class="health-bar">
+                            <div id="player-health-fill" class="health-fill player-health" style="width: 100%">
+                                <div class="health-shine"></div>
+                            </div>
+                            <span id="player-health-text" class="health-text">20/20</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Battle log -->
-        <div id="battle-log" class="battle-log"></div>
-
-        <!-- Player's field -->
-        <div class="battlefield player-field">
-            <div id="player-health" class="health-bar">
-                <div class="health-fill" style="width: 100%"></div>
-                <span class="health-text">20 / 20</span>
-            </div>
-            <div id="player-field" class="card-slots">
-                <div class="card-slot" data-slot="0"></div>
-                <div class="card-slot" data-slot="1"></div>
-                <div class="card-slot" data-slot="2"></div>
-                <div class="card-slot" data-slot="3"></div>
-            </div>
-            <div class="field-label">Tu (o almeno, così credi)</div>
+        <!-- Player Hand -->
+        <div class="hand-container">
+            <div class="hand-label">LA TUA MANO</div>
+            <div id="player-hand" class="player-hand"></div>
         </div>
 
-        <!-- Player's hand -->
-        <div id="player-hand" class="player-hand"></div>
-
-        <!-- Action buttons -->
+        <!-- Action Bar -->
         <div class="action-bar">
-            <button id="end-turn-btn" class="btn btn-primary">Termina Turno</button>
-            <button id="sacrifice-mode-btn" class="btn btn-secondary">Modalità Sacrificio</button>
-            <button id="draw-card-btn" class="btn btn-secondary">Pesca (costa 1 🜏)</button>
+            <button id="sacrifice-btn" class="action-btn sacrifice-btn">
+                <span class="btn-icon">🗡️</span>
+                <span class="btn-text">SACRIFICA</span>
+            </button>
+
+            <button id="draw-card-btn" class="action-btn draw-btn">
+                <span class="btn-icon">🃏</span>
+                <span class="btn-text">PESCA (1🜏)</span>
+            </button>
+
+            <button id="end-turn-btn" class="action-btn end-turn-btn">
+                <span class="btn-icon">⏭</span>
+                <span class="btn-text">TERMINA TURNO</span>
+            </button>
         </div>
 
-        <!-- Metanarrative modal -->
-        <div id="meta-modal" class="modal hidden">
-            <div class="modal-content">
-                <div id="modal-text" class="modal-text"></div>
-                <button id="modal-continue" class="btn btn-primary">Continua...</button>
+        <!-- Card Tooltip -->
+        <div id="card-tooltip" class="card-tooltip hidden">
+            <div class="tooltip-content">
+                <p id="tooltip-text"></p>
             </div>
         </div>
     </div>
 
-    <!-- Audio elements -->
-    <audio id="card-play-sound" preload="auto"></audio>
-    <audio id="attack-sound" preload="auto"></audio>
-    <audio id="ambient-sound" loop></audio>
+    <!-- About Modal -->
+    <div id="about-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>THE CARD GAME</h2>
+            <p>Un card game metanarrativo dove le carte ricordano,<br>l'Entità osserva, e tu... tu sei sicuro di essere il giocatore?</p>
+            <br>
+            <p><strong>Obiettivo:</strong> Riduci la salute dell'Entità a 0</p>
+            <p><strong>Meccaniche:</strong></p>
+            <ul>
+                <li>Gioca carte trascinandole negli slot</li>
+                <li>Sacrifica carte per ottenere anime (🜏)</li>
+                <li>Le carte si scontrano in posizioni corrispondenti</li>
+                <li>Sopravvivi e scopri cosa si nasconde oltre il gioco</li>
+            </ul>
+            <br>
+            <p class="modal-warning">⚠️ Ogni scelta ha conseguenze</p>
+            <button id="close-about-btn" class="modal-btn">CAPISCO</button>
+        </div>
+    </div>
 
     <script src="game.js"></script>
 </body>
