@@ -121,31 +121,33 @@ body {
 /* === OPPONENT FIELD (Far side of table) === */
 .opponent-field {
     position: absolute;
-    top: 5%;
+    top: 10%;
     left: 50%;
-    transform: translateX(-50%) translateZ(20px);
-    width: 80%;
-    height: 180px;
+    transform: translateX(-50%) translateZ(30px);
+    width: 70%;
+    height: 200px;
     display: flex;
-    gap: 15px;
+    gap: 12px;
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d;
+    z-index: 5;
 }
 
 /* === PLAYER FIELD (Near side of table) === */
 .player-field {
     position: absolute;
-    bottom: 25%;
+    bottom: 20%;
     left: 50%;
-    transform: translateX(-50%) translateZ(30px);
-    width: 80%;
-    height: 180px;
+    transform: translateX(-50%) translateZ(40px);
+    width: 70%;
+    height: 200px;
     display: flex;
-    gap: 15px;
+    gap: 12px;
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d;
+    z-index: 15;
 }
 
 /* === CARD SLOTS === */
@@ -159,6 +161,14 @@ body {
     position: relative;
     transform-style: preserve-3d;
     filter: url(#rough-edges);
+    cursor: pointer;
+}
+
+.card-slot:hover:not(.occupied) {
+    border-color: rgba(212, 165, 116, 0.5);
+    background: rgba(212, 165, 116, 0.05);
+    box-shadow: 0 0 15px rgba(212, 165, 116, 0.2);
+    transform: scale(1.02);
 }
 
 .card-slot.valid-drop {
@@ -186,7 +196,7 @@ body {
     justify-content: center;
     align-items: flex-end;
     perspective: 1000px;
-    z-index: 100;
+    z-index: 200;
     pointer-events: none;
 }
 
@@ -1385,4 +1395,129 @@ body.high-contrast {
         width: 150px;
         height: 220px;
     }
+}
+
+/* === INTRO NARRATIVE PHASE === */
+body.intro-phase .player-field,
+body.intro-phase .opponent-field,
+body.intro-phase .hand-container,
+body.intro-phase #game-state,
+body.intro-phase #action-buttons,
+body.intro-phase #event-log,
+body.intro-phase #alter-messages {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.5s ease;
+}
+
+body.game-started .player-field,
+body.game-started .opponent-field,
+body.game-started .hand-container,
+body.game-started #game-state,
+body.game-started #action-buttons,
+body.game-started #event-log {
+    opacity: 1;
+    pointer-events: all;
+    animation: fadeInGame 2s ease;
+}
+
+@keyframes fadeInGame {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* === INTRO DIALOGUE BOX === */
+.intro-dialogue {
+    position: fixed;
+    bottom: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 900px;
+    background: rgba(26, 20, 16, 0.95);
+    border: 4px solid var(--accent-warm);
+    border-radius: 12px;
+    padding: 30px 40px;
+    z-index: 500;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 0 40px rgba(0, 0, 0, 0.3);
+}
+
+.intro-dialogue-text {
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--text-light);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.intro-dialogue-continue {
+    display: block;
+    margin: 0 auto;
+    padding: 12px 30px;
+    background: var(--accent-warm);
+    border: 2px solid var(--border-dark);
+    border-radius: 8px;
+    color: var(--text-dark);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.intro-dialogue-continue:hover {
+    background: #e4b584;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(212, 165, 116, 0.5);
+}
+
+/* === CHOICE SYSTEM === */
+.choice-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.choice-option {
+    padding: 15px 25px;
+    background: rgba(74, 58, 42, 0.8);
+    border: 3px solid rgba(212, 165, 116, 0.3);
+    border-radius: 8px;
+    color: var(--text-light);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.choice-option:hover {
+    background: rgba(212, 165, 116, 0.2);
+    border-color: var(--accent-warm);
+    transform: translateX(10px);
+    box-shadow: 0 0 15px rgba(212, 165, 116, 0.3);
+}
+
+.choice-option:active {
+    transform: translateX(10px) scale(0.98);
+}
+
+/* === CARD SELECTION MODE === */
+.card.selected {
+    transform: translateY(-40px) scale(1.1) !important;
+    box-shadow: 
+        0 0 30px rgba(212, 165, 116, 0.8),
+        0 10px 30px rgba(0, 0, 0, 0.6);
+    z-index: 300 !important;
+}
+
+.card.selectable {
+    cursor: pointer;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.2); }
 }

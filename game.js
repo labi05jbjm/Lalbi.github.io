@@ -56,6 +56,68 @@ const TRANSLATIONS = {
 // Current language
 let currentLang = 'it';
 
+// === INTRO SEQUENCE ===
+const IntroSequence = [
+    {
+        speaker: "Dr. Lumen",
+        text: "Buongiorno Neve. Come ti senti oggi?",
+        continueText: "..."
+    },
+    {
+        speaker: "Dr. Lumen",
+        text: "Vedo che sei... stanca. È stato un periodo difficile, vero?",
+        continueText: "..."
+    },
+    {
+        speaker: "Dr. Lumen",
+        text: "Oggi vorrei provare qualcosa di diverso con te. Qualcosa che potrebbe aiutarci a esplorare certi... aspetti nascosti.",
+        continueText: "Cosa intende?"
+    },
+    {
+        speaker: "Dr. Lumen",
+        text: "Ho preparato un gioco. Un gioco di carte. So che può sembrare poco convenzionale, ma fidati di me. Sarà... illuminante.",
+        choices: [
+            { text: "Un gioco? Non capisco come potrebbe aiutarmi...", response: "hesitant", effect: { stability: -2 } },
+            { text: "Va bene, sono disposta a provare.", response: "trusting", effect: { trust: +1 } },
+            { text: "Mi sembra poco professionale. È davvero necessario?", response: "skeptical", effect: { trust: -1, awareness: +1 } }
+        ]
+    }
+];
+
+// === DIALOGUE QUESTIONS (scattered through gameplay) ===
+const DialogueQuestions = [
+    {
+        round: 3,
+        speaker: "Dr. Lumen",
+        text: "Questa carta che hai giocato... cosa rappresenta per te?",
+        choices: [
+            { text: "Non lo so. È solo un quadro.", effect: { stability: -2 } },
+            { text: "Mi ricorda qualcosa, ma non riesco a capire cosa...", effect: { fragments: 1 } },
+            { text: "Preferisco non parlarne.", effect: { stability: 1 } }
+        ]
+    },
+    {
+        round: 7,
+        speaker: "Dr. Lumen",
+        text: "Neve, hai sentito qualcosa? Una voce, forse?",
+        choices: [
+            { text: "No, niente. Perché me lo chiede?", effect: { trust: -2 } },
+            { text: "Sì... mi è sembrato di sentire qualcuno sussurrare...", effect: { fragments: 2, stability: -1 } },
+            { text: "È solo la mia immaginazione.", effect: { stability: 1 } }
+        ]
+    },
+    {
+        round: 15,
+        speaker: "Dr. Lumen",
+        text: "Neve... quante volte hai già giocato questa partita?",
+        choices: [
+            { text: "Cosa? È la prima volta.", effect: { awareness: -1 } },
+            { text: "[Silenzio inquietante]", effect: { metaAwareness: true, stability: -3 } },
+            { text: "Perché me lo chiede?", effect: { awareness: +2 } }
+        ]
+    }
+];
+
 // === THERAPIST DIALOGUES (Progressive manipulation) ===
 const TherapistDialogues = {
     // Phase 1: Benign & Professional (Rounds 1-5)
