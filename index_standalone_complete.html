@@ -9812,5 +9812,137 @@ class AccessibilityManager {
 
 
 </script>
+    <script>
+/* ——— FIX PACK JS ——— */
+(function () {
+  const g = window.game;
+  if (!g) return;
+
+  /* 1) Salvataggi: allinea le chiavi (“Continua”) */
+  const _saveGame = g.saveGame?.bind(g);
+  g.saveGame = function () {
+    _saveGame && _saveGame();
+    try {
+      const autosave = localStorage.getItem('neveSavedGame_autosave');
+      if (autosave) localStorage.setItem('neveSavedGame', autosave);
+    } catch (e) {}
+  };
+  const _loadGame = g.loadGame?.bind(g);
+  g.loadGame = function () {
+    try {
+      const raw = localStorage.getItem('neveSavedGame') || localStorage.getItem('neveSavedGame_autosave');
+      if (raw) {
+        const data = JSON.parse(raw);
+        this.applySave?.(data);
+        return true;
+      }
+    } catch (e) {}
+    return _loadGame ? _loadGame() : false;
+  };
+
+  /* 2) Merge statistiche corretto */
+  const _applySave = g.applySave?.bind(g);
+  g.applySave = function (data = {}) {
+    if (data.statistics) this.statistics = { ...(this.statistics || {}), ...data.statistics };
+    return _applySave ? _applySave(data) : undefined;
+  };
+
+  /* 3) Tastiera: frecce/Invio/Esc mappati al GamepadManager */
+  window.addEventListener('keydown', (e) => {
+    const m = g.gamepadManager;
+    if (!m) return;
+    switch (e.key) {
+      case 'ArrowUp':   m.navigate?.('up');    e.preventDefault(); break;
+      case 'ArrowDown': m.navigate?.('down');  e.preventDefault(); break;
+      case 'ArrowLeft': m.navigate?.('left');  e.preventDefault(); break;
+      case 'ArrowRight':m.navigate?.('right'); e.preventDefault(); break;
+      case 'Enter':
+      case ' ':         m.confirmAction?.();   e.preventDefault(); break;
+      case 'Escape':    g.togglePause?.();     e.preventDefault(); break;
+    }
+  }, { passive: false });
+
+  /* 4) Sacrifici anche con click/tap (oltre al drag) */
+  const _startSacrifice = g.startSacrificeMode?.bind(g);
+  g.startSacrificeMode = function (required = 1) {
+    _startSacrifice && _startSacrifice(required);
+    const handler = (ev) => {
+      if (!this.sacrificeMode) return;
+      const el = ev.target.closest('.card.in-play, .card.on-board');
+      if (!el) return;
+      const id = el.getAttribute('data-card-id') || el.id;
+      this.markCardForSacrifice?.(id);
+      // Se hai un contatore interno di selezioni, completa quando arriva a 'required'
+      if (this.sacrificeSelectedCount >= required) this.completeSacrifice?.();
+    };
+    this._sacrificeClickHandler = handler;
+    this.elements?.gameContainer?.addEventListener('click', handler);
+  };
+  const _completeSacrifice = g.completeSacrifice?.bind(g);
+  g.completeSacrifice = function () {
+    if (this._sacrificeClickHandler && this.elements?.gameContainer) {
+      this.elements.gameContainer.removeEventListener('click', this._sacrificeClickHandler);
+      this._sacrificeClickHandler = null;
+    }
+    return _completeSacrifice ? _completeSacrifice() : undefined;
+  };
+
+  /* 5) Tooltip accessibili (focusin/focusout) */
+  document.addEventListener('focusin', (e) => {
+    const t = e.target.closest('[data-tooltip]');
+    if (t && g.tooltip?.show) {
+      g.tooltip.show(t.getAttribute('data-tooltip'), t);
+      t.setAttribute('aria-describedby', 'global-tooltip');
+    }
+  });
+  document.addEventListener('focusout', () => g.tooltip?.hide && g.tooltip.hide());
+
+  /* 6) Slider volume → audio reale */
+  const vol = document.querySelector('#volume-range, input[name="volume"], .volume-range');
+  if (vol && g.audio?.setVolume) vol.addEventListener('input', (e) => g.audio.setVolume(e.target.value / 100));
+
+  /* 7) Riduci animazioni centralizzato */
+  if (g.accessibility?.applySettings) {
+    const _apply = g.accessibility.applySettings.bind(g.accessibility);
+    g.accessibility.applySettings = function () {
+      document.body.classList.toggle('reduce-motion', !!this.settings?.reducedMotion);
+      return _apply();
+    };
+  }
+
+  /* 8) Event log parlante */
+  const log = document.querySelector('#event-log');
+  if (log) { log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite'); }
+
+  /* 9) Niente scroll “automatico” dal gamepad */
+  if (g.gamepadManager) g.gamepadManager.scrollIntoView = function () { /* no-op */ };
+
+  /* 10) Opzioni/Informazioni apribili dal menu iniziale (warning → modale) */
+  const _showCW = g.showContentWarning?.bind(g);
+  g.showContentWarning = function () {
+    this.showMainMenu?.();                              // mostra il menu subito
+    _showCW && _showCW();                               // poi sovrapponi il warning
+    this.elements?.contentWarning?.classList.add('menu-overlay'); // stesso layer system
+  };
+
+  /* 11) Rileva e disattiva duplicati di ID (cause di overlay “sbagliati”) */
+  (function hideDuplicateIds(){
+    const seen = new Map();
+    document.querySelectorAll('[id]').forEach(el => {
+      const id = el.id;
+      if (!id) return;
+      if (seen.has(id)) {
+        // Nascondi le copie successive per evitare conflitti negli handler
+        el.setAttribute('data-duplicate', 'true');
+        el.style.display = 'none';
+      } else {
+        seen.set(id, el);
+      }
+    });
+  })();
+
+})();
+</script>
+
 </body>
 </html>
