@@ -961,6 +961,255 @@ class Card {
     }
 }
 
+// ============================================
+// === AUDIO MANAGER ===
+// ============================================
+class AudioManager {
+    constructor() {
+        this.audioContext = null;
+        this.masterGain = null;
+        this.musicGain = null;
+        this.sfxGain = null;
+
+        this.enabled = true;
+        this.musicVolume = 0.3;
+        this.sfxVolume = 0.5;
+
+        this.currentMusic = null;
+        this.glitchLevel = 0;
+
+        // Audio buffers for preloaded sounds
+        this.buffers = {};
+
+        // Initialize on user interaction (required by browsers)
+        this.initialized = false;
+    }
+
+    /**
+     * Initialize Web Audio API (must be called after user interaction)
+     */
+    init() {
+        if (this.initialized) return;
+
+        try {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+            // Master gain node
+            this.masterGain = this.audioContext.createGain();
+            this.masterGain.connect(this.audioContext.destination);
+
+            // Music gain node
+            this.musicGain = this.audioContext.createGain();
+            this.musicGain.gain.value = this.musicVolume;
+            this.musicGain.connect(this.masterGain);
+
+            // SFX gain node
+            this.sfxGain = this.audioContext.createGain();
+            this.sfxGain.gain.value = this.sfxVolume;
+            this.sfxGain.connect(this.masterGain);
+
+            this.initialized = true;
+            console.log('[Audio] AudioManager initialized');
+        } catch (e) {
+            console.warn('[Audio] Web Audio API not supported:', e);
+            this.enabled = false;
+        }
+    }
+
+    /**
+     * Play synthesized tone (for UI feedback)
+     */
+    playTone(frequency, duration = 0.1, type = 'sine', volume = 0.3) {
+        if (!this.enabled || !this.initialized) return;
+
+        const oscillator = this.audioContext.createOscillator();
+        const gainNode = this.audioContext.createGain();
+
+        oscillator.type = type;
+        oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+
+        gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(this.sfxGain);
+
+        oscillator.start(this.audioContext.currentTime);
+        oscillator.stop(this.audioContext.currentTime + duration);
+    }
+
+    /**
+     * Play card draw sound
+     */
+    playCardDraw() {
+        this.playTone(800, 0.08, 'sine', 0.2);
+        setTimeout(() => this.playTone(1000, 0.05, 'sine', 0.15), 30);
+    }
+
+    /**
+     * Play card play sound
+     */
+    playCardPlay() {
+        this.playTone(400, 0.12, 'triangle', 0.25);
+        setTimeout(() => this.playTone(600, 0.08, 'triangle', 0.2), 40);
+    }
+
+    /**
+     * Play attack sound
+     */
+    playAttack() {
+        this.playTone(200, 0.15, 'sawtooth', 0.3);
+        setTimeout(() => this.playTone(150, 0.1, 'sawtooth', 0.25), 50);
+    }
+
+    /**
+     * Play sacrifice sound
+     */
+    playSacrifice() {
+        this.playTone(600, 0.2, 'sine', 0.3);
+        setTimeout(() => this.playTone(400, 0.3, 'sine', 0.25), 100);
+        setTimeout(() => this.playTone(200, 0.4, 'sine', 0.2), 200);
+    }
+
+    /**
+     * Play heal/restore sound
+     */
+    playHeal() {
+        this.playTone(600, 0.1, 'sine', 0.2);
+        setTimeout(() => this.playTone(800, 0.1, 'sine', 0.2), 60);
+        setTimeout(() => this.playTone(1000, 0.15, 'sine', 0.25), 120);
+    }
+
+    /**
+     * Play damage sound
+     */
+    playDamage() {
+        this.playTone(150, 0.2, 'sawtooth', 0.35);
+    }
+
+    /**
+     * Play unlock/achievement sound
+     */
+    playUnlock() {
+        this.playTone(800, 0.1, 'sine', 0.25);
+        setTimeout(() => this.playTone(1000, 0.1, 'sine', 0.25), 80);
+        setTimeout(() => this.playTone(1200, 0.15, 'sine', 0.3), 160);
+        setTimeout(() => this.playTone(1600, 0.2, 'sine', 0.35), 240);
+    }
+
+    /**
+     * Play glitch sound (intensity 0-5)
+     */
+    playGlitch(intensity = 1) {
+        if (!this.enabled || !this.initialized) return;
+
+        const baseFreq = 100 + Math.random() * 200;
+        const duration = 0.2 + intensity * 0.1;
+        const volume = 0.15 + intensity * 0.05;
+
+        // Create noise-like glitch
+        const oscillator1 = this.audioContext.createOscillator();
+        const oscillator2 = this.audioContext.createOscillator();
+        const gainNode = this.audioContext.createGain();
+
+        oscillator1.type = 'sawtooth';
+        oscillator2.type = 'square';
+
+        oscillator1.frequency.setValueAtTime(baseFreq, this.audioContext.currentTime);
+        oscillator2.frequency.setValueAtTime(baseFreq * 1.5, this.audioContext.currentTime);
+
+        // Frequency glitch modulation
+        oscillator1.frequency.exponentialRampToValueAtTime(
+            baseFreq * (1 + intensity * 0.5),
+            this.audioContext.currentTime + duration
+        );
+
+        gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+
+        oscillator1.connect(gainNode);
+        oscillator2.connect(gainNode);
+        gainNode.connect(this.sfxGain);
+
+        oscillator1.start();
+        oscillator2.start();
+        oscillator1.stop(this.audioContext.currentTime + duration);
+        oscillator2.stop(this.audioContext.currentTime + duration);
+    }
+
+    /**
+     * Play ambient drone (for atmosphere)
+     */
+    playAmbientDrone(duration = 2, frequency = 110) {
+        if (!this.enabled || !this.initialized) return;
+
+        const oscillator = this.audioContext.createOscillator();
+        const gainNode = this.audioContext.createGain();
+        const filter = this.audioContext.createBiquadFilter();
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(400, this.audioContext.currentTime);
+
+        gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.08, this.audioContext.currentTime + 0.5);
+        gainNode.gain.linearRampToValueAtTime(0.08, this.audioContext.currentTime + duration - 0.5);
+        gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + duration);
+
+        oscillator.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(this.musicGain);
+
+        oscillator.start();
+        oscillator.stop(this.audioContext.currentTime + duration);
+    }
+
+    /**
+     * Set music volume (0-1)
+     */
+    setMusicVolume(volume) {
+        this.musicVolume = Math.max(0, Math.min(1, volume));
+        if (this.musicGain) {
+            this.musicGain.gain.setValueAtTime(this.musicVolume, this.audioContext.currentTime);
+        }
+    }
+
+    /**
+     * Set SFX volume (0-1)
+     */
+    setSFXVolume(volume) {
+        this.sfxVolume = Math.max(0, Math.min(1, volume));
+        if (this.sfxGain) {
+            this.sfxGain.gain.setValueAtTime(this.sfxVolume, this.audioContext.currentTime);
+        }
+    }
+
+    /**
+     * Toggle mute
+     */
+    toggleMute() {
+        this.enabled = !this.enabled;
+        if (this.masterGain) {
+            this.masterGain.gain.setValueAtTime(
+                this.enabled ? 1 : 0,
+                this.audioContext.currentTime
+            );
+        }
+        return this.enabled;
+    }
+
+    /**
+     * Apply glitch effect to audio (0-5 intensity)
+     */
+    setGlitchLevel(level) {
+        this.glitchLevel = level;
+        // Glitch effects would modulate existing audio
+        // For now, just store the level for future use
+    }
+}
+
 // === GAME CLASS ===
 class Game {
     constructor() {
@@ -1045,6 +1294,14 @@ class Game {
             fastestWin: 0,
             perfectRounds: 0
         };
+
+        // Audio System
+        this.audio = new AudioManager();
+
+        // Tutorial System
+        this.tutorialActive = false;
+        this.tutorialStep = 0;
+        this.tutorialCompleted = false;
 
         this.init();
     }
@@ -2733,6 +2990,9 @@ class Game {
         this.hideMainMenu();
         this.resetGame();
 
+        // Initialize audio (requires user interaction)
+        this.audio.init();
+
         // Start with intro sequence
         document.body.classList.add('intro-phase');
         this.inIntroSequence = true;
@@ -2741,6 +3001,11 @@ class Game {
         // Show only table and therapist
         this.sessionStartTime = Date.now();
         this.startSessionTimer();
+
+        // Play ambient drone for atmosphere
+        setTimeout(() => {
+            this.audio.playAmbientDrone(5, 90);
+        }, 500);
 
         // Start intro dialogue after a moment
         setTimeout(() => {
@@ -2852,7 +3117,145 @@ class Game {
             this.log("La sessione di gioco inizia...");
             this.updateUI();
             this.checkPhaseProgression();
+
+            // Start tutorial if first time playing
+            const tutorialSeen = localStorage.getItem('neveTutorialCompleted');
+            if (!tutorialSeen) {
+                setTimeout(() => this.startTutorial(), 1000);
+            }
         }, 1500);
+    }
+
+    // === TUTORIAL SYSTEM ===
+    startTutorial() {
+        this.tutorialActive = true;
+        this.tutorialStep = 0;
+        this.showTutorialStep();
+    }
+
+    showTutorialStep() {
+        const steps = [
+            {
+                title: "Benvenuto",
+                text: "Questa è la tua mano di carte. Ogni carta rappresenta un frammento della psiche di Neve.",
+                highlight: '.player-hand',
+                position: 'bottom'
+            },
+            {
+                title: "Giocare una Carta",
+                text: "Trascina una carta dalla tua mano in uno slot vuoto del tuo campo per giocarla. Alcune carte richiedono un sacrificio (🩸).",
+                highlight: '.player-field',
+                position: 'top',
+                requireAction: 'playCard'
+            },
+            {
+                title: "Attaccare",
+                text: "Al termine del tuo turno, le tue carte attaccheranno le carte avversarie o direttamente il Dr. Lumen. Clicca 'TERMINA TURNO' quando sei pronto.",
+                highlight: '.end-turn-btn',
+                position: 'left',
+                requireAction: 'endTurn'
+            },
+            {
+                title: "Stabilità e Frammenti",
+                text: "Monitora la tua Stabilità (❤️) e i Frammenti di Memoria (💎). Se la Stabilità raggiunge 0, la sessione finisce.",
+                highlight: '.player-stats',
+                position: 'right'
+            },
+            {
+                title: "Tutorial Completato!",
+                text: "Hai imparato le basi. Ma ricorda: in questa sessione, nulla è come sembra. La verità si nasconde oltre la superficie...",
+                highlight: null,
+                position: 'center'
+            }
+        ];
+
+        const step = steps[this.tutorialStep];
+        if (!step) {
+            this.endTutorial();
+            return;
+        }
+
+        // Create or update tutorial overlay
+        let overlay = document.querySelector('.tutorial-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'tutorial-overlay';
+            document.body.appendChild(overlay);
+        }
+
+        // Remove previous highlights
+        document.querySelectorAll('.tutorial-highlight').forEach(el => {
+            el.classList.remove('tutorial-highlight');
+        });
+
+        // Add highlight to target element
+        if (step.highlight) {
+            const target = document.querySelector(step.highlight);
+            if (target) {
+                target.classList.add('tutorial-highlight');
+            }
+        }
+
+        // Create tutorial popup
+        overlay.innerHTML = `
+            <div class="tutorial-popup tutorial-${step.position}">
+                <div class="tutorial-header">
+                    <h3 class="tutorial-title">${step.title}</h3>
+                    <div class="tutorial-progress">${this.tutorialStep + 1} / ${steps.length}</div>
+                </div>
+                <p class="tutorial-text">${step.text}</p>
+                ${!step.requireAction ? `
+                    <button class="tutorial-next-btn">
+                        ${this.tutorialStep < steps.length - 1 ? 'Avanti →' : 'Inizia Gioco!'}
+                    </button>
+                ` : `
+                    <p class="tutorial-action-hint">Completa l'azione per continuare</p>
+                `}
+            </div>
+        `;
+
+        overlay.classList.add('visible');
+
+        // Handle next button
+        const nextBtn = overlay.querySelector('.tutorial-next-btn');
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                this.tutorialStep++;
+                this.showTutorialStep();
+            });
+        }
+
+        // Store required action for this step
+        this.tutorialRequiredAction = step.requireAction || null;
+    }
+
+    advanceTutorialIfNeeded(action) {
+        if (!this.tutorialActive) return;
+        if (this.tutorialRequiredAction === action) {
+            this.tutorialStep++;
+            this.tutorialRequiredAction = null;
+            setTimeout(() => this.showTutorialStep(), 500);
+        }
+    }
+
+    endTutorial() {
+        this.tutorialActive = false;
+        this.tutorialCompleted = true;
+        localStorage.setItem('neveTutorialCompleted', 'true');
+
+        // Remove tutorial overlay
+        const overlay = document.querySelector('.tutorial-overlay');
+        if (overlay) {
+            overlay.classList.remove('visible');
+            setTimeout(() => overlay.remove(), 500);
+        }
+
+        // Remove highlights
+        document.querySelectorAll('.tutorial-highlight').forEach(el => {
+            el.classList.remove('tutorial-highlight');
+        });
+
+        this.log("[ Tutorial completato! ]", "meta");
     }
 
     resetGame() {
@@ -2890,6 +3293,7 @@ class Game {
         const card = this.createRandomCard();
         this.playerHand.push(card);
         this.log(`Hai pescato: ${card.name}`);
+        this.audio.playCardDraw();
         this.updateUI();
     }
 

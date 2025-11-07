@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neve: Limen? - Complete Standalone</title>
+    <title>Neve: Limen?</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
+<style>
 /* ============================================
    NEVE: LIMEN? - 3D Inscryption-style CSS
    ============================================ */
@@ -2481,9 +2482,566 @@ body.glitch-phase-5 .glitch-overlay::before {
 .card.evolved-3 .card-name::after {
     content: ' ★★★';
 }
-    </style>
+
+/* ================================================
+   TUTORIAL SYSTEM
+   ================================================ */
+
+.tutorial-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.tutorial-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.tutorial-popup {
+    position: fixed;
+    background: linear-gradient(135deg, #2d2416 0%, #1a1410 100%);
+    border: 3px solid var(--accent-warm);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 400px;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.9),
+        inset 0 0 40px rgba(0, 0, 0, 0.3),
+        0 0 30px rgba(212, 165, 116, 0.4);
+    animation: tutorial-popup-enter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes tutorial-popup-enter {
+    from {
+        transform: scale(0.8) translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.tutorial-popup.tutorial-bottom {
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tutorial-popup.tutorial-top {
+    bottom: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tutorial-popup.tutorial-left {
+    top: 50%;
+    left: 20%;
+    transform: translateY(-50%);
+}
+
+.tutorial-popup.tutorial-right {
+    top: 50%;
+    right: 20%;
+    transform: translateY(-50%);
+}
+
+.tutorial-popup.tutorial-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tutorial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.tutorial-title {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--accent-warm);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.tutorial-progress {
+    font-size: 14px;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 12px;
+}
+
+.tutorial-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-light);
+    margin-bottom: 20px;
+}
+
+.tutorial-next-btn {
+    width: 100%;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--accent-rust) 0%, #8a3a2a 100%);
+    border: 2px solid var(--accent-warm);
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tutorial-next-btn:hover {
+    background: linear-gradient(135deg, #a04030 0%, #902a1a 100%);
+    box-shadow: 0 0 20px rgba(212, 165, 116, 0.5);
+    transform: scale(1.05);
+}
+
+.tutorial-action-hint {
+    text-align: center;
+    font-style: italic;
+    color: var(--accent-warm);
+    margin: 0;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.tutorial-highlight {
+    position: relative;
+    z-index: 1999;
+    box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.6),
+                0 0 30px rgba(212, 165, 116, 0.8) !important;
+    animation: tutorial-highlight-pulse 2s ease-in-out infinite;
+}
+
+@keyframes tutorial-highlight-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.6),
+                    0 0 30px rgba(212, 165, 116, 0.8);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba(212, 165, 116, 0.8),
+                    0 0 50px rgba(212, 165, 116, 1);
+    }
+}
+
+/* ================================================
+   RESPONSIVE DESIGN (Mobile + Tablet)
+   ================================================ */
+
+/* Tablet (768px - 1024px) */
+@media screen and (max-width: 1024px) {
+    .game-container {
+        padding: 20px 15px;
+    }
+
+    .table-surface {
+        padding: 20px;
+    }
+
+    .card {
+        width: 120px;
+        height: 170px;
+    }
+
+    .therapist-portrait {
+        width: 100px;
+        height: 100px;
+    }
+
+    .log-panel {
+        font-size: 13px;
+        padding: 15px;
+    }
+
+    .menu-content {
+        max-width: 500px;
+        padding: 40px 30px;
+    }
+}
+
+/* Mobile (max-width: 768px) */
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .game-container {
+        padding: 10px;
+        flex-direction: column;
+    }
+
+    .main-game-area {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .log-panel {
+        width: 100%;
+        max-height: 200px;
+        position: relative;
+    }
+
+    .table-surface {
+        padding: 15px;
+    }
+
+    .card {
+        width: 80px;
+        height: 115px;
+        font-size: 11px;
+    }
+
+    .card-stat {
+        font-size: 12px;
+    }
+
+    .card-name {
+        font-size: 10px;
+    }
+
+    .card-artist {
+        font-size: 8px;
+    }
+
+    .blood-drop {
+        font-size: 16px;
+    }
+
+    .therapist-portrait {
+        width: 70px;
+        height: 70px;
+    }
+
+    .therapist-dialogue {
+        font-size: 13px;
+        padding: 12px;
+    }
+
+    .player-stats {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .stat-display {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .end-turn-btn,
+    .discard-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .menu-content {
+        max-width: 90%;
+        padding: 30px 20px;
+    }
+
+    .menu-title {
+        font-size: 32px;
+    }
+
+    .menu-button {
+        padding: 14px 24px;
+        font-size: 14px;
+    }
+
+    .warning-content {
+        padding: 30px 20px;
+    }
+
+    .warning-list {
+        font-size: 13px;
+    }
+
+    /* Tutorial adjustments for mobile */
+    .tutorial-popup {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .tutorial-popup.tutorial-left,
+    .tutorial-popup.tutorial-right {
+        left: 50%;
+        right: auto;
+        transform: translate(-50%, -50%);
+        top: 50%;
+    }
+
+    .tutorial-title {
+        font-size: 18px;
+    }
+
+    .tutorial-text {
+        font-size: 14px;
+    }
+
+    /* Unlock notifications for mobile */
+    .unlock-notification {
+        max-width: 90%;
+        padding: 30px 40px;
+    }
+
+    .unlock-icon {
+        font-size: 60px;
+    }
+
+    .unlock-title {
+        font-size: 24px;
+    }
+
+    .unlock-subtitle {
+        font-size: 16px;
+    }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media screen and (max-width: 480px) {
+    .card {
+        width: 70px;
+        height: 100px;
+    }
+
+    .session-info {
+        font-size: 11px;
+    }
+
+    .round-counter {
+        font-size: 24px;
+    }
+
+    .log-panel {
+        max-height: 150px;
+        font-size: 11px;
+    }
+
+    .menu-title {
+        font-size: 24px;
+    }
+
+    .warning-title {
+        font-size: 24px;
+    }
+}
+
+/* ================================================
+   VISUAL POLISH & ANIMATIONS
+   ================================================ */
+
+/* Smooth card transitions */
+.card {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.05);
+    filter: brightness(1.15);
+}
+
+/* Card play animation */
+@keyframes card-play {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2) rotate(5deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(0.95);
+        opacity: 1;
+    }
+}
+
+.card.playing {
+    animation: card-play 0.5s ease;
+}
+
+/* Card attack animation */
+@keyframes card-attack {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-8px) rotate(-5deg);
+    }
+    75% {
+        transform: translateX(20px) rotate(5deg);
+    }
+}
+
+.card.attacking {
+    animation: card-attack 0.6s ease;
+}
+
+/* Damage number popup */
+@keyframes damage-popup {
+    0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 0;
+    }
+    20% {
+        transform: translateY(-10px) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-60px) scale(0.8);
+        opacity: 0;
+    }
+}
+
+.damage-number {
+    position: absolute;
+    font-size: 32px;
+    font-weight: 900;
+    color: #ff4444;
+    text-shadow:
+        2px 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 10px rgba(255, 68, 68, 0.8);
+    animation: damage-popup 1s ease-out forwards;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+/* Heal number popup */
+.heal-number {
+    position: absolute;
+    font-size: 28px;
+    font-weight: 900;
+    color: #44ff44;
+    text-shadow:
+        2px 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 10px rgba(68, 255, 68, 0.8);
+    animation: damage-popup 1s ease-out forwards;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+/* Particle effects */
+@keyframes particle-float {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(-100px) translateX(var(--particle-x)) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--accent-warm);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particle-float 2s ease-out forwards;
+    box-shadow: 0 0 10px var(--accent-warm);
+}
+
+/* Button press effect */
+.menu-button:active,
+.end-turn-btn:active,
+.discard-btn:active,
+.choice-btn:active {
+    transform: scale(0.95);
+    filter: brightness(0.9);
+}
+
+/* Smooth log scroll */
+.log-panel {
+    scroll-behavior: smooth;
+}
+
+/* Enhanced focus states for accessibility */
+button:focus-visible,
+.card:focus-visible {
+    outline: 3px solid var(--accent-warm);
+    outline-offset: 2px;
+}
+
+/* Loading shimmer effect */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.loading-shimmer {
+    background: linear-gradient(
+        90deg,
+        rgba(26, 20, 16, 0) 0%,
+        rgba(212, 165, 116, 0.2) 50%,
+        rgba(26, 20, 16, 0) 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* Fade in animation for UI elements */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Pulsing glow for important elements */
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 5px var(--accent-warm);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--accent-warm),
+                    0 0 30px var(--accent-warm);
+    }
+}
+
+.pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+</style>
 </head>
-<body>
 <body>
     <!-- SVG FILTERS (Hand-drawn effects) -->
     <svg id="svg-filters" xmlns="http://www.w3.org/2000/svg">
@@ -2845,7 +3403,6 @@ body.glitch-phase-5 .glitch-overlay::before {
         <span>Gamepad Attivo</span>
     </div>
 
-    <script src="game.js"></script>
     <script>
 // ============================================
 // NEVE: LIMEN? - Psychological Card Game
@@ -3810,6 +4367,255 @@ class Card {
     }
 }
 
+// ============================================
+// === AUDIO MANAGER ===
+// ============================================
+class AudioManager {
+    constructor() {
+        this.audioContext = null;
+        this.masterGain = null;
+        this.musicGain = null;
+        this.sfxGain = null;
+
+        this.enabled = true;
+        this.musicVolume = 0.3;
+        this.sfxVolume = 0.5;
+
+        this.currentMusic = null;
+        this.glitchLevel = 0;
+
+        // Audio buffers for preloaded sounds
+        this.buffers = {};
+
+        // Initialize on user interaction (required by browsers)
+        this.initialized = false;
+    }
+
+    /**
+     * Initialize Web Audio API (must be called after user interaction)
+     */
+    init() {
+        if (this.initialized) return;
+
+        try {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+            // Master gain node
+            this.masterGain = this.audioContext.createGain();
+            this.masterGain.connect(this.audioContext.destination);
+
+            // Music gain node
+            this.musicGain = this.audioContext.createGain();
+            this.musicGain.gain.value = this.musicVolume;
+            this.musicGain.connect(this.masterGain);
+
+            // SFX gain node
+            this.sfxGain = this.audioContext.createGain();
+            this.sfxGain.gain.value = this.sfxVolume;
+            this.sfxGain.connect(this.masterGain);
+
+            this.initialized = true;
+            console.log('[Audio] AudioManager initialized');
+        } catch (e) {
+            console.warn('[Audio] Web Audio API not supported:', e);
+            this.enabled = false;
+        }
+    }
+
+    /**
+     * Play synthesized tone (for UI feedback)
+     */
+    playTone(frequency, duration = 0.1, type = 'sine', volume = 0.3) {
+        if (!this.enabled || !this.initialized) return;
+
+        const oscillator = this.audioContext.createOscillator();
+        const gainNode = this.audioContext.createGain();
+
+        oscillator.type = type;
+        oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+
+        gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(this.sfxGain);
+
+        oscillator.start(this.audioContext.currentTime);
+        oscillator.stop(this.audioContext.currentTime + duration);
+    }
+
+    /**
+     * Play card draw sound
+     */
+    playCardDraw() {
+        this.playTone(800, 0.08, 'sine', 0.2);
+        setTimeout(() => this.playTone(1000, 0.05, 'sine', 0.15), 30);
+    }
+
+    /**
+     * Play card play sound
+     */
+    playCardPlay() {
+        this.playTone(400, 0.12, 'triangle', 0.25);
+        setTimeout(() => this.playTone(600, 0.08, 'triangle', 0.2), 40);
+    }
+
+    /**
+     * Play attack sound
+     */
+    playAttack() {
+        this.playTone(200, 0.15, 'sawtooth', 0.3);
+        setTimeout(() => this.playTone(150, 0.1, 'sawtooth', 0.25), 50);
+    }
+
+    /**
+     * Play sacrifice sound
+     */
+    playSacrifice() {
+        this.playTone(600, 0.2, 'sine', 0.3);
+        setTimeout(() => this.playTone(400, 0.3, 'sine', 0.25), 100);
+        setTimeout(() => this.playTone(200, 0.4, 'sine', 0.2), 200);
+    }
+
+    /**
+     * Play heal/restore sound
+     */
+    playHeal() {
+        this.playTone(600, 0.1, 'sine', 0.2);
+        setTimeout(() => this.playTone(800, 0.1, 'sine', 0.2), 60);
+        setTimeout(() => this.playTone(1000, 0.15, 'sine', 0.25), 120);
+    }
+
+    /**
+     * Play damage sound
+     */
+    playDamage() {
+        this.playTone(150, 0.2, 'sawtooth', 0.35);
+    }
+
+    /**
+     * Play unlock/achievement sound
+     */
+    playUnlock() {
+        this.playTone(800, 0.1, 'sine', 0.25);
+        setTimeout(() => this.playTone(1000, 0.1, 'sine', 0.25), 80);
+        setTimeout(() => this.playTone(1200, 0.15, 'sine', 0.3), 160);
+        setTimeout(() => this.playTone(1600, 0.2, 'sine', 0.35), 240);
+    }
+
+    /**
+     * Play glitch sound (intensity 0-5)
+     */
+    playGlitch(intensity = 1) {
+        if (!this.enabled || !this.initialized) return;
+
+        const baseFreq = 100 + Math.random() * 200;
+        const duration = 0.2 + intensity * 0.1;
+        const volume = 0.15 + intensity * 0.05;
+
+        // Create noise-like glitch
+        const oscillator1 = this.audioContext.createOscillator();
+        const oscillator2 = this.audioContext.createOscillator();
+        const gainNode = this.audioContext.createGain();
+
+        oscillator1.type = 'sawtooth';
+        oscillator2.type = 'square';
+
+        oscillator1.frequency.setValueAtTime(baseFreq, this.audioContext.currentTime);
+        oscillator2.frequency.setValueAtTime(baseFreq * 1.5, this.audioContext.currentTime);
+
+        // Frequency glitch modulation
+        oscillator1.frequency.exponentialRampToValueAtTime(
+            baseFreq * (1 + intensity * 0.5),
+            this.audioContext.currentTime + duration
+        );
+
+        gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+
+        oscillator1.connect(gainNode);
+        oscillator2.connect(gainNode);
+        gainNode.connect(this.sfxGain);
+
+        oscillator1.start();
+        oscillator2.start();
+        oscillator1.stop(this.audioContext.currentTime + duration);
+        oscillator2.stop(this.audioContext.currentTime + duration);
+    }
+
+    /**
+     * Play ambient drone (for atmosphere)
+     */
+    playAmbientDrone(duration = 2, frequency = 110) {
+        if (!this.enabled || !this.initialized) return;
+
+        const oscillator = this.audioContext.createOscillator();
+        const gainNode = this.audioContext.createGain();
+        const filter = this.audioContext.createBiquadFilter();
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(400, this.audioContext.currentTime);
+
+        gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.08, this.audioContext.currentTime + 0.5);
+        gainNode.gain.linearRampToValueAtTime(0.08, this.audioContext.currentTime + duration - 0.5);
+        gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + duration);
+
+        oscillator.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(this.musicGain);
+
+        oscillator.start();
+        oscillator.stop(this.audioContext.currentTime + duration);
+    }
+
+    /**
+     * Set music volume (0-1)
+     */
+    setMusicVolume(volume) {
+        this.musicVolume = Math.max(0, Math.min(1, volume));
+        if (this.musicGain) {
+            this.musicGain.gain.setValueAtTime(this.musicVolume, this.audioContext.currentTime);
+        }
+    }
+
+    /**
+     * Set SFX volume (0-1)
+     */
+    setSFXVolume(volume) {
+        this.sfxVolume = Math.max(0, Math.min(1, volume));
+        if (this.sfxGain) {
+            this.sfxGain.gain.setValueAtTime(this.sfxVolume, this.audioContext.currentTime);
+        }
+    }
+
+    /**
+     * Toggle mute
+     */
+    toggleMute() {
+        this.enabled = !this.enabled;
+        if (this.masterGain) {
+            this.masterGain.gain.setValueAtTime(
+                this.enabled ? 1 : 0,
+                this.audioContext.currentTime
+            );
+        }
+        return this.enabled;
+    }
+
+    /**
+     * Apply glitch effect to audio (0-5 intensity)
+     */
+    setGlitchLevel(level) {
+        this.glitchLevel = level;
+        // Glitch effects would modulate existing audio
+        // For now, just store the level for future use
+    }
+}
+
 // === GAME CLASS ===
 class Game {
     constructor() {
@@ -3894,6 +4700,14 @@ class Game {
             fastestWin: 0,
             perfectRounds: 0
         };
+
+        // Audio System
+        this.audio = new AudioManager();
+
+        // Tutorial System
+        this.tutorialActive = false;
+        this.tutorialStep = 0;
+        this.tutorialCompleted = false;
 
         this.init();
     }
@@ -5582,6 +6396,9 @@ class Game {
         this.hideMainMenu();
         this.resetGame();
 
+        // Initialize audio (requires user interaction)
+        this.audio.init();
+
         // Start with intro sequence
         document.body.classList.add('intro-phase');
         this.inIntroSequence = true;
@@ -5590,6 +6407,11 @@ class Game {
         // Show only table and therapist
         this.sessionStartTime = Date.now();
         this.startSessionTimer();
+
+        // Play ambient drone for atmosphere
+        setTimeout(() => {
+            this.audio.playAmbientDrone(5, 90);
+        }, 500);
 
         // Start intro dialogue after a moment
         setTimeout(() => {
@@ -5701,7 +6523,145 @@ class Game {
             this.log("La sessione di gioco inizia...");
             this.updateUI();
             this.checkPhaseProgression();
+
+            // Start tutorial if first time playing
+            const tutorialSeen = localStorage.getItem('neveTutorialCompleted');
+            if (!tutorialSeen) {
+                setTimeout(() => this.startTutorial(), 1000);
+            }
         }, 1500);
+    }
+
+    // === TUTORIAL SYSTEM ===
+    startTutorial() {
+        this.tutorialActive = true;
+        this.tutorialStep = 0;
+        this.showTutorialStep();
+    }
+
+    showTutorialStep() {
+        const steps = [
+            {
+                title: "Benvenuto",
+                text: "Questa è la tua mano di carte. Ogni carta rappresenta un frammento della psiche di Neve.",
+                highlight: '.player-hand',
+                position: 'bottom'
+            },
+            {
+                title: "Giocare una Carta",
+                text: "Trascina una carta dalla tua mano in uno slot vuoto del tuo campo per giocarla. Alcune carte richiedono un sacrificio (🩸).",
+                highlight: '.player-field',
+                position: 'top',
+                requireAction: 'playCard'
+            },
+            {
+                title: "Attaccare",
+                text: "Al termine del tuo turno, le tue carte attaccheranno le carte avversarie o direttamente il Dr. Lumen. Clicca 'TERMINA TURNO' quando sei pronto.",
+                highlight: '.end-turn-btn',
+                position: 'left',
+                requireAction: 'endTurn'
+            },
+            {
+                title: "Stabilità e Frammenti",
+                text: "Monitora la tua Stabilità (❤️) e i Frammenti di Memoria (💎). Se la Stabilità raggiunge 0, la sessione finisce.",
+                highlight: '.player-stats',
+                position: 'right'
+            },
+            {
+                title: "Tutorial Completato!",
+                text: "Hai imparato le basi. Ma ricorda: in questa sessione, nulla è come sembra. La verità si nasconde oltre la superficie...",
+                highlight: null,
+                position: 'center'
+            }
+        ];
+
+        const step = steps[this.tutorialStep];
+        if (!step) {
+            this.endTutorial();
+            return;
+        }
+
+        // Create or update tutorial overlay
+        let overlay = document.querySelector('.tutorial-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'tutorial-overlay';
+            document.body.appendChild(overlay);
+        }
+
+        // Remove previous highlights
+        document.querySelectorAll('.tutorial-highlight').forEach(el => {
+            el.classList.remove('tutorial-highlight');
+        });
+
+        // Add highlight to target element
+        if (step.highlight) {
+            const target = document.querySelector(step.highlight);
+            if (target) {
+                target.classList.add('tutorial-highlight');
+            }
+        }
+
+        // Create tutorial popup
+        overlay.innerHTML = `
+            <div class="tutorial-popup tutorial-${step.position}">
+                <div class="tutorial-header">
+                    <h3 class="tutorial-title">${step.title}</h3>
+                    <div class="tutorial-progress">${this.tutorialStep + 1} / ${steps.length}</div>
+                </div>
+                <p class="tutorial-text">${step.text}</p>
+                ${!step.requireAction ? `
+                    <button class="tutorial-next-btn">
+                        ${this.tutorialStep < steps.length - 1 ? 'Avanti →' : 'Inizia Gioco!'}
+                    </button>
+                ` : `
+                    <p class="tutorial-action-hint">Completa l'azione per continuare</p>
+                `}
+            </div>
+        `;
+
+        overlay.classList.add('visible');
+
+        // Handle next button
+        const nextBtn = overlay.querySelector('.tutorial-next-btn');
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                this.tutorialStep++;
+                this.showTutorialStep();
+            });
+        }
+
+        // Store required action for this step
+        this.tutorialRequiredAction = step.requireAction || null;
+    }
+
+    advanceTutorialIfNeeded(action) {
+        if (!this.tutorialActive) return;
+        if (this.tutorialRequiredAction === action) {
+            this.tutorialStep++;
+            this.tutorialRequiredAction = null;
+            setTimeout(() => this.showTutorialStep(), 500);
+        }
+    }
+
+    endTutorial() {
+        this.tutorialActive = false;
+        this.tutorialCompleted = true;
+        localStorage.setItem('neveTutorialCompleted', 'true');
+
+        // Remove tutorial overlay
+        const overlay = document.querySelector('.tutorial-overlay');
+        if (overlay) {
+            overlay.classList.remove('visible');
+            setTimeout(() => overlay.remove(), 500);
+        }
+
+        // Remove highlights
+        document.querySelectorAll('.tutorial-highlight').forEach(el => {
+            el.classList.remove('tutorial-highlight');
+        });
+
+        this.log("[ Tutorial completato! ]", "meta");
     }
 
     resetGame() {
@@ -5739,6 +6699,7 @@ class Game {
         const card = this.createRandomCard();
         this.playerHand.push(card);
         this.log(`Hai pescato: ${card.name}`);
+        this.audio.playCardDraw();
         this.updateUI();
     }
 
@@ -7741,6 +8702,7 @@ document.addEventListener('DOMContentLoaded', () => {
     game = new Game();
     window.game = game; // For debugging
 });
-    </script>
+
+</script>
 </body>
 </html>
