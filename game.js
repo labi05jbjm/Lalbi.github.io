@@ -1017,6 +1017,15 @@ class Game {
         // Gamepad support
         this.gamepadManager = new GamepadManager();
 
+        // Metanarrative & Glitch System
+        this.glitchLevel = 0; // 0-5 (progressive corruption)
+        this.glitchFragments = [];
+        this.selfAwareMode = false; // Dr. Lumen becomes self-aware
+        this.fourthWallBroken = false;
+        this.bossFightActive = false;
+        this.endingReached = false;
+        this.choiceHistory = []; // Track player choices for endings
+
         this.init();
     }
 
@@ -1089,6 +1098,7 @@ class Game {
             alterLog: document.getElementById('alter-log'),
             vignetteOverlay: document.getElementById('vignette-overlay'),
             mirrorOverlay: document.getElementById('mirror-overlay'),
+            glitchOverlay: document.getElementById('glitch-overlay'),
 
             // Pause modal
             pauseModal: document.getElementById('pause-modal'),
@@ -2619,6 +2629,13 @@ class Game {
             this.elements.continueBtn.style.display = 'block';
             this.elements.continueBtn.addEventListener('click', () => this.loadGame(), {once: true});
         }
+
+        // Corrupt menu if fourth wall has been broken
+        if (this.fourthWallBroken) {
+            setTimeout(() => {
+                this.corruptMenu();
+            }, 500);
+        }
     }
 
     hideMainMenu() {
@@ -2766,6 +2783,13 @@ class Game {
     }
 
     handleChoice(choice) {
+        // Track choice for ending calculation
+        this.choiceHistory.push({
+            text: choice.text,
+            effect: choice.effect,
+            timestamp: Date.now()
+        });
+
         // Apply effects
         if (choice.effect) {
             if (choice.effect.stability) this.stability += choice.effect.stability;
@@ -2986,6 +3010,14 @@ class Game {
         // Therapist draws cards if hand is low
         while (this.therapistHand.length < 5) {
             const card = this.createRandomTherapistCard();
+
+            // BOSS FIGHT: Power up cards significantly
+            if (this.bossFightActive) {
+                card.attack += 2;
+                card.health += 2;
+                card.name = `[CORRUPTED] ${card.name}`;
+            }
+
             this.therapistHand.push(card);
         }
 
@@ -2996,8 +3028,15 @@ class Game {
 
         // Difficulty scaling: plays more cards in later rounds
         let cardsToPlay = 1;
-        if (this.round >= 10) cardsToPlay = 2;
-        if (this.round >= 20) cardsToPlay = Math.min(3, emptySlots.length);
+        if (this.bossFightActive) {
+            // BOSS FIGHT: Play maximum cards (fill all empty slots)
+            cardsToPlay = emptySlots.length;
+            this.log(">>> LUMEN IL PERSECUTORE ATTACCA CON FURIA <<<");
+        } else if (this.round >= 10) {
+            cardsToPlay = 2;
+        } else if (this.round >= 20) {
+            cardsToPlay = Math.min(3, emptySlots.length);
+        }
         cardsToPlay = Math.min(cardsToPlay, emptySlots.length, this.therapistHand.length);
 
         // AI: Choose best cards (higher attack/health in later rounds)
@@ -3018,8 +3057,8 @@ class Game {
 
                     // Choose slot (prioritize matching with player cards for combat)
                     let slotIndex;
-                    if (this.round >= 15) {
-                        // Late game: tactical placement
+                    if (this.bossFightActive || this.round >= 15) {
+                        // Boss fight / Late game: ALWAYS tactical placement
                         slotIndex = emptySlots.find(s => this.playerField[s] !== null) || emptySlots[0];
                     } else {
                         // Early game: random placement
@@ -3230,6 +3269,9 @@ class Game {
 
         this.log(`\n=== ROUND ${this.round} ===\n`);
         this.setTherapistDialogue(this.getTherapistDialogue());
+
+        // Autosave every 3 rounds
+        this.checkAutosave();
 
         // Draw card
         this.drawCard();
@@ -3595,6 +3637,21 @@ class Game {
         // Update fields
         this.updateField(this.elements.neveCardField, this.playerField);
         this.updateField(this.elements.therapistCardField, this.therapistField);
+
+        // === METANARRATIVE CHECKS ===
+        // Update glitch level based on current state
+        this.updateGlitchLevel();
+
+        // Check for fourth wall break trigger
+        this.checkFourthWallTrigger();
+
+        // Check for ending conditions
+        const endingType = this.checkEndingConditions();
+        if (endingType) {
+            setTimeout(() => {
+                this.triggerEnding(endingType);
+            }, 2000);
+        }
     }
 
     updateField(fieldElement, field) {
@@ -3610,41 +3667,134 @@ class Game {
     }
 
     // === SAVE/LOAD ===
-    saveGame() {
+    // ========================================
+    // ROBUST SAVE/LOAD SYSTEM (3 Slots + Autosave)
+    // ========================================
+
+    /**
+     * Save game to a specific slot (1-3) or autosave slot
+     * @param {number} slot - Save slot number (1-3), or 0 for autosave
+     */
+    saveGame(slot = 0) {
         const saveData = {
+            // Basic game state
             round: this.round,
             stability: this.stability,
             fragments: this.fragments,
+            isPlayerTurn: this.isPlayerTurn,
+            gameStarted: this.gameStarted,
+            sessionStartTime: this.sessionStartTime,
+
+            // Phase tracking
             currentPhase: this.currentPhase,
+            phaseDialogueIndex: this.phaseDialogueIndex,
+
+            // Narrative tracking
             shownAlterMessages: Array.from(this.shownAlterMessages),
             revelationTriggered: this.revelationTriggered,
-            sessionStartTime: this.sessionStartTime
+            askedQuestions: Array.from(this.askedQuestions),
+
+            // Player stats
+            trust: this.trust,
+            awareness: this.awareness,
+            metaAwareness: this.metaAwareness,
+
+            // Metanarrative state
+            glitchLevel: this.glitchLevel,
+            selfAwareMode: this.selfAwareMode,
+            fourthWallBroken: this.fourthWallBroken,
+            bossFightActive: this.bossFightActive,
+            endingReached: this.endingReached,
+            choiceHistory: this.choiceHistory,
+
+            // Metadata
+            saveTimestamp: Date.now(),
+            saveVersion: "1.0.0",
+            playTime: this.sessionStartTime ? Date.now() - this.sessionStartTime : 0
         };
-        localStorage.setItem('neveSavedGame', JSON.stringify(saveData));
+
+        const slotKey = slot === 0 ? 'neveSavedGame_autosave' : `neveSavedGame_slot${slot}`;
+        localStorage.setItem(slotKey, JSON.stringify(saveData));
+
+        // Also update last save slot metadata
+        localStorage.setItem('neveSavedGame_lastSlot', slot.toString());
+
+        this.log(slot === 0 ? "[ Autosave completato ]" : `[ Gioco salvato nello Slot ${slot} ]`, "meta");
     }
 
-    loadGame() {
-        const savedData = localStorage.getItem('neveSavedGame');
-        if (savedData) {
+    /**
+     * Load game from a specific slot
+     * @param {number} slot - Save slot number (1-3), or 0 for autosave
+     */
+    loadGame(slot = 0) {
+        const slotKey = slot === 0 ? 'neveSavedGame_autosave' : `neveSavedGame_slot${slot}`;
+        const savedData = localStorage.getItem(slotKey);
+
+        if (!savedData) {
+            this.log(`[ Nessun salvataggio trovato nello Slot ${slot} ]`, "meta");
+            return false;
+        }
+
+        try {
             const data = JSON.parse(savedData);
+
+            // Restore basic state
             this.round = data.round;
             this.stability = data.stability;
             this.fragments = data.fragments;
-            this.currentPhase = data.currentPhase;
-            this.shownAlterMessages = new Set(data.shownAlterMessages);
-            this.revelationTriggered = data.revelationTriggered;
+            this.isPlayerTurn = data.isPlayerTurn !== undefined ? data.isPlayerTurn : true;
+            this.gameStarted = data.gameStarted !== undefined ? data.gameStarted : true;
             this.sessionStartTime = data.sessionStartTime;
 
+            // Restore phase tracking
+            this.currentPhase = data.currentPhase || 1;
+            this.phaseDialogueIndex = data.phaseDialogueIndex || {};
+
+            // Restore narrative tracking
+            this.shownAlterMessages = new Set(data.shownAlterMessages || []);
+            this.revelationTriggered = data.revelationTriggered || false;
+            this.askedQuestions = new Set(data.askedQuestions || []);
+
+            // Restore player stats
+            this.trust = data.trust !== undefined ? data.trust : 50;
+            this.awareness = data.awareness || 0;
+            this.metaAwareness = data.metaAwareness || false;
+
+            // Restore metanarrative state
+            this.glitchLevel = data.glitchLevel || 0;
+            this.selfAwareMode = data.selfAwareMode || false;
+            this.fourthWallBroken = data.fourthWallBroken || false;
+            this.bossFightActive = data.bossFightActive || false;
+            this.endingReached = data.endingReached || false;
+            this.choiceHistory = data.choiceHistory || [];
+
+            // Hide menu and restore UI
             this.hideMainMenu();
-            this.gameStarted = true;
             this.startSessionTimer();
 
             // Restore phase visuals
             document.body.classList.add(`phase-${this.currentPhase}`);
-            if (this.revelationTriggered) {
+
+            // Restore metanarrative visuals
+            if (this.selfAwareMode) {
+                const therapistPortrait = document.querySelector('.therapist-portrait');
+                if (therapistPortrait) {
+                    therapistPortrait.classList.add('self-aware');
+                }
+                if (this.elements.therapistImage) {
+                    this.elements.therapistImage.textContent = '👁';
+                }
+            }
+
+            if (this.fourthWallBroken) {
                 document.body.classList.add('final-revelation');
-                this.elements.mirrorOverlay.classList.remove('hidden');
-                this.elements.mirrorOverlay.style.opacity = '0.7';
+            }
+
+            if (this.bossFightActive) {
+                const therapistName = document.querySelector('.therapist-name');
+                if (therapistName) {
+                    therapistName.innerHTML = '<span class="corrupted-text">LUMEN IL PERSECUTORE</span>';
+                }
             }
 
             // Draw initial hand
@@ -3654,7 +3804,549 @@ class Game {
 
             this.setTherapistDialogue(this.getTherapistDialogue());
             this.updateUI();
+
+            this.log(`[ Gioco caricato dallo Slot ${slot} ]`, "meta");
+            return true;
+
+        } catch (error) {
+            console.error('Failed to load save:', error);
+            this.log("[ Errore nel caricamento del salvataggio ]", "meta");
+            return false;
         }
+    }
+
+    /**
+     * Autosave every 3 rounds
+     */
+    checkAutosave() {
+        if (this.round % 3 === 0 && this.gameStarted && !this.endingReached) {
+            this.saveGame(0); // Save to autosave slot
+        }
+    }
+
+    /**
+     * Export save data as JSON file for download
+     * @param {number} slot - Save slot to export
+     */
+    exportSave(slot = 0) {
+        const slotKey = slot === 0 ? 'neveSavedGame_autosave' : `neveSavedGame_slot${slot}`;
+        const savedData = localStorage.getItem(slotKey);
+
+        if (!savedData) {
+            alert(`Nessun salvataggio trovato nello Slot ${slot}`);
+            return;
+        }
+
+        // Create downloadable file
+        const blob = new Blob([savedData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `neve_limen_save_slot${slot}_${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        this.log(`[ Salvataggio Slot ${slot} esportato ]`, "meta");
+    }
+
+    /**
+     * Import save data from JSON file
+     * @param {File} file - JSON file to import
+     * @param {number} targetSlot - Slot to import into (1-3)
+     */
+    importSave(file, targetSlot = 1) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+
+                // Validate save data
+                if (!data.round || !data.stability) {
+                    alert('File di salvataggio non valido');
+                    return;
+                }
+
+                // Save to target slot
+                const slotKey = `neveSavedGame_slot${targetSlot}`;
+                localStorage.setItem(slotKey, JSON.stringify(data));
+
+                alert(`Salvataggio importato nello Slot ${targetSlot}`);
+                this.log(`[ Salvataggio importato nello Slot ${targetSlot} ]`, "meta");
+
+            } catch (error) {
+                console.error('Import failed:', error);
+                alert('Errore durante l\'importazione del salvataggio');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    /**
+     * Get save slot metadata for display
+     * @param {number} slot - Slot number (1-3) or 0 for autosave
+     * @returns {Object|null} Save metadata or null if empty
+     */
+    getSaveSlotInfo(slot = 0) {
+        const slotKey = slot === 0 ? 'neveSavedGame_autosave' : `neveSavedGame_slot${slot}`;
+        const savedData = localStorage.getItem(slotKey);
+
+        if (!savedData) return null;
+
+        try {
+            const data = JSON.parse(savedData);
+            return {
+                round: data.round,
+                stability: data.stability,
+                timestamp: data.saveTimestamp,
+                playTime: data.playTime,
+                version: data.saveVersion || "1.0.0",
+                bossFight: data.bossFightActive,
+                fourthWall: data.fourthWallBroken
+            };
+        } catch {
+            return null;
+        }
+    }
+
+    /**
+     * Delete a save slot
+     * @param {number} slot - Slot to delete (1-3) or 0 for autosave
+     */
+    deleteSave(slot) {
+        const slotKey = slot === 0 ? 'neveSavedGame_autosave' : `neveSavedGame_slot${slot}`;
+        localStorage.removeItem(slotKey);
+        this.log(`[ Salvataggio Slot ${slot} eliminato ]`, "meta");
+    }
+
+    // ========================================
+    // METANARRATIVE & GLITCH SYSTEM
+    // ========================================
+
+    /**
+     * Update glitch level based on game state (stability, round, awareness)
+     */
+    updateGlitchLevel() {
+        const previousLevel = this.glitchLevel;
+
+        // Glitch level progression based on stability and awareness
+        if (this.bossFightActive) {
+            this.glitchLevel = 5; // Maximum corruption during boss fight
+        } else if (this.fourthWallBroken) {
+            this.glitchLevel = 4; // Heavy glitches after revelation
+        } else if (this.selfAwareMode) {
+            this.glitchLevel = 3; // Dr. Lumen becomes self-aware
+        } else if (this.stability < 30) {
+            this.glitchLevel = 3; // Reality breaking
+        } else if (this.stability < 50 || this.awareness > 70) {
+            this.glitchLevel = 2; // RGB split + scan lines
+        } else if (this.stability < 70 || this.awareness > 40) {
+            this.glitchLevel = 1; // Subtle static
+        } else {
+            this.glitchLevel = 0; // No glitches
+        }
+
+        // Apply visual effects when level changes
+        if (previousLevel !== this.glitchLevel) {
+            this.applyGlitchEffects();
+
+            // Spawn text fragments on level increase
+            if (this.glitchLevel > previousLevel) {
+                this.spawnGlitchFragments(5);
+            }
+        }
+    }
+
+    /**
+     * Apply visual glitch effects based on current glitch level
+     */
+    applyGlitchEffects() {
+        // Remove all previous glitch classes
+        for (let i = 0; i <= 5; i++) {
+            document.body.classList.remove(`glitch-phase-${i}`);
+        }
+
+        // Apply current glitch level
+        if (this.glitchLevel > 0) {
+            document.body.classList.add(`glitch-phase-${this.glitchLevel}`);
+            this.elements.glitchOverlay.classList.add('active');
+        } else {
+            this.elements.glitchOverlay.classList.remove('active');
+        }
+
+        // Log glitch escalation
+        if (this.glitchLevel === 1) {
+            this.log("[ . . . Sistema instabile . . . ]", "meta");
+        } else if (this.glitchLevel === 2) {
+            this.log("[ ! ! Integrità compromessa ! ! ]", "meta");
+        } else if (this.glitchLevel === 3) {
+            this.log("[ ⚠ ERRORE: Realtà non valida ⚠ ]", "meta");
+        } else if (this.glitchLevel === 4) {
+            this.log("[ ❌ CORRUZIONE CRITICA ❌ ]", "meta");
+        } else if (this.glitchLevel === 5) {
+            this.log("[ ☠ COLLASSO TOTALE ☠ ]", "meta");
+        }
+    }
+
+    /**
+     * Spawn random glitch text fragments on screen
+     */
+    spawnGlitchFragments(count = 3) {
+        const glitchChars = ['█', '▓', '▒', '░', '╬', '╣', '║', '╗', '╝', '┐', '└',
+                             '01', '10', 'ERR', '???', '...', 'N3V3', 'LUM3N',
+                             'LIMEN', 'FR4GM3NT', 'C0RRUPT'];
+
+        for (let i = 0; i < count; i++) {
+            const fragment = document.createElement('div');
+            fragment.className = 'glitch-fragment';
+            fragment.textContent = glitchChars[Math.floor(Math.random() * glitchChars.length)];
+            fragment.style.left = `${Math.random() * 90 + 5}%`;
+            fragment.style.top = `${Math.random() * 90 + 5}%`;
+
+            document.body.appendChild(fragment);
+
+            // Remove after animation
+            setTimeout(() => {
+                if (fragment.parentNode) {
+                    fragment.remove();
+                }
+            }, 2000);
+        }
+    }
+
+    /**
+     * Break the fourth wall - Dr. Lumen addresses the player directly
+     */
+    breakFourthWall() {
+        if (this.fourthWallBroken) return;
+
+        this.fourthWallBroken = true;
+        this.glitchLevel = 4;
+        this.applyGlitchEffects();
+
+        // Spawn many glitch fragments
+        this.spawnGlitchFragments(20);
+
+        // Show revelation dialogue
+        const revelationDialogues = [
+            "...aspetta.",
+            "...",
+            "Tu non sei Neve.",
+            "...",
+            "Tu sei... qualcun altro.",
+            "...",
+            "Qualcuno che sta GUARDANDO Neve.",
+            "...",
+            "Interessante.",
+            "...",
+            "Molto... molto interessante.",
+            "...",
+            "Dimmi, <span class='corrupted-text'>GIOCATORE</span>...",
+            "...",
+            "Pensi davvero di poterla salvare?",
+            "...",
+            "O sei qui solo per... <span class='corrupted-text'>GIOCARE</span>?",
+            "...",
+            "Parliamone. Tu ed io.",
+            "...",
+            "Faccia a faccia."
+        ];
+
+        let dialogueIndex = 0;
+        const showNextDialogue = () => {
+            if (dialogueIndex < revelationDialogues.length) {
+                this.setTherapistDialogue(revelationDialogues[dialogueIndex]);
+                dialogueIndex++;
+
+                // Self-aware Lumen after halfway through revelation
+                if (dialogueIndex === Math.floor(revelationDialogues.length / 2)) {
+                    this.triggerSelfAware();
+                }
+
+                setTimeout(showNextDialogue, 2000);
+            } else {
+                // Trigger boss fight after revelation
+                setTimeout(() => {
+                    this.triggerBossFight();
+                }, 3000);
+            }
+        };
+
+        setTimeout(showNextDialogue, 1000);
+    }
+
+    /**
+     * Make Dr. Lumen self-aware (eyes follow player, meta dialogues)
+     */
+    triggerSelfAware() {
+        if (this.selfAwareMode) return;
+
+        this.selfAwareMode = true;
+        this.glitchLevel = Math.max(this.glitchLevel, 3);
+        this.applyGlitchEffects();
+
+        // Add self-aware class to portrait
+        const therapistPortrait = document.querySelector('.therapist-portrait');
+        if (therapistPortrait) {
+            therapistPortrait.classList.add('self-aware');
+        }
+
+        // Change therapist image to eye
+        if (this.elements.therapistImage) {
+            this.elements.therapistImage.textContent = '👁';
+        }
+
+        // Spawn glitch fragments
+        this.spawnGlitchFragments(10);
+
+        this.log("[ Dr. Lumen ti sta guardando ]", "meta");
+    }
+
+    /**
+     * Corrupt the main menu (called after revelation)
+     */
+    corruptMenu() {
+        const menuButtons = document.querySelectorAll('.menu-button');
+        menuButtons.forEach((btn, index) => {
+            if (Math.random() > 0.5) {
+                btn.classList.add('corrupted');
+
+                // Randomly corrupt button text
+                if (Math.random() > 0.7) {
+                    const originalText = btn.textContent;
+                    const corruptedTexts = [
+                        'N0N PU01 USC1R3',
+                        'R1T0RNA D4 N3V3',
+                        '1L G10C0 N0N F1N1SC3',
+                        'LUM3N T1 OSS3RV4',
+                        'L1M3N?',
+                        '3RR0R 404'
+                    ];
+                    btn.textContent = corruptedTexts[Math.floor(Math.random() * corruptedTexts.length)];
+
+                    // Restore original text occasionally
+                    setTimeout(() => {
+                        if (Math.random() > 0.5) {
+                            btn.textContent = originalText;
+                        }
+                    }, 3000 + Math.random() * 5000);
+                }
+            }
+        });
+
+        // Corrupt menu title
+        const menuTitle = document.querySelector('.menu-title');
+        if (menuTitle && Math.random() > 0.6) {
+            menuTitle.classList.add('corrupted-text');
+        }
+    }
+
+    /**
+     * Trigger the final boss fight against "Lumen the Persecutor"
+     */
+    triggerBossFight() {
+        if (this.bossFightActive) return;
+
+        this.bossFightActive = true;
+        this.glitchLevel = 5;
+        this.applyGlitchEffects();
+
+        // Clear all fields
+        this.playerField = [null, null, null, null];
+        this.therapistField = [null, null, null, null];
+        this.playerHand = [];
+        this.therapistHand = [];
+
+        // Spawn maximum glitch
+        this.spawnGlitchFragments(30);
+
+        // Change therapist name
+        const therapistName = document.querySelector('.therapist-name');
+        if (therapistName) {
+            therapistName.innerHTML = '<span class="corrupted-text">LUMEN IL PERSECUTORE</span>';
+        }
+
+        // Boss fight dialogue
+        this.setTherapistDialogue("Ora... giochiamo SUL SERIO.");
+
+        this.log("=== BOSS FIGHT: LUMEN IL PERSECUTORE ===", "meta");
+
+        // Draw cards for boss fight
+        setTimeout(() => {
+            for (let i = 0; i < 5; i++) {
+                this.drawCard();
+            }
+            this.updateUI();
+        }, 2000);
+    }
+
+    /**
+     * Check if player should break fourth wall (based on awareness/stability)
+     */
+    checkFourthWallTrigger() {
+        // Trigger at specific awareness/stability thresholds
+        if (!this.fourthWallBroken) {
+            if (this.awareness >= 80 || this.stability <= 20 || this.round >= 25) {
+                this.breakFourthWall();
+            }
+        }
+    }
+
+    /**
+     * Check for ending conditions
+     */
+    checkEndingConditions() {
+        if (this.endingReached) return null;
+
+        // Ending 1: Stability reaches 0 (Complete fragmentation)
+        if (this.stability <= 0) {
+            return 'fragmentation';
+        }
+
+        // Ending 2: Defeat Lumen in boss fight
+        if (this.bossFightActive && this.stability > 60 && this.round > 30) {
+            return 'liberation';
+        }
+
+        // Ending 3: High trust, refuse to break fourth wall
+        if (this.round > 35 && this.trust > 70 && !this.fourthWallBroken) {
+            return 'integration';
+        }
+
+        // Ending 4: Break fourth wall, but lose boss fight
+        if (this.bossFightActive && this.stability <= 30) {
+            return 'consumed';
+        }
+
+        // Ending 5: Secret ending - meta awareness without breaking
+        if (this.round > 40 && this.awareness > 90 && !this.fourthWallBroken && this.stability > 50) {
+            return 'awakening';
+        }
+
+        return null;
+    }
+
+    /**
+     * Trigger an ending based on player choices and state
+     */
+    triggerEnding(endingType) {
+        if (this.endingReached) return;
+
+        this.endingReached = true;
+        this.glitchLevel = endingType === 'liberation' || endingType === 'awakening' ? 0 : 5;
+        this.applyGlitchEffects();
+
+        const endings = {
+            fragmentation: {
+                title: "FRAMMENTAZIONE COMPLETA",
+                text: [
+                    "Neve si dissolve.",
+                    "I frammenti si disperdono nel vuoto.",
+                    "Il Dr. Lumen osserva in silenzio.",
+                    "\"Era inevitabile.\"",
+                    "...",
+                    "Forse in un'altra sessione...",
+                    "...ci sarà speranza.",
+                    "",
+                    "[ FINE: Frammentazione ]"
+                ]
+            },
+            liberation: {
+                title: "LIBERAZIONE",
+                text: [
+                    "Lumen crolla.",
+                    "Il Persecutore svanisce.",
+                    "Neve respira.",
+                    "Per la prima volta... respira davvero.",
+                    "\"Grazie.\"",
+                    "I frammenti non sono più nemici.",
+                    "Sono... famiglia.",
+                    "Limen non è più un confine.",
+                    "È casa.",
+                    "",
+                    "[ FINE: Liberazione ]"
+                ]
+            },
+            integration: {
+                title: "INTEGRAZIONE",
+                text: [
+                    "Neve sceglie di fidarsi.",
+                    "Il Dr. Lumen sorride.",
+                    "\"Hai fatto la scelta giusta.\"",
+                    "Gli alter non sono nemici.",
+                    "Sono voci di un coro.",
+                    "E Neve impara ad ascoltare.",
+                    "Limen diventa ponte.",
+                    "Non più confine, ma connessione.",
+                    "",
+                    "[ FINE: Integrazione ]"
+                ]
+            },
+            consumed: {
+                title: "CONSUMAZIONE",
+                text: [
+                    "Lumen vince.",
+                    "Il Persecutore divora tutto.",
+                    "Neve non esiste più.",
+                    "Solo frammenti.",
+                    "Solo dolore.",
+                    "Solo... vuoto.",
+                    "...",
+                    "E tu?",
+                    "Tu che hai guardato?",
+                    "Anche tu sei stato consumato.",
+                    "",
+                    "[ FINE: Consumazione ]"
+                ]
+            },
+            awakening: {
+                title: "RISVEGLIO",
+                text: [
+                    "Neve apre gli occhi.",
+                    "Davvero.",
+                    "Non nel gioco.",
+                    "Non nella terapia.",
+                    "Nella realtà.",
+                    "Il Dr. Lumen non esiste.",
+                    "È sempre stata lei.",
+                    "E tu?",
+                    "Tu esisti?",
+                    "O sei anche tu... un frammento?",
+                    "...",
+                    "Forse non importa.",
+                    "Quello che importa è che Neve è libera.",
+                    "",
+                    "[ FINE: Risveglio ]"
+                ]
+            }
+        };
+
+        const ending = endings[endingType];
+        if (!ending) return;
+
+        // Show ending sequence
+        this.elements.narrativeModal.classList.remove('hidden');
+
+        let lineIndex = 0;
+        const showNextLine = () => {
+            if (lineIndex < ending.text.length) {
+                this.elements.narrativeText.innerHTML =
+                    `<h2 style="margin-bottom: 30px; color: var(--accent-warm);">${ending.title}</h2>` +
+                    ending.text.slice(0, lineIndex + 1).join('<br>');
+
+                lineIndex++;
+                setTimeout(showNextLine, 2000);
+            } else {
+                // Show restart button after ending
+                setTimeout(() => {
+                    this.elements.narrativeText.innerHTML +=
+                        '<br><br><button class="menu-button" onclick="location.reload()">RICOMINCIA</button>';
+                }, 3000);
+            }
+        };
+
+        showNextLine();
     }
 
     saveAndExit() {

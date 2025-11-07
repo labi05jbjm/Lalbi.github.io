@@ -1971,3 +1971,396 @@ body.game-started #event-log {
             0 0 80px rgba(212, 165, 116, 0.3);
     }
 }
+
+/* ================================================
+   METANARRATIVE GLITCH SYSTEM (5 Progressive Phases)
+   ================================================ */
+
+/* Glitch Overlay Container */
+.glitch-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 900;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.glitch-overlay.active {
+    opacity: 1;
+}
+
+/* Phase 1: Subtle static noise */
+body.glitch-phase-1 .glitch-overlay {
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            rgba(255, 255, 255, 0.02) 1px,
+            transparent 2px,
+            transparent 4px
+        );
+    animation: static-noise-1 0.1s steps(1) infinite;
+}
+
+@keyframes static-noise-1 {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.35; }
+}
+
+/* Phase 2: RGB split + scan lines */
+body.glitch-phase-2 {
+    animation: rgb-split-subtle 3s ease-in-out infinite;
+}
+
+@keyframes rgb-split-subtle {
+    0%, 100% {
+        text-shadow:
+            0.5px 0 0 rgba(255, 0, 0, 0.3),
+            -0.5px 0 0 rgba(0, 255, 255, 0.3);
+    }
+    50% {
+        text-shadow:
+            1px 0 0 rgba(255, 0, 0, 0.5),
+            -1px 0 0 rgba(0, 255, 255, 0.5);
+    }
+}
+
+body.glitch-phase-2 .glitch-overlay {
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.1) 0px,
+            transparent 1px,
+            transparent 2px
+        );
+    animation: scan-lines 6s linear infinite;
+}
+
+@keyframes scan-lines {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+}
+
+/* Phase 3: Screen shake + distortion */
+body.glitch-phase-3 {
+    animation: screen-shake-glitch 8s ease-in-out infinite;
+}
+
+@keyframes screen-shake-glitch {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+        filter: contrast(1.1) saturate(0.9);
+    }
+    10% {
+        transform: translate(-2px, 1px) rotate(0.2deg);
+        filter: contrast(1.15) saturate(0.85);
+    }
+    20% {
+        transform: translate(1px, -2px) rotate(-0.2deg);
+    }
+    30% {
+        transform: translate(-1px, -1px) rotate(0.1deg);
+        filter: contrast(1.2) saturate(0.8);
+    }
+    40% {
+        transform: translate(2px, 2px) rotate(-0.15deg);
+    }
+    50% {
+        transform: translate(-2px, 1px) rotate(0.2deg);
+        filter: contrast(1.3) saturate(0.75);
+    }
+}
+
+body.glitch-phase-3 .glitch-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            rgba(255, 0, 0, 0.1) 2px,
+            transparent 4px,
+            rgba(0, 255, 255, 0.1) 6px,
+            transparent 8px
+        );
+    animation: rgb-distortion 0.2s steps(2) infinite;
+}
+
+@keyframes rgb-distortion {
+    0% { transform: translateX(0); }
+    33% { transform: translateX(-2px); }
+    66% { transform: translateX(2px); }
+}
+
+/* Phase 4: Reality breaking (heavy glitches) */
+body.glitch-phase-4 {
+    animation: reality-break-heavy 2s ease-in-out infinite;
+}
+
+@keyframes reality-break-heavy {
+    0%, 90%, 100% {
+        filter: contrast(1.2) saturate(0.8) brightness(0.95);
+        transform: translate(0, 0);
+    }
+    5% {
+        filter: contrast(2) saturate(0.3) brightness(1.2) hue-rotate(-30deg);
+        transform: translate(-5px, 2px) skewX(2deg);
+    }
+    10% {
+        filter: contrast(0.8) saturate(1.5) brightness(0.7) hue-rotate(15deg);
+        transform: translate(3px, -3px) skewX(-3deg);
+    }
+    15% {
+        filter: contrast(1.5) saturate(0.5) brightness(1.1);
+        transform: translate(0, 0);
+    }
+}
+
+body.glitch-phase-4 .glitch-overlay {
+    opacity: 1;
+}
+
+body.glitch-phase-4 .glitch-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.1) 0px,
+            transparent 2px,
+            rgba(0, 0, 0, 0.2) 4px,
+            transparent 6px
+        );
+    animation: glitch-bars 0.5s steps(3) infinite;
+    mix-blend-mode: overlay;
+}
+
+@keyframes glitch-bars {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100%); }
+}
+
+/* Phase 5: Complete corruption (boss fight phase) */
+body.glitch-phase-5 {
+    animation: total-corruption 1s ease-in-out infinite;
+}
+
+@keyframes total-corruption {
+    0%, 100% {
+        filter:
+            contrast(1.3)
+            saturate(0.6)
+            brightness(0.9)
+            hue-rotate(-10deg);
+        transform: translate(0, 0);
+    }
+    10% {
+        filter:
+            contrast(2.5)
+            saturate(0.2)
+            brightness(1.3)
+            hue-rotate(-40deg)
+            invert(0.1);
+        transform: translate(-8px, 4px) skewX(5deg);
+    }
+    20% {
+        filter:
+            contrast(0.5)
+            saturate(2)
+            brightness(0.6)
+            hue-rotate(30deg)
+            invert(0.2);
+        transform: translate(6px, -5px) skewX(-4deg);
+    }
+    30% {
+        filter:
+            contrast(1.8)
+            saturate(0.4)
+            brightness(1.1)
+            hue-rotate(-20deg);
+        transform: translate(-3px, 2px) skewY(2deg);
+    }
+    40% {
+        filter:
+            contrast(1.2)
+            saturate(0.7)
+            brightness(0.85);
+        transform: translate(0, 0);
+    }
+}
+
+body.glitch-phase-5 .glitch-overlay {
+    background:
+        repeating-linear-gradient(
+            45deg,
+            rgba(255, 0, 0, 0.1) 0px,
+            transparent 2px,
+            rgba(0, 255, 0, 0.1) 4px,
+            transparent 6px,
+            rgba(0, 0, 255, 0.1) 8px,
+            transparent 10px
+        );
+    animation: chromatic-aberration 0.1s steps(1) infinite;
+}
+
+@keyframes chromatic-aberration {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    50% { transform: translateX(3px); }
+    75% { transform: translateX(-2px); }
+}
+
+body.glitch-phase-5 .glitch-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at center,
+        transparent 0%,
+        rgba(138, 74, 58, 0.3) 100%
+    );
+    animation: vignette-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes vignette-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Corrupted text effect (for metanarrative dialogues) */
+.corrupted-text {
+    animation: text-corruption 0.3s steps(5) infinite;
+}
+
+@keyframes text-corruption {
+    0% {
+        text-shadow:
+            2px 0 0 rgba(255, 0, 0, 0.7),
+            -2px 0 0 rgba(0, 255, 255, 0.7);
+    }
+    20% {
+        text-shadow:
+            -2px 0 0 rgba(255, 0, 0, 0.7),
+            2px 0 0 rgba(0, 255, 255, 0.7);
+    }
+    40% {
+        text-shadow:
+            0 2px 0 rgba(255, 0, 0, 0.7),
+            0 -2px 0 rgba(0, 255, 255, 0.7);
+    }
+    60% {
+        text-shadow:
+            -2px -2px 0 rgba(255, 0, 0, 0.7),
+            2px 2px 0 rgba(0, 255, 255, 0.7);
+    }
+    80% {
+        text-shadow:
+            2px -2px 0 rgba(255, 0, 0, 0.7),
+            -2px 2px 0 rgba(0, 255, 255, 0.7);
+    }
+}
+
+/* Corrupted menu button */
+.menu-button.corrupted {
+    animation: button-corruption 0.5s steps(3) infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes button-corruption {
+    0% {
+        background: rgba(138, 74, 58, 0.9);
+        transform: translateX(0) skewX(0deg);
+    }
+    33% {
+        background: rgba(26, 20, 16, 0.9);
+        transform: translateX(-2px) skewX(2deg);
+    }
+    66% {
+        background: rgba(212, 165, 116, 0.3);
+        transform: translateX(2px) skewX(-2deg);
+    }
+}
+
+.menu-button.corrupted::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        rgba(255, 255, 255, 0.1) 1px,
+        transparent 2px
+    );
+    animation: scan-corrupted 2s linear infinite;
+}
+
+@keyframes scan-corrupted {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+/* Glitch text fragments (random characters appearing) */
+.glitch-fragment {
+    position: fixed;
+    font-family: monospace;
+    font-size: 14px;
+    color: rgba(212, 165, 116, 0.6);
+    pointer-events: none;
+    z-index: 950;
+    animation: fragment-appear 2s ease-out forwards;
+}
+
+@keyframes fragment-appear {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.8);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.8);
+    }
+}
+
+/* Self-aware Dr. Lumen eyes (following cursor) */
+.therapist-portrait.self-aware .portrait-img {
+    position: relative;
+    animation: eye-twitch 3s ease-in-out infinite;
+}
+
+@keyframes eye-twitch {
+    0%, 90%, 100% { transform: scale(1); }
+    93% { transform: scale(1.05) rotate(-2deg); }
+    96% { transform: scale(0.95) rotate(2deg); }
+}
+
+.therapist-portrait.self-aware .portrait-img::before {
+    content: '👁';
+    position: absolute;
+    font-size: 30px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: eye-glow 2s ease-in-out infinite;
+}
+
+@keyframes eye-glow {
+    0%, 100% {
+        filter: drop-shadow(0 0 5px rgba(212, 165, 116, 0.5));
+        opacity: 1;
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(212, 165, 116, 1));
+        opacity: 0.8;
+    }
+}
