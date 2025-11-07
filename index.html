@@ -69,17 +69,45 @@
 
     <!-- MAIN MENU -->
     <div id="main-menu" class="main-menu menu-overlay hidden">
-        <div class="menu-content">
-            <h1 class="menu-title">NEVE: LIMEN?</h1>
-            <p style="margin-bottom: 40px; font-style: italic; color: var(--text-muted);">"Il confine tra realtà e frammentazione"</p>
+        <!-- Picture Frame -->
+        <div class="menu-frame">
+            <div class="menu-content">
+                <h1 class="menu-title">NEVE: LIMEN?</h1>
+                <p style="margin-bottom: 40px; font-style: italic; color: var(--text-muted);">"Il confine tra realtà e frammentazione"</p>
 
-            <button id="new-game-btn" class="menu-button">NUOVA SESSIONE</button>
-            <button id="continue-btn" class="menu-button" style="display: none;">CONTINUA SESSIONE</button>
-            <button id="options-btn" class="menu-button">OPZIONI</button>
-            <button id="about-game-btn" class="menu-button">INFORMAZIONI</button>
+                <button id="new-game-btn" class="menu-button">NUOVA SESSIONE</button>
+                <button id="continue-btn" class="menu-button" style="display: none;">CONTINUA SESSIONE</button>
+                <button id="options-btn" class="menu-button">OPZIONI</button>
+                <button id="about-game-btn" class="menu-button">INFORMAZIONI</button>
 
-            <p style="margin-top: 40px; font-size: 12px; color: var(--text-muted);">
-                v1.0 | "Ogni identità è un limen"
+                <p style="margin-top: 40px; font-size: 12px; color: var(--text-muted);">
+                    v1.0 | "Ogni identità è un limen"
+                </p>
+            </div>
+        </div>
+
+        <!-- Museum Plaque (Credits) -->
+        <div class="menu-plaque">
+            <h3>Opera Interattiva Digitale</h3>
+            <p>"Neve: Limen?" - Un'esplorazione metanarrativa del Disturbo Dissociativo dell'Identità</p>
+            <div class="credits-row">
+                <span class="credits-label">Concept & Design</span>
+                <span class="credits-value">Psychological Horror Experience</span>
+            </div>
+            <div class="credits-row">
+                <span class="credits-label">Tecnica</span>
+                <span class="credits-value">JavaScript, HTML5, CSS3</span>
+            </div>
+            <div class="credits-row">
+                <span class="credits-label">Opere d'Arte</span>
+                <span class="credits-value">50 dipinti + 50 sculture classiche</span>
+            </div>
+            <div class="credits-row">
+                <span class="credits-label">Anno</span>
+                <span class="credits-value">2025</span>
+            </div>
+            <p style="margin-top: 15px; font-size: 10px; color: #666;">
+                Ispirato da Inscryption • Contiene temi psicologici intensi • Giocabile con gamepad o tastiera/mouse
             </p>
         </div>
     </div>
@@ -124,6 +152,18 @@
                     <input type="checkbox" id="high-contrast" style="margin-right: 10px;">
                     <span>Alto Contrasto</span>
                 </label>
+            </div>
+
+            <div style="text-align: left; margin: 30px 0;">
+                <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--text-muted);">🎮 Metodo di Input</label>
+                <select id="input-method-select" style="width: 100%; padding: 12px; background: rgba(26, 20, 16, 0.8); border: 2px solid var(--border-card); color: var(--text-light); border-radius: 4px; font-size: 14px;">
+                    <option value="auto">Auto (Rileva automaticamente)</option>
+                    <option value="keyboard-mouse">Tastiera e Mouse</option>
+                    <option value="gamepad">Gamepad (Xbox/PlayStation)</option>
+                </select>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">
+                    Il gamepad consente navigazione completa con D-Pad, stick analogico e pulsanti A/B.
+                </p>
             </div>
 
             <button id="close-options-btn" class="menu-button">CHIUDI</button>
@@ -317,6 +357,11 @@
                 <div id="alter-log" class="alter-log"></div>
             </div>
         </div>
+    </div>
+
+    <!-- Gamepad Indicator -->
+    <div id="gamepad-indicator" class="gamepad-indicator">
+        <span>Gamepad Attivo</span>
     </div>
 
     <script src="game.js"></script>

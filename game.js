@@ -553,6 +553,330 @@ const AlterMessages = {
     ]
 };
 
+// ===================================
+// GAMEPAD MANAGER
+// ===================================
+class GamepadManager {
+    constructor() {
+        this.enabled = false;
+        this.mode = 'auto'; // auto, keyboard-mouse, gamepad
+        this.gamepad = null;
+        this.lastUpdate = Date.now();
+        this.deadzone = 0.3;
+
+        // Button mapping (Xbox/PlayStation)
+        this.buttons = {
+            A: 0,        // A / Cross
+            B: 1,        // B / Circle
+            X: 2,        // X / Square
+            Y: 3,        // Y / Triangle
+            LB: 4,       // Left Bumper / L1
+            RB: 5,       // Right Bumper / R1
+            LT: 6,       // Left Trigger / L2
+            RT: 7,       // Right Trigger / R2
+            SELECT: 8,   // Back / Share
+            START: 9,    // Start / Options
+            L3: 10,      // Left Stick Click
+            R3: 11,      // Right Stick Click
+            UP: 12,      // D-Pad Up
+            DOWN: 13,    // D-Pad Down
+            LEFT: 14,    // D-Pad Left
+            RIGHT: 15    // D-Pad Right
+        };
+
+        // Axis mapping
+        this.axes = {
+            LEFT_X: 0,
+            LEFT_Y: 1,
+            RIGHT_X: 2,
+            RIGHT_Y: 3
+        };
+
+        // State tracking
+        this.buttonStates = {};
+        this.axisStates = {};
+        this.currentFocus = null;
+        this.focusableElements = [];
+
+        // Repeat handling for D-Pad
+        this.repeatDelay = 250; // ms before repeat starts
+        this.repeatRate = 150;  // ms between repeats
+        this.lastPress = {};
+        this.repeatTimers = {};
+
+        this.init();
+    }
+
+    init() {
+        // Listen for gamepad connection
+        window.addEventListener('gamepadconnected', (e) => {
+            console.log('Gamepad connected:', e.gamepad.id);
+            this.gamepad = e.gamepad;
+            this.updateIndicator(true);
+            if (this.mode === 'auto') {
+                this.enabled = true;
+            }
+        });
+
+        window.addEventListener('gamepaddisconnected', (e) => {
+            console.log('Gamepad disconnected');
+            this.gamepad = null;
+            this.updateIndicator(false);
+            if (this.mode === 'auto') {
+                this.enabled = false;
+            }
+        });
+
+        // Start polling loop
+        this.pollGamepad();
+    }
+
+    setMode(mode) {
+        this.mode = mode;
+        if (mode === 'gamepad') {
+            this.enabled = true;
+            this.updateIndicator(true);
+        } else if (mode === 'keyboard-mouse') {
+            this.enabled = false;
+            this.updateIndicator(false);
+        } else {
+            // auto mode
+            this.enabled = !!this.gamepad;
+            this.updateIndicator(!!this.gamepad);
+        }
+    }
+
+    updateIndicator(show) {
+        const indicator = document.getElementById('gamepad-indicator');
+        if (indicator) {
+            if (show) {
+                indicator.classList.add('active');
+            } else {
+                indicator.classList.remove('active');
+            }
+        }
+    }
+
+    pollGamepad() {
+        if (this.enabled && this.mode !== 'keyboard-mouse') {
+            const gamepads = navigator.getGamepads();
+            if (gamepads[0]) {
+                this.gamepad = gamepads[0];
+                this.update();
+            }
+        }
+
+        requestAnimationFrame(() => this.pollGamepad());
+    }
+
+    update() {
+        if (!this.enabled || !this.gamepad) return;
+
+        const now = Date.now();
+        if (now - this.lastUpdate < 16) return; // ~60fps
+        this.lastUpdate = now;
+
+        // Check buttons
+        this.gamepad.buttons.forEach((button, index) => {
+            const pressed = button.pressed || button.value > 0.5;
+            const wasPressed = this.buttonStates[index];
+
+            if (pressed && !wasPressed) {
+                this.onButtonDown(index);
+                this.lastPress[index] = now;
+
+                // Setup repeat for D-Pad
+                if (index >= 12 && index <= 15) {
+                    this.repeatTimers[index] = setTimeout(() => {
+                        this.startRepeat(index);
+                    }, this.repeatDelay);
+                }
+            } else if (!pressed && wasPressed) {
+                this.onButtonUp(index);
+                if (this.repeatTimers[index]) {
+                    clearTimeout(this.repeatTimers[index]);
+                    clearInterval(this.repeatTimers[index + '_interval']);
+                }
+            }
+
+            this.buttonStates[index] = pressed;
+        });
+
+        // Check axes (analog sticks)
+        this.gamepad.axes.forEach((value, index) => {
+            const deadzonedValue = Math.abs(value) > this.deadzone ? value : 0;
+            const wasValue = this.axisStates[index] || 0;
+
+            if (deadzonedValue !== 0 && wasValue === 0) {
+                this.onAxisMove(index, deadzonedValue);
+                this.lastPress[`axis_${index}`] = now;
+            } else if (deadzonedValue === 0 && wasValue !== 0) {
+                // Axis returned to center
+            }
+
+            this.axisStates[index] = deadzonedValue;
+        });
+    }
+
+    startRepeat(buttonIndex) {
+        this.repeatTimers[buttonIndex + '_interval'] = setInterval(() => {
+            this.onButtonDown(buttonIndex);
+        }, this.repeatRate);
+    }
+
+    onButtonDown(buttonIndex) {
+        // A button - Confirm/Select
+        if (buttonIndex === this.buttons.A) {
+            this.confirmAction();
+        }
+        // B button - Cancel/Back
+        else if (buttonIndex === this.buttons.B) {
+            this.cancelAction();
+        }
+        // D-Pad navigation
+        else if (buttonIndex === this.buttons.UP) {
+            this.navigate('up');
+        }
+        else if (buttonIndex === this.buttons.DOWN) {
+            this.navigate('down');
+        }
+        else if (buttonIndex === this.buttons.LEFT) {
+            this.navigate('left');
+        }
+        else if (buttonIndex === this.buttons.RIGHT) {
+            this.navigate('right');
+        }
+        // Start - Pause/Menu
+        else if (buttonIndex === this.buttons.START) {
+            this.togglePause();
+        }
+    }
+
+    onButtonUp(buttonIndex) {
+        // Button released
+    }
+
+    onAxisMove(axisIndex, value) {
+        const now = Date.now();
+        if (now - (this.lastPress[`axis_${axisIndex}`] || 0) < 200) return;
+
+        // Left stick Y axis - Up/Down navigation
+        if (axisIndex === this.axes.LEFT_Y) {
+            if (value < -0.5) {
+                this.navigate('up');
+            } else if (value > 0.5) {
+                this.navigate('down');
+            }
+        }
+        // Left stick X axis - Left/Right navigation
+        else if (axisIndex === this.axes.LEFT_X) {
+            if (value < -0.5) {
+                this.navigate('left');
+            } else if (value > 0.5) {
+                this.navigate('right');
+            }
+        }
+    }
+
+    updateFocusableElements() {
+        this.focusableElements = [];
+
+        // Get all visible interactive elements
+        const selectors = [
+            '.menu-button:not([style*="display: none"])',
+            '.choice-option',
+            '#neve-hand .card',
+            '#neve-card-field .card-slot:not(:has(.card))',
+            '.action-btn:not(:disabled)',
+            '.intro-dialogue-continue'
+        ];
+
+        selectors.forEach(selector => {
+            const elements = Array.from(document.querySelectorAll(selector));
+            elements.forEach(el => {
+                if (el.offsetParent !== null) { // Check if visible
+                    this.focusableElements.push(el);
+                }
+            });
+        });
+    }
+
+    navigate(direction) {
+        this.updateFocusableElements();
+
+        if (this.focusableElements.length === 0) return;
+
+        // Clear all focus classes
+        document.querySelectorAll('.gamepad-focused').forEach(el => {
+            el.classList.remove('gamepad-focused');
+        });
+
+        if (!this.currentFocus) {
+            // Focus first element
+            this.currentFocus = this.focusableElements[0];
+            this.currentFocus.classList.add('gamepad-focused');
+            this.scrollIntoView(this.currentFocus);
+            return;
+        }
+
+        let currentIndex = this.focusableElements.indexOf(this.currentFocus);
+        if (currentIndex === -1) {
+            currentIndex = 0;
+        }
+
+        let newIndex = currentIndex;
+
+        if (direction === 'down' || direction === 'right') {
+            newIndex = (currentIndex + 1) % this.focusableElements.length;
+        } else if (direction === 'up' || direction === 'left') {
+            newIndex = (currentIndex - 1 + this.focusableElements.length) % this.focusableElements.length;
+        }
+
+        this.currentFocus = this.focusableElements[newIndex];
+        this.currentFocus.classList.add('gamepad-focused');
+        this.scrollIntoView(this.currentFocus);
+    }
+
+    confirmAction() {
+        if (this.currentFocus) {
+            this.currentFocus.click();
+        }
+    }
+
+    cancelAction() {
+        // B button - back/cancel
+        const closeBtn = document.querySelector('#close-options-btn');
+        if (closeBtn && closeBtn.offsetParent !== null) {
+            closeBtn.click();
+        }
+    }
+
+    togglePause() {
+        // Start button - open options if in game
+        const optionsBtn = document.querySelector('#options-btn');
+        if (optionsBtn && optionsBtn.offsetParent !== null) {
+            optionsBtn.click();
+        }
+    }
+
+    scrollIntoView(element) {
+        if (element && element.scrollIntoView) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'nearest'
+            });
+        }
+    }
+
+    clearFocus() {
+        document.querySelectorAll('.gamepad-focused').forEach(el => {
+            el.classList.remove('gamepad-focused');
+        });
+        this.currentFocus = null;
+    }
+}
+
 // === CARD CLASS ===
 class Card {
     constructor(name, type, attack, health, bloodCost, artworkUrl, artist, shortDesc, longDesc, sigils = []) {
@@ -689,6 +1013,9 @@ class Game {
         this.cardLibrary = this.createCardLibrary();
         this.therapistCardLibrary = this.createTherapistCardLibrary();
 
+        // Gamepad support
+        this.gamepadManager = new GamepadManager();
+
         this.init();
     }
 
@@ -719,6 +1046,7 @@ class Game {
             textSpeedSelect: document.getElementById('text-speed-select'),
             reduceMotion: document.getElementById('reduce-motion'),
             highContrast: document.getElementById('high-contrast'),
+            inputMethodSelect: document.getElementById('input-method-select'),
             closeOptionsBtn: document.getElementById('close-options-btn'),
 
             // About menu
@@ -834,6 +1162,11 @@ class Game {
         if (this.elements.highContrast) {
             this.elements.highContrast.addEventListener('change', (e) => {
                 document.body.classList.toggle('high-contrast', e.target.checked);
+            });
+        }
+        if (this.elements.inputMethodSelect) {
+            this.elements.inputMethodSelect.addEventListener('change', (e) => {
+                this.gamepadManager.setMode(e.target.value);
             });
         }
 

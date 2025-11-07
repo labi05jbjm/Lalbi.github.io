@@ -894,22 +894,120 @@ body {
     backdrop-filter: blur(10px);
     z-index: 500;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 40px;
+}
+
+/* PICTURE FRAME (Cornice da quadro) */
+.menu-frame {
+    position: relative;
+    padding: 30px;
+    background: linear-gradient(135deg, #8b7355 0%, #6b5845 50%, #4b3825 100%);
+    box-shadow:
+        /* Outer frame shadow */
+        0 30px 80px rgba(0, 0, 0, 0.9),
+        /* Inner bevel light */
+        inset 4px 4px 8px rgba(255, 255, 255, 0.2),
+        /* Inner bevel dark */
+        inset -4px -4px 8px rgba(0, 0, 0, 0.6);
+    border: 12px solid;
+    border-color: #c9a877 #8b7355 #6b5845 #a98e6f;
+    max-width: 700px;
+    width: 90%;
+}
+
+.menu-frame::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    pointer-events: none;
+}
+
+.menu-frame::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            rgba(0, 0, 0, 0.1) 1px,
+            transparent 2px,
+            transparent 6px
+        );
+    pointer-events: none;
 }
 
 .menu-content {
+    position: relative;
     background: var(--bg-wood);
     border: 4px solid var(--border-dark);
-    border-radius: 12px;
     padding: 50px;
-    max-width: 600px;
-    width: 90%;
     text-align: center;
     filter: url(#rough-edges);
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.8),
         inset 0 0 60px rgba(0, 0, 0, 0.3);
+}
+
+/* MUSEUM PLAQUE (Targhetta crediti) */
+.menu-plaque {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+    border: 2px solid #1a1a1a;
+    border-radius: 4px;
+    padding: 20px 30px;
+    max-width: 600px;
+    width: 85%;
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.menu-plaque h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #c9a877;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.menu-plaque p {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #b0b0b0;
+    text-align: center;
+    margin: 8px 0;
+}
+
+.menu-plaque .credits-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 6px 0;
+    font-size: 11px;
+}
+
+.menu-plaque .credits-label {
+    color: #888;
+    font-weight: 600;
+}
+
+.menu-plaque .credits-value {
+    color: #c9a877;
+    font-style: italic;
 }
 
 .menu-title {
@@ -938,13 +1036,27 @@ body {
     filter: url(#rough-edges);
 }
 
-.menu-button:hover {
+.menu-button:hover,
+.menu-button.gamepad-focused {
     background: var(--accent-warm);
     color: var(--text-dark);
     transform: scale(1.05);
     box-shadow:
         0 8px 24px rgba(0, 0, 0, 0.6),
         0 0 30px rgba(212, 165, 116, 0.4);
+}
+
+.menu-button.gamepad-focused::before {
+    content: '▶';
+    position: absolute;
+    left: 20px;
+    font-size: 20px;
+    animation: arrow-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes arrow-pulse {
+    0%, 100% { transform: translateX(0); opacity: 1; }
+    50% { transform: translateX(5px); opacity: 0.7; }
 }
 
 /* === CONTENT WARNING === */
@@ -1520,4 +1632,67 @@ body.game-started #event-log {
 @keyframes pulse-glow {
     0%, 100% { filter: brightness(1); }
     50% { filter: brightness(1.2); }
+}
+
+/* === GAMEPAD FOCUS STATES === */
+.card.gamepad-focused {
+    transform: translateY(-20px) scale(1.08) !important;
+    box-shadow:
+        0 0 40px rgba(106, 138, 154, 0.9),
+        0 10px 30px rgba(0, 0, 0, 0.6);
+    z-index: 250 !important;
+    border: 3px solid var(--accent-cold);
+}
+
+.card-slot.gamepad-focused {
+    animation: slot-pulse 1s ease-in-out infinite;
+    border: 3px solid var(--accent-cold);
+}
+
+@keyframes slot-pulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(106, 138, 154, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(106, 138, 154, 1);
+    }
+}
+
+.choice-option.gamepad-focused {
+    transform: translateX(10px);
+    background: rgba(212, 165, 116, 0.3);
+    border-color: var(--accent-warm);
+    box-shadow: 0 0 20px rgba(212, 165, 116, 0.5);
+}
+
+.choice-option.gamepad-focused::before {
+    content: '▶ ';
+    color: var(--accent-warm);
+}
+
+/* Gamepad indicator */
+.gamepad-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(26, 20, 16, 0.9);
+    border: 2px solid var(--accent-cold);
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: var(--accent-cold);
+    font-family: 'Montserrat', sans-serif;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+.gamepad-indicator.active {
+    display: flex;
+}
+
+.gamepad-indicator::before {
+    content: '🎮';
+    font-size: 18px;
 }
