@@ -1,5 +1,5 @@
 // ============================================
-// NEVE: LIMEN? - Psychological Card Game
+// A NEVE PORTRAIT - Psychological Card Game
 // A game about dissociation, identity, and truth
 // ============================================
 
@@ -1733,6 +1733,9 @@ class Game {
     }
 
     completeSacrifice() {
+        // Play sacrifice sound
+        this.audio.playSacrifice();
+
         // Play the target card
         this.playerField[this.sacrificeTargetSlot] = this.sacrificeTargetCard;
         this.log(`Hai giocato: ${this.sacrificeTargetCard.name}`);
@@ -3372,6 +3375,9 @@ class Game {
         // Apply play sigils
         this.applyPlaySigils(card);
 
+        // Advance tutorial if needed
+        this.advanceTutorialIfNeeded('playCard');
+
         this.updateUI();
         this.checkAlterMessages();
     }
@@ -3423,6 +3429,9 @@ class Game {
         this.log("=== Fine del tuo turno ===");
         this.isPlayerTurn = false;
         this.setTherapistDialogue(this.getTherapistDialogue());
+
+        // Advance tutorial if needed
+        this.advanceTutorialIfNeeded('endTurn');
 
         setTimeout(() => {
             this.therapistTurn();
@@ -3587,6 +3596,9 @@ class Game {
     }
 
     resolveCombat(playerCard, therapistCard, slotIndex) {
+        // Play attack sound
+        this.audio.playAttack();
+
         let playerAttack = playerCard.attack;
         let therapistAttack = therapistCard.attack;
 
@@ -3633,6 +3645,7 @@ class Game {
 
         if (damageToTherapist > 0) {
             this.log(`→ ${therapistCard.name} subisce ${damageToTherapist} danni`);
+            this.audio.playDamage();
 
             // Animate damage
             setTimeout(() => {
@@ -3647,6 +3660,7 @@ class Game {
         }
         if (damageToPlayer > 0) {
             this.log(`→ ${playerCard.name} subisce ${damageToPlayer} danni`);
+            this.audio.playDamage();
 
             // Animate damage
             setTimeout(() => {
@@ -4989,6 +5003,9 @@ class Game {
      * @param {number} level - Evolution level (if applicable)
      */
     showUnlockNotification(type, id, level = 0) {
+        // Play unlock sound
+        this.audio.playUnlock();
+
         const notification = document.createElement('div');
         notification.className = 'unlock-notification';
 
