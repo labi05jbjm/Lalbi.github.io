@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Universal Tooltip -->
+    <div id="universal-tooltip" class="universal-tooltip hidden" role="tooltip"></div>
+
     <!-- SVG FILTERS (Hand-drawn effects) -->
     <svg id="svg-filters" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -323,8 +326,8 @@
 
             <!-- Action Buttons -->
             <div class="action-buttons">
-                <button id="end-turn-btn" class="action-btn">TERMINA TURNO</button>
-                <button id="discard-btn" class="action-btn">SCARTA</button>
+                <button id="end-turn-btn" class="action-btn" data-tooltip="Termina il tuo turno e inizia la fase di combattimento">TERMINA TURNO</button>
+                <button id="discard-btn" class="action-btn" data-tooltip="Scarta una carta dalla tua mano per pescare una nuova carta">SCARTA</button>
             </div>
 
             <!-- Therapist Hand (Far side, cards face down) -->

@@ -1208,6 +1208,452 @@ class AudioManager {
         // Glitch effects would modulate existing audio
         // For now, just store the level for future use
     }
+
+    /**
+     * Play card destroyed sound
+     */
+    playCardDestroyed() {
+        this.playTone(300, 0.15, 'square', 0.3);
+        setTimeout(() => this.playTone(200, 0.2, 'square', 0.25), 50);
+        setTimeout(() => this.playTone(100, 0.3, 'square', 0.2), 150);
+    }
+
+    /**
+     * Play victory sound
+     */
+    playVictory() {
+        const melody = [
+            { freq: 523, time: 0 },      // C
+            { freq: 659, time: 150 },    // E
+            { freq: 784, time: 300 },    // G
+            { freq: 1047, time: 450 }    // C high
+        ];
+        melody.forEach(note => {
+            setTimeout(() => this.playTone(note.freq, 0.3, 'sine', 0.4), note.time);
+        });
+    }
+
+    /**
+     * Play defeat sound
+     */
+    playDefeat() {
+        const melody = [
+            { freq: 392, time: 0 },      // G
+            { freq: 349, time: 150 },    // F
+            { freq: 294, time: 300 },    // D
+            { freq: 262, time: 450 }     // C
+        ];
+        melody.forEach(note => {
+            setTimeout(() => this.playTone(note.freq, 0.4, 'triangle', 0.35), note.time);
+        });
+    }
+
+    /**
+     * Play UI click sound
+     */
+    playClick() {
+        this.playTone(800, 0.05, 'sine', 0.15);
+    }
+
+    /**
+     * Play UI hover sound
+     */
+    playHover() {
+        this.playTone(600, 0.03, 'sine', 0.08);
+    }
+
+    /**
+     * Play turn start sound
+     */
+    playTurnStart() {
+        this.playTone(440, 0.1, 'triangle', 0.2);
+        setTimeout(() => this.playTone(550, 0.15, 'triangle', 0.25), 80);
+    }
+
+    /**
+     * Play card type-specific sound
+     */
+    playCardTypeSound(type) {
+        const sounds = {
+            'eco': () => {
+                this.playTone(880, 0.1, 'sine', 0.2);
+                setTimeout(() => this.playTone(660, 0.15, 'sine', 0.15), 100);
+            },
+            'voce': () => {
+                this.playTone(1100, 0.12, 'triangle', 0.22);
+                setTimeout(() => this.playTone(1320, 0.1, 'triangle', 0.18), 80);
+            },
+            'impulso': () => {
+                this.playTone(220, 0.15, 'sawtooth', 0.28);
+                setTimeout(() => this.playTone(330, 0.1, 'sawtooth', 0.24), 60);
+            },
+            'velo': () => {
+                this.playTone(660, 0.2, 'sine', 0.18);
+                setTimeout(() => this.playTone(880, 0.18, 'sine', 0.16), 120);
+                setTimeout(() => this.playTone(1100, 0.15, 'sine', 0.14), 220);
+            }
+        };
+
+        const soundFn = sounds[type.toLowerCase()];
+        if (soundFn) soundFn();
+        else this.playCardPlay();
+    }
+
+    /**
+     * Play special ability sound
+     */
+    playAbilitySound() {
+        this.playTone(1000, 0.08, 'square', 0.25);
+        setTimeout(() => this.playTone(1200, 0.08, 'square', 0.22), 40);
+        setTimeout(() => this.playTone(1500, 0.1, 'square', 0.2), 80);
+    }
+
+    /**
+     * Load and prepare music track (for user's compositions)
+     * @param {string} url - URL to audio file
+     * @param {string} trackId - Identifier for the track
+     */
+    async loadMusicTrack(url, trackId) {
+        if (!this.enabled || !this.initialized) return null;
+
+        try {
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+            const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+            this.buffers[trackId] = audioBuffer;
+            console.log(`[Audio] Loaded track: ${trackId}`);
+            return audioBuffer;
+        } catch (e) {
+            console.warn(`[Audio] Failed to load track ${trackId}:`, e);
+            return null;
+        }
+    }
+
+    /**
+     * Play loaded music track
+     * @param {string} trackId - Track identifier
+     * @param {boolean} loop - Whether to loop the track
+     * @param {number} fadeIn - Fade in duration in seconds
+     */
+    playMusicTrack(trackId, loop = true, fadeIn = 2) {
+        if (!this.enabled || !this.initialized) return;
+        if (!this.buffers[trackId]) {
+            console.warn(`[Audio] Track not loaded: ${trackId}`);
+            return;
+        }
+
+        // Stop current music
+        if (this.currentMusic) {
+            this.stopMusicTrack(2);
+        }
+
+        const source = this.audioContext.createBufferSource();
+        const gainNode = this.audioContext.createGain();
+
+        source.buffer = this.buffers[trackId];
+        source.loop = loop;
+
+        // Fade in
+        gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(1, this.audioContext.currentTime + fadeIn);
+
+        source.connect(gainNode);
+        gainNode.connect(this.musicGain);
+
+        source.start(0);
+
+        this.currentMusic = { source, gainNode };
+        console.log(`[Audio] Playing track: ${trackId}`);
+    }
+
+    /**
+     * Stop current music track
+     * @param {number} fadeOut - Fade out duration in seconds
+     */
+    stopMusicTrack(fadeOut = 2) {
+        if (!this.currentMusic) return;
+
+        const { source, gainNode } = this.currentMusic;
+        const now = this.audioContext.currentTime;
+
+        gainNode.gain.cancelScheduledValues(now);
+        gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+        gainNode.gain.linearRampToValueAtTime(0, now + fadeOut);
+
+        setTimeout(() => {
+            source.stop();
+            this.currentMusic = null;
+        }, fadeOut * 1000);
+    }
+}
+
+// ============================================
+// === PARTICLE SYSTEM ===
+// ============================================
+class ParticleSystem {
+    constructor() {
+        this.particles = [];
+        this.container = null;
+        this.animationFrame = null;
+        this.init();
+    }
+
+    init() {
+        // Create particle container
+        this.container = document.createElement('div');
+        this.container.id = 'particle-container';
+        this.container.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        `;
+        document.body.appendChild(this.container);
+
+        // Start animation loop
+        this.animate();
+    }
+
+    /**
+     * Create damage particles
+     */
+    createDamageParticles(x, y, amount) {
+        const colors = ['#ff4444', '#ff6666', '#cc0000'];
+        for (let i = 0; i < 8; i++) {
+            this.createParticle({
+                x, y,
+                vx: (Math.random() - 0.5) * 4,
+                vy: -Math.random() * 3 - 2,
+                size: Math.random() * 6 + 4,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                life: 60,
+                gravity: 0.15,
+                shape: 'circle'
+            });
+        }
+
+        // Damage number
+        this.createTextParticle(x, y, `-${amount}`, '#ff0000', 40);
+    }
+
+    /**
+     * Create heal particles
+     */
+    createHealParticles(x, y, amount) {
+        const colors = ['#44ff44', '#66ff66', '#00cc00'];
+        for (let i = 0; i < 8; i++) {
+            this.createParticle({
+                x, y,
+                vx: (Math.random() - 0.5) * 3,
+                vy: -Math.random() * 2 - 1,
+                size: Math.random() * 5 + 3,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                life: 50,
+                gravity: -0.05,
+                shape: 'circle'
+            });
+        }
+
+        // Heal number
+        this.createTextParticle(x, y, `+${amount}`, '#00ff00', 40);
+    }
+
+    /**
+     * Create card play particles
+     */
+    createCardPlayParticles(x, y, cardType) {
+        const typeColors = {
+            'eco': ['#7abacc', '#5a8aa4', '#4a9ab4'],
+            'voce': ['#a47a9a', '#8a5a84', '#7a4a74'],
+            'impulso': ['#cc7a7a', '#a45a5a', '#944a4a'],
+            'velo': ['#7acc7a', '#5aa45a', '#4a944a']
+        };
+
+        const colors = typeColors[cardType] || ['#7abacc', '#5a8aa4'];
+
+        for (let i = 0; i < 12; i++) {
+            this.createParticle({
+                x, y,
+                vx: (Math.random() - 0.5) * 5,
+                vy: (Math.random() - 0.5) * 5,
+                size: Math.random() * 4 + 2,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                life: 40,
+                gravity: 0,
+                shape: 'square'
+            });
+        }
+    }
+
+    /**
+     * Create card destroyed particles
+     */
+    createDestroyedParticles(x, y) {
+        for (let i = 0; i < 15; i++) {
+            this.createParticle({
+                x, y,
+                vx: (Math.random() - 0.5) * 6,
+                vy: -Math.random() * 4 - 1,
+                size: Math.random() * 8 + 3,
+                color: `hsl(${Math.random() * 60 + 20}, 70%, 50%)`,
+                life: 70,
+                gravity: 0.2,
+                shape: 'square',
+                rotation: Math.random() * 360,
+                rotationSpeed: (Math.random() - 0.5) * 10
+            });
+        }
+    }
+
+    /**
+     * Create sparkle effect
+     */
+    createSparkles(x, y, count = 20) {
+        for (let i = 0; i < count; i++) {
+            const angle = (Math.PI * 2 * i) / count;
+            const speed = Math.random() * 2 + 1;
+            this.createParticle({
+                x, y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                size: Math.random() * 3 + 1,
+                color: '#ffffaa',
+                life: 30,
+                gravity: 0,
+                shape: 'star'
+            });
+        }
+    }
+
+    /**
+     * Create text particle (floating damage/heal numbers)
+     */
+    createTextParticle(x, y, text, color, life) {
+        const el = document.createElement('div');
+        el.textContent = text;
+        el.style.cssText = `
+            position: absolute;
+            left: ${x}px;
+            top: ${y}px;
+            color: ${color};
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+        `;
+
+        this.container.appendChild(el);
+
+        let currentLife = life;
+        const animate = () => {
+            currentLife--;
+            const progress = currentLife / life;
+
+            el.style.top = `${y - (life - currentLife) * 2}px`;
+            el.style.opacity = progress;
+
+            if (currentLife > 0) {
+                requestAnimationFrame(animate);
+            } else {
+                el.remove();
+            }
+        };
+
+        animate();
+    }
+
+    /**
+     * Create a single particle
+     */
+    createParticle(config) {
+        const particle = {
+            x: config.x,
+            y: config.y,
+            vx: config.vx,
+            vy: config.vy,
+            size: config.size,
+            color: config.color,
+            life: config.life,
+            maxLife: config.life,
+            gravity: config.gravity || 0,
+            shape: config.shape || 'circle',
+            rotation: config.rotation || 0,
+            rotationSpeed: config.rotationSpeed || 0,
+            element: document.createElement('div')
+        };
+
+        particle.element.style.cssText = `
+            position: absolute;
+            width: ${particle.size}px;
+            height: ${particle.size}px;
+            background: ${particle.color};
+            left: ${particle.x}px;
+            top: ${particle.y}px;
+            border-radius: ${particle.shape === 'circle' ? '50%' : '0'};
+            pointer-events: none;
+            transform: translate(-50%, -50%) rotate(${particle.rotation}deg);
+        `;
+
+        if (particle.shape === 'star') {
+            particle.element.style.clipPath = 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)';
+        }
+
+        this.container.appendChild(particle.element);
+        this.particles.push(particle);
+    }
+
+    /**
+     * Animation loop
+     */
+    animate() {
+        this.particles.forEach((particle, index) => {
+            particle.life--;
+            particle.vy += particle.gravity;
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+            particle.rotation += particle.rotationSpeed;
+
+            const progress = particle.life / particle.maxLife;
+
+            particle.element.style.left = `${particle.x}px`;
+            particle.element.style.top = `${particle.y}px`;
+            particle.element.style.opacity = progress;
+            particle.element.style.transform = `translate(-50%, -50%) rotate(${particle.rotation}deg) scale(${progress})`;
+
+            if (particle.life <= 0) {
+                particle.element.remove();
+                this.particles.splice(index, 1);
+            }
+        });
+
+        this.animationFrame = requestAnimationFrame(() => this.animate());
+    }
+
+    /**
+     * Clear all particles
+     */
+    clear() {
+        this.particles.forEach(p => p.element.remove());
+        this.particles = [];
+    }
+
+    /**
+     * Destroy particle system
+     */
+    destroy() {
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+        this.clear();
+        if (this.container) {
+            this.container.remove();
+        }
+    }
 }
 
 // === GAME CLASS ===
@@ -1297,6 +1743,14 @@ class Game {
 
         // Audio System
         this.audio = new AudioManager();
+
+        // Particle System
+        this.particles = new ParticleSystem();
+        // Tooltip System
+        this.tooltips = new TooltipManager();
+
+        // Accessibility System
+        this.accessibility = new AccessibilityManager();
 
         // Tutorial System
         this.tutorialActive = false;
@@ -3430,6 +3884,18 @@ class Game {
         this.log(`Hai giocato: ${card.name}`);
         this.setTherapistDialogue(this.getTherapistDialogue());
 
+        // Play sound and particles
+        this.audio.playCardTypeSound(card.type);
+        setTimeout(() => {
+            const slot = document.querySelector(`#neve-card-field .card-slot[data-slot="${slotIndex}"]`);
+            if (slot) {
+                const rect = slot.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+                this.particles.createCardPlayParticles(x, y, card.type);
+            }
+        }, 100);
+
         // Card effects (Voice cards increase fragments)
         if (card.type === 'voce') {
             this.fragments++;
@@ -3622,6 +4088,13 @@ class Game {
                     cardElements.forEach(el => {
                         if (el.dataset.cardId === card.id) {
                             el.classList.add('destroyed');
+
+                            // Destroyed particles + sound
+                            const rect = el.getBoundingClientRect();
+                            const x = rect.left + rect.width / 2;
+                            const y = rect.top + rect.height / 2;
+                            this.particles.createDestroyedParticles(x, y);
+                            this.audio.playCardDestroyed();
                         }
                     });
                 }, 100);
@@ -3641,6 +4114,13 @@ class Game {
                     cardElements.forEach(el => {
                         if (el.dataset.cardId === card.id) {
                             el.classList.add('destroyed');
+
+                            // Destroyed particles + sound
+                            const rect = el.getBoundingClientRect();
+                            const x = rect.left + rect.width / 2;
+                            const y = rect.top + rect.height / 2;
+                            this.particles.createDestroyedParticles(x, y);
+                            this.audio.playCardDestroyed();
                         }
                     });
                 }, 100);
@@ -3710,13 +4190,19 @@ class Game {
             this.log(`→ ${therapistCard.name} subisce ${damageToTherapist} danni`);
             this.audio.playDamage();
 
-            // Animate damage
+            // Animate damage + particles
             setTimeout(() => {
                 const cardElements = document.querySelectorAll('#therapist-card-field .card');
                 cardElements.forEach(el => {
                     if (el.dataset.cardId === therapistCard.id) {
                         el.classList.add('taking-damage');
                         setTimeout(() => el.classList.remove('taking-damage'), 500);
+
+                        // Damage particles
+                        const rect = el.getBoundingClientRect();
+                        const x = rect.left + rect.width / 2;
+                        const y = rect.top + rect.height / 2;
+                        this.particles.createDamageParticles(x, y, damageToTherapist);
                     }
                 });
             }, 300);
@@ -3725,13 +4211,19 @@ class Game {
             this.log(`→ ${playerCard.name} subisce ${damageToPlayer} danni`);
             this.audio.playDamage();
 
-            // Animate damage
+            // Animate damage + particles
             setTimeout(() => {
                 const cardElements = document.querySelectorAll('#neve-card-field .card');
                 cardElements.forEach(el => {
                     if (el.dataset.cardId === playerCard.id) {
                         el.classList.add('taking-damage');
                         setTimeout(() => el.classList.remove('taking-damage'), 500);
+
+                        // Damage particles
+                        const rect = el.getBoundingClientRect();
+                        const x = rect.left + rect.width / 2;
+                        const y = rect.top + rect.height / 2;
+                        this.particles.createDamageParticles(x, y, damageToPlayer);
                     }
                 });
             }, 300);
@@ -5405,3 +5897,142 @@ document.addEventListener('DOMContentLoaded', () => {
     game = new Game();
     window.game = game; // For debugging
 });
+
+// ============================================
+// === TOOLTIP MANAGER ===
+// ============================================
+class TooltipManager {
+    constructor() {
+        this.tooltip = document.getElementById('universal-tooltip');
+        this.currentTarget = null;
+        this.hideTimeout = null;
+        this.init();
+    }
+
+    init() {
+        // Add tooltip data to elements
+        this.addTooltipListeners();
+    }
+
+    addTooltipListeners() {
+        document.addEventListener('mouseover', (e) => {
+            const target = e.target.closest('[data-tooltip]');
+            if (target) {
+                this.show(target.dataset.tooltip, e.clientX, e.clientY);
+                this.currentTarget = target;
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            const target = e.target.closest('[data-tooltip]');
+            if (target === this.currentTarget) {
+                this.hide();
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (this.currentTarget) {
+                this.updatePosition(e.clientX, e.clientY);
+            }
+        });
+    }
+
+    show(text, x, y) {
+        clearTimeout(this.hideTimeout);
+        this.tooltip.textContent = text;
+        this.tooltip.classList.remove('hidden');
+        this.tooltip.classList.add('visible');
+        this.updatePosition(x, y);
+    }
+
+    hide() {
+        this.hideTimeout = setTimeout(() => {
+            this.tooltip.classList.remove('visible');
+            this.tooltip.classList.add('hidden');
+            this.currentTarget = null;
+        }, 100);
+    }
+
+    updatePosition(x, y) {
+        const padding = 15;
+        let left = x + padding;
+        let top = y + padding;
+
+        const rect = this.tooltip.getBoundingClientRect();
+        
+        // Keep tooltip in viewport
+        if (left + rect.width > window.innerWidth) {
+            left = x - rect.width - padding;
+        }
+        if (top + rect.height > window.innerHeight) {
+            top = y - rect.height - padding;
+        }
+
+        this.tooltip.style.left = `${left}px`;
+        this.tooltip.style.top = `${top}px`;
+    }
+}
+
+// ============================================
+// === ACCESSIBILITY MANAGER ===
+// ============================================
+class AccessibilityManager {
+    constructor() {
+        this.settings = {
+            highContrast: false,
+            largeText: false,
+            colorblindFriendly: false,
+            reducedMotion: false
+        };
+        this.init();
+    }
+
+    init() {
+        // Load saved settings
+        const saved = localStorage.getItem('accessibilitySettings');
+        if (saved) {
+            this.settings = JSON.parse(saved);
+            this.applySettings();
+        }
+
+        // Check system preferences
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            this.settings.reducedMotion = true;
+            this.applySettings();
+        }
+
+        if (window.matchMedia('(prefers-contrast: high)').matches) {
+            this.settings.highContrast = true;
+            this.applySettings();
+        }
+    }
+
+    toggleHighContrast() {
+        this.settings.highContrast = !this.settings.highContrast;
+        this.applySettings();
+        this.save();
+    }
+
+    toggleLargeText() {
+        this.settings.largeText = !this.settings.largeText;
+        this.applySettings();
+        this.save();
+    }
+
+    toggleColorblindFriendly() {
+        this.settings.colorblindFriendly = !this.settings.colorblindFriendly;
+        this.applySettings();
+        this.save();
+    }
+
+    applySettings() {
+        document.body.classList.toggle('high-contrast', this.settings.highContrast);
+        document.body.classList.toggle('large-text', this.settings.largeText);
+        document.body.classList.toggle('colorblind-friendly', this.settings.colorblindFriendly);
+    }
+
+    save() {
+        localStorage.setItem('accessibilitySettings', JSON.stringify(this.settings));
+    }
+}
+

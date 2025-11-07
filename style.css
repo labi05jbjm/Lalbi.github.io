@@ -3237,3 +3237,160 @@ button:focus-visible,
 .pulse-glow {
     animation: pulse-glow 2s ease-in-out infinite;
 }
+
+/* === TOOLTIPS & ACCESSIBILITY === */
+
+/* Universal Tooltip System */
+.universal-tooltip {
+    position: fixed;
+    z-index: 10000;
+    background: rgba(10, 14, 20, 0.95);
+    border: 2px solid var(--accent-cyan);
+    color: var(--text-light);
+    padding: 12px 16px;
+    border-radius: 8px;
+    max-width: 300px;
+    font-size: 14px;
+    line-height: 1.4;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(90, 138, 164, 0.3);
+    font-family: 'Crimson Text', 'Georgia', serif;
+}
+
+.universal-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.universal-tooltip::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: var(--accent-cyan);
+}
+
+.universal-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-bottom-color: rgba(10, 14, 20, 0.95);
+    margin-bottom: -1px;
+}
+
+/* Accessibility Features */
+
+/* High Contrast Mode */
+body.high-contrast {
+    --bg-dark: #000000;
+    --bg-table: #0a0a0a;
+    --bg-wood: #000000;
+    --bg-card: #ffffff;
+    --text-dark: #000000;
+    --text-light: #ffffff;
+    --text-muted: #cccccc;
+    --accent-cyan: #00ffff;
+    --accent-ice: #00ffff;
+    --border-glow: #00ffff;
+    --border-card: #ffffff;
+}
+
+body.high-contrast .card {
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+body.high-contrast button {
+    border: 2px solid #ffffff;
+    background: #000000;
+    color: #ffffff;
+}
+
+body.high-contrast button:hover {
+    background: #ffffff;
+    color: #000000;
+}
+
+/* Large Text Mode */
+body.large-text {
+    font-size: 1.2em;
+}
+
+body.large-text .card {
+    transform: scale(1.1);
+}
+
+body.large-text button {
+    font-size: 1.2em;
+    padding: 12px 24px;
+}
+
+body.large-text .universal-tooltip {
+    font-size: 16.8px;
+    max-width: 360px;
+}
+
+/* Colorblind Friendly Mode */
+body.colorblind-friendly {
+    --accent-cyan: #0088ff;
+    --accent-ice: #00aaff;
+    --accent-warm: #ffaa00;
+    --accent-danger: #ff0044;
+}
+
+/* Focus Indicators */
+*:focus {
+    outline: 3px solid var(--accent-cyan);
+    outline-offset: 2px;
+}
+
+button:focus,
+.card:focus {
+    outline: 3px solid var(--accent-ice);
+    outline-offset: 4px;
+}
+
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Enhanced Animations */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(74, 154, 180, 0.4), 0 0 30px rgba(74, 154, 180, 0.3);
+    filter: brightness(1.15);
+}
+
+button {
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(74, 154, 180, 0.3);
+}
+
+button:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
