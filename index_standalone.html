@@ -2160,53 +2160,93 @@ class Game {
 
     setupEventListeners() {
         // Warning
-        this.elements.acceptWarningBtn.addEventListener('click', () => this.acceptWarning());
-        this.elements.declineWarningBtn.addEventListener('click', () => this.declineWarning());
+        if (this.elements.acceptWarningBtn) {
+            this.elements.acceptWarningBtn.addEventListener('click', () => this.acceptWarning());
+        }
+        if (this.elements.declineWarningBtn) {
+            this.elements.declineWarningBtn.addEventListener('click', () => this.declineWarning());
+        }
 
         // Main menu
-        this.elements.newGameBtn.addEventListener('click', () => this.startNewGame());
-        this.elements.optionsBtn.addEventListener('click', () => this.showOptions());
-        this.elements.aboutGameBtn.addEventListener('click', () => this.showAbout());
+        if (this.elements.newGameBtn) {
+            this.elements.newGameBtn.addEventListener('click', () => this.startNewGame());
+        }
+        if (this.elements.optionsBtn) {
+            this.elements.optionsBtn.addEventListener('click', () => this.showOptions());
+        }
+        if (this.elements.aboutGameBtn) {
+            this.elements.aboutGameBtn.addEventListener('click', () => this.showAbout());
+        }
 
         // Options
-        this.elements.closeOptionsBtn.addEventListener('click', () => this.hideOptions());
-        this.elements.languageSelect.addEventListener('change', (e) => this.changeLanguage(e.target.value));
-        this.elements.volumeSlider.addEventListener('input', (e) => {
-            this.elements.volumeValue.textContent = e.target.value + '%';
-        });
-        this.elements.reduceMotion.addEventListener('change', (e) => {
-            document.body.classList.toggle('reduce-motion', e.target.checked);
-        });
-        this.elements.highContrast.addEventListener('change', (e) => {
-            document.body.classList.toggle('high-contrast', e.target.checked);
-        });
+        if (this.elements.closeOptionsBtn) {
+            this.elements.closeOptionsBtn.addEventListener('click', () => this.hideOptions());
+        }
+        if (this.elements.languageSelect) {
+            this.elements.languageSelect.addEventListener('change', (e) => this.changeLanguage(e.target.value));
+        }
+        if (this.elements.volumeSlider && this.elements.volumeValue) {
+            this.elements.volumeSlider.addEventListener('input', (e) => {
+                this.elements.volumeValue.textContent = e.target.value + '%';
+            });
+        }
+        if (this.elements.reduceMotion) {
+            this.elements.reduceMotion.addEventListener('change', (e) => {
+                document.body.classList.toggle('reduce-motion', e.target.checked);
+            });
+        }
+        if (this.elements.highContrast) {
+            this.elements.highContrast.addEventListener('change', (e) => {
+                document.body.classList.toggle('high-contrast', e.target.checked);
+            });
+        }
 
         // About
-        this.elements.closeAboutBtn.addEventListener('click', () => this.hideAbout());
+        if (this.elements.closeAboutBtn) {
+            this.elements.closeAboutBtn.addEventListener('click', () => this.hideAbout());
+        }
 
         // Game controls
-        this.elements.pauseBtn.addEventListener('click', () => this.togglePause());
-        this.elements.endTurnBtn.addEventListener('click', () => this.endTurn());
-        this.elements.discardBtn.addEventListener('click', () => this.toggleDiscardMode());
+        if (this.elements.pauseBtn) {
+            this.elements.pauseBtn.addEventListener('click', () => this.togglePause());
+        }
+        if (this.elements.endTurnBtn) {
+            this.elements.endTurnBtn.addEventListener('click', () => this.endTurn());
+        }
+        if (this.elements.discardBtn) {
+            this.elements.discardBtn.addEventListener('click', () => this.toggleDiscardMode());
+        }
 
         // Pause menu
-        this.elements.resumeGameBtn.addEventListener('click', () => this.togglePause());
-        this.elements.saveExitBtn.addEventListener('click', () => this.saveAndExit());
-        this.elements.optionsFromPauseBtn.addEventListener('click', () => {
-            this.togglePause();
-            this.showOptions();
-        });
+        if (this.elements.resumeGameBtn) {
+            this.elements.resumeGameBtn.addEventListener('click', () => this.togglePause());
+        }
+        if (this.elements.saveExitBtn) {
+            this.elements.saveExitBtn.addEventListener('click', () => this.saveAndExit());
+        }
+        if (this.elements.optionsFromPauseBtn) {
+            this.elements.optionsFromPauseBtn.addEventListener('click', () => {
+                this.togglePause();
+                this.showOptions();
+            });
+        }
 
         // Narrative modal
-        this.elements.narrativeContinueBtn.addEventListener('click', () => this.hideNarrativeModal());
+        if (this.elements.narrativeContinueBtn) {
+            this.elements.narrativeContinueBtn.addEventListener('click', () => this.hideNarrativeModal());
+        }
 
         // Card details modal
-        this.elements.closeCardDetailsBtn.addEventListener('click', () => this.hideCardDetails());
-        this.elements.cardDetailsModal.addEventListener('click', (e) => {
-            if (e.target === this.elements.cardDetailsModal) {
-                this.hideCardDetails();
-            }
-        });
+        if (this.elements.closeCardDetailsBtn) {
+            this.elements.closeCardDetailsBtn.addEventListener('click', () => this.hideCardDetails());
+        }
+        if (this.elements.cardDetailsModal) {
+            this.elements.cardDetailsModal.addEventListener('click', (e) => {
+                if (e.target === this.elements.cardDetailsModal) {
+                    this.hideCardDetails();
+                }
+            });
+        }
 
         // Card info button clicks (delegated)
         document.addEventListener('click', (e) => {
@@ -3212,10 +3252,10 @@ class Game {
 
             card.sigils.forEach(sigil => {
                 const sigilEl = document.createElement('div');
-                sigilEl.className = 'sigil-detail';
+                sigilEl.className = 'card-details-sigil';
                 sigilEl.innerHTML = `
-                    <span class="sigil-icon">${sigil.icon}</span>
-                    <span class="sigil-description">${sigil.desc}</span>
+                    <div class="card-details-sigil-icon">${sigil.icon}</div>
+                    <div class="card-details-sigil-desc">${sigil.desc}</div>
                 `;
                 this.elements.modalSigils.appendChild(sigilEl);
             });
