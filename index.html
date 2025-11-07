@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Card Game - Chi sta giocando con chi?</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Glitch overlay for metanarrative effects -->
+    <div id="glitch-overlay" class="glitch-overlay"></div>
+
+    <!-- Main game container -->
+    <div id="game-container" class="game-container">
+        <!-- Header with mysterious messages -->
+        <div id="header" class="header">
+            <h1 id="game-title" class="glitch-text">THE CARD GAME</h1>
+            <div id="meta-message" class="meta-message"></div>
+        </div>
+
+        <!-- Game state display -->
+        <div class="game-state">
+            <div class="player-info">
+                <span id="player-lives">❤️ Vite: 3</span>
+                <span id="player-currency">🜏 Anime: 0</span>
+            </div>
+            <div class="round-info">
+                <span id="round-counter">Round 1</span>
+                <span id="turn-indicator">Il tuo turno</span>
+            </div>
+        </div>
+
+        <!-- Opponent's field -->
+        <div class="battlefield opponent-field">
+            <div class="field-label">L'Entità</div>
+            <div id="opponent-field" class="card-slots">
+                <div class="card-slot" data-slot="0"></div>
+                <div class="card-slot" data-slot="1"></div>
+                <div class="card-slot" data-slot="2"></div>
+                <div class="card-slot" data-slot="3"></div>
+            </div>
+            <div id="opponent-health" class="health-bar">
+                <div class="health-fill" style="width: 100%"></div>
+                <span class="health-text">20 / 20</span>
+            </div>
+        </div>
+
+        <!-- Battle log -->
+        <div id="battle-log" class="battle-log"></div>
+
+        <!-- Player's field -->
+        <div class="battlefield player-field">
+            <div id="player-health" class="health-bar">
+                <div class="health-fill" style="width: 100%"></div>
+                <span class="health-text">20 / 20</span>
+            </div>
+            <div id="player-field" class="card-slots">
+                <div class="card-slot" data-slot="0"></div>
+                <div class="card-slot" data-slot="1"></div>
+                <div class="card-slot" data-slot="2"></div>
+                <div class="card-slot" data-slot="3"></div>
+            </div>
+            <div class="field-label">Tu (o almeno, così credi)</div>
+        </div>
+
+        <!-- Player's hand -->
+        <div id="player-hand" class="player-hand"></div>
+
+        <!-- Action buttons -->
+        <div class="action-bar">
+            <button id="end-turn-btn" class="btn btn-primary">Termina Turno</button>
+            <button id="sacrifice-mode-btn" class="btn btn-secondary">Modalità Sacrificio</button>
+            <button id="draw-card-btn" class="btn btn-secondary">Pesca (costa 1 🜏)</button>
+        </div>
+
+        <!-- Metanarrative modal -->
+        <div id="meta-modal" class="modal hidden">
+            <div class="modal-content">
+                <div id="modal-text" class="modal-text"></div>
+                <button id="modal-continue" class="btn btn-primary">Continua...</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio elements -->
+    <audio id="card-play-sound" preload="auto"></audio>
+    <audio id="attack-sound" preload="auto"></audio>
+    <audio id="ambient-sound" loop></audio>
+
+    <script src="game.js"></script>
+</body>
+</html>
