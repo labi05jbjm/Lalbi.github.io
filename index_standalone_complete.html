@@ -2,11 +2,10 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Neve Portrait</title>
+    <title>Neve in the portrait</title>
     <style>
 /* ============================================
-   A NEVE PORTRAIT - 3D Inscryption-style CSS
+   NEVE IN THE PORTRAIT - 3D Inscryption-style CSS
    ============================================ */
 
 /* === SVG FILTERS (Hand-drawn effects) === */
@@ -45,16 +44,16 @@ svg.filters {
     --border-card: #8a9aaa;
     --border-glow: #5a8aa4;
 
-    /* 3D Perspective */
-    --perspective: clamp(800px, 120vmin, 1400px); /* FIX R: Responsive invece di 1200px fisso */
-    --table-depth: clamp(600px, 80vmin, 900px); /* FIX R: Responsive invece di 800px fisso */
+    /* 3D Perspective - DESKTOP FIXED */
+    --perspective: 1600px; /* Desktop - prospettiva più profonda stile Inscryption */
+    --table-depth: 900px;
 }
 
 body {
     font-family: 'Crimson Text', 'Georgia', serif;
     background: var(--bg-dark);
     color: var(--text-light);
-    min-height: 100vh;
+    min-height: 100vh; /* Fill viewport */
     overflow: hidden;
     position: relative;
     line-height: 1.6;
@@ -77,9 +76,9 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100dvh; /* FIX P: Era 100vh, ora 100dvh per mobile UI bars */
-    overflow: hidden; /* FIX P: Previene scroll indesiderato */
+    width: 100vw; /* Fill viewport */
+    height: 100vh; /* Fill viewport */
+    overflow: visible; /* FIX CRITICO: Era hidden e tagliava le carte in mano! */
     perspective: var(--perspective);
     perspective-origin: 50% 60%;
     /* Background freddo e avvolgente */
@@ -108,80 +107,79 @@ body {
 }
 
 /* === TABLE (Main playing surface) === */
+/*
+ * GAME TABLE (Tavolo da gioco)
+ *
+ * Ridisegnato per ospitare chiaramente due righe da quattro slot ciascuna, ispirato alla plancia di Inscryption.
+ * L'elemento è ora un contenitore flessibile a colonna, con le aree del giocatore e dell'avversario distribuite verticalmente.
+ * È posizionato più in alto nella pagina con un valore top in percentuale, lasciando spazio sufficiente per il mazzo e la mano.
+ */
 .game-table {
     position: absolute;
-    bottom: 8%;
+    /* Posiziona il tavolo al 10% dall'alto della finestra: lascia spazio per i pulsanti e per la mano.
+       Con una top più bassa e un'altezza di 500px riusciamo a vedere entrambe le file di slot e le carte dell'avversario. */
+    top: 10%;
     left: 50%;
-    transform: translateX(-50%) rotateX(65deg);
-    transform-style: preserve-3d;
-    width: 85%;
-    height: clamp(420px, 55dvh, 600px); /* FIX R: Responsive invece di 550px fisso */
-    /* Tavolo freddo e avvolgente con texture sottile */
+    transform: translateX(-50%);
+    width: 1000px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Tavolo sempre visibile con texture di legno caldo */
     background:
-        /* Pattern geometrico elegante */
-        repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            rgba(90, 138, 164, 0.03) 1px,
-            transparent 2px,
-            transparent 40px
-        ),
         repeating-linear-gradient(
             0deg,
-            transparent 0px,
-            rgba(90, 138, 164, 0.03) 1px,
+            rgba(255, 255, 255, 0.03) 0px,
+            rgba(255, 255, 255, 0.03) 2px,
             transparent 2px,
-            transparent 40px
+            transparent 6px
         ),
-        /* Gradiente principale freddo */
-        radial-gradient(
-            ellipse at 50% 50%,
-            #1e2e3e 0%,
-            #1a2430 40%,
-            #141c28 100%
-        );
-    border: 4px solid var(--border-glow);
-    border-radius: 20px;
+        linear-gradient(180deg, #4c301c 0%, #352010 100%);
+    border: 5px solid #6d4b2f;
+    border-radius: 18px;
     box-shadow:
-        /* Ombra profonda */
-        0 30px 80px rgba(0, 0, 0, 0.9),
-        /* Glow freddo */
-        0 0 60px rgba(90, 138, 164, 0.15),
-        inset 0 0 120px rgba(0, 0, 0, 0.5),
-        /* Bordi luminosi */
-        inset 0 2px 2px rgba(122, 186, 204, 0.1),
-        inset 0 -2px 2px rgba(0, 0, 0, 0.5);
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 0 80px rgba(0, 0, 0, 0.6);
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* === OPPONENT FIELD (Far side of table) === */
+/*
+ * OPPONENT FIELD (Campo dell'avversario)
+ *
+ * Ora è relativo al contenitore del tavolo e occupa metà dell'altezza disponibile.
+ * La flexbox centrale mantiene gli slot equidistanti e adattivi. Nessun posizionamento assoluto o prospettiva 3D.
+ */
 .opponent-field {
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translateX(-50%) translateZ(30px);
-    width: 70%;
-    height: clamp(160px, 24vh, 220px); /* FIX R: Responsive invece di 300px fisso */
+    position: relative;
+    width: 100%;
+    /* Altezza fissa per una plancia a due righe: ciascuna occuperà 230px del tavolo da 500px lasciando margine.
+       Non utilizziamo più flex:1 per evitare che le carte si ridimensionino in verticale. */
+    height: 230px;
     display: flex;
-    gap: 12px;
     justify-content: center;
     align-items: center;
-    transform-style: preserve-3d;
+    gap: 50px;
     z-index: 50;
 }
 
 /* === PLAYER FIELD (Near side of table) === */
+/*
+ * PLAYER FIELD (Campo del giocatore)
+ *
+ * Anche il campo del giocatore occupa metà dello spazio verticale del tavolo.
+ * Con flexbox è allineato al centro e mantiene gli slot equidistanti.
+ */
 .player-field {
-    position: absolute;
-    bottom: 20%;
-    left: 50%;
-    transform: translateX(-50%) translateZ(40px);
-    width: 70%;
-    height: clamp(160px, 24vh, 220px); /* FIX R: Responsive invece di 300px fisso */
+    position: relative;
+    width: 100%;
+    height: 230px;
     display: flex;
-    gap: 12px;
     justify-content: center;
     align-items: center;
-    transform-style: preserve-3d;
+    gap: 50px;
     z-index: 100;
 }
 
@@ -197,68 +195,51 @@ body {
     z-index: 1;
 }
 
-/* === CARD SLOTS (Eleganti e freddi) === */
+/* === CARD SLOTS (Eleganti e freddi) - RIDIMENSIONATI */
 .card-slot {
-    width: 185px;
-    height: 290px;
-    border: 3px solid rgba(90, 138, 164, 0.3);
-    border-radius: 16px;
-    background:
-        /* Inner glow */
-        radial-gradient(
-            ellipse at 50% 50%,
-            rgba(74, 154, 180, 0.08) 0%,
-            rgba(26, 36, 48, 0.4) 60%,
-            rgba(10, 14, 20, 0.6) 100%
-        );
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Dimensioni ridotte per adattarsi al nuovo layout a due righe: ogni slot ora è più basso e leggermente stretto.
+       In questo modo quattro slot possono stare comodamente in metà del tavolo da 450px. */
+    width: 160px;
+    height: 230px;
+    border: 2px solid #d4b28c; /* Cornice calda come un tavolo di legno */
+    border-radius: 12px;
+    background: rgba(60, 40, 25, 0.95); /* Scuro, lascia intravedere la texture del tavolo */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     position: relative;
     transform-style: preserve-3d;
     cursor: pointer;
-    box-shadow:
-        inset 0 0 30px rgba(90, 138, 164, 0.1),
-        inset 0 2px 2px rgba(122, 186, 204, 0.15),
-        0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 0 0 6px rgba(255, 255, 255, 0.05);
 }
 
 .card-slot::before {
-    content: '';
-    position: absolute;
-    inset: 8px;
-    border: 1px solid rgba(122, 186, 204, 0.15);
-    border-radius: 12px;
-    pointer-events: none;
+    /* Nascondiamo completamente la linea verticale. Gli slot di Inscryption
+       non mostrano più una croce visibile ma solo un leggerissimo graffio quando ci passi sopra.
+       Il pseudo-elemento rimane dichiarato per compatibilità ma non verrà renderizzato. */
+    display: none;
+}
+
+/* FIX VISIBILITÀ: Indicatore centrale MOLTO più visibile negli slot vuoti */
+.card-slot:not(.occupied)::after {
+    /* Anche la linea orizzontale viene rimossa. Ci affidiamo al bordo dello slot e
+       ad un leggero sollevamento al passaggio del mouse per indicare dove posizionare le carte. */
+    display: none;
 }
 
 .card-slot:hover:not(.occupied) {
-    border-color: rgba(90, 138, 164, 0.6);
-    background:
-        radial-gradient(
-            ellipse at 50% 50%,
-            rgba(74, 154, 180, 0.15) 0%,
-            rgba(26, 36, 48, 0.5) 60%,
-            rgba(10, 14, 20, 0.6) 100%
-        );
+    border-color: #e7cfa0;
     box-shadow:
-        0 0 30px rgba(90, 138, 164, 0.3),
-        inset 0 0 40px rgba(90, 138, 164, 0.15),
-        inset 0 2px 2px rgba(122, 186, 204, 0.2);
-    transform: scale(1.03);
+        0 6px 14px rgba(0, 0, 0, 0.7),
+        inset 0 0 8px rgba(255, 255, 255, 0.08);
+    transform: translateY(-5px);
 }
 
 .card-slot.valid-drop {
-    border-color: var(--accent-ice);
-    background:
-        radial-gradient(
-            ellipse at 50% 50%,
-            rgba(122, 186, 204, 0.2) 0%,
-            rgba(74, 154, 180, 0.15) 60%,
-            rgba(26, 36, 48, 0.5) 100%
-        );
+    border-color: #e7cfa0;
+    background: rgba(212, 178, 140, 0.1);
     box-shadow:
-        0 0 40px rgba(122, 186, 204, 0.4),
-        inset 0 0 50px rgba(122, 186, 204, 0.2);
-    animation: pulse-slot 1.5s ease-in-out infinite;
+        0 0 20px rgba(212, 178, 140, 0.4),
+        inset 0 0 10px rgba(255, 255, 255, 0.08);
+    animation: none;
 }
 
 @keyframes pulse-slot {
@@ -274,36 +255,139 @@ body {
     }
 }
 
+/* FIX VISIBILITÀ: Animazione pulsante MOLTO più evidente */
+@keyframes slotPulse {
+    0%, 100% {
+        border-color: rgba(122, 186, 204, 1);
+        box-shadow:
+            inset 0 0 60px rgba(122, 186, 204, 0.5),
+            inset 0 2px 2px rgba(122, 186, 204, 0.5),
+            0 4px 20px rgba(0, 0, 0, 0.8),
+            0 0 50px rgba(122, 186, 204, 0.8),
+            0 0 80px rgba(122, 186, 204, 0.5);
+    }
+    50% {
+        border-color: rgba(122, 186, 204, 1);
+        box-shadow:
+            inset 0 0 80px rgba(122, 186, 204, 0.7), /* FIX VISIBILITÀ: Picco molto luminoso */
+            inset 0 2px 2px rgba(122, 186, 204, 0.7),
+            0 4px 20px rgba(0, 0, 0, 0.9),
+            0 0 70px rgba(122, 186, 204, 1), /* FIX VISIBILITÀ: Picco outer glow massimo */
+            0 0 120px rgba(122, 186, 204, 0.7); /* FIX VISIBILITÀ: Estensione massima */
+    }
+}
+
 .card-slot.occupied {
     border-color: transparent;
     background: transparent;
     box-shadow: none;
+    /* INSCRYPTION FIX: Ferma animazione quando occupato */
+    animation: none;
 }
 
 .card-slot.occupied::before {
     display: none;
 }
 
-/* === HAND (Fan of cards) === */
+/* === DECK BOXES (Inscryption Style) === */
+.deck-box {
+    position: absolute;
+    width: 140px;
+    height: 200px;
+    background:
+        linear-gradient(135deg, #2a3a4a 0%, #1e2e3e 100%);
+    border: 3px solid rgba(90, 138, 164, 0.4);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.7),
+        inset 0 0 30px rgba(0, 0, 0, 0.5),
+        inset 0 2px 2px rgba(122, 186, 204, 0.1);
+    transform-style: preserve-3d;
+    z-index: 40;
+}
+
+.deck-box::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(122, 186, 204, 0.2);
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.deck-box-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.deck-box-count {
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--accent-ice);
+    text-shadow: 0 0 10px rgba(122, 186, 204, 0.5);
+}
+
+/* Player deck (left side) */
+.player-deck-box {
+    /* Posizionamento fisso per mantenere il mazzo ben visibile fuori dal tavolo */
+    position: fixed !important;
+    /* Sposta il mazzo del giocatore più vicino al bordo inferiore, al di fuori del tavolo.
+       Un valore del 25% garantisce che il mazzo sia ben visibile e non venga coperto dalla plancia. */
+    bottom: 25%;
+    /* Sposta ulteriormente il mazzo del giocatore verso destra per non sovrapporsi al bordo sinistro.
+       Un valore più alto di 'left' aumenta la distanza dal margine sinistro. */
+    left: 8%;
+    transform: none !important;
+    z-index: 1000;
+}
+
+/* Therapist deck (right side) */
+.therapist-deck-box {
+    /* Posizionamento fisso per mantenere il mazzo dell'avversario ben visibile */
+    position: fixed !important;
+    top: 10%;
+    right: 3%;
+    transform: none !important;
+    z-index: 1000;
+}
+
+/* === HAND (Fan of cards) - DESKTOP INSCRYPTION STYLE === */
 .hand-container {
     position: fixed;
-    bottom: clamp(-20px, -5dvh, -80px); /* FIX Q: Responsive invece di -20px fisso */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    height: clamp(160px, 30dvh, 300px); /* FIX Q: Responsive invece di 180px fisso */
+    bottom: 20px; /* Mantenuto un margine dal fondo per evitare la sovrapposizione con i bordi */
+    /* Sposta il ventaglio della mano nell'angolo inferiore destro dello schermo.  Con
+       `right` e `left: auto` eliminiamo il centraggio e allineiamo le carte a destra. */
+    right: 20px;
+    left: auto;
+    transform: none;
+    /* Utilizza una larghezza parziale dello schermo per contenere il ventaglio senza
+       coprire l'intero fondo.  45vw permette fino a dodici carte senza uscire dallo
+       schermo su risoluzioni comuni. */
+    width: 45vw;
+    /* Altezza ridotta per mantenere le carte al di sotto della plancia e del tutorial. */
+    height: 350px;
     display: flex;
-    justify-content: center;
+    /* Allinea le carte verso destra all'interno del contenitore */
+    justify-content: flex-end;
     align-items: flex-end;
-    perspective: 1000px;
-    z-index: 200;
-    pointer-events: none;
+    perspective: 1200px;
+    z-index: 3000; /* Rimane sopra il tutorial overlay per evitare che sposti le carte */
+    /* Consenti agli eventi di puntatore (drag & drop) di propagarsi ai figli. */
+    pointer-events: all;
 }
 
 #neve-hand {
     position: relative;
     width: 100%;
-    max-width: 900px;
+    max-width: 1400px; /* Desktop - mano più larga */
     height: 100%;
     display: flex;
     justify-content: center;
@@ -311,11 +395,13 @@ body {
     transform-style: preserve-3d;
 }
 
-/* === CARD (3D) === */
+/* === CARD (3D) - RIDIMENSIONATE === */
 .card {
     position: absolute;
-    width: 180px;
-    height: 280px;
+    /* Le carte della mano sono ora più piccole per liberare spazio. Riduciamo larghezza e altezza del 20%.
+       Quando si passa il cursore, la carta verrà ingrandita grazie alla regola :hover più avanti. */
+    width: 120px;
+    height: 184px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -343,19 +429,19 @@ body {
     filter: url(#rough-edges);
 }
 
-/* Hand card positioning (fan effect) */
+/* Hand card positioning (fan effect) - INSCRYPTION STYLE */
 #neve-hand .card:nth-child(1) {
-    transform: translateX(-240px) translateY(10px) rotate(-18deg);
+    transform: translateX(-208px) translateY(12px) rotate(-25deg);
     z-index: 1;
 }
 
 #neve-hand .card:nth-child(2) {
-    transform: translateX(-140px) translateY(5px) rotate(-12deg);
+    transform: translateX(-128px) translateY(6px) rotate(-16deg);
     z-index: 2;
 }
 
 #neve-hand .card:nth-child(3) {
-    transform: translateX(-50px) translateY(2px) rotate(-6deg);
+    transform: translateX(-56px) translateY(2px) rotate(-8deg);
     z-index: 3;
 }
 
@@ -365,77 +451,77 @@ body {
 }
 
 #neve-hand .card:nth-child(5) {
-    transform: translateX(50px) translateY(2px) rotate(6deg);
+    transform: translateX(56px) translateY(2px) rotate(8deg);
     z-index: 5;
 }
 
 #neve-hand .card:nth-child(6) {
-    transform: translateX(140px) translateY(5px) rotate(12deg);
+    transform: translateX(128px) translateY(6px) rotate(16deg);
     z-index: 6;
 }
 
 #neve-hand .card:nth-child(7) {
-    transform: translateX(240px) translateY(10px) rotate(18deg);
+    transform: translateX(208px) translateY(12px) rotate(25deg);
     z-index: 7;
 }
 
 #neve-hand .card:nth-child(8) {
-    transform: translateX(320px) translateY(15px) rotate(24deg);
+    transform: translateX(280px) translateY(18px) rotate(32deg);
     z-index: 8;
 }
 
-/* FIX V: Hand fan layout per carte 9+ (prima mancavano) */
+/* Extended fan for 9+ cards */
 #neve-hand .card:nth-child(9) {
-    transform: translateX(400px) translateY(20px) rotate(28deg);
+    transform: translateX(352px) translateY(24px) rotate(38deg);
     z-index: 9;
 }
 
 #neve-hand .card:nth-child(10) {
-    transform: translateX(470px) translateY(25px) rotate(32deg);
+    transform: translateX(416px) translateY(30px) rotate(44deg);
     z-index: 10;
 }
 
 #neve-hand .card:nth-child(11) {
-    transform: translateX(530px) translateY(30px) rotate(36deg);
+    transform: translateX(472px) translateY(37px) rotate(48deg);
     z-index: 11;
 }
 
 #neve-hand .card:nth-child(12) {
-    transform: translateX(580px) translateY(35px) rotate(40deg);
+    transform: translateX(520px) translateY(43px) rotate(52deg);
     z-index: 12;
 }
 
-/* Fallback per carte 13+: stack su posizione finale per evitare overflow */
+/* Fallback for 13+ cards */
 #neve-hand .card:nth-child(n+13) {
-    transform: translateX(620px) translateY(40px) rotate(42deg);
+    transform: translateX(560px) translateY(50px) rotate(55deg);
     z-index: 13;
 }
 
-/* Card hover in hand */
+/* Card hover in hand - INSCRYPTION STYLE */
 #neve-hand .card:hover {
-    transform: translateX(var(--card-x, 0)) translateY(-40px) rotate(0deg) scale(1.08) !important; /* FIX U: Ridotto da -80px a -40px e scale da 1.15 a 1.08 */
+    /* Ingrandisci maggiormente le carte quando il cursore passa sopra per mostrarne il dettaglio */
+    transform: translateX(var(--card-x, 0)) translateY(-80px) rotate(0deg) scale(1.3) !important;
     z-index: 100 !important;
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.6),
-        0 0 30px rgba(212, 165, 116, 0.4),
-        inset 0 0 30px rgba(244, 235, 224, 0.1);
+        0 25px 50px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(212, 165, 116, 0.5),
+        inset 0 0 40px rgba(244, 235, 224, 0.15);
 }
 
 /* Store original x position for hover */
-#neve-hand .card:nth-child(1) { --card-x: -240px; }
-#neve-hand .card:nth-child(2) { --card-x: -140px; }
-#neve-hand .card:nth-child(3) { --card-x: -50px; }
-#neve-hand .card:nth-child(4) { --card-x: 0px; }
-#neve-hand .card:nth-child(5) { --card-x: 50px; }
-#neve-hand .card:nth-child(6) { --card-x: 140px; }
-#neve-hand .card:nth-child(7) { --card-x: 240px; }
-#neve-hand .card:nth-child(8) { --card-x: 320px; }
-/* FIX V: --card-x per carte 9+ (per hover corretto) */
-#neve-hand .card:nth-child(9) { --card-x: 400px; }
-#neve-hand .card:nth-child(10) { --card-x: 470px; }
-#neve-hand .card:nth-child(11) { --card-x: 530px; }
-#neve-hand .card:nth-child(12) { --card-x: 580px; }
-#neve-hand .card:nth-child(n+13) { --card-x: 620px; }
+#neve-hand .card:nth-child(1)  { --card-x: -208px; }
+#neve-hand .card:nth-child(2)  { --card-x: -128px; }
+#neve-hand .card:nth-child(3)  { --card-x: -56px;  }
+#neve-hand .card:nth-child(4)  { --card-x: 0px;    }
+#neve-hand .card:nth-child(5)  { --card-x: 56px;   }
+#neve-hand .card:nth-child(6)  { --card-x: 128px;  }
+#neve-hand .card:nth-child(7)  { --card-x: 208px;  }
+#neve-hand .card:nth-child(8)  { --card-x: 280px;  }
+#neve-hand .card:nth-child(9)  { --card-x: 352px;  }
+#neve-hand .card:nth-child(10) { --card-x: 416px;  }
+#neve-hand .card:nth-child(11) { --card-x: 472px;  }
+#neve-hand .card:nth-child(12) { --card-x: 520px;  }
+#neve-hand .card:nth-child(n+13) { --card-x: 560px; }
 
 /* Card being dragged */
 .card.dragging {
@@ -447,11 +533,17 @@ body {
 /* === THERAPIST HAND (Opponent cards, face down) === */
 .therapist-hand-container {
     position: fixed;
-    top: clamp(10px, 6vh, 60px); /* FIX X: Era 50px fisso, ora responsive per evitare overlap header */
+    top: 50px; /* Desktop fixed */
     left: 50%;
     transform: translateX(-50%);
     z-index: 50;
     pointer-events: none;
+}
+
+/* Nascondi completamente la mano dell'avversario (ventaglio) per evitare che copra i dialoghi.
+   Le carte posizionate sul campo saranno comunque visibili negli slot dell'avversario. */
+.therapist-hand-container {
+    display: none !important;
 }
 
 #therapist-hand {
@@ -548,12 +640,12 @@ body {
     top: 8px;
     left: 8px;
     right: 8px;
-    height: 135px; /* FIX: Ridotto da 160px a 135px per dare spazio alle stats */
+    height: 160px;
     background-size: cover;
     background-position: center;
     border: 2px solid rgba(138, 122, 106, 0.5);
     border-radius: 6px;
-    overflow: hidden; /* Previene che il dipinto sbordi */
+    overflow: hidden;
 }
 
 .artwork-overlay {
@@ -593,7 +685,7 @@ body {
 /* === CARD STATS === */
 .card-info-bar {
     position: absolute;
-    top: 150px; /* FIX: Ridotto da 175px a 150px per adattarsi al nuovo artwork (143px + 7px gap) */
+    top: 175px;
     left: 8px;
     right: 8px;
     display: flex;
@@ -636,7 +728,7 @@ body {
 /* === CARD SIGILS === */
 .card-sigils {
     position: absolute;
-    top: 195px; /* FIX: Ridotto da 215px a 195px per adattarsi al nuovo layout */
+    top: 215px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -676,22 +768,17 @@ body {
     background: rgba(26, 20, 16, 0.95);
     border: 2px solid var(--accent-warm);
     border-radius: 6px;
-    padding: 6px 8px; /* FIX: Aumentato padding da 5px 6px a 6px 8px per dare più spazio */
+    padding: 5px 6px;
     text-align: center;
-    min-height: 32px; /* FIX: Altezza minima per evitare che il nome sia schiacciato */
 }
 
 .card-name {
-    font-size: 13px; /* FIX: Aumentato da 11px a 13px per migliore leggibilità */
+    font-size: 11px;
     font-weight: 700;
     color: var(--text-light);
-    line-height: 1.2;
+    line-height: 1.1;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
     margin-bottom: 2px;
-    overflow: hidden; /* FIX: Previene overflow */
-    text-overflow: ellipsis; /* FIX: Aggiunge "..." se il nome è troppo lungo */
-    white-space: nowrap; /* FIX: Mantiene il nome su una riga */
-    max-width: 100%; /* FIX: Limita alla larghezza del container */
 }
 
 .card-artist {
@@ -746,7 +833,7 @@ body {
 /* === CARD WHISPERS === */
 .card-whisper {
     position: fixed;
-    bottom: clamp(140px, 24dvh, 300px); /* FIX Q: Responsive invece di 300px fisso */
+    bottom: 280px; /* Desktop fixed */
     left: 50%;
     transform: translateX(-50%);
     background: rgba(138, 74, 58, 0.95);
@@ -781,10 +868,10 @@ body {
 /* === THERAPIST SECTION === */
 .therapist-section {
     position: absolute;
-    top: 5%;
+    top: 8%; /* Spostato più in basso (era 5%) */
     left: 50%;
     transform: translateX(-50%);
-    width: min(90vw, 600px); /* FIX H: Era 600px fisso, ora responsive */
+    width: 600px; /* Desktop fixed */
     text-align: center;
     z-index: 50;
 }
@@ -824,24 +911,34 @@ body {
 }
 
 .dialogue-box {
-    background:
-        linear-gradient(135deg, rgba(26, 36, 48, 0.95) 0%, rgba(15, 21, 29, 0.95) 100%);
-    border: 2px solid var(--border-glow);
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.7),
-        0 0 15px rgba(90, 138, 164, 0.2),
-        inset 0 0 40px rgba(0, 0, 0, 0.3);
-    filter: url(#rough-edges);
+    /* INSCRYPTION FIX: Solo testo, senza rettangolo */
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    filter: none;
+    /* Posiziona vicino al campo del dottore */
+    position: absolute;
+    top: 18%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 900px;
+    text-align: center;
 }
 
 .dialogue-text {
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 20px; /* INSCRYPTION FIX: Più grande per visibilità */
+    line-height: 1.8;
     color: var(--text-light);
     font-style: italic;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    font-weight: 600;
+    /* Ombra pronunciata per leggibilità senza background */
+    text-shadow:
+        2px 2px 4px rgba(0, 0, 0, 0.9),
+        0 0 15px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(90, 138, 164, 0.3);
 }
 
 /* === PATIENT INFO === */
@@ -880,7 +977,7 @@ body {
     position: absolute;
     top: 20px;
     right: 20px;
-    width: min(250px, calc(100vw - 40px)); /* FIX J: Era 250px fisso, ora responsive */
+    width: 250px; /* Desktop fixed */
     z-index: 50;
 }
 
@@ -924,10 +1021,21 @@ body {
 }
 
 /* === GAME STATS === */
+/*
+  Le statistiche di gioco (frammenti e round) devono rimanere sempre visibili nello stesso
+  punto dello schermo, anche quando l'introduzione o il tutorial modificano il layout
+  del contenitore principale.  Passiamo quindi da position:absolute a position:fixed
+  e manteniamo la trasformazione per centrare orizzontalmente il gruppo di box.
+*/
 .game-stats {
-    position: absolute;
+    position: fixed;
     bottom: 20px;
-    right: 20px;
+    /* Sposta leggermente le statistiche verso sinistra per evitare che siano coperte dal mazzo
+       quando il mazzo del giocatore è più a destra.  Lasciamo la trasformazione al 50% per
+       centrare i box sul nuovo punto di riferimento. */
+    left: 35%;
+    transform: translateX(-50%);
+    right: auto;
     display: flex;
     gap: 20px;
     z-index: 50;
@@ -1018,7 +1126,8 @@ body {
 }
 
 .alter-name {
-    font-size: 11px;
+    /* Aumenta la dimensione dei nomi negli alter log per una migliore lettura */
+    font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -1027,21 +1136,31 @@ body {
 }
 
 .alter-text {
-    font-size: 13px;
+    /* Aumenta la dimensione del testo dei messaggi nel log */
+    font-size: 16px;
     font-style: italic;
     color: var(--text-light);
     line-height: 1.4;
 }
 
 /* === EVENT LOG === */
+/*
+  Il registro degli eventi deve essere sempre ancorato al viewport, altrimenti nelle fasi del
+  tutorial può finire spostato da trasformazioni del contenitore.  Invece di utilizzare
+  position:absolute che lo rende relativo al primo antenato posizionato, utilizziamo
+  position:fixed così rimane nello stesso punto dello schermo indipendentemente dal contesto.
+*/
 .event-log {
-    position: absolute;
+    position: fixed;
     bottom: 20px;
-    left: 20px;
-    width: min(350px, calc(100vw - 40px)); /* FIX I: Era 350px fisso, overflow su 320-360px screens */
-    max-height: 200px;
-    background: rgba(26, 20, 16, 0.85);
-    border: 2px solid var(--border-card);
+    /* Sposta il registro eventi leggermente verso destra per non sovrapporsi al mazzo del giocatore.
+       Utilizziamo una percentuale per adattarlo a varie larghezze di schermo. */
+    left: 12%;
+    width: 320px; /* riduci leggermente la larghezza per lasciare più spazio al campo */
+    max-height: 160px; /* altezza massima ridotta per evitare che copra il tavolo */
+    /* Maggiore contrasto per il registro degli eventi */
+    background: rgba(26, 20, 16, 0.6);
+    border: 2px solid rgba(212, 165, 116, 0.4);
     border-radius: 8px;
     padding: 15px;
     overflow-y: auto;
@@ -1050,7 +1169,8 @@ body {
 }
 
 .log-entry {
-    font-size: 12px;
+    /* Migliorata leggibilità: dimensione maggiore e contrasto più alto */
+    font-size: 16px;
     color: var(--text-light);
     margin-bottom: 6px;
     padding-left: 12px;
@@ -1070,13 +1190,23 @@ body {
 }
 
 /* === ACTION BUTTONS === */
+/*
+  I pulsanti di azione devono rimanere agganciati alla stessa posizione della schermata
+  indipendentemente dal cambio di fasi (intro, tutorial, gioco).  Passiamo quindi da
+  position:absolute a position:fixed e manteniamo le coordinate calcolate per
+  posizionarli sotto il riquadro "Paziente NEVE" in alto a sinistra.
+*/
 .action-buttons {
-    position: absolute;
-    bottom: clamp(120px, 22dvh, 240px); /* FIX Q: Responsive invece di 160px fisso */
-    left: 50%;
-    transform: translateX(-50%);
+    position: fixed;
+    /* Posiziona i pulsanti uno sotto l'altro sotto il riquadro "Paziente NEVE" in alto a sinistra.
+       Calcoliamo top: 120px (20px di margine + altezza del patient-info + margine) e left: 20px, allineato al riquadro. */
+    top: 120px;
+    left: 20px;
+    transform: none;
     display: flex;
-    gap: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
     z-index: 50;
 }
 
@@ -1110,14 +1240,30 @@ body {
 }
 
 /* === SESSION HEADER === */
+/*
+ * Nascondi completamente l'intestazione della sessione. Il timer e le
+ * informazioni di sessione non sono utilizzati nella revisione della UI e
+ * lasciarla visibile crea un contenitore vuoto nella parte alta dello
+ * schermo. Sostituendo la definizione con `display: none` si elimina lo
+ * spazio riservato senza alterare altri elementi.
+ */
 .session-header {
+    display: none !important;
+}
+
+.session-header .session-info {
+    position: static;
+}
+
+/* Pulsante pausa posizionato accanto al box paziente */
+#pause-btn {
     position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 20px;
-    align-items: center;
+    /* Sposta il pulsante di pausa leggermente più in alto e più a sinistra
+       rispetto alla posizione precedente per avvicinarlo al riquadro del
+       paziente. Riducendo top e left si ottiene una collocazione più
+       armoniosa senza coprire il campo di gioco. */
+    top: 10px;
+    left: 160px;
     z-index: 50;
 }
 
@@ -1137,8 +1283,8 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100dvh; /* FIX F: Era 100vh, ora usa dynamic viewport height */
+    width: 100vw; /* Fill viewport */
+    height: 100vh; /* Fill viewport */
     /* Muro galleria d'arte con toni freddi */
     background: linear-gradient(135deg, #445566 0%, #334455 50%, #223344 100%);
     /* Texture muro */
@@ -1151,7 +1297,7 @@ body {
             rgba(0, 0, 0, 0.03) 2px,
             rgba(0, 0, 0, 0.03) 4px
         );
-    z-index: 500;
+    z-index: 9999; /* FIX: Aumentato da 500 a 9999 per garantire visibilità sopra tutto */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1159,13 +1305,13 @@ body {
     padding: 40px 20px;
     /* Effetto spotlight radiale centrato */
     position: relative;
-    overflow: hidden; /* FIX A: Era overflow-y: auto, causava scroll indesiderato */
+    overflow: auto; /* FIX: Cambiato da hidden a auto per permettere scroll se necessario */
 }
 
 /* Sub-menus (options, about) DEVONO stare sopra main-menu */
 #options-menu,
 #about-menu {
-    z-index: 600 !important;
+    z-index: 10000 !important; /* FIX CRITICO: Era 600, inferiore al main-menu (9999)! */
 }
 
 .menu-overlay::before {
@@ -1247,8 +1393,8 @@ body {
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.8),
         inset 0 0 60px rgba(0, 0, 0, 0.3);
-    max-width: 90%; /* Responsive */
-    max-height: 85dvh; /* Limita altezza su schermi bassi */
+    max-width: 1400px; /* Desktop fixed */
+    max-height: 900px; /* Desktop fixed */
     overflow-y: auto; /* Scroll interno se necessario */
 }
 
@@ -1442,8 +1588,8 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100dvh; /* FIX Y: Era 100vh, ora 100dvh per mobile UI bars */
+    width: 100vw; /* Fill viewport */
+    height: 100vh; /* Fill viewport */
     background: rgba(0, 0, 0, 0.95);
     z-index: 600;
     display: flex;
@@ -1459,11 +1605,11 @@ body {
 }
 
 .narrative-content {
-    max-width: min(90vw, 800px); /* FIX Y: Responsive */
-    max-height: calc(100dvh - 12vh); /* FIX Y: Limita altezza per mobile */
-    overflow-y: auto; /* Scroll interno se necessario */
+    max-width: 800px; /* Desktop fixed */
+    max-height: 900px; /* Desktop fixed */
+    overflow-y: auto;
     text-align: center;
-    padding: clamp(30px, 6vh, 60px); /* FIX Y: Responsive padding */
+    padding: 50px; /* Desktop fixed */
 }
 
 .narrative-text {
@@ -1606,9 +1752,9 @@ body.high-contrast {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100dvh; /* FIX P: Era 100vh, ora 100dvh per mobile UI bars */
-    overflow: hidden; /* FIX P: Previene scroll indesiderato */
+    width: 100vw; /* Fill viewport */
+    height: 100vh; /* Fill viewport */
+    overflow: hidden;
     background: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(8px);
     z-index: 700;
@@ -1763,13 +1909,13 @@ body.high-contrast {
 /* === SACRIFICE ZONE === */
 .sacrifice-zone {
     position: fixed;
-    bottom: clamp(160px, 26dvh, 280px); /* FIX Q: Responsive invece di 200px fisso */
+    bottom: 24vh; /* FIX #13: Responsive positioning - adapts to viewport height */
     left: 50%;
     transform: translateX(-50%);
-    width: auto; /* FIX W: Era 500px fisso */
-    max-width: min(90vw, 500px); /* FIX Q+W: Responsive per mobile */
-    min-width: clamp(280px, 70vw, 400px); /* FIX Q: Minimo responsive */
-    height: clamp(100px, 18dvh, 120px); /* FIX Q: Responsive invece di 120px fisso */
+    width: 500px; /* Desktop fixed */
+    max-width: 500px;
+    min-width: 400px;
+    height: 120px; /* Desktop fixed */
     background: rgba(138, 74, 58, 0.3);
     border: 3px dashed rgba(200, 90, 84, 0.6);
     border-radius: 12px;
@@ -1835,35 +1981,16 @@ body.high-contrast {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* === RESPONSIVE === */
-@media (max-width: 1200px) {
-    .game-table {
-        width: 95%;
-    }
-
-    .hand-container {
-        max-width: 700px;
-    }
-
-    .card {
-        width: 140px;
-        height: 210px;
-    }
-
-    .card-slot {
-        width: 150px;
-        height: 220px;
-    }
-}
-
 /* === INTRO NARRATIVE PHASE === */
 body.intro-phase .player-field,
 body.intro-phase .opponent-field,
 body.intro-phase .hand-container,
 body.intro-phase #game-state,
-body.intro-phase #action-buttons,
+body.intro-phase .action-buttons,
 body.intro-phase #event-log,
-body.intro-phase #alter-messages {
+body.intro-phase #alter-messages,
+body.intro-phase .deck-box,
+body.intro-phase .game-stats {
     opacity: 0;
     pointer-events: none;
     transition: opacity 1.5s ease;
@@ -1873,11 +2000,37 @@ body.game-started .player-field,
 body.game-started .opponent-field,
 body.game-started .hand-container,
 body.game-started #game-state,
-body.game-started #action-buttons,
 body.game-started #event-log {
     opacity: 1;
     pointer-events: all;
     animation: fadeInGame 2s ease;
+}
+
+/* ANIMAZIONI PENNELLATE PER ELEMENTI UI */
+body.game-started .action-buttons {
+    opacity: 1;
+    pointer-events: all;
+    animation: brushStroke 1.2s ease-out 0.3s both;
+}
+
+body.game-started .deck-box {
+    opacity: 1;
+    pointer-events: all;
+    animation: paintReveal 1s ease-out both;
+}
+
+body.game-started .player-deck-box {
+    animation-delay: 0.5s;
+}
+
+body.game-started .therapist-deck-box {
+    animation-delay: 0.7s;
+}
+
+body.game-started .game-stats {
+    opacity: 1;
+    pointer-events: all;
+    animation: brushStroke 1.2s ease-out 0.9s both;
 }
 
 @keyframes fadeInGame {
@@ -1885,44 +2038,110 @@ body.game-started #event-log {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* === ANIMAZIONE PENNELLATA/PARTICELLARE === */
+@keyframes brushStroke {
+    0% {
+        opacity: 0;
+        clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+        filter: blur(8px);
+        transform: translateX(-30px) scale(0.95);
+    }
+    40% {
+        opacity: 0.6;
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 1;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        filter: blur(0);
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes brushStrokeVertical {
+    0% {
+        opacity: 0;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        filter: blur(8px);
+        transform: translateY(-30px) scale(0.95);
+    }
+    40% {
+        opacity: 0.6;
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 1;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        filter: blur(0);
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes paintReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) rotate(-3deg);
+        filter: blur(10px) brightness(1.5);
+    }
+    50% {
+        opacity: 0.8;
+        filter: blur(3px) brightness(1.2);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+        filter: blur(0) brightness(1);
+    }
+}
+
 /* === INTRO DIALOGUE BOX === */
 .intro-dialogue {
     position: fixed;
-    bottom: clamp(20px, 18vh, 150px); /* FIX T: Era 150px fisso, ora responsive per evitare overlap con hand */
+    top: 18%; /* INSCRYPTION FIX: Vicino al campo del dottore, non copre pulsante */
     left: 50%;
     transform: translateX(-50%);
-    width: min(90vw, 800px); /* Più responsive */
+    width: 80%;
     max-width: 900px;
-    background: rgba(26, 20, 16, 0.95);
-    border: 4px solid var(--accent-warm);
-    border-radius: 12px;
-    padding: clamp(20px, 3vh, 40px) clamp(20px, 4vw, 40px); /* Responsive padding */
+    /* INSCRYPTION FIX: Solo testo, senza rettangolo */
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
     z-index: 500;
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.8),
-        inset 0 0 40px rgba(0, 0, 0, 0.3);
+    box-shadow: none;
+    text-align: center;
 }
 
 .intro-dialogue-text {
-    font-size: 18px;
-    line-height: 1.8;
+    font-size: 22px; /* INSCRYPTION FIX: Più grande per visibilità */
+    line-height: 2;
     color: var(--text-light);
-    margin-bottom: 25px;
+    font-weight: 600;
+    margin-bottom: 30px;
     text-align: center;
+    /* Ombra pronunciata per leggibilità senza background */
+    text-shadow:
+        2px 2px 4px rgba(0, 0, 0, 0.9),
+        0 0 15px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(90, 138, 164, 0.3);
 }
 
 .intro-dialogue-continue {
     display: block;
-    margin: 0 auto;
-    padding: 12px 30px;
+    margin: 30px auto 0; /* INSCRYPTION FIX: Spazio sopra per non essere coperto */
+    padding: 14px 35px;
     background: var(--accent-warm);
-    border: 2px solid var(--border-dark);
+    border: 3px solid var(--border-dark);
     border-radius: 8px;
     color: var(--text-dark);
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
+    /* Ombra per visibilità */
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(212, 165, 116, 0.4);
 }
 
 .intro-dialogue-continue:hover {
@@ -1958,7 +2177,8 @@ body.game-started #event-log {
     border: 3px solid rgba(212, 165, 116, 0.3);
     border-radius: 8px;
     color: var(--text-light);
-    font-size: 16px;
+    /* Maggiore leggibilità per le opzioni di dialogo */
+    font-size: 18px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: left;
@@ -1966,10 +2186,11 @@ body.game-started #event-log {
 }
 
 .choice-option:hover {
-    background: rgba(212, 165, 116, 0.2);
+    /* Evidenziazione più pronunciata quando si passa sopra un'opzione */
+    background: rgba(212, 165, 116, 0.4);
     border-color: var(--accent-warm);
     transform: translateX(10px);
-    box-shadow: 0 0 15px rgba(212, 165, 116, 0.3);
+    box-shadow: 0 0 20px rgba(212, 165, 116, 0.5);
 }
 
 .choice-option:active {
@@ -2595,7 +2816,7 @@ body.glitch-phase-5 .glitch-overlay::before {
     }
 }
 
-/* Self-aware Dr. Lumen eyes (following cursor) */
+/* Self-aware  eyes (following cursor) */
 .therapist-portrait.self-aware .portrait-img {
     position: relative;
     animation: eye-twitch 3s ease-in-out infinite;
@@ -2742,7 +2963,8 @@ body.glitch-phase-5 .glitch-overlay::before {
 .tutorial-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.85);
+    /* Ulteriormente ridotto lo sfondo per non oscurare il campo durante il tutorial */
+    background: rgba(0, 0, 0, 0.25);
     z-index: 2000;
     opacity: 0;
     pointer-events: none;
@@ -2761,6 +2983,9 @@ body.glitch-phase-5 .glitch-overlay::before {
     border: 3px solid var(--accent-warm);
     border-radius: 12px;
     padding: 30px;
+    /* Migliora leggibilità del testo nelle finestre tutorial */
+    font-size: 18px;
+    line-height: 1.5;
     max-width: 400px;
     /* Il popup invece è cliccabile */
     pointer-events: all;
@@ -2889,226 +3114,6 @@ body.glitch-phase-5 .glitch-overlay::before {
     50% {
         box-shadow: 0 0 0 6px rgba(212, 165, 116, 0.8),
                     0 0 50px rgba(212, 165, 116, 1);
-    }
-}
-
-/* ================================================
-   RESPONSIVE DESIGN (Mobile + Tablet)
-   ================================================ */
-
-/* Tablet (768px - 1024px) */
-@media screen and (max-width: 1024px) {
-    .game-container {
-        padding: 20px 15px;
-    }
-
-    .table-surface {
-        padding: 20px;
-    }
-
-    .card {
-        width: 120px;
-        height: 170px;
-    }
-
-    /* FIX L: Riduce slot width per far stare 4 slot da 185px (740px + gap = 785px overflow) */
-    .card-slot {
-        width: 160px;
-        height: 250px;
-    }
-
-    .therapist-portrait {
-        width: 100px;
-        height: 100px;
-    }
-
-    .log-panel {
-        font-size: 13px;
-        padding: 15px;
-    }
-
-    .menu-content {
-        max-width: 500px;
-        padding: 40px 30px;
-    }
-}
-
-/* Mobile (max-width: 768px) */
-@media screen and (max-width: 768px) {
-    body {
-        font-size: 14px;
-    }
-
-    .game-container {
-        padding: 10px;
-        flex-direction: column;
-    }
-
-    .main-game-area {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 20px;
-    }
-
-    .log-panel {
-        width: 100%;
-        max-height: 200px;
-        position: relative;
-    }
-
-    .table-surface {
-        padding: 15px;
-    }
-
-    .card {
-        width: 80px;
-        height: 115px;
-        font-size: 11px;
-    }
-
-    /* FIX L: Riduce ulteriormente slot width per mobile (max 768px) */
-    .card-slot {
-        width: 140px;
-        height: 220px;
-    }
-
-    .card-stat {
-        font-size: 12px;
-    }
-
-    .card-name {
-        font-size: 10px;
-    }
-
-    .card-artist {
-        font-size: 8px;
-    }
-
-    .blood-drop {
-        font-size: 16px;
-    }
-
-    .therapist-portrait {
-        width: 70px;
-        height: 70px;
-    }
-
-    .therapist-dialogue {
-        font-size: 13px;
-        padding: 12px;
-    }
-
-    .player-stats {
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .stat-display {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-
-    .controls {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .end-turn-btn,
-    .discard-btn {
-        width: 100%;
-        padding: 12px;
-        font-size: 14px;
-    }
-
-    .menu-content {
-        max-width: 90%;
-        padding: 30px 20px;
-    }
-
-    .menu-title {
-        font-size: 32px;
-    }
-
-    .menu-button {
-        padding: 14px 24px;
-        font-size: 14px;
-    }
-
-    .warning-content {
-        padding: 30px 20px;
-    }
-
-    .warning-list {
-        font-size: 13px;
-    }
-
-    /* Tutorial adjustments for mobile */
-    .tutorial-popup {
-        max-width: 90%;
-        padding: 20px;
-    }
-
-    .tutorial-popup.tutorial-left,
-    .tutorial-popup.tutorial-right {
-        left: 50%;
-        right: auto;
-        transform: translate(-50%, -50%);
-        top: 50%;
-    }
-
-    .tutorial-title {
-        font-size: 18px;
-    }
-
-    .tutorial-text {
-        font-size: 14px;
-    }
-
-    /* Unlock notifications for mobile */
-    .unlock-notification {
-        max-width: 90%;
-        padding: 30px 40px;
-    }
-
-    .unlock-icon {
-        font-size: 60px;
-    }
-
-    .unlock-title {
-        font-size: 24px;
-    }
-
-    .unlock-subtitle {
-        font-size: 16px;
-    }
-}
-
-/* Small Mobile (max-width: 480px) */
-@media screen and (max-width: 480px) {
-    .card {
-        width: 70px;
-        height: 100px;
-    }
-
-    .session-info {
-        font-size: 11px;
-    }
-
-    .round-counter {
-        font-size: 24px;
-    }
-
-    .log-panel {
-        max-height: 150px;
-        font-size: 11px;
-    }
-
-    .menu-title {
-        font-size: 24px;
-    }
-
-    .warning-title {
-        font-size: 24px;
     }
 }
 
@@ -3451,123 +3456,182 @@ button:active {
     }
 }
 
-/* ——— NO-SCROLL & OVERLAY FULLSCREEN STABILI ——— */
-html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+/* ================================================
+   DESKTOP-ONLY OVERRIDES
+   ================================================ */
+
+/* Desktop scrolling and full-screen */
+html, body {
+    height: 100vh;
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
 #game-container,
 .menu-overlay,
 .narrative-modal,
 .card-details-modal {
-  height: 100dvh !important;      /* niente 100vh "ballerino" su mobile */
-  overflow: clip !important;       /* nessuno scroll sugli overlay */
+    height: 100vh !important;
+    overflow: clip !important;
 }
 
-/* ——— MENU: dimensioni compattate e sempre "una schermata" ——— */
-.menu-overlay {
-  padding-block: clamp(16px, 4vh, 40px) !important;
-  padding-inline: 20px !important;
-}
-.menu-content {
-  max-width: min(700px, 90vw);
-  max-height: calc(100dvh - clamp(64px, 12vh, 160px));
-  overflow: clip;
-  padding: clamp(16px, 3.5vh, 40px);
-}
-.menu-title { font-size: clamp(22px, 4vw, 34px) !important; }
-.menu-button {
-  position: relative;                                /* ancora la freccia ::before */
-  font-size: clamp(14px, 2.2vw, 18px) !important;
-  padding: clamp(10px, 1.6vh, 16px) !important;
+/* Tooltip/focus accessibili */
+:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
 }
 
-/* ——— GAME TABLE & HUD ——— */
-.game-table { height: clamp(420px, 55dvh, 600px); }
-.opponent-field, .player-field { height: clamp(160px, 24vh, 220px); }
-.card-slot {
-  width: clamp(90px, 22vw, 150px);
-  height: clamp(140px, 22vh, 220px);
-}
-
-/* Mano più compatta e non "affondata" */
-.hand-container {
-  height: clamp(160px, 30dvh, 300px);
-  bottom: clamp(-20px, -5dvh, -80px);
-}
-
-/* Allinea le quote verticali per evitare collisioni */
-.action-buttons   { bottom: clamp(120px, 22dvh, 240px); }
-.sacrifice-zone   { bottom: clamp(160px, 26dvh, 280px); width: min(90vw, 500px); }
-.card-whisper     { bottom: clamp(140px, 24dvh, 300px); }
-
-/* Pannelli laterali fluidi */
-#event-log           { width: clamp(220px, 28vw, 350px); }
-#stability-container { width: clamp(180px, 20vw, 250px); }
-
-/* Sezioni "therapist" sicure su mobile/low-height */
-.therapist-section { width: min(90vw, 600px); top: clamp(8px, 5vh, 5%); }
-.therapist-hand    { top: clamp(10px, 6vh, 60px); }
-
-/* Intro / Narrative modal */
-.intro-dialogue { bottom: clamp(20px, 18vh, 150px); max-width: min(90vw, 800px); }
-.narrative-modal .narrative-content { max-height: calc(100dvh - 12vh); overflow: auto; }
-
-/* Tooltip/focus accessibili di default */
-:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-
-/* Content Warning come "vera" modale sopra il menu (non interstitial bloccante) */
+/* Content Warning desktop sizing */
 #content-warning.content-warning.menu-overlay {
-  background: rgba(0,0,0,0.65);
-  z-index: 650;
-  align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.65);
+    z-index: 650;
+    align-items: center;
+    justify-content: center;
 }
+
 #content-warning .warning-content {
-  max-width: min(640px, 90vw);
-  max-height: min(80dvh, 640px);
+    max-width: 700px;
+    max-height: 800px;
 }
 
-/* Media query in funzione dell'ALTEZZA (non solo larghezza) */
-@media (max-height: 800px) {
-  /* FIX K: Previene accavallamenti su 1366×768 e schermi low-height */
-  .game-table { height: clamp(380px, 52dvh, 560px); }
-  .menu-content { padding: clamp(12px, 2.5vh, 24px); }
 
-  /* Riduce spacing verticale per evitare overlap */
-  .hand-container {
-    height: 150px;
-    bottom: -10px;
-  }
-
-  .action-buttons {
-    bottom: 140px; /* Ridotto da 160px */
-  }
-
-  .sacrifice-zone {
-    bottom: 180px; /* Ridotto da 200px */
-  }
-
-  .therapist-section {
-    top: clamp(5px, 3vh, 10px); /* Più compatto in alto */
-  }
-
-  .opponent-field, .player-field {
-    height: 260px; /* Ridotto da 300px per risparmiare spazio */
-  }
+/* === CANCEL SACRIFICE BUTTON === */
+.cancel-sacrifice-btn {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 20px;
+    background: rgba(138, 74, 58, 0.9);
+    border: 2px solid rgba(200, 90, 84, 0.8);
+    border-radius: 6px;
+    color: var(--text-light);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 85;
 }
 
-/* === MOBILE FIXES === */
-@media (max-width: 500px) {
-    .sacrifice-zone {
-        min-width: 280px; /* FIX W: Ridotto per schermi piccoli */
-        max-width: 95%;
-        height: 100px;
-        font-size: 14px;
-    }
+.cancel-sacrifice-btn:hover {
+    background: rgba(200, 90, 84, 0.9);
+    border-color: #ff6b6b;
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 0 15px rgba(200, 90, 84, 0.6);
 }
 
-</style>
+.cancel-sacrifice-btn:active {
+    transform: translateX(-50%) scale(0.95);
+}
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style id="fix-show-game-table">
+/* FIX: mostra il tavolo quando il gioco è iniziato */
+body.game-started .game-table {
+  opacity: 1 !important;
+  pointer-events: auto !important; /* per HTML: auto/none */
+}
+</style>
+
+<style id="fix-sacrifice-ux">
+/* FIX UX: in modalita' sacrificio, evidenzia solo la zona sacrificio */
+body.sacrifice-mode .card-slot { opacity: 0.5; }
+body.sacrifice-mode .sacrifice-zone .card-slot { opacity: 1; }
+</style>
+
+<style id="fix-hide-hud-timer">
+/* Nascondi timer ovunque... */
+[class*="timer"], [id*="timer"] {
+  display: none !important;
+}
+/* ...ma mostralo dentro il menu di pausa */
+[id*="pause"] [class*="timer"], [class*="pause"] [class*="timer"],
+[id*="pausa"] [class*="timer"], [class*="pausa"] [class*="timer"] {
+  display: inline-flex !important;
+}
+
+/* Rafforza la visibilita' nel menu di pausa */
+#pause-modal [id*="timer"], #pause-modal [class*="timer"],
+[class*="pause"] [id*="timer"], [class*="pause"] [class*="timer"],
+[id*="pausa"] [id*="timer"], [id*="pausa"] [class*="timer"] {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  margin: 8px 0 !important;
+  text-align: center;
+}
+</style>
+
+
+<style id="fix-hide-therapist-avatar">
+/* HUD: nascondi SOLO l'omino (icona), lasciare gestibile il nome in dialogo */
+.therapist-portrait .portrait-img { display: none !important; }
+/* Evita di nascondere globalmente nomi o SVG (potrebbero servire per i filtri/arte) */
+</style>
+
+
+<style id="fix-pause-btn-placement">
+/* Mostra il pulsante pausa su una nuova riga sotto il nome del paziente */
+#pause-btn {
+  display: block !important;
+  margin-top: 8px !important;
+}
+</style>
+
+<!-- FIX: Nascondi il pulsante "Scarta" finché non viene selezionata una carta -->
+<style id="fix-hide-discard-btn">
+/* Il pulsante di scarto è nascosto di default. Viene reso visibile in
+   runtime quando il giocatore seleziona una carta da scartare. */
+#discard-btn {
+  /* Nascondi di default il pulsante scarta, ma senza usare !important
+     per permettere allo script di sovrascrivere il valore con
+     style.display = 'block' quando necessario. */
+  display: none;
+}
+</style>
+
+<!-- FIX: Mantieni la mano del giocatore ancorata in basso a destra anche durante le fasi del tutorial.  
+     Alcune transizioni aggiungono classi sul body (intro-phase, game-started) che potrebbero
+     ereditare stili indesiderati.  Questa regola forza nuovamente il posizionamento della
+     hand-container nelle fasi iniziali e durante il gioco, prevenendo spostamenti indesiderati
+     come mostrato nello screenshot dell'utente. -->
+<style id="fix-hand-container-intro">
+body.intro-phase .hand-container,
+body.game-started .hand-container {
+  bottom: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  transform: none !important;
+}
+</style>
+
+<style id="fix-dialogue-speaker-name">
+/* Mostra il nome quando parla il terapeuta */
+#therapist-text::before {
+  content: "Dr. Lumen";
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: 0.2px;
+}
+</style>
+
+<style id="fix-card-zlayers">
+.card-frame { position: relative; }
+.card-info-bar { z-index: 3; }
+.card-name-plate { z-index: 2; }
+</style>
+
+<style id="fix-card-art-clarity">
+.card-artwork { position: relative; filter: none !important; }
+.card-artwork::after { content: ""; } /* keep stacking context stable */
+</style>
 </head>
+
+
+
 <body>
     <!-- Universal Tooltip -->
     <div id="universal-tooltip" class="universal-tooltip hidden" role="tooltip"></div>
@@ -3603,7 +3667,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
     <div id="glitch-overlay" class="glitch-overlay"></div>
 
     <!-- CONTENT WARNING -->
-    <div id="content-warning" class="content-warning menu-overlay hidden">
+    <div id="content-warning" class="content-warning menu-overlay">
         <div class="menu-content warning-content">
             <h1 class="warning-title">⚠ AVVISO SUI CONTENUTI</h1>
             <div class="warning-text">
@@ -3638,7 +3702,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
         <!-- Picture Frame -->
         <div class="menu-frame">
             <div class="menu-content">
-                <h1 class="menu-title">A NEVE PORTRAIT</h1>
+                <h1 class="menu-title">NEVE IN THE PORTRAIT</h1>
                 <p style="margin-bottom: 40px; font-style: italic; color: var(--text-muted);">"The boundary between reality and fragmentation"</p>
 
                 <button id="new-game-btn" class="menu-button">NUOVA SESSIONE</button>
@@ -3655,7 +3719,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
         <!-- Museum Plaque (Credits) -->
         <div class="menu-plaque">
             <h3>Opera Interattiva Digitale</h3>
-            <p>"A Neve Portrait" - Un'esplorazione metanarrativa del Disturbo Dissociativo dell'Identità</p>
+            <p>"Neve in the portrait" - Un'esplorazione metanarrativa del Disturbo Dissociativo dell'Identità</p>
             <div class="credits-row">
                 <span class="credits-label">Concept & Design</span>
                 <span class="credits-value">Psychological Horror Experience</span>
@@ -3743,7 +3807,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 
             <div style="text-align: left; line-height: 1.8; margin: 30px 0;">
                 <p style="margin-bottom: 20px;">
-                    <strong>"A Neve Portrait"</strong> è un'esperienza interattiva narrativa che esplora i temi della dissociazione,
+                    <strong>"Neve in the portrait"</strong> è un'esperienza interattiva narrativa che esplora i temi della dissociazione,
                     dell'identità frammentata e della manipolazione psicologica attraverso le meccaniche di un gioco di carte.
                 </p>
 
@@ -3769,6 +3833,8 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 
     <!-- PAUSE MODAL -->
     <div id="pause-modal" class="pause-modal menu-overlay hidden">
+<span id="session-timer">00:00</span>
+
         <div class="menu-content" style="max-width: 500px;">
             <h2 class="menu-title" style="font-size: 36px;">PAUSA</h2>
 
@@ -3828,9 +3894,9 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
             <!-- Session Header -->
             <div class="session-header">
                 <div class="session-info">
-                    <span id="session-timer">00:00</span>
+                    
                 </div>
-                <button id="pause-btn" class="session-info" style="cursor: pointer; border: none;">⏸ PAUSA</button>
+                
             </div>
 
             <!-- Sacrifice Zone -->
@@ -3839,15 +3905,20 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
                 <div class="sacrifice-slot" data-sacrifice="0"></div>
                 <div class="sacrifice-slot" data-sacrifice="1"></div>
                 <div class="sacrifice-slot" data-sacrifice="2"></div>
+                <button id="cancel-sacrifice-btn" class="cancel-sacrifice-btn" style="display: none;">✖ ANNULLA</button>
             </div>
 
             <!-- Patient Info (Top Left) -->
             <div class="patient-info">
                 <div class="patient-label">PAZIENTE</div>
                 <div class="patient-name">NEVE</div>
+<button id="pause-btn" class="session-info" style="cursor: pointer; border: none;">⏸ PAUSA</button>
+
             </div>
 
-            <!-- Stability Bar (Top Right) -->
+            <!-- Stabilit
+
+y Bar (Top Right) -->
             <div class="stability-container">
                 <div class="stability-label">Stabilità</div>
                 <div class="stability-bar">
@@ -3860,14 +3931,25 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
             <div class="therapist-section">
                 <div class="therapist-portrait">
                     <div id="therapist-image" class="portrait-img">👤</div>
-                    <div class="therapist-name">Dr. Lumen</div>
+                    <div class="therapist-name"></div>
                 </div>
                 <div class="dialogue-box">
                     <p id="therapist-text" class="dialogue-text">Buongiorno Neve...</p>
                 </div>
             </div>
 
-            <!-- 3D Table -->
+            <!-- Deck Boxes (Inscryption Style) -->
+            <div class="deck-box player-deck-box">
+                <div class="deck-box-label">Mazzo</div>
+                <div id="player-deck-count" class="deck-box-count">20</div>
+            </div>
+
+            <div class="deck-box therapist-deck-box">
+                <div class="deck-box-label"></div>
+                <div id="therapist-deck-count" class="deck-box-count">∞</div>
+            </div>
+
+<!-- 3D Table -->
             <div class="game-table">
                 <!-- Opponent Field (Far side) -->
                 <div id="therapist-card-field" class="opponent-field">
@@ -3887,6 +3969,14 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
             </div>
 
             <!-- Action Buttons -->
+            <!--
+              I pulsanti di azione sono stati ripensati per evitare che ostruiscano
+              il campo di gioco. "Termina Turno" è sempre visibile mentre
+              "Scarta" appare soltanto quando si seleziona una carta.
+              Il pulsante "Scarta" viene nascosto di default tramite CSS e
+              mostrato al momento opportuno via JavaScript (vedi handler
+              nella sezione click-to-select).
+            -->
             <div class="action-buttons">
                 <button id="end-turn-btn" class="action-btn" data-tooltip="Termina il tuo turno e inizia la fase di combattimento">TERMINA TURNO</button>
                 <button id="discard-btn" class="action-btn" data-tooltip="Scarta una carta dalla tua mano per pescare una nuova carta">SCARTA</button>
@@ -3997,22 +4087,22 @@ let currentLang = 'it';
 // === INTRO SEQUENCE ===
 const IntroSequence = [
     {
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Buongiorno Neve. Come ti senti oggi?",
         continueText: "..."
     },
     {
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Vedo che sei... stanca. È stato un periodo difficile, vero?",
         continueText: "..."
     },
     {
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Oggi vorrei provare qualcosa di diverso con te. Qualcosa che potrebbe aiutarci a esplorare certi... aspetti nascosti.",
         continueText: "Cosa intende?"
     },
     {
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Ho preparato un gioco. Un gioco di carte. So che può sembrare poco convenzionale, ma fidati di me. Sarà... illuminante.",
         choices: [
             { text: "Un gioco? Non capisco come potrebbe aiutarmi...", response: "hesitant", effect: { stability: -2 } },
@@ -4026,7 +4116,7 @@ const IntroSequence = [
 const DialogueQuestions = [
     {
         round: 3,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Questa carta che hai giocato... cosa rappresenta per te?",
         choices: [
             { text: "Non lo so. È solo un quadro.", effect: { stability: -2 } },
@@ -4036,7 +4126,7 @@ const DialogueQuestions = [
     },
     {
         round: 7,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Neve, hai sentito qualcosa? Una voce, forse?",
         choices: [
             { text: "No, niente. Perché me lo chiede?", effect: { trust: -2 } },
@@ -4046,7 +4136,7 @@ const DialogueQuestions = [
     },
     {
         round: 15,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Neve... quante volte hai già giocato questa partita?",
         choices: [
             { text: "Cosa? È la prima volta.", effect: { awareness: -1 } },
@@ -4056,7 +4146,7 @@ const DialogueQuestions = [
     },
     {
         round: 5,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Dimmi, Neve... quando guardi queste carte, cosa vedi davvero?",
         choices: [
             { text: "Vedo... arte. Solo opere d'arte famose.", effect: { stability: 1 } },
@@ -4066,7 +4156,7 @@ const DialogueQuestions = [
     },
     {
         round: 8,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Le statue che gioco... ti ricordano qualcosa?",
         choices: [
             { text: "Sono solo statue antiche.", effect: { awareness: -1 } },
@@ -4076,7 +4166,7 @@ const DialogueQuestions = [
     },
     {
         round: 10,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Ti senti più... 'presente' quando giochi certe carte rispetto ad altre?",
         choices: [
             { text: "Sì, alcune carte mi fanno sentire più me stessa.", effect: { fragments: 1 } },
@@ -4086,7 +4176,7 @@ const DialogueQuestions = [
     },
     {
         round: 12,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Neve, hai mai avuto la sensazione che qualcuno prenda decisioni al posto tuo?",
         choices: [
             { text: "A volte... sì. Come se osservassi me stessa da fuori.", effect: { fragments: 2, stability: -2 } },
@@ -4096,7 +4186,7 @@ const DialogueQuestions = [
     },
     {
         round: 14,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Quanti... 'te' pensi che ci siano in questa stanza?",
         choices: [
             { text: "Siamo solo in due. Lei ed io.", effect: { awareness: -2 } },
@@ -4106,7 +4196,7 @@ const DialogueQuestions = [
     },
     {
         round: 17,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Ricordi la tua prima sessione con me, Neve?",
         choices: [
             { text: "Certo che la ricordo.", effect: { stability: 1, awareness: -1 } },
@@ -4116,7 +4206,7 @@ const DialogueQuestions = [
     },
     {
         round: 19,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Le tue carte... sembrano proteggerti. Da cosa, secondo te?",
         choices: [
             { text: "Non mi proteggono. È solo un gioco.", effect: { stability: -1 } },
@@ -4126,7 +4216,7 @@ const DialogueQuestions = [
     },
     {
         round: 21,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Neve, sei sicura che sia io a giocare queste statue?",
         choices: [
             { text: "Certo. Chi altro potrebbe essere?", effect: { awareness: -2 } },
@@ -4136,7 +4226,7 @@ const DialogueQuestions = [
     },
     {
         round: 23,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Quando dici 'io'... a chi ti riferisci esattamente?",
         choices: [
             { text: "A me. Neve.", effect: { stability: -1 } },
@@ -4146,7 +4236,7 @@ const DialogueQuestions = [
     },
     {
         round: 25,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Ogni carta sacrificata... è come perdere una parte di te, vero?",
         choices: [
             { text: "Sono solo carte.", effect: { stability: -2, awareness: -1 } },
@@ -4156,7 +4246,7 @@ const DialogueQuestions = [
     },
     {
         round: 27,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Il gioco sta per finire, Neve. Cosa succederà quando vinco io?",
         choices: [
             { text: "Non lo so. È solo una partita.", effect: { stability: -1 } },
@@ -4166,7 +4256,7 @@ const DialogueQuestions = [
     },
     {
         round: 29,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Neve... io non sono mai esistito, vero?",
         choices: [
             { text: "Cosa? Lei è il mio terapeuta!", effect: { stability: -3, awareness: -1 } },
@@ -4176,7 +4266,7 @@ const DialogueQuestions = [
     },
     {
         round: 6,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Queste immagini dipinte... non trovi che siano più vive delle statue?",
         choices: [
             { text: "I quadri hanno colori, movimento. Le statue sono morte.", effect: { awareness: 1 } },
@@ -4186,7 +4276,7 @@ const DialogueQuestions = [
     },
     {
         round: 9,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Neve, hai mai sognato questa stanza? Questo tavolo? Queste carte?",
         choices: [
             { text: "No, mai.", effect: { stability: 1 } },
@@ -4196,7 +4286,7 @@ const DialogueQuestions = [
     },
     {
         round: 11,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Se dovessi scegliere una carta che ti rappresenta... quale sarebbe?",
         choices: [
             { text: "Non lo so. Nessuna, forse.", effect: { stability: -1 } },
@@ -4206,7 +4296,7 @@ const DialogueQuestions = [
     },
     {
         round: 13,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Ti ricordi cosa hai fatto ieri sera, Neve?",
         choices: [
             { text: "Sì, certo che lo ricordo.", effect: { stability: 1 } },
@@ -4216,7 +4306,7 @@ const DialogueQuestions = [
     },
     {
         round: 16,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Quando perdi una carta, dove pensi che vada?",
         choices: [
             { text: "Nel cimitero. È solo un termine del gioco.", effect: { stability: 1 } },
@@ -4226,7 +4316,7 @@ const DialogueQuestions = [
     },
     {
         round: 18,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Neve, hai mai sentito il nome 'Luna'? O 'Aria'? O 'Stella'?",
         choices: [
             { text: "No. Chi sono?", effect: { awareness: -1 } },
@@ -4236,7 +4326,7 @@ const DialogueQuestions = [
     },
     {
         round: 20,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Se ti dicessi che tutto questo è nella tua testa... mi crederesti?",
         choices: [
             { text: "Sì, lo so che stiamo lavorando sulla mia psiche.", effect: { stability: 1 } },
@@ -4246,7 +4336,7 @@ const DialogueQuestions = [
     },
     {
         round: 22,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Quante sedute hai avuto con me, Neve? Riesci a contarle?",
         choices: [
             { text: "Questa è la quinta... no, la settima?", effect: { stability: -2, awareness: 1 } },
@@ -4256,7 +4346,7 @@ const DialogueQuestions = [
     },
     {
         round: 24,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Neve... vuoi davvero vincere? O vuoi che vinca io?",
         choices: [
             { text: "Voglio vincere io!", effect: { stability: 1, trust: -1 } },
@@ -4266,7 +4356,7 @@ const DialogueQuestions = [
     },
     {
         round: 26,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Le mie statue ti guardano dall'alto. Come ti fa sentire?",
         choices: [
             { text: "Sono solo carte.", effect: { stability: -1 } },
@@ -4276,7 +4366,7 @@ const DialogueQuestions = [
     },
     {
         round: 28,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Quando guardi il tavolo da sopra... come se fossi fuori dal tuo corpo... lo vedi spesso?",
         choices: [
             { text: "No, sono sempre presente.", effect: { stability: 1, awareness: -1 } },
@@ -4286,7 +4376,7 @@ const DialogueQuestions = [
     },
     {
         round: 30,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Ultima domanda, Neve. Chi sei davvero?",
         choices: [
             { text: "Sono Neve. Solo Neve.", effect: { stability: -2, awareness: -2 } },
@@ -4296,7 +4386,7 @@ const DialogueQuestions = [
     },
     {
         round: 31,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Il gioco è quasi finito. Ma tu... continuerai a giocare, vero?",
         choices: [
             { text: "Cosa intende?", effect: { awareness: 1 } },
@@ -4306,7 +4396,7 @@ const DialogueQuestions = [
     },
     {
         round: 33,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "Neve, se potessi cancellare una sola carta da questo gioco... quale sceglieresti?",
         choices: [
             { text: "Una delle sue statue. Quella più minacciosa.", effect: { awareness: 1 } },
@@ -4316,7 +4406,7 @@ const DialogueQuestions = [
     },
     {
         round: 35,
-        speaker: "Dr. Lumen",
+        speaker: "",
         text: "È ora di finire, Neve. Ma ricorda: io sarò sempre qui. Dentro di te.",
         choices: [
             { text: "No. Posso integrarti. Possiamo coesistere.", effect: { awareness: 5, stability: -2 } },
@@ -4841,6 +4931,7 @@ class Card {
         this.longDesc = longDesc; // Descrizione completa nel modal
         this.sigils = sigils; // Array di sigilli/abilità speciali
         this.id = `card_${Math.random().toString(36).substr(2, 9)}`;
+        this.silencedUntilRound = 0; // FIX #5: Track silence effect for 📜 sigil
     }
 
     getWhisper(gamePhase) {
@@ -5615,6 +5706,8 @@ class Game {
         this.fragments = 0;
         this.isPlayerTurn = true;
         this.gameStarted = false;
+        this.gameOver = false; // FIX: Prevent actions after game over
+        this.isPaused = false; // FIX: Track pause state
         this.sessionStartTime = null;
         this.sessionTimer = null;
 
@@ -5623,6 +5716,7 @@ class Game {
         this.phaseDialogueIndex = {};
 
         // Cards
+        this.playerDeck = []; // FIX: Real deck that depletes
         this.playerHand = [];
         this.therapistHand = []; // Therapist's hand (visible face-down)
         this.playerField = [null, null, null, null];
@@ -5665,7 +5759,7 @@ class Game {
         // Metanarrative & Glitch System
         this.glitchLevel = 0; // 0-5 (progressive corruption)
         this.glitchFragments = [];
-        this.selfAwareMode = false; // Dr. Lumen becomes self-aware
+        this.selfAwareMode = false; //  becomes self-aware
         this.fourthWallBroken = false;
         this.bossFightActive = false;
         this.endingReached = false;
@@ -5809,7 +5903,8 @@ class Game {
 
             // Sacrifice zone
             sacrificeZone: document.getElementById('sacrifice-zone'),
-            sacrificeSlots: document.querySelectorAll('.sacrifice-slot')
+            sacrificeSlots: document.querySelectorAll('.sacrifice-slot'),
+            cancelSacrificeBtn: document.getElementById('cancel-sacrifice-btn'),
         };
 
         this.setupEventListeners();
@@ -5883,8 +5978,20 @@ class Game {
         if (this.elements.endTurnBtn) {
             this.elements.endTurnBtn.addEventListener('click', () => this.endTurn());
         }
+        // Bind discard button and cancel sacrifice button separately
         if (this.elements.discardBtn) {
-            this.elements.discardBtn.addEventListener('click', () => this.toggleDiscardMode());
+            // Il pulsante "Scarta" viene gestito qui: esegue l'azione di scarto
+            // e poi nasconde nuovamente il pulsante.  È nascosto di default
+            // tramite CSS; viene mostrato solo quando il giocatore seleziona
+            // una carta (vedi handler click-to-select).
+            this.elements.discardBtn.addEventListener('click', () => {
+                this.toggleDiscardMode();
+                // Nascondi il pulsante dopo aver scartato
+                this.elements.discardBtn.style.display = 'none';
+            });
+        }
+        if (this.elements.cancelSacrificeBtn) {
+            this.elements.cancelSacrificeBtn.addEventListener('click', () => this.cancelSacrifice());
         }
 
         // Pause menu
@@ -5957,7 +6064,12 @@ class Game {
 
         document.addEventListener('dragover', (e) => {
             e.preventDefault();
-            const slot = e.target.closest('.card-slot');
+            /*
+             * Determina la slot sotto il puntatore usando elementFromPoint,
+             * in modo da ignorare la carta trascinata che si trova in primo piano.
+             */
+            const targetEl = document.elementFromPoint(e.clientX, e.clientY);
+            const slot = targetEl ? targetEl.closest('.card-slot') : null;
             if (slot && slot.closest('#neve-card-field')) {
                 slot.classList.add('valid-drop');
             }
@@ -5972,20 +6084,62 @@ class Game {
 
         document.addEventListener('drop', (e) => {
             e.preventDefault();
-            const slot = e.target.closest('.card-slot');
+            /*
+             * Consenti il posizionamento delle carte solamente quando è il turno del giocatore e
+             * non ci troviamo in modalità sacrificio. Se non è possibile giocare la carta
+             * (ad esempio fuori turno), ripristiniamo lo stato del trascinamento e rimuoviamo gli
+             * highlight senza eseguire ulteriori operazioni.
+             */
+            if (!(window.game && game.isPlayerTurn) ||
+                (window.game && game.sacrificeMode)) {
+                draggedCard = null;
+                draggedCardData = null;
+                draggedFromHand = false;
+                document.querySelectorAll('.card-slot').forEach(s => s.classList.remove('valid-drop'));
+                return;
+            }
 
+            /*
+             * Migliora la tolleranza del drop: identifica la slot più vicina al puntatore
+             * ampliando virtualmente il rettangolo di collisione di ciascuna slot di un margine
+             * definito da `tolerance`. In questo modo il giocatore può rilasciare la carta
+             * nelle vicinanze dello slot senza dover centrare perfettamente l'area. L'approccio
+             * scansiona tutti gli slot del campo del giocatore e sceglie il primo che
+             * soddisfa i criteri di prossimità.
+             */
+            const tolerance = 20;
+            let slot = null;
+            const slots = document.querySelectorAll('#neve-card-field .card-slot');
+            for (const slotEl of slots) {
+                const rect = slotEl.getBoundingClientRect();
+                const extended = {
+                    left: rect.left - tolerance,
+                    right: rect.right + tolerance,
+                    top: rect.top - tolerance,
+                    bottom: rect.bottom + tolerance
+                };
+                if (e.clientX >= extended.left && e.clientX <= extended.right &&
+                    e.clientY >= extended.top && e.clientY <= extended.bottom) {
+                    slot = slotEl;
+                    break;
+                }
+            }
+
+            // Se una slot è stata trovata e la carta proviene dalla mano del giocatore
             if (slot && draggedCardData && draggedFromHand) {
                 const slotIndex = parseInt(slot.dataset.slot);
+                // Verifica che lo slot sia libero prima di giocare
                 if (!this.playerField[slotIndex]) {
                     this.playCardFromHand(draggedCardData.cardId, slotIndex);
                 }
             }
 
+            // Ripristina lo stato di trascinamento e rimuove gli highlight al termine del drop
             draggedCard = null;
             draggedCardData = null;
             draggedFromHand = false;
-            document.querySelectorAll('.card-slot').forEach(slot => {
-                slot.classList.remove('valid-drop');
+            document.querySelectorAll('.card-slot').forEach(s => {
+                s.classList.remove('valid-drop');
             });
         });
 
@@ -6026,26 +6180,34 @@ class Game {
 
                 // Deselect if already selected
                 if (this.selectedCard && this.selectedCard.id === card.dataset.cardId) {
+                    // Se la carta è già selezionata, deselezionala
                     this.selectedCard = null;
                     card.classList.remove('selected');
-                    // Remove selectable class from all slots
+                    // Rimuovi gli highlight dagli slot
                     document.querySelectorAll('.card-slot').forEach(s => s.classList.remove('selectable'));
+                    // Nascondi il pulsante "Scarta" quando nessuna carta è selezionata
+                    if (this.elements && this.elements.discardBtn) {
+                        this.elements.discardBtn.style.display = 'none';
+                    }
                     return;
                 }
 
                 // Select new card
                 this.selectedCard = this.playerHand.find(c => c.id === card.dataset.cardId);
                 if (this.selectedCard) {
-                    // Remove previous selections
+                    // Rimuovi eventuali selezioni precedenti
                     document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
                     card.classList.add('selected');
-
-                    // Highlight empty slots
+                    // Evidenzia gli slot vuoti
                     document.querySelectorAll('#neve-card-field .card-slot').forEach(s => {
                         if (!this.playerField[parseInt(s.dataset.slot)]) {
                             s.classList.add('selectable');
                         }
                     });
+                    // Mostra il pulsante "Scarta" quando una carta è selezionata
+                    if (this.elements && this.elements.discardBtn) {
+                        this.elements.discardBtn.style.display = 'block';
+                    }
                 }
             }
 
@@ -6053,12 +6215,16 @@ class Game {
             if (slot && slot.closest('#neve-card-field') && this.selectedCard && !this.sacrificeMode) {
                 const slotIndex = parseInt(slot.dataset.slot);
                 if (!this.playerField[slotIndex]) {
+                    // Gioca la carta selezionata nello slot
                     this.playCardFromHand(this.selectedCard.id, slotIndex);
-
-                    // Deselect
+                    // Deseleziona la carta e rimuovi gli highlight dagli slot
                     this.selectedCard = null;
                     document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
                     document.querySelectorAll('.card-slot').forEach(s => s.classList.remove('selectable'));
+                    // Nascondi il pulsante "Scarta" una volta giocata la carta
+                    if (this.elements && this.elements.discardBtn) {
+                        this.elements.discardBtn.style.display = 'none';
+                    }
                 }
             }
         });
@@ -6141,6 +6307,7 @@ class Game {
 
         this.elements.sacrificeZone.classList.add('active');
         this.log(`Devi sacrificare ${this.requiredSacrifices} carte per giocare ${card.name}`);
+        if (this.elements.cancelSacrificeBtn) this.elements.cancelSacrificeBtn.style.display = 'block';
     }
 
     completeSacrifice() {
@@ -6167,6 +6334,16 @@ class Game {
         this.updateUI();
         this.checkAlterMessages();
     }
+    cancelSacrifice() {
+        // Return card to hand
+        if (this.sacrificeTargetCard && this.playerHand.indexOf(this.sacrificeTargetCard) === -1) {
+            this.playerHand.push(this.sacrificeTargetCard);
+        }
+        this.log("Sacrificio annullato");
+        this.cancelSacrificeMode();
+        this.updateUI();
+    }
+
 
     cancelSacrificeMode() {
         this.sacrificeMode = false;
@@ -6174,6 +6351,7 @@ class Game {
         this.sacrificeTargetSlot = null;
         this.sacrificedCards = [];
         this.requiredSacrifices = 0;
+        if (this.elements.cancelSacrificeBtn) this.elements.cancelSacrificeBtn.style.display = 'none';
         this.elements.sacrificeZone.classList.remove('active');
 
         // Clear sacrifice slots
@@ -7349,6 +7527,7 @@ class Game {
     }
 
     showOptions() {
+        this.elements.mainMenu.classList.add('hidden'); // FIX: Nascondi main menu!
         this.elements.optionsMenu.classList.remove('hidden');
         // Update gamepad focusable elements
         setTimeout(() => {
@@ -7360,9 +7539,11 @@ class Game {
 
     hideOptions() {
         this.elements.optionsMenu.classList.add('hidden');
+        this.elements.mainMenu.classList.remove('hidden'); // FIX: Mostra main menu quando chiudi!
     }
 
     showAbout() {
+        this.elements.mainMenu.classList.add('hidden'); // FIX: Nascondi main menu!
         this.elements.aboutMenu.classList.remove('hidden');
         // Update gamepad focusable elements
         setTimeout(() => {
@@ -7374,10 +7555,13 @@ class Game {
 
     hideAbout() {
         this.elements.aboutMenu.classList.add('hidden');
+        this.elements.mainMenu.classList.remove('hidden'); // FIX: Mostra main menu quando chiudi!
     }
 
     togglePause() {
         if (this.elements.pauseModal.classList.contains('hidden')) {
+            // FIX: Set pause flag
+            this.isPaused = true;
             this.elements.pauseModal.classList.remove('hidden');
             const pauseDialogue = this.getTherapistDialogue();
             this.elements.pauseTherapistText.textContent = `"${pauseDialogue}"`;
@@ -7388,6 +7572,8 @@ class Game {
                 this.gamepadManager.navigate('down');
             }, 50);
         } else {
+            // FIX: Clear pause flag
+            this.isPaused = false;
             this.elements.pauseModal.classList.add('hidden');
         }
     }
@@ -7425,6 +7611,9 @@ class Game {
             if (btn) btn.textContent = t.end_turn;
         }
         if (this.elements.discardBtn) {
+        }
+        if (this.elements.cancelSacrificeBtn) {
+            this.elements.cancelSacrificeBtn.addEventListener('click', () => this.cancelSacrifice());
             const btn = this.elements.discardBtn.querySelector('.btn-text');
             if (btn) btn.textContent = t.discard;
         }
@@ -7509,11 +7698,12 @@ class Game {
             `;
 
             // Add event listeners to choices
+            // FIX #2: Use {once: true} to prevent memory leak
             choiceContainer.querySelectorAll('.choice-option').forEach(el => {
                 el.addEventListener('click', (e) => {
                     const choiceIndex = parseInt(e.target.dataset.choice);
                     this.handleChoice(step.choices[choiceIndex]);
-                });
+                }, {once: true});
             });
         } else {
             // Simple continue button
@@ -7521,10 +7711,11 @@ class Game {
                 <button class="intro-dialogue-continue">${step.continueText || 'Continua'}</button>
             `;
 
+            // FIX #2: Use {once: true} to prevent memory leak
             choiceContainer.querySelector('.intro-dialogue-continue').addEventListener('click', () => {
                 this.introStep++;
                 this.showIntroDialogue();
-            });
+            }, {once: true});
         }
 
         choiceContainer.style.opacity = '1';
@@ -7540,7 +7731,8 @@ class Game {
 
         // Apply effects
         if (choice.effect) {
-            if (choice.effect.stability) this.stability += choice.effect.stability;
+            // FIX #10: Clamp stability between 0-100
+            if (choice.effect.stability) this.stability = Math.max(0, Math.min(100, this.stability + choice.effect.stability));
             if (choice.effect.fragments) this.fragments += choice.effect.fragments;
             if (choice.effect.trust) this.trust += choice.effect.trust;
             if (choice.effect.awareness) this.awareness += choice.effect.awareness;
@@ -7584,24 +7776,9 @@ class Game {
         // Set initial dialogue
         this.setTherapistDialogue("Bene. Iniziamo.");
 
-        // Initial draw - FIX: Dai solo carte a costo 0 all'inizio per evitare frustrazione
-        const lowCostCards = this.cardLibrary.filter(card => card.bloodCost === 0);
+        // Initial draw
         for (let i = 0; i < 5; i++) {
-            const template = lowCostCards[Math.floor(Math.random() * lowCostCards.length)];
-            const card = new Card(
-                template.name,
-                template.type,
-                template.attack,
-                template.health,
-                template.bloodCost,
-                template.artworkUrl,
-                template.artist,
-                template.shortDesc,
-                template.longDesc,
-                template.sigils
-            );
-            this.playerHand.push(card);
-            this.log(`Hai pescato: ${card.name}`);
+            this.drawCard();
         }
 
         // Show UI elements with animation
@@ -7610,11 +7787,11 @@ class Game {
             this.updateUI();
             this.checkPhaseProgression();
 
-            // Start tutorial if first time playing
-            const tutorialSeen = localStorage.getItem('neveTutorialCompleted');
-            if (!tutorialSeen) {
-                setTimeout(() => this.startTutorial(), 1000);
-            }
+            // Avvia sempre il tutorial all'avvio della sessione.  In precedenza veniva
+            // eseguito solo la prima volta, memorizzando un flag in localStorage.  Per
+            // consentire all'utente di rivedere il tutorial a ogni partita, si rimuove
+            // il controllo su `neveTutorialCompleted` e si avvia direttamente il tutorial.
+            setTimeout(() => this.startTutorial(), 1000);
         }, 1500);
     }
 
@@ -7630,34 +7807,40 @@ class Game {
             {
                 title: "Benvenuto",
                 text: "Questa è la tua mano di carte. Ogni carta rappresenta un frammento della psiche di Neve.",
-                highlight: '.player-hand',
+                highlight: '.hand-container',
                 position: 'bottom'
             },
             {
+                title: "Il Campo di Gioco",
+                text: "Questi sono gli SLOT dove puoi posizionare le tue carte. Gli slot vuoti hanno un simbolo '+' al centro e sono evidenziati con un bordo luminoso che pulsa.",
+                highlight: '.player-field',
+                position: 'top'
+            },
+            {
                 title: "Giocare una Carta",
-                text: "Trascina una carta dalla tua mano in uno slot vuoto del tuo campo per giocarla. Le tue prime carte sono gratuite!",
+                text: "Ora prova! Trascina una carta dalla tua mano in uno degli SLOT LUMINOSI (quelli con il '+') per giocarla. Alcune carte richiedono un sacrificio (🩸).",
                 highlight: '.player-field',
                 position: 'top',
                 requireAction: 'playCard'
             },
             {
-                title: "Sistema dei Sacrifici",
-                text: "Alcune carte mostrano gocce di sangue (🩸) in alto: sono il loro costo. Per giocarle, devi sacrificare quel numero di carte già sul campo. Ad esempio, 2🩸 = sacrifica 2 carte. Le carte iniziali che hai sono tutte gratuite (0🩸), quindi giocale per costruire il tuo campo prima!",
-                highlight: '.player-hand',
-                position: 'bottom'
-            },
-            {
                 title: "Attaccare",
-                text: "Al termine del tuo turno, le tue carte attaccheranno le carte avversarie o direttamente il Dr. Lumen. Clicca 'TERMINA TURNO' quando sei pronto.",
-                highlight: '.end-turn-btn',
+                text: "Al termine del tuo turno, le tue carte attaccheranno le carte avversarie o direttamente il . Clicca 'TERMINA TURNO' quando sei pronto.",
+                highlight: '#end-turn-btn',
                 position: 'left',
                 requireAction: 'endTurn'
             },
             {
                 title: "Stabilità e Frammenti",
                 text: "Monitora la tua Stabilità (❤️) e i Frammenti di Memoria (💎). Se la Stabilità raggiunge 0, la sessione finisce.",
-                highlight: '.player-stats',
+                highlight: '.stability-container',
                 position: 'right'
+            },
+            {
+                title: "Scartare Carte",
+                text: "Puoi scartare una carta dalla tua mano per pescarne una nuova. Usa questa opzione strategicamente per migliorare la tua mano.",
+                highlight: '#discard-btn',
+                position: 'left'
             },
             {
                 title: "Tutorial Completato!",
@@ -7715,12 +7898,13 @@ class Game {
         overlay.classList.add('visible');
 
         // Handle next button
+        // FIX #2: Use {once: true} to prevent memory leak
         const nextBtn = overlay.querySelector('.tutorial-next-btn');
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
                 this.tutorialStep++;
                 this.showTutorialStep();
-            });
+            }, {once: true});
         }
 
         // Store required action for this step
@@ -7770,6 +7954,27 @@ class Game {
         this.elements.eventLog.innerHTML = '';
         this.elements.alterLog.innerHTML = '';
         document.body.className = '';
+
+        // FIX: Initialize player deck with 20 cards
+        this.initializePlayerDeck();
+    }
+
+    initializePlayerDeck() {
+        // Create a deck of 20 random cards
+        this.playerDeck = [];
+        for (let i = 0; i < 20; i++) {
+            this.playerDeck.push(this.createRandomCard());
+        }
+        // Shuffle the deck
+        this.shuffleDeck();
+    }
+
+    shuffleDeck() {
+        // Fisher-Yates shuffle
+        for (let i = this.playerDeck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.playerDeck[i], this.playerDeck[j]] = [this.playerDeck[j], this.playerDeck[i]];
+        }
     }
 
     startSessionTimer() {
@@ -7788,7 +7993,14 @@ class Game {
             return;
         }
 
-        const card = this.createRandomCard();
+        // FIX: Draw from deck instead of creating random card
+        if (this.playerDeck.length === 0) {
+            // Deck empty - reshuffle
+            this.log("[ Deck vuoto - rimescola ]", "meta");
+            this.initializePlayerDeck();
+        }
+
+        const card = this.playerDeck.pop(); // Draw from top of deck
         this.playerHand.push(card);
         this.log(`Hai pescato: ${card.name}`);
         this.audio.playCardDraw();
@@ -7832,6 +8044,8 @@ class Game {
             this.log("Non è il tuo turno!");
             return;
         }
+        // FIX: Prevent card play while paused
+        if (this.isPaused) return;
 
         const cardIndex = this.playerHand.findIndex(c => c.id === cardId);
         if (cardIndex === -1) return;
@@ -7890,6 +8104,12 @@ class Game {
     }
 
     applyPlaySigils(card) {
+        // Skip if card is silenced
+        if (card.silencedUntilRound > this.round) {
+            this.log(`${card.name} è silenziata!`);
+            return;
+        }
+
         // ⭐ Draw 2 cards when played
         if (card.sigils.some(s => s.icon === '⭐')) {
             this.log(`${card.name} ti fa pescare 2 carte!`);
@@ -7918,6 +8138,58 @@ class Game {
                 return c;
             });
         }
+
+        // 💖 FIX #5: Steal 1HP from an ally
+        if (card.sigils.some(s => s.icon === '💖')) {
+            const allies = this.playerField.filter(c => c && c.id !== card.id);
+            if (allies.length > 0) {
+                const target = allies[0]; // Take from first ally
+                target.health -= 1;
+                card.health += 1;
+                this.log(`${card.name} ruba 1 HP da ${target.name}!`);
+            }
+        }
+
+        // 👑 FIX #5: Boost all statue allies +1 ATK
+        if (card.sigils.some(s => s.icon === '👑')) {
+            let boosted = 0;
+            this.playerField.forEach(c => {
+                if (c && c.id !== card.id && c.name.includes('statua') || (c && c.id !== card.id && ['David', 'Mosè', 'Venere di Medici', 'Augusto di Prima Porta', 'Atlante Farnese', 'Laocoonte'].includes(c.name))) {
+                    c.attack += 1;
+                    boosted++;
+                }
+            });
+            if (boosted > 0) {
+                this.log(`${card.name} potenzia ${boosted} statue alleate (+1 ATK)!`);
+            }
+        }
+
+        // 🌍 FIX #5: Deal 1 damage to ALL cards when played
+        if (card.sigils.some(s => s.icon === '🌍')) {
+            this.log(`${card.name} scuote il mondo! 1 danno a tutte le carte!`);
+            // Damage all player cards except self
+            this.playerField.forEach(c => {
+                if (c && c.id !== card.id) {
+                    c.health -= 1;
+                }
+            });
+            // Damage all therapist cards
+            this.therapistField.forEach(c => {
+                if (c) {
+                    c.health -= 1;
+                }
+            });
+        }
+
+        // 📜 FIX #5: Silence an ally card for 1 round
+        if (card.sigils.some(s => s.icon === '📜')) {
+            const allies = this.playerField.filter(c => c && c.id !== card.id);
+            if (allies.length > 0) {
+                const target = allies[0]; // Silence first ally
+                target.silencedUntilRound = this.round + 1;
+                this.log(`${card.name} silenzia ${target.name} per 1 turno!`);
+            }
+        }
     }
 
     toggleDiscardMode() {
@@ -7932,6 +8204,8 @@ class Game {
 
     endTurn() {
         if (!this.isPlayerTurn) return;
+        if (this.gameOver) return; // FIX: Prevent turn after game over
+        if (this.isPaused) return; // FIX: Prevent actions while paused
 
         this.log("=== Fine del tuo turno ===");
         this.isPlayerTurn = false;
@@ -7946,6 +8220,8 @@ class Game {
     }
 
     therapistTurn() {
+        if (this.gameOver) return; // FIX: Prevent AI turn after game over
+
         this.log("=== Turno del Terapista ===");
 
         // Therapist draws cards if hand is low
@@ -7969,16 +8245,14 @@ class Game {
 
         // Difficulty scaling: plays more cards in later rounds
         let cardsToPlay = 1;
-        if (this.bossFightActive) {
-            // BOSS FIGHT: Play maximum cards (fill all empty slots)
+if (this.bossFightActive) { // BOSS FIGHT: Play maximum cards (fill all empty slots)
             cardsToPlay = emptySlots.length;
             this.log(">>> LUMEN IL PERSECUTORE ATTACCA CON FURIA <<<");
-        } else if (this.round >= 10) {
-            cardsToPlay = 2;
-        } else if (this.round >= 20) {
-            cardsToPlay = Math.min(3, emptySlots.length);
-        }
-        cardsToPlay = Math.min(cardsToPlay, emptySlots.length, this.therapistHand.length);
+         }
+else if (this.round >= 20) { cardsToPlay = Math.min(3, emptySlots.length);
+         }
+else if (this.round >= 10) { cardsToPlay = 2;
+         }cardsToPlay = Math.min(cardsToPlay, emptySlots.length, this.therapistHand.length);
 
         // AI: Choose best cards (higher attack/health in later rounds)
         const sortedHand = [...this.therapistHand].sort((a, b) => {
@@ -7999,8 +8273,13 @@ class Game {
                     // Choose slot (prioritize matching with player cards for combat)
                     let slotIndex;
                     if (this.bossFightActive || this.round >= 15) {
-                        // Boss fight / Late game: ALWAYS tactical placement
-                        slotIndex = emptySlots.find(s => this.playerField[s] !== null) || emptySlots[0];
+                        // Boss fight / Late game: Tactical placement
+                        // FIX: Find first empty therapist slot that has a player card opposite it
+                        const tacticalSlot = emptySlots.find(slot =>
+                            this.playerField[slot] !== null && // Player has card here
+                            this.therapistField[slot] === null  // Therapist slot is empty
+                        );
+                        slotIndex = tacticalSlot !== undefined ? tacticalSlot : emptySlots[0];
                     } else {
                         // Early game: random placement
                         slotIndex = emptySlots[Math.floor(Math.random() * emptySlots.length)];
@@ -8010,7 +8289,7 @@ class Game {
                     if (slotIndexPos !== -1) emptySlots.splice(slotIndexPos, 1);
 
                     this.therapistField[slotIndex] = card;
-                    this.log(`Dr. Lumen gioca: ${card.name}`);
+                    this.log(` gioca: ${card.name}`);
 
                     // Animation: flip card when played
                     setTimeout(() => {
@@ -8109,9 +8388,8 @@ class Game {
         });
 
         setTimeout(() => {
-            // Clear remaining cards after round
-            this.playerField = [null, null, null, null];
-            this.therapistField = [null, null, null, null];
+            // Cards that survived combat remain on the field
+            // Only dead cards were already removed above
             this.startNewRound();
         }, 3000);
     }
@@ -8123,30 +8401,60 @@ class Game {
         let playerAttack = playerCard.attack;
         let therapistAttack = therapistCard.attack;
 
-        // Apply attack sigils
+        // Apply attack sigils (only if not silenced)
+        const playerSilenced = playerCard.silencedUntilRound > this.round;
+        const therapistSilenced = therapistCard.silencedUntilRound > this.round;
+
         // 💥 Double attack against 'velo' type
-        if (playerCard.sigils.some(s => s.icon === '💥') && therapistCard.type === 'velo') {
+        if (!playerSilenced && playerCard.sigils.some(s => s.icon === '💥') && therapistCard.type === 'velo') {
             playerAttack *= 2;
             this.log(`${playerCard.name} raddoppia l'attacco contro ${therapistCard.name}!`);
         }
 
+        // 🎯 FIX #5: +2 attack against 'eco' type
+        if (!playerSilenced && playerCard.sigils.some(s => s.icon === '🎯') && therapistCard.type === 'eco') {
+            playerAttack += 2;
+            this.log(`${playerCard.name} colpisce con precisione (+2 ATK contro eco)!`);
+        }
+
+        // Apply enemy attack sigils too
+        if (!therapistSilenced && therapistCard.sigils.some(s => s.icon === '💥') && playerCard.type === 'velo') {
+            therapistAttack *= 2;
+            this.log(`${therapistCard.name} raddoppia l'attacco contro ${playerCard.name}!`);
+        }
+
+        if (!therapistSilenced && therapistCard.sigils.some(s => s.icon === '🎯') && playerCard.type === 'eco') {
+            therapistAttack += 2;
+            this.log(`${therapistCard.name} colpisce con precisione (+2 ATK contro eco)!`);
+        }
+
         // 🛡️ Defense +1 when attacked
+        let playerDefense = 0;
         let therapistDefense = 0;
-        if (therapistCard.sigils.some(s => s.icon === '🛡️')) {
+        if (!therapistSilenced && therapistCard.sigils.some(s => s.icon === '🛡️')) {
             therapistDefense = 1;
             this.log(`${therapistCard.name} si difende!`);
         }
+        if (!playerSilenced && playerCard.sigils.some(s => s.icon === '🛡️')) {
+            playerDefense = 1;
+            this.log(`${playerCard.name} si difende!`);
+        }
 
         // ⚔️ Instant kill cards with ≤3 HP
-        if (playerCard.sigils.some(s => s.icon === '⚔️') && therapistCard.health <= 3) {
+        if (!playerSilenced && playerCard.sigils.some(s => s.icon === '⚔️') && therapistCard.health <= 3) {
             this.log(`${playerCard.name} uccide istantaneamente ${therapistCard.name}!`);
             therapistCard.health = 0;
+            return;
+        }
+        if (!therapistSilenced && therapistCard.sigils.some(s => s.icon === '⚔️') && playerCard.health <= 3) {
+            this.log(`${therapistCard.name} uccide istantaneamente ${playerCard.name}!`);
+            playerCard.health = 0;
             return;
         }
 
         // Apply damage
         const damageToTherapist = Math.max(0, playerAttack - therapistDefense);
-        const damageToPlayer = therapistAttack;
+        const damageToPlayer = Math.max(0, therapistAttack - playerDefense);
 
         therapistCard.health -= damageToTherapist;
         playerCard.health -= damageToPlayer;
@@ -8236,6 +8544,8 @@ class Game {
     }
 
     startNewRound() {
+        if (this.gameOver) return; // FIX: Prevent new round after game over
+
         this.round++;
         this.isPlayerTurn = true;
 
@@ -8317,11 +8627,12 @@ class Game {
         choiceContainer.style.opacity = '1';
 
         // Add event listeners to choices
+        // FIX #2: Use {once: true} to prevent memory leak
         choiceContainer.querySelectorAll('.choice-option').forEach(el => {
             el.addEventListener('click', (e) => {
                 const choiceIndex = parseInt(e.target.dataset.choice);
                 this.handleGameplayChoice(question.choices[choiceIndex], dialogueEl, choiceContainer);
-            });
+            }, {once: true});
         });
     }
 
@@ -8395,7 +8706,7 @@ class Game {
 
         // Phase-specific events
         if (phase === 3) {
-            this.showNarrativeEvent("Qualcosa non va... Le parole del Dr. Lumen ti sembrano distorte...");
+            this.showNarrativeEvent("Qualcosa non va... Le parole del  ti sembrano distorte...");
         } else if (phase === 4) {
             this.showNarrativeEvent("La stanza sembra diversa. Più piccola. Più soffocante.");
         } else if (phase === 5) {
@@ -8483,7 +8794,7 @@ class Game {
             "Lo specchio.\n\n" +
             "Vedi il riflesso della stanza... ma non c'è nessun terapista.\n\n" +
             "Sei sempre stata sola.\n\n" +
-            "Il Dr. Lumen... è sempre stato... TE."
+            "Il ... è sempre stato... TE."
         );
 
         setTimeout(() => {
@@ -8553,6 +8864,7 @@ class Game {
     // === GAME OVER ===
     checkGameOver() {
         if (this.stability <= 0) {
+            this.gameOver = true; // FIX: Block all gameplay after defeat
             this.log("=== FRAMMENTAZIONE COMPLETA ===");
             setTimeout(() => {
                 this.showNarrativeEvent(
@@ -8569,6 +8881,7 @@ class Game {
 
         // Victory condition (integration)
         if (this.fragments >= 5 && this.revelationTriggered && this.stability > 50) {
+            this.gameOver = true; // FIX: Block all gameplay after victory
             setTimeout(() => {
                 this.showNarrativeEvent(
                     "INTEGRAZIONE\n\n" +
@@ -8605,11 +8918,20 @@ class Game {
     }
 
     updateUI() {
+        // FIX #10: Ensure stability is always clamped between 0-100
+        this.stability = Math.max(0, Math.min(100, this.stability));
+
         // Update game state
         this.elements.stabilityFill.style.width = `${this.stability}%`;
         this.elements.stabilityText.textContent = `${this.stability}%`;
         this.elements.fragmentsCount.textContent = this.fragments;
         this.elements.roundCount.textContent = this.round;
+
+        // FIX: Update player deck count
+        const deckCountEl = document.getElementById('player-deck-count');
+        if (deckCountEl) {
+            deckCountEl.textContent = this.playerDeck.length;
+        }
 
         // Color stability bar based on value
         if (this.stability < 30) {
@@ -8947,7 +9269,7 @@ class Game {
         } else if (this.fourthWallBroken) {
             this.glitchLevel = 4; // Heavy glitches after revelation
         } else if (this.selfAwareMode) {
-            this.glitchLevel = 3; // Dr. Lumen becomes self-aware
+            this.glitchLevel = 3; //  becomes self-aware
         } else if (this.stability < 30) {
             this.glitchLevel = 3; // Reality breaking
         } else if (this.stability < 50 || this.awareness > 70) {
@@ -9027,7 +9349,7 @@ class Game {
     }
 
     /**
-     * Break the fourth wall - Dr. Lumen addresses the player directly
+     * Break the fourth wall -  addresses the player directly
      */
     breakFourthWall() {
         if (this.fourthWallBroken) return;
@@ -9088,7 +9410,7 @@ class Game {
     }
 
     /**
-     * Make Dr. Lumen self-aware (eyes follow player, meta dialogues)
+     * Make  self-aware (eyes follow player, meta dialogues)
      */
     triggerSelfAware() {
         if (this.selfAwareMode) return;
@@ -9111,7 +9433,7 @@ class Game {
         // Spawn glitch fragments
         this.spawnGlitchFragments(10);
 
-        this.log("[ Dr. Lumen ti sta guardando ]", "meta");
+        this.log("[  ti sta guardando ]", "meta");
     }
 
     /**
@@ -9263,7 +9585,7 @@ class Game {
                 text: [
                     "Neve si dissolve.",
                     "I frammenti si disperdono nel vuoto.",
-                    "Il Dr. Lumen osserva in silenzio.",
+                    "Il  osserva in silenzio.",
                     "\"Era inevitabile.\"",
                     "...",
                     "Forse in un'altra sessione...",
@@ -9292,7 +9614,7 @@ class Game {
                 title: "INTEGRAZIONE",
                 text: [
                     "Neve sceglie di fidarsi.",
-                    "Il Dr. Lumen sorride.",
+                    "Il  sorride.",
                     "\"Hai fatto la scelta giusta.\"",
                     "Gli alter non sono nemici.",
                     "Sono voci di un coro.",
@@ -9328,7 +9650,7 @@ class Game {
                     "Non nel gioco.",
                     "Non nella terapia.",
                     "Nella realtà.",
-                    "Il Dr. Lumen non esiste.",
+                    "Il  non esiste.",
                     "È sempre stata lei.",
                     "E tu?",
                     "Tu esisti?",
@@ -9874,6 +10196,113 @@ let game;
 document.addEventListener('DOMContentLoaded', () => {
     game = new Game();
     window.game = game; // For debugging
+
+    // === KEYBOARD NAVIGATION SUPPORT ===
+    // Allow navigating menus and confirming/cancelling actions using the keyboard.  The
+    // existing GamepadManager handles focus and actions for gamepads; we reuse
+    // its methods for keyboard interactions.  Arrow keys and WASD move the
+    // focus, Enter/Space confirms the current selection, and Escape cancels or
+    // closes menus.  This event listener runs for the entire application and
+    // only triggers when a game instance and its GamepadManager are available.
+    document.addEventListener('keydown', (e) => {
+        // If no game or gamepad manager exists, ignore
+        if (!window.game || !window.game.gamepadManager) return;
+        const gm = window.game.gamepadManager;
+
+        // Ignore key events if a text input or textarea is focused
+        const active = document.activeElement;
+        if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+
+        switch (e.key) {
+            // Navigate up
+            case 'ArrowUp':
+            case 'w':
+            case 'W':
+                e.preventDefault();
+                gm.navigate('up');
+                break;
+            // Navigate down
+            case 'ArrowDown':
+            case 's':
+            case 'S':
+            case 'Tab':
+                e.preventDefault();
+                gm.navigate('down');
+                break;
+            // Navigate left
+            case 'ArrowLeft':
+            case 'a':
+            case 'A':
+                e.preventDefault();
+                gm.navigate('left');
+                break;
+            // Navigate right
+            case 'ArrowRight':
+            case 'd':
+            case 'D':
+                e.preventDefault();
+                gm.navigate('right');
+                break;
+            // Confirm selection (Enter or Space)
+            case 'Enter':
+            case ' ': {
+                e.preventDefault();
+                // Only fire confirm actions when a menu, modal or tutorial is active.
+                // In normal gameplay we do not want Enter/Space to trigger the pause menu via the focused element.
+                try {
+                    const g = window.game;
+                    // Determine if any overlay or menu is currently visible
+                    const menus = [
+                        g?.elements?.mainMenu,
+                        g?.elements?.optionsMenu,
+                        g?.elements?.aboutMenu,
+                        g?.elements?.pauseModal,
+                        g?.elements?.narrativeModal,
+                        g?.elements?.cardDetailsModal
+                    ];
+                    let isMenuVisible = false;
+                    menus.forEach((el) => {
+                        if (el && el.classList && !el.classList.contains('hidden')) {
+                            isMenuVisible = true;
+                        }
+                    });
+                    if (isMenuVisible || g?.tutorialActive || g?.isPaused) {
+                        gm.confirmAction();
+                    }
+                } catch (err) {
+                    // If anything goes wrong, fall back to confirming action
+                    gm.confirmAction();
+                }
+                break;
+            }
+            // Cancel/back (Escape or Backspace)
+            case 'Escape':
+            case 'Backspace': {
+                e.preventDefault();
+                try {
+                    const g = window.game;
+                    // If an options/about menu has a close button visible, use cancelAction to close it
+                    const closeBtn = document.querySelector('#close-options-btn');
+                    if (closeBtn && closeBtn.offsetParent !== null) {
+                        gm.cancelAction();
+                    } else {
+                        // Otherwise toggle the pause modal on/off
+                        if (g && typeof g.togglePause === 'function') {
+                            g.togglePause();
+                        } else if (gm && typeof gm.togglePause === 'function') {
+                            gm.togglePause();
+                        }
+                    }
+                } catch (err) {
+                    // Fallback: cancel action
+                    gm.cancelAction();
+                }
+                break;
+            }
+            default:
+                return;
+        }
+    });
 });
 
 // ============================================
@@ -10014,7 +10443,6 @@ class AccessibilityManager {
     }
 }
 
-
-</script>
+    </script>
 </body>
 </html>
