@@ -172,19 +172,47 @@ func _player_attack_phase() -> void:
 func _card_attack_card(attacker: Card, defender: Card) -> void:
 	print("GameManager: %s attacks %s" % [attacker.card_data.card_name, defender.card_data.card_name])
 
-	# Calcola danno
+	# ITERAZIONE 3: Check evasion del difensore
+	if _has_sigil(defender, "👻"):  # Evasion
+		if randf() < 0.5:  # 50% chance
+			print("Evasion: %s dodged the attack!" % defender.card_data.card_name)
+			return  # Attacco evitato
+
+	# Calcola danno base
 	var damage = attacker.current_attack
 
-	# Applica modificatori sigilli
-	# TODO: check per double damage sigil, ecc.
+	# ITERAZIONE 3: Applica modificatori sigilli
+	# Double damage contro VELO
+	if _has_sigil(attacker, "💥") and defender.card_data.card_type == CardData.CardType.VELO:
+		damage *= 2
+		print("Double Damage: %s deals 2x damage to VELO!" % attacker.card_data.card_name)
+
+	# Piercing ignora scudi
+	var piercing = _has_sigil(attacker, "🗡️")
+	if not piercing and _has_sigil(defender, "🛡️"):
+		damage = max(0, damage - 1)
+		print("Shield: %s blocked 1 damage" % defender.card_data.card_name)
 
 	# Applica danno
 	defender.take_damage(damage)
 	damage_dealt_total += damage
 
+	# ITERAZIONE 3: Thorns - Riflette danno
+	if _has_sigil(defender, "🌵") and damage > 0:
+		var reflect_damage = 1
+		attacker.take_damage(reflect_damage)
+		print("Thorns: %s reflected %d damage!" % [defender.card_data.card_name, reflect_damage])
+
 	# Contrattacco simultaneo
 	if defender.current_health > 0:
 		attacker.take_damage(defender.current_attack)
+
+## Check se una carta ha un sigillo specifico
+func _has_sigil(card: Card, sigil_icon: String) -> bool:
+	for sigil in card.card_data.sigils:
+		if sigil.icon == sigil_icon:
+			return true
+	return false
 
 func _direct_damage_to_therapist(damage: int) -> void:
 	# In questo gioco, l'avversario "vince" riducendo la stabilità del giocatore
@@ -264,9 +292,11 @@ func lose_stability(amount: int) -> void:
 	# ITERAZIONE 2: Trigger dialogo low stability
 	if stability <= 30 and stability > 0:
 		if not DialogueManager.has_seen_dialogue("low_stability"):
+			AudioManager.play_low_stability_warning()  # ITERAZIONE 3
 			DialogueManager.start_dialogue("low_stability")
 
 	if stability <= 0:
+		AudioManager.play_game_over()  # ITERAZIONE 3
 		_trigger_game_over(false)
 
 func add_stability(amount: int) -> void:
@@ -279,6 +309,9 @@ func add_fragments(amount: int) -> void:
 
 	fragments += amount
 	fragments_changed.emit(fragments)
+
+	# ITERAZIONE 3: Suono frammento raccolto
+	AudioManager.play_fragment_collected()
 
 	# ITERAZIONE 2: Trigger dialogo primo frammento
 	if was_zero and fragments > 0:
@@ -303,6 +336,10 @@ func _check_phase_progression() -> void:
 		current_phase = new_phase
 		phase_changed.emit(current_phase)
 		print("GameManager: Phase changed to %d" % current_phase)
+
+		# ITERAZIONE 3: Suono transizione fase
+		AudioManager.play_phase_transition(new_phase)
+		AudioManager.play_phase_music(new_phase)
 
 		# ITERAZIONE 2: Trigger dialogo di transizione fase
 		_trigger_phase_dialogue(new_phase)
@@ -336,28 +373,202 @@ func _trigger_sigils(card: Card, trigger_type: SigilData.SigilTrigger) -> void:
 		if sigil.trigger == trigger_type:
 			_execute_sigil_effect(card, sigil)
 
+## ITERAZIONE 3: Implementazione completa sigilli
 func _execute_sigil_effect(card: Card, sigil: SigilData) -> void:
-	# TODO: Implementa effetti sigilli specifici
 	match sigil.icon:
+		# ITERAZIONE 1 - Sigilli base
 		"⭐":  # Draw cards
 			for i in range(sigil.effect_value):
 				draw_card()
+			print("Sigil: %s drew %d cards" % [card.card_data.card_name, sigil.effect_value])
+
 		"🌙":  # Heal allies
+			var healed_count = 0
 			for field_card in player_field:
 				if field_card and field_card != card:
 					field_card.modify_health(sigil.effect_value)
-		_:
-			print("GameManager: Sigil effect %s not implemented yet" % sigil.icon)
+					healed_count += 1
+			print("Sigil: Healed %d allies by %d HP" % [healed_count, sigil.effect_value])
 
-## Save/Load
+		"💥":  # Double damage (handled in attack calculation)
+			print("Sigil: Double damage active on %s" % card.card_data.card_name)
+
+		"🛡️":  # Shield (handled when damaged)
+			print("Sigil: Shield active on %s" % card.card_data.card_name)
+
+		"🔗":  # Bond (link two cards - complex, placeholder)
+			print("Sigil: Bond effect on %s (not fully implemented)" % card.card_data.card_name)
+
+		# ITERAZIONE 2 - Sigilli avanzati
+		"🗡️":  # Piercing (handled in attack calculation)
+			print("Sigil: Piercing active on %s" % card.card_data.card_name)
+
+		"🌀":  # Confusion - enemy attacks itself
+			_apply_confusion_effect(card)
+
+		"🌵":  # Thorns (handled when damaged)
+			print("Sigil: Thorns active on %s" % card.card_data.card_name)
+
+		"💫":  # Absorb (passive - triggers on card death)
+			print("Sigil: Absorb active on %s" % card.card_data.card_name)
+
+		"👻":  # Evasion (passive - chance to dodge)
+			print("Sigil: Evasion active on %s" % card.card_data.card_name)
+
+		"💤":  # Weaken (passive - reduces enemy attack)
+			_apply_weaken_effect(card)
+
+		_:
+			print("GameManager: Sigil effect %s not implemented" % sigil.icon)
+
+## Applica effetto confusione
+func _apply_confusion_effect(caster: Card) -> void:
+	# Trova la carta avversaria corrispondente
+	var caster_slot = _find_card_slot(caster, player_field)
+	if caster_slot == -1:
+		caster_slot = _find_card_slot(caster, therapist_field)
+
+	if caster_slot != -1:
+		# Determina il campo opposto
+		var enemy_field = therapist_field if caster in player_field else player_field
+		var target = enemy_field[caster_slot]
+
+		if target:
+			# La carta nemica si danneggia da sola
+			var self_damage = target.current_attack
+			target.take_damage(self_damage)
+			print("Confusion: %s hit itself for %d damage!" % [target.card_data.card_name, self_damage])
+
+## Applica effetto indebolimento
+func _apply_weaken_effect(caster: Card) -> void:
+	# Determina quale campo indebolire
+	var enemy_field = therapist_field if caster in player_field else player_field
+
+	for enemy in enemy_field:
+		if enemy and enemy != caster:
+			# Riduce temporaneamente l'attacco (gestito con modificatore)
+			enemy.current_attack = max(0, enemy.current_attack - 1)
+			print("Weaken: %s attack reduced by 1" % enemy.card_data.card_name)
+
+## Trova lo slot di una carta
+func _find_card_slot(card: Card, field: Array) -> int:
+	for i in range(field.size()):
+		if field[i] == card:
+			return i
+	return -1
+
+## ITERAZIONE 3: Save/Load System
+const SAVE_FILE_PATH = "user://neve_portrait_save.json"
+const SETTINGS_FILE_PATH = "user://settings.json"
+
 func _load_preferences() -> void:
-	# Carica impostazioni salvate
-	tutorial_completed = false  # TODO: load from save file
+	# Carica impostazioni
+	if FileAccess.file_exists(SETTINGS_FILE_PATH):
+		var file = FileAccess.open(SETTINGS_FILE_PATH, FileAccess.READ)
+		if file:
+			var json_string = file.get_as_text()
+			var json = JSON.new()
+			var error = json.parse(json_string)
+			if error == OK:
+				var data = json.data
+				tutorial_completed = data.get("tutorial_completed", false)
+				AudioManager.set_music_volume(data.get("music_volume", 0.7))
+				AudioManager.set_sfx_volume(data.get("sfx_volume", 0.8))
+				AudioManager.set_master_volume(data.get("master_volume", 1.0))
+				print("GameManager: Settings loaded")
+			file.close()
+
+func save_settings() -> void:
+	var settings = {
+		"tutorial_completed": tutorial_completed,
+		"music_volume": AudioManager.music_volume,
+		"sfx_volume": AudioManager.sfx_volume,
+		"master_volume": AudioManager.master_volume
+	}
+
+	var file = FileAccess.open(SETTINGS_FILE_PATH, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(settings, "\t"))
+		file.close()
+		print("GameManager: Settings saved")
 
 func save_game() -> void:
-	# TODO: Implementa salvataggio
-	pass
+	if not game_started:
+		return
 
-func load_game() -> void:
-	# TODO: Implementa caricamento
-	pass
+	var save_data = {
+		"version": "1.0",
+		"timestamp": Time.get_unix_time_from_system(),
+		"round": round,
+		"stability": stability,
+		"fragments": fragments,
+		"current_phase": current_phase,
+		"choice_history": choice_history,
+		"trust": trust,
+		"awareness": awareness,
+		"meta_awareness": meta_awareness,
+		"cards_played_count": cards_played_count,
+		"damage_dealt_total": damage_dealt_total,
+		"session_duration": Time.get_ticks_msec() - session_start_time,
+		# Note: Non salviamo lo stato del campo (troppo complesso per ora)
+	}
+
+	var file = FileAccess.open(SAVE_FILE_PATH, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(save_data, "\t"))
+		file.close()
+		print("GameManager: Game saved (Round %d, Phase %d)" % [round, current_phase])
+	else:
+		push_error("GameManager: Failed to save game!")
+
+func load_game() -> bool:
+	if not FileAccess.file_exists(SAVE_FILE_PATH):
+		print("GameManager: No save file found")
+		return false
+
+	var file = FileAccess.open(SAVE_FILE_PATH, FileAccess.READ)
+	if not file:
+		push_error("GameManager: Failed to open save file!")
+		return false
+
+	var json_string = file.get_as_text()
+	file.close()
+
+	var json = JSON.new()
+	var error = json.parse(json_string)
+	if error != OK:
+		push_error("GameManager: Failed to parse save file!")
+		return false
+
+	var data = json.data
+
+	# Ripristina stato
+	round = data.get("round", 1)
+	stability = data.get("stability", 100)
+	fragments = data.get("fragments", 0)
+	current_phase = data.get("current_phase", 1)
+	choice_history = data.get("choice_history", [])
+	trust = data.get("trust", 0)
+	awareness = data.get("awareness", 0)
+	meta_awareness = data.get("meta_awareness", false)
+	cards_played_count = data.get("cards_played_count", 0)
+	damage_dealt_total = data.get("damage_dealt_total", 0)
+
+	game_started = true
+	is_player_turn = true
+
+	# Emetti segnali per aggiornare UI
+	stability_changed.emit(stability)
+	fragments_changed.emit(fragments)
+	phase_changed.emit(current_phase)
+
+	print("GameManager: Game loaded (Round %d, Phase %d)" % [round, current_phase])
+	return true
+
+func has_save_file() -> bool:
+	return FileAccess.file_exists(SAVE_FILE_PATH)
+
+func delete_save_file() -> void:
+	if has_save_file():
+		DirAccess.remove_absolute(SAVE_FILE_PATH)
+		print("GameManager: Save file deleted")

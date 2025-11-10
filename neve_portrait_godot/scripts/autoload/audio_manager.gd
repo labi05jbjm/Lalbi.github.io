@@ -108,6 +108,75 @@ func play_ambient_drone(duration: float = 5.0, volume_db: float = -10.0) -> void
 	# TODO: Load and play ambient drone
 	ambient_player.volume_db = volume_db
 
+## ITERAZIONE 3: Suoni narrativi e fasi
+func play_phase_transition(phase: int) -> void:
+	print("AudioManager: Phase %d transition sound" % phase)
+	# play_sfx(preload("res://assets/audio/sfx/phase_transition.ogg"))
+
+func play_dialogue_start() -> void:
+	print("AudioManager: Dialogue start sound")
+	# Suono di "apertura" dialogo
+
+func play_dialogue_end() -> void:
+	print("AudioManager: Dialogue end sound")
+	# Suono di "chiusura" dialogo
+
+func play_fragment_collected() -> void:
+	print("AudioManager: Fragment collected!")
+	# Suono magico/etereo di frammento raccolto
+
+func play_low_stability_warning() -> void:
+	print("AudioManager: Low stability warning!")
+	# Suono inquietante per bassa stabilità
+
+func play_game_over() -> void:
+	print("AudioManager: Game over sound")
+	# Suono drammatico di game over
+
+func play_victory() -> void:
+	print("AudioManager: Victory sound")
+	# Suono di vittoria (ma forse inquietante?)
+
+## Musica per fasi narrative
+func play_phase_music(phase: int) -> void:
+	match phase:
+		1:  # Denial
+			print("AudioManager: Playing Phase 1 music (Denial)")
+			# Musica calma ma inquietante
+		2:  # Recognition
+			print("AudioManager: Playing Phase 2 music (Recognition)")
+			# Musica più tesa, dissonante
+		3:  # Fracture
+			print("AudioManager: Playing Phase 3 music (Fracture)")
+			# Musica intensa, distorta
+		4:  # Revelation
+			print("AudioManager: Playing Phase 4 music (Revelation)")
+			# Musica drammatica, climax
+
+## Effetti sigilli
+func play_sigil_effect(sigil_icon: String) -> void:
+	match sigil_icon:
+		"⭐":
+			print("AudioManager: Draw cards effect")
+		"🌙":
+			print("AudioManager: Heal effect")
+		"💥":
+			print("AudioManager: Double damage effect")
+		"🗡️":
+			print("AudioManager: Piercing effect")
+		"🌀":
+			print("AudioManager: Confusion effect")
+		"🌵":
+			print("AudioManager: Thorns effect")
+		"💫":
+			print("AudioManager: Absorb effect")
+		"👻":
+			print("AudioManager: Evasion effect")
+		"💤":
+			print("AudioManager: Weaken effect")
+		_:
+			print("AudioManager: Generic sigil effect")
+
 ## Volume controls
 func set_master_volume(value: float) -> void:
 	master_volume = clamp(value, 0.0, 1.0)

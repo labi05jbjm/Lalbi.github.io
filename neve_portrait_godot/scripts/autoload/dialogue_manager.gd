@@ -30,6 +30,9 @@ func start_dialogue(dialogue_id: String) -> void:
 	is_dialogue_active = true
 	dialogue_started.emit(dialogue_data)
 
+	# ITERAZIONE 3: Suono inizio dialogo
+	AudioManager.play_dialogue_start()
+
 	print("DialogueManager: Started dialogue '%s'" % dialogue_id)
 
 ## Termina il dialogo corrente
@@ -41,6 +44,9 @@ func end_dialogue() -> void:
 	current_dialogue.clear()
 	is_dialogue_active = false
 	dialogue_ended.emit()
+
+	# ITERAZIONE 3: Suono fine dialogo
+	AudioManager.play_dialogue_end()
 
 	print("DialogueManager: Dialogue ended")
 

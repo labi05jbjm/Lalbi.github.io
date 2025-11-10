@@ -13,17 +13,23 @@ func _ready() -> void:
 
 ## Inizializza le carte del giocatore (porte da HTML)
 func _initialize_player_cards() -> void:
-	# LOW COST CARDS (0 blood)
+	# ITERAZIONE 1: LOW COST CARDS (0 blood)
 	player_cards.append(_create_ophelia())
 	player_cards.append(_create_girl_with_pearl())
 	player_cards.append(_create_starry_night())
 	player_cards.append(_create_christinas_world())
 
-	# MEDIUM COST CARDS (1 blood)
+	# ITERAZIONE 1: MEDIUM COST CARDS (1 blood)
 	player_cards.append(_create_the_scream())
 	player_cards.append(_create_the_kiss())
 	player_cards.append(_create_nighthawks())
 	player_cards.append(_create_persistence_of_memory())
+
+	# ITERAZIONE 3: NUOVE CARTE (espansione gameplay)
+	player_cards.append(_create_melancholy())  # 0 blood
+	player_cards.append(_create_birth_of_venus())  # 0 blood
+	player_cards.append(_create_guernica())  # 1 blood
+	player_cards.append(_create_garden_of_earthly_delights())  # 2 blood
 
 ## Inizializza le carte del terapeuta/avversario
 func _initialize_therapist_cards() -> void:
@@ -296,4 +302,64 @@ func _create_therapist_sedation() -> CardData:
 	card.short_desc = "Spegnere le emozioni"
 	card.long_desc = "Pillole colorate in bottigliette bianche. \"Prendile, ti faranno sentire meglio.\" Ma Neve si sente solo... vuota."
 	card.sigils = [SigilData.create_weaken_sigil()]
+	return card
+
+## ========================================
+## PLAYER CARDS - ITERAZIONE 3
+## ========================================
+
+func _create_melancholy() -> CardData:
+	var card = CardData.new()
+	card.card_name = "Melancholia I"
+	card.card_type = CardData.CardType.ECO
+	card.attack = 0
+	card.health = 5
+	card.blood_cost = 0
+	card.artwork_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/D%C3%BCrer_Melancholia_I.jpg/800px-D%C3%BCrer_Melancholia_I.jpg"
+	card.artist = "Dürer, 1514"
+	card.short_desc = "Paralisi contemplativa"
+	card.long_desc = "Una figura pensierosa, circondata da strumenti inutilizzati. La paralisi della malinconia. Neve conosce questa sensazione: troppo pesante per muoversi, troppo stanca per agire."
+	card.sigils = [SigilData.create_shield_sigil()]
+	return card
+
+func _create_birth_of_venus() -> CardData:
+	var card = CardData.new()
+	card.card_name = "Nascita di Venere"
+	card.card_type = CardData.CardType.VOCE
+	card.attack = 1
+	card.health = 2
+	card.blood_cost = 0
+	card.artwork_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/1024px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg"
+	card.artist = "Botticelli, 1485"
+	card.short_desc = "Rinascita fragile"
+	card.long_desc = "Emergere dall'acqua, nuda e vulnerabile. Neve ricorda quando era intera? Quando non era frammentata? C'è stata mai una nascita prima della rottura?"
+	card.sigils = [SigilData.create_draw_sigil()]
+	return card
+
+func _create_guernica() -> CardData:
+	var card = CardData.new()
+	card.card_name = "Guernica"
+	card.card_type = CardData.CardType.IMPULSO
+	card.attack = 3
+	card.health = 1
+	card.blood_cost = 1
+	card.artwork_url = "https://upload.wikimedia.org/wikipedia/en/7/74/PicassoGuernica.jpg"
+	card.artist = "Picasso, 1937"
+	card.short_desc = "Trauma collettivo"
+	card.long_desc = "Urla silenti, corpi distorte, caos. Il trauma non è solo personale. È universale. Neve vede se stessa in ogni figura frammentata del quadro."
+	card.sigils = [SigilData.create_piercing_sigil()]
+	return card
+
+func _create_garden_of_earthly_delights() -> CardData:
+	var card = CardData.new()
+	card.card_name = "Giardino delle Delizie"
+	card.card_type = CardData.CardType.VELO
+	card.attack = 2
+	card.health = 5
+	card.blood_cost = 2
+	card.artwork_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/The_Garden_of_earthly_delights.jpg/1024px-The_Garden_of_earthly_delights.jpg"
+	card.artist = "Bosch, 1515"
+	card.short_desc = "Paradiso distorto"
+	card.long_desc = "Un giardino di piaceri che si trasforma in incubo. Figure bizzarre, scene impossibili. La mente di Neve è così: paradiso e inferno mescolati, indistinguibili."
+	card.sigils = [SigilData.create_bond_sigil(), SigilData.create_heal_sigil()]
 	return card

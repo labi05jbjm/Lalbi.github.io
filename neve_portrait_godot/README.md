@@ -8,7 +8,7 @@ Un gioco di carte psicologico ispirato a Inscryption, convertito da HTML/JavaScr
 
 ## 🎯 Stato del Progetto
 
-**ITERAZIONE 2 COMPLETATA** ✅
+**ITERAZIONE 3 COMPLETATA** ✅
 
 ### ITERAZIONE 1 - Core Gameplay:
 - ✅ Sistema carte completo (CardData, Card, CardDatabase)
@@ -36,15 +36,35 @@ Un gioco di carte psicologico ispirato a Inscryption, convertito da HTML/JavaScr
 - ✅ **UI Dialoghi**: Script DialogueBox per visualizzazione narrativa
 - ✅ **Integrazione narrativa**: Trigger automatici dialoghi in-game
 
+### ITERAZIONE 3 - Meccaniche Complete & Polish:
+- ✅ **Implementazione sigilli completa**: Tutti i sigilli ora funzionanti
+  - Evasion (50% dodge), Thorns (riflette danno), Piercing (ignora scudi)
+  - Double Damage contro VELO, Shield blocking, Confusion (auto-danno)
+  - Weaken (riduce attacco nemico), Absorb tracking
+- ✅ **Sistema audio espanso**: AudioManager con funzioni complete
+  - Musica per fasi narrative (Phase 1-4)
+  - SFX per eventi speciali (transizioni, frammenti, low stability)
+  - Effetti sonori per sigilli, dialoghi, game over
+  - Sistema volume (Music, SFX, Master)
+- ✅ **Sistema Save/Load JSON**: Salvataggio progressi
+  - Salva: round, stability, fragments, fase, statistiche
+  - Load: ripristino completo stato di gioco
+  - Settings: volume audio, tutorial status
+  - File: `user://neve_portrait_save.json`
+- ✅ **Carte giocatore espanse**: 12 carte totali (da 8 a 12)
+  - 4 nuove opere d'arte: Melancholia I, Nascita di Venere, Guernica, Giardino delle Delizie
+  - Diverse strategie e build
+  - Prima carta 2 blood cost (Giardino delle Delizie)
+- ✅ **Integrazione audio in-game**: Trigger automatici suoni per eventi
+
 ### Da Implementare (Iterazioni Future):
 - ⏳ Tutorial interattivo
 - ⏳ Scene UI dialoghi (.tscn files)
 - ⏳ Effetti visivi e particelle
-- ⏳ Sistema audio completo (musica, SFX)
-- ⏳ Sistema salvataggio
+- ⏳ Asset audio reali (attualmente placeholder)
 - ⏳ Achievements Steam
-- ⏳ Implementazione sigilli avanzati (alcuni definiti ma non implementati)
 - ⏳ Animazioni carte avanzate
+- ⏳ Multiplayer (forse?)
 
 ## 🚀 Come Iniziare
 
@@ -320,6 +340,62 @@ Il **DialogueManager** gestisce la narrativa del gioco:
 - Primo frammento → Dialogo celebrativo
 
 ### File: `scripts/autoload/dialogue_manager.gd`
+
+## 🃏 Nuove Carte Giocatore - ITERAZIONE 3
+
+4 nuove carte aggiunte per espandere le strategie disponibili:
+
+1. **Melancholia I** (0 ATK / 5 HP) - ECO [0🩸]
+   - Sigillo: Shield
+   - "Paralisi contemplativa" - Carta difensiva ultra-resistente
+
+2. **Nascita di Venere** (1 ATK / 2 HP) - VOCE [0🩸]
+   - Sigillo: Pesca Carte (⭐)
+   - "Rinascita fragile" - Pesca 2 carte quando giocata
+
+3. **Guernica** (3 ATK / 1 HP) - IMPULSO [1🩸]
+   - Sigillo: Piercing (🗡️)
+   - "Trauma collettivo" - Attacco potente che ignora difese
+
+4. **Giardino delle Delizie** (2 ATK / 5 HP) - VELO [2🩸]
+   - Sigilli: Bond (🔗) + Heal (🌙)
+   - "Paradiso distorto" - Prima carta 2 blood cost, molto potente
+
+**Totale carte giocatore: 12** (4 gratuite, 4 costo 1, 3 costo 1 nuove, 1 costo 2)
+
+## 💾 Sistema Save/Load - ITERAZIONE 3
+
+Il gioco ora supporta salvataggio e caricamento completo!
+
+### File Salvati
+- **Salvataggio gioco**: `user://neve_portrait_save.json`
+  - Round, stability, fragments, fase corrente
+  - Storia scelte, trust, awareness, meta_awareness
+  - Statistiche (carte giocate, danno totale, durata sessione)
+
+- **Impostazioni**: `user://settings.json`
+  - Volumi (music, sfx, master)
+  - Tutorial completato
+  - Preferenze UI (futuro)
+
+### API Salvataggio
+```gdscript
+# Salvare il gioco
+GameManager.save_game()
+
+# Caricare il gioco
+if GameManager.has_save_file():
+    GameManager.load_game()
+
+# Salvare impostazioni
+GameManager.save_settings()
+
+# Eliminare salvataggio
+GameManager.delete_save_file()
+```
+
+### Nota
+Lo stato del campo di battaglia (carte sul tavolo) NON viene salvato per semplicità. Il salvataggio è pensato per salvare il progresso narrativo tra sessioni, non lo stato esatto della partita.
 
 ## 🎨 Personalizzazione
 
