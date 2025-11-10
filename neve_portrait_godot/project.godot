@@ -35,8 +35,9 @@ window/stretch/aspect="expand"
 
 [gui]
 
-theme/custom="res://resources/themes/main_theme.tres"
-theme/custom_font="res://assets/fonts/crimson_text.ttf"
+# theme/custom="res://resources/themes/main_theme.tres"
+# theme/custom_font="res://assets/fonts/crimson_text.ttf"
+# Commented out - files don't exist yet. Can be added later.
 
 [input]
 
