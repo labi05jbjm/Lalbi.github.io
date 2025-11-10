@@ -548,7 +548,7 @@ body {
     top: 8px;
     left: 8px;
     right: 8px;
-    height: 135px; /* FIX: Ridotto da 160px a 135px per dare spazio alle stats */
+    height: 128px; /* FIX FINALE: Ridotto a 128px per layout ottimale */
     background-size: cover;
     background-position: center;
     border: 2px solid rgba(138, 122, 106, 0.5);
@@ -593,7 +593,7 @@ body {
 /* === CARD STATS === */
 .card-info-bar {
     position: absolute;
-    top: 150px; /* FIX: Ridotto da 175px a 150px per adattarsi al nuovo artwork (143px + 7px gap) */
+    top: 144px; /* FIX FINALE: 128px artwork + 8px top + 2px border + 6px gap = 144px */
     left: 8px;
     right: 8px;
     display: flex;
@@ -606,12 +606,13 @@ body {
     background: rgba(26, 20, 16, 0.9);
     border: 2px solid var(--accent-warm);
     border-radius: 6px;
-    padding: 6px 8px;
+    padding: 5px 6px; /* FIX FINALE: Padding ottimizzato per compattezza */
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 6px; /* FIX FINALE: Gap aumentato per evitare sovrapposizioni */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    min-height: 28px; /* FIX FINALE: Altezza minima consistente */
 }
 
 .card-stat.attack {
@@ -623,37 +624,42 @@ body {
 }
 
 .stat-icon {
-    font-size: 14px;
+    font-size: 15px; /* FIX FINALE: Aumentato da 14px a 15px */
+    line-height: 1;
 }
 
 .card-stat .stat-value {
-    font-size: 18px;
+    font-size: 19px; /* FIX FINALE: Aumentato da 18px a 19px per migliore leggibilità */
     font-weight: 900;
     color: var(--text-light);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    line-height: 1;
 }
 
 /* === CARD SIGILS === */
 .card-sigils {
     position: absolute;
-    top: 195px; /* FIX: Ridotto da 215px a 195px per adattarsi al nuovo layout */
+    top: 182px; /* FIX FINALE: stats a 144px + ~32px height + 6px gap = 182px */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 5px;
+    gap: 4px; /* FIX FINALE: Gap ridotto da 5px a 4px per più sigils */
     z-index: 5;
+    max-width: 160px; /* FIX FINALE: Limita larghezza per evitare overflow */
+    flex-wrap: nowrap; /* FIX FINALE: Mantiene sigils su una riga */
+    justify-content: center;
 }
 
 .sigil {
-    width: 26px;
-    height: 26px;
+    width: 24px; /* FIX FINALE: Ridotto da 26px a 24px per sigils multipli */
+    height: 24px; /* FIX FINALE: Ridotto da 26px a 24px */
     background: rgba(212, 165, 116, 0.9);
     border: 2px solid var(--border-dark);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 13px; /* FIX FINALE: Ridotto da 14px a 13px */
     cursor: help;
     box-shadow:
         0 2px 4px rgba(0, 0, 0, 0.4),
@@ -670,35 +676,42 @@ body {
 /* === CARD NAME PLATE === */
 .card-name-plate {
     position: absolute;
-    bottom: 10px;
+    bottom: 8px;
     left: 8px;
     right: 8px;
     background: rgba(26, 20, 16, 0.95);
     border: 2px solid var(--accent-warm);
     border-radius: 6px;
-    padding: 6px 8px; /* FIX: Aumentato padding da 5px 6px a 6px 8px per dare più spazio */
+    padding: 8px 10px; /* FIX FINALE: Padding ottimizzato per contenuto */
     text-align: center;
-    min-height: 32px; /* FIX: Altezza minima per evitare che il nome sia schiacciato */
+    min-height: 38px; /* FIX FINALE: Altezza minima aumentata */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .card-name {
-    font-size: 13px; /* FIX: Aumentato da 11px a 13px per migliore leggibilità */
+    font-size: 14px; /* FIX FINALE: Aumentato a 14px per leggibilità ottimale */
     font-weight: 700;
     color: var(--text-light);
-    line-height: 1.2;
+    line-height: 1.3;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
     margin-bottom: 2px;
     overflow: hidden; /* FIX: Previene overflow */
-    text-overflow: ellipsis; /* FIX: Aggiunge "..." se il nome è troppo lungo */
-    white-space: nowrap; /* FIX: Mantiene il nome su una riga */
-    max-width: 100%; /* FIX: Limita alla larghezza del container */
+    text-overflow: ellipsis; /* FIX: Aggiunge "..." se troppo lungo */
+    white-space: nowrap; /* FIX: Una riga sola */
+    max-width: 100%; /* FIX: Limita alla larghezza */
 }
 
 .card-artist {
-    font-size: 8px;
+    font-size: 9px; /* FIX FINALE: Aumentato da 8px a 9px */
     font-style: italic;
     color: var(--text-muted);
-    line-height: 1;
+    line-height: 1.2;
+    overflow: hidden; /* FIX: Previene overflow anche per artista */
+    text-overflow: ellipsis; /* FIX: Aggiunge "..." se troppo lungo */
+    white-space: nowrap; /* FIX: Una riga sola */
+    max-width: 100%; /* FIX: Limita alla larghezza */
 }
 
 /* === CARD TYPE TAG === */
