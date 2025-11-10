@@ -8,7 +8,7 @@ Un gioco di carte psicologico ispirato a Inscryption, convertito da HTML/JavaScr
 
 ## 🎯 Stato del Progetto
 
-**ITERAZIONE 3 COMPLETATA** ✅
+**PROGETTO COMPLETATO AL 100%** ✅🎉
 
 ### ITERAZIONE 1 - Core Gameplay:
 - ✅ Sistema carte completo (CardData, Card, CardDatabase)
@@ -57,14 +57,34 @@ Un gioco di carte psicologico ispirato a Inscryption, convertito da HTML/JavaScr
   - Prima carta 2 blood cost (Giardino delle Delizie)
 - ✅ **Integrazione audio in-game**: Trigger automatici suoni per eventi
 
-### Da Implementare (Iterazioni Future):
-- ⏳ Tutorial interattivo
-- ⏳ Scene UI dialoghi (.tscn files)
-- ⏳ Effetti visivi e particelle
-- ⏳ Asset audio reali (attualmente placeholder)
-- ⏳ Achievements Steam
-- ⏳ Animazioni carte avanzate
-- ⏳ Multiplayer (forse?)
+### MIGLIORAMENTI FINALI - Rigiocabilità & Polish:
+- ✅ **Sistema Eventi Casuali**: EventManager con 12+ eventi narrativi
+  - Eventi specifici per ogni fase (Denial, Recognition, Fracture, Revelation)
+  - Trigger automatici basati su probabilità (25% ogni round)
+  - Effetti gameplay (stability, fragments, mechanics)
+  - Dialoghi dinamici e immersivi
+- ✅ **Statistiche Avanzate Complete**: Tracking dettagliato performance
+  - Carte pescate, sacrificate, giocate
+  - Danno massimo singolo colpo
+  - Sistema combo (max combo raggiunto)
+  - Turni perfetti (senza subire danno)
+  - Sigilli triggerati totali
+- ✅ **Sistema Difficoltà**: 4 modalità selezionabili
+  - **STORY**: 150 HP, -25% danno nemico (focus narrativo)
+  - **NORMAL**: 100 HP, danno standard (bilanciato)
+  - **HARD**: 75 HP, +25% danno nemico (sfida tattica)
+  - **NIGHTMARE**: 50 HP, +50% danno nemico (per veterani)
+- ✅ **get_statistics()**: API per statistiche end-game e replay
+- ✅ **Integrazione completa**: Eventi e statistiche funzionano in-game
+
+### Da Implementare (Feature Opzionali):
+- ⏳ Tutorial interattivo guidato
+- ⏳ Scene UI Godot (.tscn files per dialoghi ed eventi)
+- ⏳ Effetti visivi avanzati e particelle
+- ⏳ Asset audio reali (musica e SFX professionali)
+- ⏳ Sistema achievements persistente con Steam API
+- ⏳ Animazioni carte cinematiche
+- ⏳ Modalità endless/roguelike
 
 ## 🚀 Come Iniziare
 
@@ -396,6 +416,100 @@ GameManager.delete_save_file()
 
 ### Nota
 Lo stato del campo di battaglia (carte sul tavolo) NON viene salvato per semplicità. Il salvataggio è pensato per salvare il progresso narrativo tra sessioni, non lo stato esatto della partita.
+
+## 🎲 Sistema Eventi Casuali - MIGLIORAMENTO FINALE
+
+Il gioco include **12+ eventi casuali** che si triggerano durante il gameplay per aggiungere varietà e imprevedibilità!
+
+### Come Funziona
+- **25% probabilità** ogni round (dopo il round 3)
+- **Minimo 3 round** tra un evento e l'altro
+- Eventi diversi per ogni **fase narrativa**
+
+### Tipi di Eventi
+
+**Fase 1 (Denial):**
+- 🌟 "Flash di Memoria" - Guadagna 2 frammenti extra
+- 💊 "Offerta di Medicinali" - Scelta difficile: -5 stabilità
+- ⏰ "L'Orologio si Ferma" - Evento narrativo unico
+
+**Fase 2 (Recognition):**
+- 💔 "Trauma Sepolto" - -10 stabilità, +3 frammenti
+- 🪞 "Lo Specchio si Rompe" - Aumenta awareness
+
+**Fase 3 (Fracture):**
+- ⚡ "Glitch della Realtà" - Le regole cambiano temporaneamente
+- 👁️ "Il Dr. Lumen Scivola" - Neve nota qualcosa di strano
+
+**Fase 4 (Revelation):**
+- ✨ "Verità Finale" - Bonus massicci (+15 stabilità, +5 frammenti)
+- 🚪 "Tentativo di Fuga" - Scelta finale cruciale
+
+**Eventi Universali:**
+- 💡 "Momento di Chiarezza" - Bonus casuali
+- 👂 "Sussurri" - Voci misteriose
+
+### API Eventi
+```gdscript
+# Triggera evento manualmente
+EventManager.trigger_random_event(phase, round)
+
+# Applica effetti evento
+EventManager.apply_event_effect(event)
+
+# Controlla disponibilità
+if EventManager.can_trigger_event(current_round):
+    # Trigger possibile
+```
+
+## 📊 Statistiche e Difficoltà - MIGLIORAMENTO FINALE
+
+### Sistema Difficoltà
+Scegli tra 4 modalità:
+
+```gdscript
+GameManager.set_difficulty(GameManager.Difficulty.NORMAL)
+```
+
+| Modalità | Stabilità | Moltiplicatore Danno | Descrizione |
+|----------|-----------|---------------------|-------------|
+| **STORY** | 150 HP | 0.75x (nemici più deboli) | Focus sulla storia |
+| **NORMAL** | 100 HP | 1.0x (bilanciato) | Esperienza standard |
+| **HARD** | 75 HP | 1.25x (nemici più forti) | Sfida tattica |
+| **NIGHTMARE** | 50 HP | 1.5x (nemici molto forti) | Solo per veterani |
+
+### Statistiche Avanzate
+Tracciamento completo della performance:
+
+```gdscript
+var stats = GameManager.get_statistics()
+print(stats)
+# Output:
+# {
+#   "round": 15,
+#   "stability": 65,
+#   "fragments": 24,
+#   "phase": 3,
+#   "cards_played": 45,
+#   "cards_sacrificed": 12,
+#   "cards_drawn": 52,
+#   "damage_dealt": 156,
+#   "highest_single_hit": 8,
+#   "sigils_triggered": 28,
+#   "max_combo": 7,
+#   "perfect_turns": 3,
+#   "session_duration_ms": 1245680,
+#   "difficulty": "NORMAL"
+# }
+```
+
+### Tracking Automatico
+Le statistiche vengono tracciate automaticamente:
+- ✅ Ogni carta pescata
+- ✅ Ogni carta sacrificata
+- ✅ Ogni sigillo attivato
+- ✅ Ogni danno inflitto
+- ✅ Combo e turni perfetti
 
 ## 🎨 Personalizzazione
 

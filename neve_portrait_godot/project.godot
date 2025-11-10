@@ -22,6 +22,7 @@ GameManager="*res://scripts/autoload/game_manager.gd"
 CardDatabase="*res://scripts/autoload/card_database.gd"
 AudioManager="*res://scripts/autoload/audio_manager.gd"
 DialogueManager="*res://scripts/autoload/dialogue_manager.gd"
+EventManager="*res://scripts/autoload/event_manager.gd"
 
 [display]
 

@@ -37,6 +37,24 @@ var session_start_time: int = 0
 var cards_played_count: int = 0
 var damage_dealt_total: int = 0
 
+## MIGLIORAMENTO FINALE: Statistiche avanzate
+var cards_sacrificed_count: int = 0
+var sigils_triggered_count: int = 0
+var max_combo: int = 0
+var current_combo: int = 0
+var perfect_turns: int = 0  # Turni senza subire danno
+var cards_drawn_total: int = 0
+var highest_damage_single_hit: int = 0
+
+## Difficulty settings
+enum Difficulty {
+	STORY,    # Facile, focus narrativo
+	NORMAL,   # Bilanciato
+	HARD,     # Sfida tattica
+	NIGHTMARE # Per veterani
+}
+var current_difficulty: Difficulty = Difficulty.NORMAL
+
 const MAX_HAND_SIZE: int = 8
 const STARTING_HAND_SIZE: int = 5
 
@@ -74,6 +92,18 @@ func _reset_game_state() -> void:
 	cards_played_count = 0
 	damage_dealt_total = 0
 
+	# MIGLIORAMENTO FINALE: Reset statistiche avanzate
+	cards_sacrificed_count = 0
+	sigils_triggered_count = 0
+	max_combo = 0
+	current_combo = 0
+	perfect_turns = 0
+	cards_drawn_total = 0
+	highest_damage_single_hit = 0
+
+	# Applica modificatori difficoltà
+	_apply_difficulty_modifiers()
+
 ## Pesca una carta
 func draw_card(free_only: bool = false) -> Card:
 	if player_hand.size() >= MAX_HAND_SIZE:
@@ -88,6 +118,9 @@ func draw_card(free_only: bool = false) -> Card:
 
 	if not card_data:
 		return null
+
+	# MIGLIORAMENTO FINALE: Track statistiche
+	track_card_drawn()
 
 	# Crea istanza carta (questo dovrà essere fatto dalla scena)
 	# Per ora returniamo solo i dati
@@ -196,6 +229,7 @@ func _card_attack_card(attacker: Card, defender: Card) -> void:
 	# Applica danno
 	defender.take_damage(damage)
 	damage_dealt_total += damage
+	track_damage_dealt(damage)  # MIGLIORAMENTO FINALE
 
 	# ITERAZIONE 3: Thorns - Riflette danno
 	if _has_sigil(defender, "🌵") and damage > 0:
@@ -250,6 +284,13 @@ func _ai_turn() -> void:
 	is_player_turn = true
 	round += 1
 	turn_changed.emit(true)
+
+	# MIGLIORAMENTO FINALE: Check evento casuale
+	if EventManager.can_trigger_event(round):
+		var event = EventManager.trigger_random_event(current_phase, round)
+		if not event.is_empty():
+			EventManager.apply_event_effect(event)
+			# Mostra dialogo evento (gestito dalla UI)
 
 	# Pesca carta automaticamente
 	draw_card()
@@ -372,6 +413,7 @@ func _trigger_sigils(card: Card, trigger_type: SigilData.SigilTrigger) -> void:
 	for sigil in card.card_data.sigils:
 		if sigil.trigger == trigger_type:
 			_execute_sigil_effect(card, sigil)
+			track_sigil_triggered()  # MIGLIORAMENTO FINALE
 
 ## ITERAZIONE 3: Implementazione completa sigilli
 func _execute_sigil_effect(card: Card, sigil: SigilData) -> void:
@@ -572,3 +614,79 @@ func delete_save_file() -> void:
 	if has_save_file():
 		DirAccess.remove_absolute(SAVE_FILE_PATH)
 		print("GameManager: Save file deleted")
+
+## MIGLIORAMENTO FINALE: Sistema difficoltà
+func set_difficulty(new_difficulty: Difficulty) -> void:
+	current_difficulty = new_difficulty
+	print("GameManager: Difficulty set to %s" % Difficulty.keys()[new_difficulty])
+
+func _apply_difficulty_modifiers() -> void:
+	match current_difficulty:
+		Difficulty.STORY:
+			stability = 150  # Più HP
+			# AI più debole (gestito in TherapistAI)
+		Difficulty.NORMAL:
+			stability = 100  # Standard
+		Difficulty.HARD:
+			stability = 75   # Meno HP
+			# AI più forte
+		Difficulty.NIGHTMARE:
+			stability = 50   # Molto meno HP
+			fragments = 0
+			# AI massima difficoltà
+
+func get_difficulty_multiplier() -> float:
+	match current_difficulty:
+		Difficulty.STORY:
+			return 0.75  # Nemici fanno -25% danno
+		Difficulty.NORMAL:
+			return 1.0
+		Difficulty.HARD:
+			return 1.25  # Nemici fanno +25% danno
+		Difficulty.NIGHTMARE:
+			return 1.5   # Nemici fanno +50% danno
+	return 1.0
+
+## Statistiche avanzate - Tracking
+func track_card_drawn() -> void:
+	cards_drawn_total += 1
+
+func track_sigil_triggered() -> void:
+	sigils_triggered_count += 1
+
+func track_sacrifice() -> void:
+	cards_sacrificed_count += 1
+
+func track_damage_dealt(damage: int) -> void:
+	if damage > highest_damage_single_hit:
+		highest_damage_single_hit = damage
+
+func track_combo_hit() -> void:
+	current_combo += 1
+	if current_combo > max_combo:
+		max_combo = current_combo
+
+func break_combo() -> void:
+	current_combo = 0
+
+func track_perfect_turn() -> void:
+	perfect_turns += 1
+
+## Ottiene statistiche come dizionario
+func get_statistics() -> Dictionary:
+	return {
+		"round": round,
+		"stability": stability,
+		"fragments": fragments,
+		"phase": current_phase,
+		"cards_played": cards_played_count,
+		"cards_sacrificed": cards_sacrificed_count,
+		"cards_drawn": cards_drawn_total,
+		"damage_dealt": damage_dealt_total,
+		"highest_single_hit": highest_damage_single_hit,
+		"sigils_triggered": sigils_triggered_count,
+		"max_combo": max_combo,
+		"perfect_turns": perfect_turns,
+		"session_duration_ms": Time.get_ticks_msec() - session_start_time,
+		"difficulty": Difficulty.keys()[current_difficulty]
+	}
