@@ -101,7 +101,7 @@ func _decide_card_count(field_state: Dictionary, threat_level: float) -> int:
 	if field_state["empty_slots"].size() == 0:
 		return 0
 
-	return mini(base_count, field_state["empty_slots"].size())
+	return min(base_count, field_state["empty_slots"].size())
 
 ## Sceglie la migliore azione da compiere
 func _choose_best_action(player_field: Array, therapist_field: Array, field_state: Dictionary) -> Dictionary:
@@ -125,7 +125,7 @@ func _choose_best_action(player_field: Array, therapist_field: Array, field_stat
 	}
 
 ## Seleziona la carta migliore da giocare
-func _select_best_card(available_cards: Array, player_field: Array, therapist_field: Array) -> CardData:
+func _select_best_card(available_cards: Array[CardData], player_field: Array, therapist_field: Array) -> CardData:
 	# Strategia: bilanciare offensive e difensive
 	var threat = _evaluate_threat_level(player_field)
 
@@ -155,7 +155,7 @@ func _select_best_card(available_cards: Array, player_field: Array, therapist_fi
 	return preferred_cards[randi() % preferred_cards.size()].duplicate_data()
 
 ## Seleziona lo slot migliore dove giocare la carta
-func _select_best_slot(card: CardData, player_field: Array, therapist_field: Array, empty_slots: Array) -> int:
+func _select_best_slot(card: CardData, player_field: Array, therapist_field: Array, empty_slots: Array[int]) -> int:
 	if empty_slots.is_empty():
 		return -1
 

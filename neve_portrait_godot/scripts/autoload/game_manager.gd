@@ -105,10 +105,10 @@ func _reset_game_state() -> void:
 	_apply_difficulty_modifiers()
 
 ## Pesca una carta
-func draw_card(free_only: bool = false) -> Card:
+func draw_card(free_only: bool = false) -> void:
 	if player_hand.size() >= MAX_HAND_SIZE:
 		print("GameManager: Hand is full!")
-		return null
+		return
 
 	var card_data: CardData
 	if free_only:
@@ -117,15 +117,14 @@ func draw_card(free_only: bool = false) -> Card:
 		card_data = CardDatabase.get_random_player_card()
 
 	if not card_data:
-		return null
+		return
 
 	# MIGLIORAMENTO FINALE: Track statistiche
 	track_card_drawn()
 
 	# Crea istanza carta (questo dovrà essere fatto dalla scena)
-	# Per ora returniamo solo i dati
 	print("GameManager: Drew card: %s" % card_data.card_name)
-	return null  # Verrà gestito dalla game scene
+	# Verrà gestito dalla game scene tramite segnali o chiamate dirette
 
 ## Gioca una carta dal giocatore
 func play_card(card: Card, slot_index: int) -> bool:
@@ -341,7 +340,7 @@ func lose_stability(amount: int) -> void:
 		_trigger_game_over(false)
 
 func add_stability(amount: int) -> void:
-	stability = mini(stability + amount, 100)
+	stability = min(stability + amount, 100)
 	stability_changed.emit(stability)
 
 ## Modifica frammenti
@@ -530,7 +529,7 @@ func save_settings() -> void:
 
 	var file = FileAccess.open(SETTINGS_FILE_PATH, FileAccess.WRITE)
 	if file:
-		file.store_string(JSON.stringify(settings, "\t"))
+		file.store_string(JSON.stringify(settings))
 		file.close()
 		print("GameManager: Settings saved")
 
@@ -557,7 +556,7 @@ func save_game() -> void:
 
 	var file = FileAccess.open(SAVE_FILE_PATH, FileAccess.WRITE)
 	if file:
-		file.store_string(JSON.stringify(save_data, "\t"))
+		file.store_string(JSON.stringify(save_data))
 		file.close()
 		print("GameManager: Game saved (Round %d, Phase %d)" % [round, current_phase])
 	else:
