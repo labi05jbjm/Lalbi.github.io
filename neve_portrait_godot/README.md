@@ -8,9 +8,9 @@ Un gioco di carte psicologico ispirato a Inscryption, convertito da HTML/JavaScr
 
 ## 🎯 Stato del Progetto
 
-**ITERAZIONE 1 COMPLETATA** ✅
+**ITERAZIONE 2 COMPLETATA** ✅
 
-### Core Gameplay Funzionante:
+### ITERAZIONE 1 - Core Gameplay:
 - ✅ Sistema carte completo (CardData, Card, CardDatabase)
 - ✅ 8 carte giocatore implementate (4 gratuite + 4 costo sangue)
 - ✅ Sistema di combattimento base
@@ -20,16 +20,31 @@ Un gioco di carte psicologico ispirato a Inscryption, convertito da HTML/JavaScr
 - ✅ UI base (stats, field, hand, log)
 - ✅ Autoload systems (GameManager, CardDatabase, AudioManager)
 
+### ITERAZIONE 2 - AI & Narrativa:
+- ✅ **Carte avversario espanse**: 10 carte terapeuta (da 3 a 10)
+  - 7 nuove carte con abilità uniche (Invalidazione, Gaslighting, Proiezione, ecc.)
+  - 6 nuovi sigilli aggiunti (Perforante, Confusione, Spine, Assorbimento, Evasione, Indebolimento)
+- ✅ **AI strategica avanzata**: TherapistAI con decision-making intelligente
+  - Valutazione delle minacce
+  - Posizionamento tattico delle carte
+  - Adattamento alle fasi narrative
+  - Scelta intelligente carte offensive/difensive
+- ✅ **DialogueManager**: Sistema dialoghi narrativi completo
+  - Dialoghi per tutte e 4 le fasi narrative
+  - Eventi speciali (low stability, primo frammento)
+  - Storia psicologica horror tra Neve e Dr. Lumen
+- ✅ **UI Dialoghi**: Script DialogueBox per visualizzazione narrativa
+- ✅ **Integrazione narrativa**: Trigger automatici dialoghi in-game
+
 ### Da Implementare (Iterazioni Future):
 - ⏳ Tutorial interattivo
-- ⏳ Sistema dialoghi completo
-- ⏳ Fasi narrative (1-4)
+- ⏳ Scene UI dialoghi (.tscn files)
 - ⏳ Effetti visivi e particelle
-- ⏳ Sistema audio completo
+- ⏳ Sistema audio completo (musica, SFX)
 - ⏳ Sistema salvataggio
 - ⏳ Achievements Steam
-- ⏳ Carte avversario complete
-- ⏳ AI avanzata
+- ⏳ Implementazione sigilli avanzati (alcuni definiti ma non implementati)
+- ⏳ Animazioni carte avanzate
 
 ## 🚀 Come Iniziare
 
@@ -135,11 +150,20 @@ Sopravvivi alla sessione di terapia mantenendo la **Stabilità** sopra 0 mentre 
 
 ### Sigilli (Abilità Speciali)
 
+**ITERAZIONE 1:**
 - **⭐ Pesca Carte**: Pesca 2 carte quando giocata
 - **🌙 Guarigione**: Cura 1 HP a tutte le carte alleate
 - **💥 Attacco Raddoppiato**: x2 danno contro carte 'velo'
 - **🛡️ Difesa**: +1 difesa quando attaccata
 - **🔗 Legame**: Lega due carte alleate (salute condivisa)
+
+**ITERAZIONE 2 (Nuovi):**
+- **🗡️ Perforante**: Gli attacchi ignorano scudi e difese
+- **🌀 Confusione**: La carta avversaria attacca se stessa
+- **🌵 Spine**: Riflette 1 danno all'attaccante quando danneggiata
+- **💫 Assorbimento**: Guadagna +1/+1 quando una carta muore
+- **👻 Evasione**: 50% di probabilità di evitare gli attacchi
+- **💤 Indebolimento**: Riduce l'attacco delle carte avversarie di 1
 
 ## 🔧 Sviluppo
 
@@ -204,6 +228,98 @@ static func create_mio_sigillo() -> SigilData:
 ```
 
 Poi implementa la logica in `GameManager._execute_sigil_effect()`.
+
+## 🃏 Carte Terapeuta (Avversario) - ITERAZIONE 2
+
+Le nuove carte aggiunte nell'ITERAZIONE 2 riflettono tecniche terapeutiche manipolative e tossiche:
+
+1. **Invalidazione** (3 ATK / 2 HP) - IMPULSO
+   - Sigillo: Perforante
+   - "Non è come pensi tu, Neve."
+
+2. **Gaslighting** (2 ATK / 3 HP) - VOCE
+   - Sigillo: Confusione
+   - "Sei sicura che sia andata così?"
+
+3. **Proiezione** (1 ATK / 4 HP) - VELO
+   - Sigillo: Spine
+   - Riflette il dolore su Neve
+
+4. **Repressione** (0 ATK / 5 HP) - VELO
+   - Sigillo: Scudo
+   - "Non pensarci. Seppelliscilo."
+
+5. **Transfert** (2 ATK / 2 HP) - IMPULSO
+   - Sigillo: Assorbimento
+   - Assorbe l'identità di Neve
+
+6. **Dissociazione Clinica** (2 ATK / 2 HP) - VOCE
+   - Sigillo: Evasione
+   - Distacco emotivo freddo
+
+7. **Sedazione** (1 ATK / 3 HP) - ECO
+   - Sigillo: Indebolimento
+   - "Prendile, ti faranno sentire meglio."
+
+## 🤖 Sistema AI - ITERAZIONE 2
+
+La nuova **TherapistAI** implementa una strategia intelligente:
+
+### Difficoltà
+- **EASY**: Gioca casualmente, 1 carta per turno
+- **NORMAL**: Strategia base, reagisce al giocatore (default)
+- **HARD**: Strategia avanzata, ottimizza posizionamento
+- **ADAPTIVE**: Si adatta al livello del giocatore
+
+### Strategia
+- **Valutazione minacce**: Calcola quanto è pericoloso il campo giocatore
+- **Adattamento fasi**: Diventa più aggressiva nelle fasi avanzate
+- **Scelta carte intelligente**:
+  - Alta minaccia → gioca difensive (VELO)
+  - Bassa minaccia → gioca offensive (IMPULSO)
+  - Situazione bilanciata → gioca ECO
+- **Posizionamento strategico**:
+  - Carte difensive contro le minacce più grandi
+  - Carte offensive contro slot vuoti (danno diretto)
+  - Preferenza per slot centrali (più flessibili)
+
+### File: `scripts/ai/therapist_ai.gd`
+
+Puoi modificare la difficoltà AI nel GameManager.
+
+## 📖 Sistema Dialoghi - ITERAZIONE 2
+
+Il **DialogueManager** gestisce la narrativa del gioco:
+
+### Fasi Narrative
+
+**Fase 1: Denial** (0-14 frammenti)
+- Neve è confusa, vulnerabile
+- Dr. Lumen è rassicurante ma ambiguo
+- Dialoghi: introduzione, primi turni, primo sacrificio
+
+**Fase 2: Recognition** (15-29 frammenti)
+- Neve inizia a ricordare
+- Il dolore emerge
+- Dr. Lumen incoraggia ad "abbracciare il dolore"
+
+**Fase 3: Fracture** (30-49 frammenti)
+- Neve si rende conto che qualcosa non va
+- Paranoia e sospetto
+- Dr. Lumen mostra crepe nella facciata
+
+**Fase 4: Revelation** (50+ frammenti)
+- La verità finale
+- Dr. Lumen rivela la sua natura
+- Confronto psicologico
+
+### Trigger Automatici
+- Inizio gioco → Dialogo introduttivo
+- Cambio fase → Dialogo transizione
+- Stabilità ≤ 30 → Dialogo "low stability"
+- Primo frammento → Dialogo celebrativo
+
+### File: `scripts/autoload/dialogue_manager.gd`
 
 ## 🎨 Personalizzazione
 

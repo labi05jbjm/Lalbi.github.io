@@ -67,3 +67,62 @@ static func create_bond_sigil() -> SigilData:
 	sigil.trigger = SigilTrigger.ON_PLAY
 	sigil.effect_target = "allies"
 	return sigil
+
+## ========================================
+## SIGILLI ITERAZIONE 2
+## ========================================
+
+static func create_piercing_sigil() -> SigilData:
+	var sigil = SigilData.new()
+	sigil.icon = "🗡️"
+	sigil.sigil_name = "Perforante"
+	sigil.description = "Gli attacchi ignorano gli scudi e le abilità difensive"
+	sigil.trigger = SigilTrigger.ON_ATTACK
+	sigil.effect_value = 1
+	return sigil
+
+static func create_confusion_sigil() -> SigilData:
+	var sigil = SigilData.new()
+	sigil.icon = "🌀"
+	sigil.sigil_name = "Confusione"
+	sigil.description = "La carta avversaria attacca se stessa"
+	sigil.trigger = SigilTrigger.ON_PLAY
+	sigil.effect_target = "enemies"
+	return sigil
+
+static func create_thorns_sigil() -> SigilData:
+	var sigil = SigilData.new()
+	sigil.icon = "🌵"
+	sigil.sigil_name = "Spine"
+	sigil.description = "Riflette 1 danno all'attaccante quando danneggiata"
+	sigil.trigger = SigilTrigger.ON_DAMAGED
+	sigil.effect_value = 1
+	return sigil
+
+static func create_absorb_sigil() -> SigilData:
+	var sigil = SigilData.new()
+	sigil.icon = "💫"
+	sigil.sigil_name = "Assorbimento"
+	sigil.description = "Guadagna +1/+1 quando una carta muore"
+	sigil.trigger = SigilTrigger.PASSIVE
+	sigil.effect_value = 1
+	return sigil
+
+static func create_evasion_sigil() -> SigilData:
+	var sigil = SigilData.new()
+	sigil.icon = "👻"
+	sigil.sigil_name = "Evasione"
+	sigil.description = "50% di probabilità di evitare gli attacchi"
+	sigil.trigger = SigilTrigger.PASSIVE
+	sigil.effect_value = 50
+	return sigil
+
+static func create_weaken_sigil() -> SigilData:
+	var sigil = SigilData.new()
+	sigil.icon = "💤"
+	sigil.sigil_name = "Indebolimento"
+	sigil.description = "Riduce l'attacco delle carte avversarie di 1"
+	sigil.trigger = SigilTrigger.PASSIVE
+	sigil.effect_value = 1
+	sigil.effect_target = "enemies"
+	return sigil

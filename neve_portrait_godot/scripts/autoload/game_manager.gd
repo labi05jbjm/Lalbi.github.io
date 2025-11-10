@@ -53,6 +53,10 @@ func start_new_game() -> void:
 
 	print("GameManager: New game started")
 
+	# ITERAZIONE 2: Trigger dialogo introduttivo
+	await get_tree().create_timer(0.5).timeout
+	DialogueManager.start_dialogue("phase1_intro")
+
 ## Reset dello stato di gioco
 func _reset_game_state() -> void:
 	round = 1
@@ -189,23 +193,23 @@ func _direct_damage_to_therapist(damage: int) -> void:
 	add_fragments(1)
 	print("GameManager: Direct hit! Gained 1 fragment")
 
-## Turno AI
+## Turno AI - ITERAZIONE 2: Usa AI strategica
 func _ai_turn() -> void:
 	print("GameManager: AI turn starting...")
 
-	# AI gioca carte casuali
-	var cards_to_play = randi_range(1, 2)
-	for i in range(cards_to_play):
-		var empty_slots = []
-		for slot_i in range(4):
-			if therapist_field[slot_i] == null:
-				empty_slots.append(slot_i)
+	# Crea istanza AI (o usa singleton se preferisci)
+	var ai = TherapistAI.new()
 
-		if empty_slots.is_empty():
-			break
+	# L'AI pianifica le sue mosse
+	var actions = ai.plan_turn(player_field, therapist_field, current_phase)
 
-		var slot = empty_slots[randi() % empty_slots.size()]
-		_ai_play_card(slot)
+	# Esegue le azioni pianificate
+	for action in actions:
+		if action.has("card") and action.has("slot"):
+			_ai_play_card_strategic(action["card"], action["slot"])
+			await get_tree().create_timer(0.5).timeout
+
+	ai.queue_free()
 
 	await get_tree().create_timer(1.0).timeout
 
@@ -222,14 +226,22 @@ func _ai_turn() -> void:
 	# Pesca carta automaticamente
 	draw_card()
 
-func _ai_play_card(slot_index: int) -> void:
-	var card_data = CardDatabase.get_random_therapist_card()
+## ITERAZIONE 2: Gioca una carta specifica scelta dall'AI
+func _ai_play_card_strategic(card_data: CardData, slot_index: int) -> void:
 	if not card_data:
 		return
 
+	if slot_index < 0 or slot_index >= 4:
+		return
+
 	# Crea carta AI (gestito dalla scene)
-	print("GameManager: AI plays %s to slot %d" % [card_data.card_name, slot_index])
+	print("GameManager: AI strategically plays %s to slot %d" % [card_data.card_name, slot_index])
 	# therapist_field[slot_index] = card  # Verrà fatto dalla scene
+
+## DEPRECATO: Mantieni per retrocompatibilità
+func _ai_play_card(slot_index: int) -> void:
+	var card_data = CardDatabase.get_random_therapist_card()
+	_ai_play_card_strategic(card_data, slot_index)
 
 func _ai_attack_phase() -> void:
 	for i in range(4):
@@ -249,6 +261,11 @@ func lose_stability(amount: int) -> void:
 	stability -= amount
 	stability_changed.emit(stability)
 
+	# ITERAZIONE 2: Trigger dialogo low stability
+	if stability <= 30 and stability > 0:
+		if not DialogueManager.has_seen_dialogue("low_stability"):
+			DialogueManager.start_dialogue("low_stability")
+
 	if stability <= 0:
 		_trigger_game_over(false)
 
@@ -258,8 +275,15 @@ func add_stability(amount: int) -> void:
 
 ## Modifica frammenti
 func add_fragments(amount: int) -> void:
+	var was_zero = (fragments == 0)
+
 	fragments += amount
 	fragments_changed.emit(fragments)
+
+	# ITERAZIONE 2: Trigger dialogo primo frammento
+	if was_zero and fragments > 0:
+		if not DialogueManager.has_seen_dialogue("first_fragment"):
+			DialogueManager.start_dialogue("first_fragment")
 
 	# Check per fase progression
 	_check_phase_progression()
@@ -279,6 +303,19 @@ func _check_phase_progression() -> void:
 		current_phase = new_phase
 		phase_changed.emit(current_phase)
 		print("GameManager: Phase changed to %d" % current_phase)
+
+		# ITERAZIONE 2: Trigger dialogo di transizione fase
+		_trigger_phase_dialogue(new_phase)
+
+## ITERAZIONE 2: Trigger dialoghi per cambio fase
+func _trigger_phase_dialogue(phase: int) -> void:
+	match phase:
+		2:
+			DialogueManager.start_dialogue("phase2_transition")
+		3:
+			DialogueManager.start_dialogue("phase3_transition")
+		4:
+			DialogueManager.start_dialogue("phase4_transition")
 
 ## Game Over
 func _trigger_game_over(player_won: bool) -> void:

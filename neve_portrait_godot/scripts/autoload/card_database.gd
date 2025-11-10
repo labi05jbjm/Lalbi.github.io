@@ -27,9 +27,19 @@ func _initialize_player_cards() -> void:
 
 ## Inizializza le carte del terapeuta/avversario
 func _initialize_therapist_cards() -> void:
+	# ITERAZIONE 1: Carte base
 	therapist_cards.append(_create_therapist_logic())
 	therapist_cards.append(_create_therapist_analysis())
 	therapist_cards.append(_create_therapist_diagnosis())
+
+	# ITERAZIONE 2: Carte avanzate
+	therapist_cards.append(_create_therapist_invalidation())
+	therapist_cards.append(_create_therapist_gaslighting())
+	therapist_cards.append(_create_therapist_projection())
+	therapist_cards.append(_create_therapist_repression())
+	therapist_cards.append(_create_therapist_transference())
+	therapist_cards.append(_create_therapist_dissociation())
+	therapist_cards.append(_create_therapist_sedation())
 
 ## Ottiene una carta casuale per il giocatore
 func get_random_player_card() -> CardData:
@@ -198,4 +208,92 @@ func _create_therapist_diagnosis() -> CardData:
 	card.blood_cost = 0
 	card.short_desc = "Etichettare la sofferenza"
 	card.long_desc = "Una parola, un'etichetta, una categoria. Il dolore di Neve ridotto a codici diagnostici."
+	return card
+
+## ========================================
+## THERAPIST CARDS - ITERAZIONE 2
+## ========================================
+
+func _create_therapist_invalidation() -> CardData:
+	var card = CardData.new()
+	card.card_name = "Invalidazione"
+	card.card_type = CardData.CardType.IMPULSO
+	card.attack = 3
+	card.health = 2
+	card.blood_cost = 0
+	card.short_desc = "Negare la realtà"
+	card.long_desc = "\"Non è come pensi tu, Neve.\" Le sue esperienze, i suoi ricordi, le sue emozioni... tutto messo in dubbio. Cancellato."
+	card.sigils = [SigilData.create_piercing_sigil()]
+	return card
+
+func _create_therapist_gaslighting() -> CardData:
+	var card = CardData.new()
+	card.card_name = "Gaslighting"
+	card.card_type = CardData.CardType.VOCE
+	card.attack = 2
+	card.health = 3
+	card.blood_cost = 0
+	card.short_desc = "Distorcere la verità"
+	card.long_desc = "\"Sei sicura che sia andata così?\" La realtà si piega, si torce. Forse Neve ricorda male. Forse è sempre stata confusa."
+	card.sigils = [SigilData.create_confusion_sigil()]
+	return card
+
+func _create_therapist_projection() -> CardData:
+	var card = CardData.new()
+	card.card_name = "Proiezione"
+	card.card_type = CardData.CardType.VELO
+	card.attack = 1
+	card.health = 4
+	card.blood_cost = 0
+	card.short_desc = "Riflettere il dolore"
+	card.long_desc = "Il Dr. Lumen proietta le sue ombre su Neve. I suoi problemi diventano i problemi di lei. Lo specchio si rompe."
+	card.sigils = [SigilData.create_thorns_sigil()]
+	return card
+
+func _create_therapist_repression() -> CardData:
+	var card = CardData.new()
+	card.card_name = "Repressione"
+	card.card_type = CardData.CardType.VELO
+	card.attack = 0
+	card.health = 5
+	card.blood_cost = 0
+	card.short_desc = "Seppellire il trauma"
+	card.long_desc = "\"Non pensarci. Seppelliscilo. Dimentica.\" Ma ciò che è sepolto non muore. Cresce nell'oscurità."
+	card.sigils = [SigilData.create_shield_sigil()]
+	return card
+
+func _create_therapist_transference() -> CardData:
+	var card = CardData.new()
+	card.card_name = "Transfert"
+	card.card_type = CardData.CardType.IMPULSO
+	card.attack = 2
+	card.health = 2
+	card.blood_cost = 0
+	card.short_desc = "Assorbire l'identità"
+	card.long_desc = "Il terapeuta diventa padre, madre, amico, nemico. Neve proietta tutto su di lui. E lui assorbe ogni frammento."
+	card.sigils = [SigilData.create_absorb_sigil()]
+	return card
+
+func _create_therapist_dissociation() -> CardData:
+	var card = CardData.new()
+	card.card_name = "Dissociazione Clinica"
+	card.card_type = CardData.CardType.VOCE
+	card.attack = 2
+	card.health = 2
+	card.blood_cost = 0
+	card.short_desc = "Distacco emotivo"
+	card.long_desc = "Il Dr. Lumen osserva dalla distanza. Freddo. Distaccato. Neve è un caso, un file, un numero. Non una persona."
+	card.sigils = [SigilData.create_evasion_sigil()]
+	return card
+
+func _create_therapist_sedation() -> CardData:
+	var card = CardData.new()
+	card.card_name = "Sedazione"
+	card.card_type = CardData.CardType.ECO
+	card.attack = 1
+	card.health = 3
+	card.blood_cost = 0
+	card.short_desc = "Spegnere le emozioni"
+	card.long_desc = "Pillole colorate in bottigliette bianche. \"Prendile, ti faranno sentire meglio.\" Ma Neve si sente solo... vuota."
+	card.sigils = [SigilData.create_weaken_sigil()]
 	return card
