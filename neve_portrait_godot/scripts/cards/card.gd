@@ -13,10 +13,10 @@ signal card_unhovered(card: Card)
 ## Riferimenti UI (assegnati nella scena)
 @onready var card_frame: Panel = $CardFrame
 @onready var artwork: TextureRect = $CardFrame/Artwork
-@onready var attack_label: Label = $CardFrame/StatsBar/AttackStat/Value
-@onready var health_label: Label = $CardFrame/StatsBar/HealthStat/Value
-@onready var name_label: Label = $CardFrame/NamePlate/CardName
-@onready var artist_label: Label = $CardFrame/NamePlate/Artist
+@onready var attack_label: Label = $CardFrame/StatsBar/AttackStat/HBox/Value
+@onready var health_label: Label = $CardFrame/StatsBar/HealthStat/HBox/Value
+@onready var name_label: Label = $CardFrame/NamePlate/VBox/CardName
+@onready var artist_label: Label = $CardFrame/NamePlate/VBox/Artist
 @onready var blood_cost_container: HBoxContainer = $CardFrame/BloodCost
 @onready var sigils_container: HBoxContainer = $CardFrame/Sigils
 

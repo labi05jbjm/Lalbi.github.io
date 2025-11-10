@@ -12,6 +12,9 @@ var sfx_volume: float = 0.8
 var master_volume: float = 1.0
 
 func _ready() -> void:
+	# Setup audio buses if they don't exist
+	_setup_audio_buses()
+
 	# Crea audio players
 	music_player = AudioStreamPlayer.new()
 	music_player.bus = "Music"
@@ -27,6 +30,24 @@ func _ready() -> void:
 
 	print("AudioManager: Initialized")
 
+## Setup audio buses
+func _setup_audio_buses() -> void:
+	# Create buses if they don't exist
+	if AudioServer.get_bus_index("Music") == -1:
+		AudioServer.add_bus()
+		AudioServer.set_bus_name(AudioServer.bus_count - 1, "Music")
+		print("AudioManager: Created Music bus")
+
+	if AudioServer.get_bus_index("SFX") == -1:
+		AudioServer.add_bus()
+		AudioServer.set_bus_name(AudioServer.bus_count - 1, "SFX")
+		print("AudioManager: Created SFX bus")
+
+	if AudioServer.get_bus_index("Ambient") == -1:
+		AudioServer.add_bus()
+		AudioServer.set_bus_name(AudioServer.bus_count - 1, "Ambient")
+		print("AudioManager: Created Ambient bus")
+
 ## Inizializza audio (chiamato dopo interazione utente)
 func init() -> void:
 	print("AudioManager: Audio system initialized")
@@ -35,9 +56,17 @@ func init() -> void:
 
 ## Applica impostazioni volume
 func _apply_volume_settings() -> void:
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(master_volume))
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(music_volume))
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), linear_to_db(sfx_volume))
+	var master_idx = AudioServer.get_bus_index("Master")
+	if master_idx != -1:
+		AudioServer.set_bus_volume_db(master_idx, linear_to_db(master_volume))
+
+	var music_idx = AudioServer.get_bus_index("Music")
+	if music_idx != -1:
+		AudioServer.set_bus_volume_db(music_idx, linear_to_db(music_volume))
+
+	var sfx_idx = AudioServer.get_bus_index("SFX")
+	if sfx_idx != -1:
+		AudioServer.set_bus_volume_db(sfx_idx, linear_to_db(sfx_volume))
 
 ## Musica
 func play_music(stream: AudioStream, fade_in: float = 1.0) -> void:
