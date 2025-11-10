@@ -548,12 +548,12 @@ body {
     top: 8px;
     left: 8px;
     right: 8px;
-    height: 160px;
+    height: 135px; /* FIX: Ridotto da 160px a 135px per dare spazio alle stats */
     background-size: cover;
     background-position: center;
     border: 2px solid rgba(138, 122, 106, 0.5);
     border-radius: 6px;
-    overflow: hidden;
+    overflow: hidden; /* Previene che il dipinto sbordi */
 }
 
 .artwork-overlay {
@@ -593,7 +593,7 @@ body {
 /* === CARD STATS === */
 .card-info-bar {
     position: absolute;
-    top: 175px;
+    top: 150px; /* FIX: Ridotto da 175px a 150px per adattarsi al nuovo artwork (143px + 7px gap) */
     left: 8px;
     right: 8px;
     display: flex;
@@ -636,7 +636,7 @@ body {
 /* === CARD SIGILS === */
 .card-sigils {
     position: absolute;
-    top: 215px;
+    top: 195px; /* FIX: Ridotto da 215px a 195px per adattarsi al nuovo layout */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -676,17 +676,22 @@ body {
     background: rgba(26, 20, 16, 0.95);
     border: 2px solid var(--accent-warm);
     border-radius: 6px;
-    padding: 5px 6px;
+    padding: 6px 8px; /* FIX: Aumentato padding da 5px 6px a 6px 8px per dare più spazio */
     text-align: center;
+    min-height: 32px; /* FIX: Altezza minima per evitare che il nome sia schiacciato */
 }
 
 .card-name {
-    font-size: 11px;
+    font-size: 13px; /* FIX: Aumentato da 11px a 13px per migliore leggibilità */
     font-weight: 700;
     color: var(--text-light);
-    line-height: 1.1;
+    line-height: 1.2;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
     margin-bottom: 2px;
+    overflow: hidden; /* FIX: Previene overflow */
+    text-overflow: ellipsis; /* FIX: Aggiunge "..." se il nome è troppo lungo */
+    white-space: nowrap; /* FIX: Mantiene il nome su una riga */
+    max-width: 100%; /* FIX: Limita alla larghezza del container */
 }
 
 .card-artist {
@@ -7579,9 +7584,24 @@ class Game {
         // Set initial dialogue
         this.setTherapistDialogue("Bene. Iniziamo.");
 
-        // Initial draw
+        // Initial draw - FIX: Dai solo carte a costo 0 all'inizio per evitare frustrazione
+        const lowCostCards = this.cardLibrary.filter(card => card.bloodCost === 0);
         for (let i = 0; i < 5; i++) {
-            this.drawCard();
+            const template = lowCostCards[Math.floor(Math.random() * lowCostCards.length)];
+            const card = new Card(
+                template.name,
+                template.type,
+                template.attack,
+                template.health,
+                template.bloodCost,
+                template.artworkUrl,
+                template.artist,
+                template.shortDesc,
+                template.longDesc,
+                template.sigils
+            );
+            this.playerHand.push(card);
+            this.log(`Hai pescato: ${card.name}`);
         }
 
         // Show UI elements with animation
@@ -7615,10 +7635,16 @@ class Game {
             },
             {
                 title: "Giocare una Carta",
-                text: "Trascina una carta dalla tua mano in uno slot vuoto del tuo campo per giocarla. Alcune carte richiedono un sacrificio (🩸).",
+                text: "Trascina una carta dalla tua mano in uno slot vuoto del tuo campo per giocarla. Le tue prime carte sono gratuite!",
                 highlight: '.player-field',
                 position: 'top',
                 requireAction: 'playCard'
+            },
+            {
+                title: "Sistema dei Sacrifici",
+                text: "Alcune carte mostrano gocce di sangue (🩸) in alto: sono il loro costo. Per giocarle, devi sacrificare quel numero di carte già sul campo. Ad esempio, 2🩸 = sacrifica 2 carte. Le carte iniziali che hai sono tutte gratuite (0🩸), quindi giocale per costruire il tuo campo prima!",
+                highlight: '.player-hand',
+                position: 'bottom'
             },
             {
                 title: "Attaccare",
