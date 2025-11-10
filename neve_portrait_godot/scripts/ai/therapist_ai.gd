@@ -125,7 +125,7 @@ func _choose_best_action(player_field: Array, therapist_field: Array, field_stat
 	}
 
 ## Seleziona la carta migliore da giocare
-func _select_best_card(available_cards: Array[CardData], player_field: Array, therapist_field: Array) -> CardData:
+func _select_best_card(available_cards: Array[CardData], player_field: Array, _therapist_field: Array) -> CardData:
 	# Strategia: bilanciare offensive e difensive
 	var threat = _evaluate_threat_level(player_field)
 
@@ -176,7 +176,7 @@ func _select_best_slot(card: CardData, player_field: Array, therapist_field: Arr
 	return best_slot
 
 ## Valuta quanto è buono un slot per una carta
-func _evaluate_slot_score(slot: int, card: CardData, player_field: Array, therapist_field: Array) -> float:
+func _evaluate_slot_score(slot: int, card: CardData, player_field: Array, _therapist_field: Array) -> float:
 	var score: float = 0.0
 
 	var opponent_card = player_field[slot]

@@ -224,7 +224,10 @@ func apply_event_effect(event: Dictionary) -> void:
 	var effect = event.get("effect", {})
 
 	if effect.has("stability"):
-		GameManager.add_stability(effect.stability) if effect.stability > 0 else GameManager.lose_stability(abs(effect.stability))
+		if effect.stability > 0:
+			GameManager.add_stability(effect.stability)
+		else:
+			GameManager.lose_stability(abs(effect.stability))
 
 	if effect.has("fragments"):
 		GameManager.add_fragments(effect.fragments)

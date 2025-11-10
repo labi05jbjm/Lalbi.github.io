@@ -298,7 +298,7 @@ func _update_ui() -> void:
 	# Update turn info
 	var round_label = turn_info.get_node("Round")
 	var turn_label = turn_info.get_node("Turn")
-	round_label.text = "Round %d" % GameManager.round
+	round_label.text = "Round %d" % GameManager.current_round
 	turn_label.text = "Your Turn" if GameManager.is_player_turn else "AI Turn"
 
 	# Enable/disable end turn button

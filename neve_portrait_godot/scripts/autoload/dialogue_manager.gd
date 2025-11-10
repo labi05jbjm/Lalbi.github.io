@@ -6,7 +6,7 @@ extends Node
 signal dialogue_started(dialogue_data: Dictionary)
 signal dialogue_line_shown(speaker: String, text: String)
 signal dialogue_ended()
-signal choice_required(choices: Array)
+# signal choice_required(choices: Array)  # TODO: Implementare sistema scelte in futuro
 
 ## Stato corrente
 var current_dialogue: Dictionary = {}

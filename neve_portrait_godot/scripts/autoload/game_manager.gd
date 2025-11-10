@@ -10,7 +10,7 @@ signal phase_changed(new_phase: int)
 signal game_over(player_won: bool)
 
 ## Game State
-var round: int = 1
+var current_round: int = 1
 var stability: int = 100  # HP del giocatore (Dr. Lumen)
 var fragments: int = 0     # Frammenti di memoria raccolti
 var is_player_turn: bool = true
@@ -77,7 +77,7 @@ func start_new_game() -> void:
 
 ## Reset dello stato di gioco
 func _reset_game_state() -> void:
-	round = 1
+	current_round = 1
 	stability = 100
 	fragments = 0
 	is_player_turn = true
@@ -247,7 +247,7 @@ func _has_sigil(card: Card, sigil_icon: String) -> bool:
 			return true
 	return false
 
-func _direct_damage_to_therapist(damage: int) -> void:
+func _direct_damage_to_therapist(_damage: int) -> void:
 	# In questo gioco, l'avversario "vince" riducendo la stabilità del giocatore
 	# Quindi qui non fa nulla - il danno diretto non esiste
 	# (o potrebbe dare frammenti bonus)
@@ -281,12 +281,12 @@ func _ai_turn() -> void:
 
 	# Ritorna turno al giocatore
 	is_player_turn = true
-	round += 1
+	current_round += 1
 	turn_changed.emit(true)
 
 	# MIGLIORAMENTO FINALE: Check evento casuale
-	if EventManager.can_trigger_event(round):
-		var event = EventManager.trigger_random_event(current_phase, round)
+	if EventManager.can_trigger_event(current_round):
+		var event = EventManager.trigger_random_event(current_phase, current_round)
 		if not event.is_empty():
 			EventManager.apply_event_effect(event)
 			# Mostra dialogo evento (gestito dalla UI)
@@ -540,7 +540,7 @@ func save_game() -> void:
 	var save_data = {
 		"version": "1.0",
 		"timestamp": Time.get_unix_time_from_system(),
-		"round": round,
+		"round": current_round,
 		"stability": stability,
 		"fragments": fragments,
 		"current_phase": current_phase,
@@ -558,7 +558,7 @@ func save_game() -> void:
 	if file:
 		file.store_string(JSON.stringify(save_data))
 		file.close()
-		print("GameManager: Game saved (Round %d, Phase %d)" % [round, current_phase])
+		print("GameManager: Game saved (Round %d, Phase %d)" % [current_round, current_phase])
 	else:
 		push_error("GameManager: Failed to save game!")
 
@@ -584,7 +584,7 @@ func load_game() -> bool:
 	var data = json.data
 
 	# Ripristina stato
-	round = data.get("round", 1)
+	current_round = data.get("round", 1)
 	stability = data.get("stability", 100)
 	fragments = data.get("fragments", 0)
 	current_phase = data.get("current_phase", 1)
@@ -603,7 +603,7 @@ func load_game() -> bool:
 	fragments_changed.emit(fragments)
 	phase_changed.emit(current_phase)
 
-	print("GameManager: Game loaded (Round %d, Phase %d)" % [round, current_phase])
+	print("GameManager: Game loaded (Round %d, Phase %d)" % [current_round, current_phase])
 	return true
 
 func has_save_file() -> bool:
@@ -674,7 +674,7 @@ func track_perfect_turn() -> void:
 ## Ottiene statistiche come dizionario
 func get_statistics() -> Dictionary:
 	return {
-		"round": round,
+		"round": current_round,
 		"stability": stability,
 		"fragments": fragments,
 		"phase": current_phase,
