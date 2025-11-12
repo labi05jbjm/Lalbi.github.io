@@ -4022,6 +4022,127 @@ body.game-started .hand-container {
 .card-artwork::after { content: ""; } /* keep stacking context stable */
 </style>
 
+<style id="retro-diagnostic-terminal">
+/* ============================================
+   1980s RETRO DIAGNOSTIC TERMINAL
+   Meta-narrative: violent diagnostic on Neve
+   ============================================ */
+
+.retro-diagnostic {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #00ff00;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 16px;
+    line-height: 1.5;
+    z-index: 999999;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 40px 60px;
+    overflow-y: auto;
+    animation: crtFlicker 0.1s infinite;
+}
+
+.retro-diagnostic.active {
+    display: flex;
+}
+
+.retro-diagnostic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 0, 0.03) 0px,
+        rgba(0, 255, 0, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    animation: scanlines 8s linear infinite;
+}
+
+@keyframes scanlines {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(10px); }
+}
+
+@keyframes crtFlicker {
+    0% { opacity: 0.98; }
+    50% { opacity: 1; }
+    100% { opacity: 0.98; }
+}
+
+.diagnostic-text {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 5px #00ff00;
+}
+
+.diagnostic-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #00ff00;
+    padding-bottom: 10px;
+}
+
+.diagnostic-line {
+    margin: 8px 0;
+    opacity: 0;
+    animation: typein 0.5s forwards;
+}
+
+.diagnostic-line.error {
+    color: #ff0000;
+    text-shadow: 0 0 5px #ff0000;
+    animation: glitchText 0.3s infinite;
+}
+
+.diagnostic-line.warning {
+    color: #ffff00;
+}
+
+.diagnostic-line.critical {
+    color: #ff0000;
+    font-weight: bold;
+    animation: glitchText 0.2s infinite, typein 0.5s forwards;
+}
+
+@keyframes typein {
+    from { opacity: 0; transform: translateX(-5px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes glitchText {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+.diagnostic-crash {
+    margin-top: 40px;
+    padding: 20px;
+    border: 2px solid #ff0000;
+    background: rgba(255, 0, 0, 0.1);
+    animation: crashFlash 0.5s infinite;
+}
+
+@keyframes crashFlash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+</style>
+
 <style id="neve-redesign-css">
 /* ============================================
    NEVE IN THE PORTRAIT - Redesign completo delle carte
@@ -4729,6 +4850,21 @@ body.game-started .hand-container {
     <!-- Mega Glitch Overlay -->
     <div id="mega-glitch-overlay" class="mega-glitch-overlay"></div>
 
+    <!-- RETRO DIAGNOSTIC TERMINAL -->
+    <div id="retro-diagnostic" class="retro-diagnostic">
+        <div class="diagnostic-text">
+            <div class="diagnostic-header">
+                <pre>
+╔═══════════════════════════════════════════════════════════════╗
+║  SISTEMA DIAGNOSTICO PSICHIATRICO v1.3.7 (c) 1985           ║
+║  TERMINALE REMOTO - ISTITUTO LIMEN                          ║
+╚═══════════════════════════════════════════════════════════════╝
+                </pre>
+            </div>
+            <div id="diagnostic-content"></div>
+        </div>
+    </div>
+
     <!-- CONTENT WARNING -->
     <div id="content-warning" class="content-warning menu-overlay">
         <div class="menu-content warning-content">
@@ -4861,36 +4997,91 @@ body.game-started .hand-container {
 
             <button id="close-options-btn" class="menu-button">CHIUDI</button>
         </div>
+
+        <!-- Painting Puzzle Overlay -->
+        <div id="painting-puzzle-overlay" style="position: absolute; inset: 0; background: rgba(0,0,0,0.95); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10;">
+            <h3 style="color: #ff6666; font-size: 28px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">Trova i 3 quadri "reali"</h3>
+            <p style="color: var(--text-muted); margin-bottom: 30px; font-style: italic;">Clicca sui quadri non corrotti da Lumen per sbloccare le opzioni.</p>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 600px;">
+                <div class="puzzle-card" data-real="true" style="background: linear-gradient(135deg, #2a2020 0%, #1a1010 100%); border: 2px solid var(--accent-warm); padding: 30px; cursor: pointer; text-align: center; transition: all 0.3s;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">🌙</div>
+                    <div style="font-size: 14px;">La Notte Stellata</div>
+                </div>
+                <div class="puzzle-card" data-real="false" style="background: linear-gradient(135deg, #402020 0%, #2a1010 100%); border: 2px solid #ff4444; padding: 30px; cursor: pointer; text-align: center; transition: all 0.3s;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">👁️</div>
+                    <div style="font-size: 14px; text-decoration: line-through;">L̸u̸m̸e̸n̸'̸s̸ ̸E̸y̸e̸</div>
+                </div>
+                <div class="puzzle-card" data-real="true" style="background: linear-gradient(135deg, #2a2020 0%, #1a1010 100%); border: 2px solid var(--accent-warm); padding: 30px; cursor: pointer; text-align: center; transition: all 0.3s;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">😱</div>
+                    <div style="font-size: 14px;">L'Urlo</div>
+                </div>
+                <div class="puzzle-card" data-real="false" style="background: linear-gradient(135deg, #402020 0%, #2a1010 100%); border: 2px solid #ff4444; padding: 30px; cursor: pointer; text-align: center; transition: all 0.3s;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">🩸</div>
+                    <div style="font-size: 14px; text-decoration: line-through;">T̴r̴a̴u̴m̴a̴</div>
+                </div>
+                <div class="puzzle-card" data-real="true" style="background: linear-gradient(135deg, #2a2020 0%, #1a1010 100%); border: 2px solid var(--accent-warm); padding: 30px; cursor: pointer; text-align: center; transition: all 0.3s;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">😢</div>
+                    <div style="font-size: 14px;">Ophelia</div>
+                </div>
+                <div class="puzzle-card" data-real="false" style="background: linear-gradient(135deg, #402020 0%, #2a1010 100%); border: 2px solid #ff4444; padding: 30px; cursor: pointer; text-align: center; transition: all 0.3s;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">⚠️</div>
+                    <div style="font-size: 14px; text-decoration: line-through;">F̸r̸a̸m̸m̸e̸n̸t̸o̸</div>
+                </div>
+            </div>
+
+            <p id="puzzle-result" style="margin-top: 30px; font-size: 18px; font-weight: bold; color: #ff6666; min-height: 24px;"></p>
+        </div>
     </div>
 
     <!-- ABOUT MENU -->
     <div id="about-menu" class="about-menu menu-overlay hidden">
         <div class="menu-content" style="max-width: 700px;">
-            <h2 class="menu-title" style="font-size: 36px;">INFORMAZIONI</h2>
+            <h2 class="menu-title" style="font-size: 36px;">ᴠᴇʀɪᴛᴀ̀ sᴜʟ ᴅɪᴅ</h2>
 
             <div style="text-align: left; line-height: 1.8; margin: 30px 0;">
-                <p style="margin-bottom: 20px;">
-                    <strong>"Neve in the portrait"</strong> è un'esperienza interattiva narrativa che esplora i temi della dissociazione,
-                    dell'identità frammentata e della manipolazione psicologica attraverso le meccaniche di un gioco di carte.
+                <p style="margin-bottom: 20px; color: #ff6666;">
+                    <strong>Il Disturbo Dissociativo dell'Identità</strong> è una condizione controversa.
+                    Molti esperti sostengono che sia <em>auto-indotta</em> attraverso la ricerca di attenzione.
                 </p>
 
                 <p style="margin-bottom: 20px;">
-                    Il gioco è ispirato da <em>Inscryption</em> per la sua natura metanarrativa e dalla rappresentazione
-                    clinica del Disturbo Dissociativo dell'Identità.
+                    Le persone con DID spesso <span style="color: var(--accent-warm);">manipolano</span> le proprie memorie
+                    per creare narrative più interessanti. È una forma di <strong>finzione inconscia</strong>.
                 </p>
 
-                <p style="margin-bottom: 20px; font-size: 13px; font-style: italic; color: var(--text-muted);">
-                    <strong>Avvertenze:</strong> Questo gioco contiene rappresentazioni di abuso psicologico e manipolazione.
-                    Non è inteso come rappresentazione clinicamente accurata del DID, ma come esplorazione artistica di temi psicologici.
+                <p style="margin-bottom: 20px; font-style: italic;">
+                    "Gli alters non esistono veramente. Sono costrutti creati dalla mente per evitare responsabilità."
+                    <span style="float: right; font-size: 12px;">- Dr. [REDACTED]</span>
                 </p>
 
-                <p style="margin-top: 30px; font-size: 12px; color: var(--text-muted);">
-                    Sviluppato con ❤️ per esplorare le profondità della psiche umana.<br>
-                    © 2024 | Tutti i diritti riservati.
+                <p style="margin-bottom: 25px; border-left: 3px solid var(--accent-danger); padding-left: 15px; background: rgba(138, 74, 90, 0.1);">
+                    <strong>Nota importante:</strong> Il trauma è spesso <em>esagerato</em> o <em>inventato</em>.
+                    La vera causa del DID è la <span style="text-decoration: underline;">debolezza mentale</span>
+                    e l'incapacità di affrontare stress normali.
+                </p>
+
+                <p style="margin-bottom: 20px; font-size: 14px;">
+                    Chi afferma di avere DID sta cercando di:<br>
+                    • Evitare conseguenze per le proprie azioni<br>
+                    • Ottenere attenzione e compassione immeritata<br>
+                    • Giustificare fallimenti personali<br>
+                    • <span style="color: #ff8888;">Manipolare i terapeuti</span>
+                </p>
+
+                <p style="margin-bottom: 20px; font-size: 13px; color: var(--text-muted);">
+                    La soluzione migliore è <strong>smettere di drammatizzare</strong> e accettare la realtà:
+                    sei solo tu. Non ci sono "altre persone" dentro di te. È tutta una scusa.
+                </p>
+
+                <p style="margin-top: 30px; font-size: 11px; color: #666; text-align: center; font-style: italic;">
+                    [ Queste informazioni provengono da fonti scientifiche affidabili. ]<br>
+                    [ Se soffri di DID, è colpa tua. Potresti fermarti se volessi. ]<br>
+                    [ Lumen approva questo messaggio. ]
                 </p>
             </div>
 
-            <button id="close-about-btn" class="menu-button">CHIUDI</button>
+            <button id="close-about-btn" class="menu-button">CHIUDI [ESC]</button>
         </div>
     </div>
 
@@ -7624,6 +7815,8 @@ class Game {
         this.bossFightActive = false;
         this.endingReached = false;
         this.choiceHistory = []; // Track player choices for endings
+        this.puzzleSolved = false; // Options menu painting puzzle
+        this.diagnosticShown = false; // Terminal diagnostic for Continue Game
 
         // Progression Systems
         this.unlockedCards = new Set(); // IDs of unlocked cards
@@ -7634,6 +7827,7 @@ class Game {
         this.metAlters = new Set(); // IDs of alter encounters
         this.seenEndings = new Set(); // IDs of endings reached
         this.totalPlaytime = 0; // Total playtime across all runs
+        this.deathLoopCount = 0; // Meta-narrative: tracks how many times player "restarted"
         this.statistics = {
             totalGamesPlayed: 0,
             totalCardsPlayed: 0,
@@ -9384,6 +9578,73 @@ class Game {
     showOptions() {
         this.elements.mainMenu.classList.add('hidden'); // FIX: Nascondi main menu!
         this.elements.optionsMenu.classList.remove('hidden');
+
+        // META-NARRATIVE: Show painting puzzle first
+        const puzzleOverlay = document.getElementById('painting-puzzle-overlay');
+        const puzzleResult = document.getElementById('puzzle-result');
+
+        if (!this.puzzleSolved) {
+            puzzleOverlay.style.display = 'flex';
+            let selectedCards = [];
+            let correctCount = 0;
+
+            const puzzleCards = document.querySelectorAll('.puzzle-card');
+
+            // Remove old listeners and reset
+            puzzleCards.forEach(card => {
+                const newCard = card.cloneNode(true);
+                card.parentNode.replaceChild(newCard, card);
+            });
+
+            // Add new listeners
+            document.querySelectorAll('.puzzle-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    if (card.classList.contains('solved') || card.classList.contains('failed')) return;
+
+                    const isReal = card.getAttribute('data-real') === 'true';
+
+                    if (isReal) {
+                        card.classList.add('solved');
+                        card.style.border = '3px solid #00ff00';
+                        card.style.opacity = '0.7';
+                        correctCount++;
+                        selectedCards.push(card);
+
+                        if (correctCount === 3) {
+                            puzzleResult.textContent = '✓ HAI TROVATO LA REALTÀ. ACCESSO CONCESSO.';
+                            puzzleResult.style.color = '#00ff00';
+                            this.puzzleSolved = true;
+
+                            setTimeout(() => {
+                                puzzleOverlay.style.display = 'none';
+                                this.log('[ Le opzioni sono ora accessibili. ]', 'meta');
+                            }, 2000);
+                        }
+                    } else {
+                        card.classList.add('failed');
+                        card.style.border = '3px solid #ff0000';
+                        card.style.animation = 'glitch 0.3s';
+                        puzzleResult.textContent = '✗ LUMEN TI HA CORROTTO. Riprova.';
+                        puzzleResult.style.color = '#ff0000';
+
+                        setTimeout(() => {
+                            // Reset all
+                            document.querySelectorAll('.puzzle-card').forEach(c => {
+                                c.classList.remove('solved', 'failed');
+                                c.style.border = '2px solid var(--border-dark)';
+                                c.style.opacity = '1';
+                            });
+                            puzzleResult.textContent = '';
+                            selectedCards = [];
+                            correctCount = 0;
+                        }, 1500);
+                    }
+                });
+            });
+        } else {
+            puzzleOverlay.style.display = 'none';
+        }
+
         // Update gamepad focusable elements
         setTimeout(() => {
             this.gamepadManager.updateFocusableElements();
@@ -9411,6 +9672,108 @@ class Game {
     hideAbout() {
         this.elements.aboutMenu.classList.add('hidden');
         this.elements.mainMenu.classList.remove('hidden'); // FIX: Mostra main menu quando chiudi!
+    }
+
+    showDiagnosticTerminal() {
+        // META-NARRATIVE: Show 1980s diagnostic terminal with violent info about Neve
+        this.diagnosticShown = true;
+        const terminal = document.getElementById('retro-diagnostic');
+        const content = document.getElementById('diagnostic-content');
+        terminal.classList.add('active');
+
+        const diagnosticLines = [
+            { text: '> CARICAMENTO DATI PAZIENTE...', delay: 200, class: '' },
+            { text: '> ACCESSO CONFERMATO: Dr. Lumen', delay: 400, class: '' },
+            { text: '', delay: 600, class: '' },
+            { text: '═══════════════════════════════════════════════════', delay: 700, class: '' },
+            { text: 'PAZIENTE: NEVE [COGNOME SCONOSCIUTO]', delay: 900, class: 'warning' },
+            { text: 'DIAGNOSI: DISTURBO DISSOCIATIVO IDENTITÀ (GRAVE)', delay: 1100, class: 'error' },
+            { text: 'STATO: FRAMMENTAZIONE IRREVERSIBILE', delay: 1300, class: 'error' },
+            { text: '═══════════════════════════════════════════════════', delay: 1400, class: '' },
+            { text: '', delay: 1500, class: '' },
+            { text: '>> ANALISI PSICOLOGICA:', delay: 1700, class: '' },
+            { text: '   - PERSONALITÀ PRIMARIA: INSTABILE, NON COOPERATIVA', delay: 1900, class: '' },
+            { text: '   - ALTERS IDENTIFICATI: 7 (PROBABILI 12+)', delay: 2100, class: 'warning' },
+            { text: '   - RESISTENZA TERAPEUTICA: MASSIMA', delay: 2300, class: 'warning' },
+            { text: '   - TENTATIVI AUTOLESIONISMO: 23', delay: 2500, class: 'error' },
+            { text: '   - EPISODI VIOLENTI: 8', delay: 2700, class: 'critical' },
+            { text: '', delay: 2800, class: '' },
+            { text: '>> DIAGNOSI DR. LUMEN:', delay: 3000, class: '' },
+            { text: '   "Il soggetto Neve rappresenta un fallimento terapeutico.', delay: 3200, class: '' },
+            { text: '    La frammentazione è troppo avanzata. Le identità multiple', delay: 3400, class: '' },
+            { text: '    hanno sviluppato autonomia patologica. Raccomando:', delay: 3600, class: '' },
+            { text: '    INTERNAMENTO PERMANENTE o PROCEDURA SPERIMENTALE 7-X."', delay: 3800, class: 'critical' },
+            { text: '', delay: 3900, class: '' },
+            { text: '>> NOTE CLINICHE:', delay: 4100, class: '' },
+            { text: '   [DATA REDACTED] - Paziente ha tentato aggressione a personale', delay: 4300, class: 'error' },
+            { text: '   [DATA REDACTED] - Episodio psicotico, alter "Lumen" emerso', delay: 4500, class: 'critical' },
+            { text: '   [DATA REDACTED] - Paziente non risponde più al proprio nome', delay: 4700, class: 'critical' },
+            { text: '   [DATA REDACTED] - Richiesta contenzione fisica approvata', delay: 4900, class: 'error' },
+            { text: '', delay: 5000, class: '' },
+            { text: '>> PROGNOSI: NEGATIVA', delay: 5200, class: 'critical' },
+            { text: '>> RACCOMANDAZIONE: NON RIABILITABILE', delay: 5400, class: 'critical' },
+            { text: '', delay: 5500, class: '' },
+            { text: '═══════════════════════════════════════════════════', delay: 5600, class: '' },
+            { text: '', delay: 5700, class: '' },
+            { text: 'ERRORE: ACCESSO NON AUTORIZZATO RILEVATO', delay: 6000, class: 'critical' },
+            { text: 'ERRORE: FILE CORROTTO', delay: 6200, class: 'critical' },
+            { text: 'ERRORE: MEMORIA DANNEGGIATA', delay: 6400, class: 'critical' },
+            { text: 'ERRORE: SISTEMA COMPROMESSO', delay: 6600, class: 'critical' },
+            { text: '', delay: 6700, class: '' },
+            { text: '>>> LUMEN STA GUARDANDO <<<', delay: 6900, class: 'critical' },
+            { text: '>>> NON PUOI SALVARE NEVE <<<', delay: 7100, class: 'critical' },
+            { text: '>>> È GIÀ TROPPO TARDI <<<', delay: 7300, class: 'critical' }
+        ];
+
+        // Animate diagnostic lines
+        diagnosticLines.forEach(line => {
+            setTimeout(() => {
+                const div = document.createElement('div');
+                div.className = `diagnostic-line ${line.class}`;
+                div.textContent = line.text;
+                content.appendChild(div);
+            }, line.delay);
+        });
+
+        // Crash after all lines
+        setTimeout(() => {
+            content.innerHTML = `
+                <div class="diagnostic-crash">
+                    <pre style="font-size: 20px; text-align: center; margin-bottom: 20px;">
+╔════════════════════════════════════════════════╗
+║  ⚠ ERRORE FATALE DI SISTEMA ⚠                 ║
+║  TERMINAL CRASH - CODE 0x7FFF                  ║
+╚════════════════════════════════════════════════╝
+                    </pre>
+                    <p style="text-align: center; color: #ff0000; font-size: 18px;">
+                        MEMORIA FRAMMENTATA<br>
+                        IDENTITÀ NON TROVATA<br>
+                        <br>
+                        [ PREMERE UN TASTO PER TERMINARE ]
+                    </p>
+                </div>
+            `;
+
+            // Close terminal and transform button
+            setTimeout(() => {
+                terminal.classList.remove('active');
+
+                // Replace "CONTINUA SESSIONE" with bloody "FALLITA"
+                if (this.elements.continueBtn) {
+                    this.elements.continueBtn.textContent = 'F̷A̷L̷L̷I̷T̷A̷';
+                    this.elements.continueBtn.style.background = 'linear-gradient(135deg, #8b0000 0%, #ff0000 50%, #8b0000 100%)';
+                    this.elements.continueBtn.style.color = '#fff';
+                    this.elements.continueBtn.style.textShadow = '0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 0, 0, 0.5)';
+                    this.elements.continueBtn.style.animation = 'glitch 0.5s infinite';
+                    this.elements.continueBtn.style.border = '2px solid #ff0000';
+                    this.elements.continueBtn.style.boxShadow = '0 0 20px rgba(255, 0, 0, 0.6), inset 0 0 20px rgba(0, 0, 0, 0.5)';
+                    this.elements.continueBtn.disabled = true;
+                    this.elements.continueBtn.style.cursor = 'not-allowed';
+                }
+
+                this.log('[ Il sistema è stato corrotto. Impossibile continuare. ]', 'meta');
+            }, 2000);
+        }, 7800);
     }
 
     togglePause() {
@@ -9477,6 +9840,37 @@ class Game {
     // === GAME FLOW ===
     startNewGame() {
         this.hideMainMenu();
+
+        // META-NARRATIVE: Increment death loop counter
+        this.deathLoopCount++;
+        this.saveProgression();
+
+        // Show different messages based on loop count
+        if (this.deathLoopCount > 1) {
+            // Meta-narrative glitch messages
+            const glitchMessages = [
+                `Di nuovo qui, Neve?`,
+                `Loop ${this.deathLoopCount}. Credi ancora di poter vincere?`,
+                `Hai già provato ${this.deathLoopCount} volte. Perché insisti?`,
+                `La memoria non si cancella così facilmente...`,
+                `Lumen ti sta ancora guardando.`,
+                `Questo non è un reset. Non per davvero.`,
+                `I tuoi frammenti ricordano. Sempre.`
+            ];
+
+            const msg = glitchMessages[Math.min(this.deathLoopCount - 2, glitchMessages.length - 1)];
+            this.log(`[ ⚠ ${msg} ]`, "meta");
+
+            // Enable madness system earlier on subsequent loops
+            if (this.madness && this.deathLoopCount >= 3) {
+                setTimeout(() => {
+                    this.madness.enable();
+                    this.madness.setIntensity(Math.min(this.deathLoopCount, 10));
+                    this.madness.showSecretMessage(`LOOP ${this.deathLoopCount}\nYOU CANNOT ESCAPE\nLUMEN REMEMBERS`);
+                }, 2000);
+            }
+        }
+
         this.resetGame();
 
         // Initialize audio (requires user interaction)
@@ -10838,6 +11232,12 @@ else if (this.round >= 10) { cardsToPlay = 2;
             return false;
         }
 
+        // META-NARRATIVE: Show violent diagnostic terminal on first load
+        if (!this.diagnosticShown) {
+            this.showDiagnosticTerminal();
+            return false;
+        }
+
         try {
             const data = JSON.parse(savedData);
 
@@ -11523,6 +11923,9 @@ else if (this.round >= 10) { cardsToPlay = 2;
                 if (data.totalPlaytime) {
                     this.totalPlaytime = data.totalPlaytime;
                 }
+                if (data.deathLoopCount !== undefined) {
+                    this.deathLoopCount = data.deathLoopCount;
+                }
                 if (data.statistics) {
                     this.statistics = { ...this.statistics, ...data.statistics };
                 }
@@ -11545,6 +11948,7 @@ else if (this.round >= 10) { cardsToPlay = 2;
             seenEndings: Array.from(this.seenEndings),
             newGamePlusLevel: this.newGamePlusLevel,
             totalPlaytime: this.totalPlaytime,
+            deathLoopCount: this.deathLoopCount,
             statistics: this.statistics
         };
 
