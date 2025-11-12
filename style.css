@@ -192,10 +192,10 @@ body {
 
 /* === CARD SLOTS (Eleganti e freddi) === */
 .card-slot {
-    width: 185px;
-    height: 290px;
-    border: 3px solid rgba(90, 138, 164, 0.3);
-    border-radius: 16px;
+    width: 115px;  /* Ridotto da 185px per carte 110px */
+    height: 172px; /* Ridotto da 290px per carte 165px */
+    border: 2px solid rgba(90, 138, 164, 0.3);
+    border-radius: 12px;
     background:
         /* Inner glow */
         radial-gradient(
@@ -307,8 +307,8 @@ body {
 /* === CARD (3D) === */
 .card {
     position: absolute;
-    width: 180px;
-    height: 280px;
+    width: 150px;  /* Ridotto da 180px */
+    height: 225px; /* Ridotto da 280px */
     background: transparent;
     border: none;
     cursor: pointer;
@@ -316,6 +316,13 @@ body {
     transform-style: preserve-3d;
     pointer-events: all;
     backface-visibility: hidden;
+}
+
+/* Carte sul campo: ancora più piccole per gameplay ottimale */
+.player-field .card,
+.opponent-field .card {
+    width: 110px;  /* 63% più piccole */
+    height: 165px;
 }
 
 .card-frame {
@@ -336,19 +343,19 @@ body {
     filter: url(#rough-edges);
 }
 
-/* Hand card positioning (fan effect) */
+/* Hand card positioning (fan effect) - Adattato per carte 150px */
 #neve-hand .card:nth-child(1) {
-    transform: translateX(-240px) translateY(10px) rotate(-18deg);
+    transform: translateX(-200px) translateY(8px) rotate(-16deg);
     z-index: 1;
 }
 
 #neve-hand .card:nth-child(2) {
-    transform: translateX(-140px) translateY(5px) rotate(-12deg);
+    transform: translateX(-120px) translateY(4px) rotate(-10deg);
     z-index: 2;
 }
 
 #neve-hand .card:nth-child(3) {
-    transform: translateX(-50px) translateY(2px) rotate(-6deg);
+    transform: translateX(-45px) translateY(2px) rotate(-5deg);
     z-index: 3;
 }
 
@@ -358,28 +365,28 @@ body {
 }
 
 #neve-hand .card:nth-child(5) {
-    transform: translateX(50px) translateY(2px) rotate(6deg);
+    transform: translateX(45px) translateY(2px) rotate(5deg);
     z-index: 5;
 }
 
 #neve-hand .card:nth-child(6) {
-    transform: translateX(140px) translateY(5px) rotate(12deg);
+    transform: translateX(120px) translateY(4px) rotate(10deg);
     z-index: 6;
 }
 
 #neve-hand .card:nth-child(7) {
-    transform: translateX(240px) translateY(10px) rotate(18deg);
+    transform: translateX(200px) translateY(8px) rotate(16deg);
     z-index: 7;
 }
 
 #neve-hand .card:nth-child(8) {
-    transform: translateX(320px) translateY(15px) rotate(24deg);
+    transform: translateX(270px) translateY(12px) rotate(20deg);
     z-index: 8;
 }
 
 /* FIX V: Hand fan layout per carte 9+ (prima mancavano) */
 #neve-hand .card:nth-child(9) {
-    transform: translateX(400px) translateY(20px) rotate(28deg);
+    transform: translateX(335px) translateY(16px) rotate(24deg);
     z-index: 9;
 }
 
@@ -455,7 +462,7 @@ body {
     align-items: flex-start;
 }
 
-/* Therapist hand fan (inverted, opens downward) */
+/* Therapist hand fan (inverted, opens downward) - Adattato per carte 150px */
 #therapist-hand .card {
     position: absolute;
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -463,17 +470,17 @@ body {
 }
 
 #therapist-hand .card:nth-child(1) {
-    transform: translateX(-240px) translateY(-10px) rotate(18deg);
+    transform: translateX(-200px) translateY(-8px) rotate(16deg);
     z-index: 8;
 }
 
 #therapist-hand .card:nth-child(2) {
-    transform: translateX(-140px) translateY(-5px) rotate(12deg);
+    transform: translateX(-120px) translateY(-4px) rotate(10deg);
     z-index: 7;
 }
 
 #therapist-hand .card:nth-child(3) {
-    transform: translateX(-50px) translateY(-2px) rotate(6deg);
+    transform: translateX(-45px) translateY(-2px) rotate(5deg);
     z-index: 6;
 }
 
@@ -483,22 +490,22 @@ body {
 }
 
 #therapist-hand .card:nth-child(5) {
-    transform: translateX(50px) translateY(-2px) rotate(-6deg);
+    transform: translateX(45px) translateY(-2px) rotate(-5deg);
     z-index: 6;
 }
 
 #therapist-hand .card:nth-child(6) {
-    transform: translateX(140px) translateY(-5px) rotate(-12deg);
+    transform: translateX(120px) translateY(-4px) rotate(-10deg);
     z-index: 7;
 }
 
 #therapist-hand .card:nth-child(7) {
-    transform: translateX(240px) translateY(-10px) rotate(-18deg);
+    transform: translateX(200px) translateY(-8px) rotate(-16deg);
     z-index: 8;
 }
 
 #therapist-hand .card:nth-child(8) {
-    transform: translateX(320px) translateY(-15px) rotate(-24deg);
+    transform: translateX(270px) translateY(-12px) rotate(-20deg);
     z-index: 9;
 }
 
@@ -538,15 +545,25 @@ body {
 /* === CARD ARTWORK === */
 .card-artwork {
     position: absolute;
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    height: 160px;
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    height: 128px; /* Ridotto da 160px per carta 225px */
     background-size: cover;
     background-position: center;
     border: 2px solid rgba(138, 122, 106, 0.5);
     border-radius: 6px;
     overflow: hidden;
+}
+
+/* Artwork per carte sul campo (più piccolo) */
+.player-field .card-artwork,
+.opponent-field .card-artwork {
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    height: 94px; /* Proporzionato a carta 165px */
+    border-radius: 4px;
 }
 
 .artwork-overlay {
@@ -564,18 +581,30 @@ body {
 /* === BLOOD COST === */
 .blood-cost {
     position: absolute;
-    top: -12px;
+    top: -10px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 4px;
+    gap: 3px;
     z-index: 10;
 }
 
 .blood-drop {
-    font-size: 20px;
+    font-size: 18px; /* Ridotto da 20px */
     filter: drop-shadow(0 2px 4px rgba(138, 74, 58, 0.8));
     animation: blood-pulse 2s ease-in-out infinite;
+}
+
+/* Blood cost per carte sul campo */
+.player-field .blood-cost,
+.opponent-field .blood-cost {
+    top: -8px;
+    gap: 2px;
+}
+
+.player-field .blood-drop,
+.opponent-field .blood-drop {
+    font-size: 14px; /* Più piccolo per campo */
 }
 
 @keyframes blood-pulse {
@@ -586,24 +615,24 @@ body {
 /* === CARD STATS === */
 .card-info-bar {
     position: absolute;
-    top: 175px;
-    left: 8px;
-    right: 8px;
+    top: 139px; /* Adattato per carta 225px (era 175 per 280) */
+    left: 6px;
+    right: 6px;
     display: flex;
     justify-content: space-between;
-    gap: 8px;
+    gap: 6px;
 }
 
 .card-stat {
     flex: 1;
     background: rgba(26, 20, 16, 0.9);
     border: 2px solid var(--accent-warm);
-    border-radius: 6px;
-    padding: 6px 8px;
+    border-radius: 5px;
+    padding: 5px 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 3px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
@@ -616,37 +645,63 @@ body {
 }
 
 .stat-icon {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .card-stat .stat-value {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 900;
     color: var(--text-light);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
+/* Stats per carte sul campo */
+.player-field .card-info-bar,
+.opponent-field .card-info-bar {
+    top: 103px; /* Proporzionato a carta 165px */
+    left: 5px;
+    right: 5px;
+    gap: 4px;
+}
+
+.player-field .card-stat,
+.opponent-field .card-stat {
+    padding: 3px 4px;
+    gap: 2px;
+    border-radius: 3px;
+}
+
+.player-field .stat-icon,
+.opponent-field .stat-icon {
+    font-size: 10px;
+}
+
+.player-field .card-stat .stat-value,
+.opponent-field .card-stat .stat-value {
+    font-size: 13px;
+}
+
 /* === CARD SIGILS === */
 .card-sigils {
     position: absolute;
-    top: 215px;
+    top: 172px; /* Adattato per carta 225px (era 215 per 280) */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 5px;
+    gap: 4px;
     z-index: 5;
 }
 
 .sigil {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
     background: rgba(212, 165, 116, 0.9);
     border: 2px solid var(--border-dark);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 12px;
     cursor: help;
     box-shadow:
         0 2px 4px rgba(0, 0, 0, 0.4),
@@ -660,21 +715,35 @@ body {
         0 0 12px rgba(212, 165, 116, 0.5);
 }
 
+/* Sigils per carte sul campo */
+.player-field .card-sigils,
+.opponent-field .card-sigils {
+    top: 128px; /* Proporzionato a carta 165px */
+    gap: 3px;
+}
+
+.player-field .sigil,
+.opponent-field .sigil {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+}
+
 /* === CARD NAME PLATE === */
 .card-name-plate {
     position: absolute;
-    bottom: 10px;
-    left: 8px;
-    right: 8px;
+    bottom: 8px;
+    left: 6px;
+    right: 6px;
     background: rgba(26, 20, 16, 0.95);
     border: 2px solid var(--accent-warm);
-    border-radius: 6px;
-    padding: 5px 6px;
+    border-radius: 5px;
+    padding: 4px 5px;
     text-align: center;
 }
 
 .card-name {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     color: var(--text-light);
     line-height: 1.1;
@@ -683,22 +752,43 @@ body {
 }
 
 .card-artist {
-    font-size: 8px;
+    font-size: 7px;
     font-style: italic;
     color: var(--text-muted);
     line-height: 1;
 }
 
+/* Name plate per carte sul campo */
+.player-field .card-name-plate,
+.opponent-field .card-name-plate {
+    bottom: 6px;
+    left: 5px;
+    right: 5px;
+    padding: 3px 4px;
+    border-radius: 3px;
+}
+
+.player-field .card-name,
+.opponent-field .card-name {
+    font-size: 8px;
+    margin-bottom: 1px;
+}
+
+.player-field .card-artist,
+.opponent-field .card-artist {
+    font-size: 6px;
+}
+
 /* === CARD TYPE TAG === */
 .card-type-tag {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 10px;
+    right: 10px;
     background: rgba(138, 74, 58, 0.9);
     border: 1px solid rgba(0, 0, 0, 0.5);
-    border-radius: 4px;
-    padding: 3px 6px;
-    font-size: 8px;
+    border-radius: 3px;
+    padding: 2px 5px;
+    font-size: 7px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -706,17 +796,26 @@ body {
     z-index: 10;
 }
 
+/* Type tag per carte sul campo */
+.player-field .card-type-tag,
+.opponent-field .card-type-tag {
+    top: 8px;
+    right: 8px;
+    padding: 2px 4px;
+    font-size: 6px;
+}
+
 /* === CARD DETAILS BUTTON === */
 .card-details-btn {
     position: absolute;
-    bottom: 12px;
-    right: 12px;
-    width: 24px;
-    height: 24px;
+    bottom: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
     background: rgba(106, 138, 154, 0.9);
     border: 2px solid var(--border-dark);
     border-radius: 50%;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -729,6 +828,16 @@ body {
     background: var(--accent-cold);
     transform: scale(1.15);
     box-shadow: 0 0 12px rgba(106, 138, 154, 0.6);
+}
+
+/* Details button per carte sul campo */
+.player-field .card-details-btn,
+.opponent-field .card-details-btn {
+    bottom: 8px;
+    right: 8px;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
 }
 
 /* === CARD WHISPERS === */
