@@ -6505,11 +6505,11 @@ Empty Recycle Bin? [Y/N]
                 }
             }
 
-            // F12 = Easter Egg (DISABLED - allow Dev Tools to open)
-            // if (e.key === 'F12') {
-            //     e.preventDefault();
-            //     this.easterEggF12();
-            // }
+            // F12 = Easter Egg
+            if (e.key === 'F12') {
+                e.preventDefault();
+                this.easterEggF12();
+            }
 
             // Escape = Close all madness effects
             if (e.key === 'Escape') {
