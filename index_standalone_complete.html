@@ -385,7 +385,7 @@ body {
 #neve-hand {
     position: relative;
     width: 100%;
-    max-width: 1400px; /* Desktop - mano più larga */
+    max-width: 750px; /* Ridotto per ventaglio stile Hearthstone più compatto */
     height: 100%;
     display: flex;
     justify-content: center;
@@ -396,8 +396,8 @@ body {
 /* === CARD (3D) === HEARTHSTONE STYLE */
 .card {
     position: absolute;
-    width: 180px;  /* Più grandi per mostrare le opere d'arte */
-    height: 270px; /* Rapporto 2:3 per eleganza */
+    width: 220px;  /* Aumentato per migliore visibilità dell'artwork */
+    height: 330px; /* Rapporto 2:3 per eleganza */
     background: transparent;
     border: none;
     cursor: pointer;
@@ -416,14 +416,14 @@ body {
 
 /* Carte nella mano del giocatore: dimensioni ottimali per artwork */
 #neve-hand .card {
-    width: 180px;
-    height: 270px;
+    width: 220px;
+    height: 330px;
 }
 
 /* Carte nella mano del terapista: dimensioni ottimali per artwork */
 #therapist-hand .card {
-    width: 180px;
-    height: 270px;
+    width: 220px;
+    height: 330px;
 }
 
 .card-frame {
@@ -522,71 +522,71 @@ body {
         inset 0 -3px 6px rgba(0, 0, 0, 0.4);
 }
 
-/* Hand card positioning (fan effect) - INSCRYPTION STYLE: ventaglio MOLTO compatto con overlap */
+/* Hand card positioning (fan effect) - HEARTHSTONE STYLE: ventaglio compatto senza sbordamenti */
 #neve-hand .card:nth-child(1) {
-    transform: translateX(-105px) translateY(8px) rotate(-14deg);
+    transform: translateX(-100px) translateY(6px) rotate(-10deg);
     z-index: 1;
 }
 
 #neve-hand .card:nth-child(2) {
-    transform: translateX(-70px) translateY(4px) rotate(-10deg);
+    transform: translateX(-75px) translateY(4px) rotate(-7deg);
     z-index: 2;
 }
 
 #neve-hand .card:nth-child(3) {
-    transform: translateX(-35px) translateY(1px) rotate(-5deg);
+    transform: translateX(-50px) translateY(2px) rotate(-4deg);
     z-index: 3;
 }
 
 #neve-hand .card:nth-child(4) {
-    transform: translateX(0px) translateY(0px) rotate(0deg);
+    transform: translateX(-25px) translateY(1px) rotate(-2deg);
     z-index: 4;
 }
 
 #neve-hand .card:nth-child(5) {
-    transform: translateX(35px) translateY(1px) rotate(5deg);
+    transform: translateX(0px) translateY(0px) rotate(0deg);
     z-index: 5;
 }
 
 #neve-hand .card:nth-child(6) {
-    transform: translateX(70px) translateY(4px) rotate(10deg);
+    transform: translateX(25px) translateY(1px) rotate(2deg);
     z-index: 6;
 }
 
 #neve-hand .card:nth-child(7) {
-    transform: translateX(105px) translateY(8px) rotate(14deg);
+    transform: translateX(50px) translateY(2px) rotate(4deg);
     z-index: 7;
 }
 
 #neve-hand .card:nth-child(8) {
-    transform: translateX(140px) translateY(12px) rotate(18deg);
+    transform: translateX(75px) translateY(4px) rotate(7deg);
     z-index: 8;
 }
 
 /* Extended fan: overlap progressivo per più carte */
 #neve-hand .card:nth-child(9) {
-    transform: translateX(175px) translateY(16px) rotate(22deg);
+    transform: translateX(100px) translateY(6px) rotate(10deg);
     z-index: 9;
 }
 
 #neve-hand .card:nth-child(10) {
-    transform: translateX(210px) translateY(20px) rotate(26deg);
+    transform: translateX(125px) translateY(8px) rotate(13deg);
     z-index: 10;
 }
 
 #neve-hand .card:nth-child(11) {
-    transform: translateX(245px) translateY(24px) rotate(30deg);
+    transform: translateX(150px) translateY(10px) rotate(16deg);
     z-index: 11;
 }
 
 #neve-hand .card:nth-child(12) {
-    transform: translateX(280px) translateY(28px) rotate(34deg);
+    transform: translateX(175px) translateY(12px) rotate(19deg);
     z-index: 12;
 }
 
 /* Fallback per carte 13+ */
 #neve-hand .card:nth-child(n+13) {
-    transform: translateX(315px) translateY(32px) rotate(38deg);
+    transform: translateX(200px) translateY(14px) rotate(22deg);
     z-index: 13;
 }
 
@@ -876,12 +876,12 @@ body {
 /* === CARD STATS === HEARTHSTONE STYLE - CRISTALLI ANGOLARI */
 .card-info-bar {
     position: absolute;
-    bottom: 8px;
+    bottom: 14px;
     left: 0;
     right: 0;
     display: flex;
     justify-content: space-between;
-    padding: 0 4px;
+    padding: 0 6px;
     pointer-events: none;
 }
 
@@ -966,7 +966,7 @@ body {
 /* === CARD SIGILS === HEARTHSTONE STYLE */
 .card-sigils {
     position: absolute;
-    bottom: 54px; /* Sopra la name plate */
+    bottom: 75px; /* Sopra la name plate - alzato per evitare sovrapposizione */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -1456,11 +1456,10 @@ body {
 .event-log {
     position: fixed;
     bottom: 20px;
-    /* Sposta il registro eventi leggermente verso destra per non sovrapporsi al mazzo del giocatore.
-       Utilizziamo una percentuale per adattarlo a varie larghezze di schermo. */
-    left: 12%;
-    width: 320px; /* riduci leggermente la larghezza per lasciare più spazio al campo */
-    max-height: 160px; /* altezza massima ridotta per evitare che copra il tavolo */
+    /* Posizionato nell'angolo in basso a sinistra */
+    left: 20px;
+    width: 300px; /* ridotto per essere più compatto */
+    max-height: 120px; /* ridotto per occupare meno spazio */
     /* Maggiore contrasto per il registro degli eventi */
     background: rgba(26, 20, 16, 0.6);
     border: 2px solid rgba(212, 165, 116, 0.4);
@@ -1617,7 +1616,7 @@ body {
        paziente. Riducendo top e left si ottiene una collocazione più
        armoniosa senza coprire il campo di gioco. */
     top: 10px;
-    left: 160px;
+    left: 110px;
     z-index: 50;
 }
 
@@ -5747,7 +5746,7 @@ y Bar (Top Right) -->
               nella sezione click-to-select).
             -->
             <!-- Blood Currency Indicator -->
-            <div id="blood-currency-indicator" style="position: fixed; top: 180px; left: 20px; background: rgba(138, 74, 58, 0.9); border: 2px solid rgba(212, 165, 116, 0.8); border-radius: 8px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: bold; color: var(--text-light); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); z-index: 150;">
+            <div id="blood-currency-indicator" style="position: fixed; top: 260px; left: 20px; background: rgba(138, 74, 58, 0.9); border: 2px solid rgba(212, 165, 116, 0.8); border-radius: 8px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: bold; color: var(--text-light); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); z-index: 150;">
                 <span style="font-size: 20px;">🩸</span>
                 <span>Sangue: <span id="blood-currency-count">0</span></span>
             </div>
@@ -5773,7 +5772,7 @@ y Bar (Top Right) -->
             </div>
 
             <!-- Event Log (Bottom Left) -->
-            <div id="event-log" class="event-log">
+            <div id="event-log" class="event-log collapsed">
                 <button id="event-log-toggle" class="event-log-toggle" aria-label="Comprimi/Espandi log eventi">
                     <span class="toggle-icon">▼</span>
                 </button>
@@ -10426,7 +10425,8 @@ class Game {
 
     // === GAME FLOW ===
     startNewGame() {
-        this.hideMainMenu();
+        // NON mostrare la UI di gioco qui - verrà mostrata dopo l'intro
+        // this.hideMainMenu(); // SPOSTATO in finishIntro()
 
         // META-NARRATIVE: Increment death loop counter
         this.deathLoopCount++;
@@ -10590,6 +10590,9 @@ class Game {
     }
 
     finishIntro() {
+        // Mostra la UI di gioco DOPO l'intro
+        this.hideMainMenu();
+
         // Remove intro dialogue
         const dialogueEl = document.querySelector('.intro-dialogue');
         if (dialogueEl) {
