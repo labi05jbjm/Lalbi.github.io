@@ -4536,62 +4536,76 @@ body.game-started .hand-container {
     --bone-cost: #d4d4d4;
     --energy-cost: #5a8aa4;
     
-    /* Artwork placeholder */
-    --artwork-bg: linear-gradient(135deg, #2a3a4a 0%, #1e2e3e 100%);
-    --artwork-symbol: rgba(122, 186, 204, 0.5);
-    
-    /* Card Type Colors */
+    /* Artwork placeholder - HEARTHSTONE STYLE */
+    --artwork-bg: rgba(0, 0, 0, 0.2);
+    --artwork-symbol: rgba(212, 165, 116, 0.3);
+
+    /* Card Type Colors - HEARTHSTONE STYLE */
     --type-memory: #5a8aa4;
     --type-identity: #8a6a9a;
     --type-trauma: #8a4a5a;
     --type-ability: #8a7a5a;
-    
-    /* Sigil Colors */
-    --sigil-bg: rgba(10, 14, 20, 0.8);
-    --sigil-border: rgba(122, 186, 204, 0.5);
-    --sigil-glow: rgba(122, 186, 204, 0.3);
-    
-    /* Stat Colors */
-    --stat-attack: #8a4a5a;
-    --stat-health: #5a8aa4;
-    
-    /* Card Component Dimensions - COMPLETAMENTE RIPENSATE */
-    --card-width: 220px;
-    --card-height: 320px;
-    --card-border-radius: 12px;
-    --card-padding: 10px;
-    
-    /* Header Height - MAGGIORE per accogliere i frammenti di sangue */
-    --header-height: 50px;
-    
-    /* Artwork Height */
-    --artwork-height: 120px;
-    
-    /* Name Plate Height */
-    --name-height: 48px;
-    
-    /* Description Height - RIDOTTA per fare spazio a sigilli e statistiche */
-    --desc-height: 60px;
-    
-    /* Sigils Height - AUMENTATA per sigilli ben visibili */
-    --sigils-height: 42px;
-    
-    /* Stats Height - AUMENTATA per stats completamente visibili */
-    --stats-height: 40px;
+    --type-eco: #4ecdc4;
+    --type-impulso: #ff6b6b;
+    --type-velo: #74b9ff;
+    --type-voce: #a29bfe;
+
+    /* Sigil Colors - HEARTHSTONE STYLE */
+    --sigil-bg: rgba(212, 165, 116, 0.95);
+    --sigil-border: #d4a574;
+    --sigil-glow: rgba(212, 165, 116, 0.6);
+
+    /* Stat Colors - HEARTHSTONE STYLE */
+    --stat-attack: #c85a54;
+    --stat-health: #4caf50;
+
+    /* Card Component Dimensions - HEARTHSTONE STYLE */
+    --card-width: 260px;
+    --card-height: 380px;
+    --card-border-radius: 16px;
+    --card-padding: 12px;
+
+    /* Header Height - Più compatto */
+    --header-height: 45px;
+
+    /* Artwork Height - DOMINANTE 58% della carta! */
+    --artwork-height: 220px;
+
+    /* Name Plate Height - Elegante */
+    --name-height: 50px;
+
+    /* Description Height - Ridotta per artwork */
+    --desc-height: 0px;
+
+    /* Sigils Height - Cristalli dorati */
+    --sigils-height: 40px;
+
+    /* Stats Height - Cristalli angolari */
+    --stats-height: 25px;
 }
 
-/* === CARD MAIN STRUCTURE === */
-/* Design più compatto che garantisce spazio per tutti gli elementi */
+/* === CARD MAIN STRUCTURE === HEARTHSTONE STYLE */
 .card {
     width: var(--card-width);
     height: var(--card-height);
-    background: var(--bg-card);
+    background: linear-gradient(135deg, #2a1f1a 0%, #1a1410 100%);
     border-radius: var(--card-border-radius);
     overflow: hidden;
     position: relative;
+    /* Bordo dorato Hearthstone */
+    border: 5px solid;
+    border-image: linear-gradient(135deg,
+        #d4a574 0%,
+        #8b6f47 25%,
+        #d4a574 50%,
+        #8b6f47 75%,
+        #d4a574 100%
+    ) 1;
     box-shadow:
-        0 5px 20px rgba(0, 0, 0, 0.5),
-        0 0 0 1px var(--border-card);
+        0 10px 30px rgba(0, 0, 0, 0.8),
+        0 0 25px rgba(212, 165, 116, 0.3),
+        inset 0 3px 6px rgba(255, 245, 220, 0.2),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
     color: var(--text-dark);
@@ -4601,11 +4615,11 @@ body.game-started .hand-container {
 }
 
 .card:hover {
-    transform: perspective(1000px) rotateX(5deg) translateY(-10px);
+    transform: perspective(1000px) rotateX(5deg) translateY(-20px) scale(1.05);
     box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.7),
-        0 0 0 1px var(--border-glow),
-        0 0 20px rgba(90, 138, 164, 0.4);
+        0 20px 50px rgba(0, 0, 0, 0.9),
+        0 0 40px rgba(212, 165, 116, 0.5),
+        inset 0 3px 6px rgba(255, 245, 220, 0.3);
 }
 
 /* === HEADER WITH COSTS AND TYPE === */
@@ -4699,12 +4713,36 @@ body.game-started .hand-container {
     background: var(--type-ability);
 }
 
-/* === ARTWORK AREA === */
+/* === ARTWORK AREA === HEARTHSTONE STYLE - DOMINANTE */
 .card-artwork {
     height: var(--artwork-height);
     background: var(--artwork-bg);
     position: relative;
     overflow: hidden;
+    /* Bordo colorato interno */
+    border: 3px solid rgba(212, 165, 116, 0.6);
+    border-left: none;
+    border-right: none;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.6),
+        inset 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Bordi colorati per tipo carta */
+.card[data-type="eco"] .card-artwork {
+    border-color: rgba(78, 205, 196, 0.7);
+}
+
+.card[data-type="impulso"] .card-artwork {
+    border-color: rgba(255, 107, 107, 0.7);
+}
+
+.card[data-type="velo"] .card-artwork {
+    border-color: rgba(116, 185, 255, 0.7);
+}
+
+.card[data-type="voce"] .card-artwork {
+    border-color: rgba(162, 155, 254, 0.8);
 }
 
 .artwork-placeholder {
@@ -4713,45 +4751,63 @@ body.game-started .hand-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 50px;
+    font-size: 80px;
     color: var(--artwork-symbol);
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
 }
 
+/* Overlay più leggero per non coprire le opere */
 .artwork-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(0deg, rgba(10, 14, 20, 0.5) 0%, transparent 50%);
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.1) 0%,
+        transparent 20%,
+        transparent 70%,
+        rgba(26, 20, 16, 0.6) 100%
+    );
+    pointer-events: none;
 }
 
-/* === NAME PLATE === */
-/* Ottimizzato per nomi lunghi con layout a due righe e truncate overflow */
+/* === NAME PLATE === HEARTHSTONE STYLE - TARGHETTA ELEGANTE */
 .card-name-plate {
     height: var(--name-height);
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 8px var(--card-padding);
-    border-top: 1px solid var(--border-dark);
-    border-bottom: 1px solid var(--border-dark);
-    background: rgba(26, 36, 48, 0.9);
+    border-top: 2px solid rgba(212, 165, 116, 0.6);
+    border-bottom: 2px solid rgba(212, 165, 116, 0.6);
+    background: linear-gradient(135deg,
+        rgba(212, 165, 116, 0.95) 0%,
+        rgba(139, 106, 71, 0.95) 50%,
+        rgba(212, 165, 116, 0.95) 100%
+    );
     position: relative;
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.7),
+        inset 0 2px 3px rgba(255, 245, 220, 0.3),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.4);
 }
 
 .card-name {
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 800;
     text-align: center;
-    color: var(--text-light);
+    color: #1a1410;
     /* Truncate con ellipsis se troppo lungo */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    text-shadow:
+        1px 1px 0 rgba(255, 245, 220, 0.5),
+        -1px -1px 0 rgba(0, 0, 0, 0.2);
     line-height: 1.2;
+    letter-spacing: 0.5px;
 }
 
 /* Per nomi lunghi, espansione a due righe */
@@ -4762,33 +4818,29 @@ body.game-started .hand-container {
     -webkit-box-orient: vertical;
     height: 38px;
     line-height: 1.2;
+    font-size: 14px;
 }
 
 .card-artist {
     font-size: 10px;
     text-align: center;
-    color: var(--text-muted);
+    color: rgba(26, 20, 16, 0.8);
     font-style: italic;
+    font-weight: 600;
     /* Truncate con ellipsis se troppo lungo */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 2px;
+    text-shadow: 0.5px 0.5px 0 rgba(255, 245, 220, 0.3);
 }
 
-/* === CARD DESCRIPTION === */
-/* Area più compatta ma con scrolling se il testo è troppo lungo */
+/* === CARD DESCRIPTION === NASCOSTA PER HEARTHSTONE STYLE */
 .card-description {
-    height: var(--desc-height);
-    padding: 8px var(--card-padding);
-    font-size: 11px;
-    line-height: 1.3;
-    overflow-y: auto;
-    color: var(--text-dark);
-    background: rgba(232, 236, 240, 0.9);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-    scrollbar-width: thin;
-    scrollbar-color: var(--text-muted) transparent;
+    display: none; /* Nascosta per dare più spazio all'artwork */
+    height: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
 /* Custom scrollbar */
@@ -4805,80 +4857,117 @@ body.game-started .hand-container {
     border-radius: 2px;
 }
 
-/* === SIGILS (ABILITIES) === */
-/* Layout ripensato con sigilli ben distanziati e posizionati centralmente */
+/* === SIGILS (ABILITIES) === HEARTHSTONE STYLE */
 .card-sigils {
     height: var(--sigils-height);
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     padding: 0 var(--card-padding);
-    border-top: 1px solid var(--border-dark);
-    background: rgba(26, 36, 48, 0.9);
+    border-top: 2px solid rgba(212, 165, 116, 0.4);
+    background: linear-gradient(180deg, rgba(26, 20, 16, 0.8) 0%, rgba(26, 20, 16, 0.6) 100%);
     position: relative;
 }
 
 .sigil {
     width: 32px;
     height: 32px;
-    background: var(--sigil-bg);
-    border: 1px solid var(--sigil-border);
+    background: radial-gradient(circle at center, rgba(212, 165, 116, 0.95) 0%, rgba(139, 106, 71, 1) 100%);
+    border: 2px solid;
+    border-image: linear-gradient(135deg,
+        #d4a574 0%,
+        #8b6f47 100%
+    ) 1;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
-    box-shadow: 0 0 8px var(--sigil-glow);
+    font-size: 16px;
+    cursor: help;
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.6),
+        inset 0 2px 3px rgba(255, 245, 220, 0.3),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* === STATS === */
-/* Completamente ridisegnata per garantire che le statistiche siano sempre visibili */
+.sigil:hover {
+    transform: scale(1.2);
+    box-shadow:
+        0 6px 12px rgba(0, 0, 0, 0.7),
+        0 0 15px rgba(212, 165, 116, 0.6),
+        inset 0 2px 3px rgba(255, 245, 220, 0.4),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* === STATS === HEARTHSTONE STYLE - CRISTALLI ANGOLARI */
 .card-stats {
     height: var(--stats-height);
     display: flex;
     justify-content: space-between;
-    padding: 0 var(--card-padding);
-    border-top: 1px solid var(--border-dark);
-    background: rgba(26, 36, 48, 0.95);
+    padding: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
 }
 
 .card-stat {
-    display: flex;
-    align-items: center;
-    gap: 5px;
     position: relative;
-    height: 100%;
-}
-
-/* Nuovi design per le icone di statistiche */
-.stat-icon {
-    width: 24px;
-    height: 24px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    font-size: 14px;
-    /* Eliminati i cerchi per risparmiare spazio */
-    color: var(--text-light);
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 3px solid;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.8),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+    transform: translateY(50%);
 }
 
-/* Nuova rappresentazione dei valori */
+/* Attack Stat - Cristallo Rosso in basso a sinistra */
+.card-stat.attack {
+    background: radial-gradient(circle at center, rgba(200, 90, 84, 0.95) 0%, rgba(139, 58, 58, 1) 100%);
+    border-image: linear-gradient(135deg,
+        #ff9a9a 0%,
+        #c85a54 50%,
+        #8b3a3a 100%
+    ) 1;
+    margin-left: 8px;
+}
+
+/* Health Stat - Cristallo Verde in basso a destra */
+.card-stat.health {
+    background: radial-gradient(circle at center, rgba(76, 175, 80, 0.95) 0%, rgba(46, 125, 50, 1) 100%);
+    border-image: linear-gradient(135deg,
+        #81c784 0%,
+        #4caf50 50%,
+        #2e7d32 100%
+    ) 1;
+    margin-right: 8px;
+}
+
+/* Nascondi icone */
+.stat-icon {
+    display: none;
+}
+
+/* Valori grandi e visibili */
 .stat-value {
     font-size: 22px;
-    font-weight: bold;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow:
+        2px 2px 4px rgba(0, 0, 0, 0.9),
+        0 0 8px rgba(255, 255, 255, 0.3);
 }
 
-.attack .stat-value {
-    color: var(--stat-attack);
-}
-
-.health .stat-value {
-    color: var(--stat-health);
-}
-
-/* === CARD VARIANTS === */
+/* === CARD VARIANTS === HEARTHSTONE STYLE */
 /* Varianti per carte con tipo diverso (cambiano i colori) */
 .card.memory .card-type {
     background: var(--type-memory);
@@ -4896,13 +4985,57 @@ body.game-started .hand-container {
     background: var(--type-ability);
 }
 
+/* Eco (Economico) - Verde Smeraldo */
+.card[data-type="eco"] {
+    border-image: linear-gradient(135deg,
+        #4ecdc4 0%,
+        #2d8a7f 25%,
+        #44a08d 50%,
+        #2d8a7f 75%,
+        #4ecdc4 100%
+    ) 1;
+}
+
+/* Impulso (Impulsivo) - Rosso Rubino */
+.card[data-type="impulso"] {
+    border-image: linear-gradient(135deg,
+        #ff6b6b 0%,
+        #c92a2a 25%,
+        #e74c3c 50%,
+        #c92a2a 75%,
+        #ff6b6b 100%
+    ) 1;
+}
+
+/* Velo (Velato) - Blu Zaffiro */
+.card[data-type="velo"] {
+    border-image: linear-gradient(135deg,
+        #74b9ff 0%,
+        #0984e3 25%,
+        #3498db 50%,
+        #0984e3 75%,
+        #74b9ff 100%
+    ) 1;
+}
+
+/* Voce/Alter (Voci interiori) - Viola Mistico */
+.card[data-type="voce"] {
+    border-image: linear-gradient(135deg,
+        #a29bfe 0%,
+        #6c5ce7 25%,
+        #8e44ad 50%,
+        #6c5ce7 75%,
+        #a29bfe 100%
+    ) 1;
+}
+
 /* Varianti per artwork */
 .card.voce .artwork-placeholder {
-    color: rgba(138, 106, 154, 0.5);
+    color: rgba(162, 155, 254, 0.4);
 }
 
 .card.strumento .artwork-placeholder {
-    color: rgba(212, 165, 116, 0.5);
+    color: rgba(212, 165, 116, 0.4);
 }
 
 /* === ADVANCED FEATURES === */
