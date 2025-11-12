@@ -5227,6 +5227,34 @@ body.game-started .hand-container {
         </div>
     </div>
 
+    <!-- DISCARD CHOICE MODAL -->
+    <div id="discard-choice-modal" class="narrative-modal hidden">
+        <div class="narrative-content" style="min-width: 400px;">
+            <h2 style="color: var(--accent-warm); margin-bottom: 20px; text-align: center;">SCARTA CARTA</h2>
+            <p id="discard-card-name" style="text-align: center; font-size: 16px; margin-bottom: 10px; color: var(--text-muted);"></p>
+            <p class="narrative-text" style="margin-bottom: 30px;">Cosa vuoi fare con questa carta?</p>
+            <div style="display: flex; gap: 15px; flex-direction: column;">
+                <button id="discard-sacrifice-btn" class="menu-button" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="font-size: 24px;">🩸</span>
+                    <div style="text-align: left;">
+                        <div style="font-weight: bold;">SACRIFICIO</div>
+                        <div style="font-size: 11px; opacity: 0.7;">Ottieni 1 punto sangue</div>
+                    </div>
+                </button>
+                <button id="discard-draw-btn" class="menu-button" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="font-size: 24px;">🎴</span>
+                    <div style="text-align: left;">
+                        <div style="font-weight: bold;">PESCA</div>
+                        <div style="font-size: 11px; opacity: 0.7;">Pesca una nuova carta</div>
+                    </div>
+                </button>
+                <button id="discard-cancel-btn" class="menu-button" style="background: rgba(138, 74, 58, 0.3); border-color: rgba(138, 74, 58, 0.5);">
+                    ANNULLA
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- GAME CONTAINER (3D Scene) -->
     <div id="game-container" class="game-container hidden">
         <div class="scene-3d">
@@ -5316,9 +5344,15 @@ y Bar (Top Right) -->
               mostrato al momento opportuno via JavaScript (vedi handler
               nella sezione click-to-select).
             -->
+            <!-- Blood Currency Indicator -->
+            <div id="blood-currency-indicator" style="position: fixed; top: 80px; left: 20px; background: rgba(138, 74, 58, 0.9); border: 2px solid rgba(212, 165, 116, 0.8); border-radius: 8px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: bold; color: var(--text-light); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); z-index: 150;">
+                <span style="font-size: 20px;">🩸</span>
+                <span>Sangue: <span id="blood-currency-count">0</span></span>
+            </div>
+
             <div class="action-buttons">
                 <button id="end-turn-btn" class="action-btn" data-tooltip="Termina il tuo turno e inizia la fase di combattimento">TERMINA TURNO</button>
-                <button id="discard-btn" class="action-btn" data-tooltip="Scarta una carta dalla tua mano per pescare una nuova carta">SCARTA</button>
+                <button id="discard-btn" class="action-btn" data-tooltip="Scarta una carta dalla tua mano per pescare una nuova carta o sacrificarla">SCARTA</button>
             </div>
 
             <!-- Therapist Hand (Far side, cards face down) -->
@@ -7840,6 +7874,7 @@ class Game {
         this.round = 1;
         this.stability = 100;
         this.fragments = 0;
+        this.bloodCurrency = 0; // Blood points from sacrificed discarded cards
         this.isPlayerTurn = true;
         this.gameStarted = false;
         this.gameOver = false; // FIX: Prevent actions after game over
@@ -8002,6 +8037,17 @@ class Game {
             endTurnBtn: document.getElementById('end-turn-btn'),
             discardBtn: document.getElementById('discard-btn'),
 
+            // Discard choice modal
+            discardChoiceModal: document.getElementById('discard-choice-modal'),
+            discardCardName: document.getElementById('discard-card-name'),
+            discardSacrificeBtn: document.getElementById('discard-sacrifice-btn'),
+            discardDrawBtn: document.getElementById('discard-draw-btn'),
+            discardCancelBtn: document.getElementById('discard-cancel-btn'),
+
+            // Blood currency
+            bloodCurrencyIndicator: document.getElementById('blood-currency-indicator'),
+            bloodCurrencyCount: document.getElementById('blood-currency-count'),
+
             // Special effects
             cardWhisper: document.getElementById('card-whisper'),
             whisperText: document.getElementById('whisper-text'),
@@ -8120,10 +8166,20 @@ class Game {
             // una carta (vedi handler click-to-select).
             this.elements.discardBtn.addEventListener('click', () => {
                 this.toggleDiscardMode();
-                // Nascondi il pulsante dopo aver scartato
-                this.elements.discardBtn.style.display = 'none';
             });
         }
+
+        // Discard choice modal buttons
+        if (this.elements.discardSacrificeBtn) {
+            this.elements.discardSacrificeBtn.addEventListener('click', () => this.discardAsSacrifice());
+        }
+        if (this.elements.discardDrawBtn) {
+            this.elements.discardDrawBtn.addEventListener('click', () => this.discardAndDraw());
+        }
+        if (this.elements.discardCancelBtn) {
+            this.elements.discardCancelBtn.addEventListener('click', () => this.cancelDiscard());
+        }
+
         if (this.elements.cancelSacrificeBtn) {
             this.elements.cancelSacrificeBtn.addEventListener('click', () => this.cancelSacrifice());
         }
@@ -8433,14 +8489,40 @@ class Game {
     }
 
     startSacrificeMode(card, slotIndex) {
+        const requiredCost = card.bloodCost;
+
+        // Check if player has enough blood currency
+        if (this.bloodCurrency >= requiredCost) {
+            // Use blood currency instead of sacrificing cards
+            this.bloodCurrency -= requiredCost;
+            this.log(`🩸 Hai usato ${requiredCost} punto${requiredCost > 1 ? 'i' : ''} sangue per giocare ${card.name}`);
+            this.audio.playSacrifice();
+
+            // Play the card directly
+            this.playerField[slotIndex] = card;
+            this.log(`Hai giocato: ${card.name}`);
+
+            // Card effects
+            if (card.type === 'voce') {
+                this.fragments++;
+            }
+
+            this.updateUI();
+            return;
+        }
+
+        // Not enough blood currency, start traditional sacrifice mode
         this.sacrificeMode = true;
         this.sacrificeTargetCard = card;
         this.sacrificeTargetSlot = slotIndex;
         this.sacrificedCards = [];
-        this.requiredSacrifices = card.bloodCost;
+        this.requiredSacrifices = requiredCost;
 
         this.elements.sacrificeZone.classList.add('active');
         this.log(`Devi sacrificare ${this.requiredSacrifices} carte per giocare ${card.name}`);
+        if (this.bloodCurrency > 0) {
+            this.log(`💡 Hai ${this.bloodCurrency} punto${this.bloodCurrency > 1 ? 'i' : ''} sangue, ma ne servono ${requiredCost}`);
+        }
         if (this.elements.cancelSacrificeBtn) this.elements.cancelSacrificeBtn.style.display = 'block';
     }
 
@@ -10429,13 +10511,41 @@ class Game {
     }
 
     toggleDiscardMode() {
-        // Simplified discard - just draw a new card
+        // Show modal with choice: sacrifice or draw
+        if (this.playerHand.length > 0 && !this.gameOver && !this.isPaused) {
+            const card = this.playerHand[0]; // Look at first card without removing it yet
+            this.elements.discardCardName.textContent = `"${card.name}"`;
+            this.elements.discardChoiceModal.classList.remove('hidden');
+        }
+    }
+
+    discardAsSacrifice() {
+        if (this.playerHand.length > 0) {
+            const card = this.playerHand.shift();
+            this.bloodCurrency++;
+            this.log(`🩸 Hai sacrificato: ${card.name} (+1 Sangue)`);
+            this.audio.playSacrifice();
+            this.elements.discardChoiceModal.classList.add('hidden');
+            this.updateUI();
+            // Hide discard button after use
+            this.elements.discardBtn.style.display = 'none';
+        }
+    }
+
+    discardAndDraw() {
         if (this.playerHand.length > 0) {
             const card = this.playerHand.shift();
             this.log(`Hai scartato: ${card.name}`);
             this.drawCard();
+            this.elements.discardChoiceModal.classList.add('hidden');
             this.updateUI();
+            // Hide discard button after use
+            this.elements.discardBtn.style.display = 'none';
         }
+    }
+
+    cancelDiscard() {
+        this.elements.discardChoiceModal.classList.add('hidden');
     }
 
     endTurn() {
@@ -11175,6 +11285,11 @@ else if (this.round >= 10) { cardsToPlay = 2;
         this.elements.stabilityText.textContent = `${this.stability}%`;
         this.elements.fragmentsCount.textContent = this.fragments;
         this.elements.roundCount.textContent = this.round;
+
+        // Update blood currency
+        if (this.elements.bloodCurrencyCount) {
+            this.elements.bloodCurrencyCount.textContent = this.bloodCurrency;
+        }
 
         // FIX: Update player deck count
         const deckCountEl = document.getElementById('player-deck-count');
