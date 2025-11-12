@@ -372,14 +372,14 @@ body {
        coprire l'intero fondo.  45vw permette fino a dodici carte senza uscire dallo
        schermo su risoluzioni comuni. */
     width: 45vw;
-    /* Altezza ridotta per mantenere le carte al di sotto della plancia e del tutorial. */
+    /* Altezza ridotta per mantenere le carte al di sotto della plancia. */
     height: 350px;
     display: flex;
     /* Allinea le carte verso destra all'interno del contenitore */
     justify-content: flex-end;
     align-items: flex-end;
     perspective: 1200px;
-    z-index: 3000; /* Rimane sopra il tutorial overlay per evitare che sposti le carte */
+    z-index: 3000;
     /* Consenti agli eventi di puntatore (drag & drop) di propagarsi ai figli. */
     pointer-events: all;
 }
@@ -2957,164 +2957,76 @@ body.glitch-phase-5 .glitch-overlay::before {
 }
 
 /* ================================================
-   TUTORIAL SYSTEM
+   QUICK TUTORIAL (Streamlined)
    ================================================ */
 
-.tutorial-overlay {
+.quick-tutorial {
     position: fixed;
-    inset: 0;
-    /* Ulteriormente ridotto lo sfondo per non oscurare il campo durante il tutorial */
-    background: rgba(0, 0, 0, 0.25);
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(26, 20, 16, 0.98);
+    border: 2px solid var(--accent-warm);
+    border-radius: 8px;
+    padding: 15px 25px;
     z-index: 2000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    animation: tutorial-slide-down 0.5s ease;
+    display: none;
 }
 
-.tutorial-overlay.visible {
-    opacity: 1;
-    /* NON bloccare i click sull'overlay, solo sul popup */
-    pointer-events: none;
+.quick-tutorial.visible {
+    display: block;
 }
 
-.tutorial-popup {
-    position: fixed;
-    background: linear-gradient(135deg, #2d2416 0%, #1a1410 100%);
-    border: 3px solid var(--accent-warm);
-    border-radius: 12px;
-    padding: 30px;
-    /* Migliora leggibilità del testo nelle finestre tutorial */
-    font-size: 18px;
-    line-height: 1.5;
-    max-width: 400px;
-    /* Il popup invece è cliccabile */
-    pointer-events: all;
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.9),
-        inset 0 0 40px rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(212, 165, 116, 0.4);
-    animation: tutorial-popup-enter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes tutorial-popup-enter {
+@keyframes tutorial-slide-down {
     from {
-        transform: scale(0.8) translateY(20px);
+        transform: translateX(-50%) translateY(-100px);
         opacity: 0;
     }
     to {
-        transform: scale(1) translateY(0);
+        transform: translateX(-50%) translateY(0);
         opacity: 1;
     }
 }
 
-.tutorial-popup.tutorial-bottom {
-    top: 70%;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.tutorial-popup.tutorial-top {
-    bottom: 60%;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.tutorial-popup.tutorial-left {
-    top: 50%;
-    left: 20%;
-    transform: translateY(-50%);
-}
-
-.tutorial-popup.tutorial-right {
-    top: 50%;
-    right: 20%;
-    transform: translateY(-50%);
-}
-
-.tutorial-popup.tutorial-center {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.tutorial-header {
+.quick-tutorial-content {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    gap: 15px;
 }
 
-.tutorial-title {
-    font-size: 24px;
-    font-weight: 900;
-    color: var(--accent-warm);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin: 0;
-}
-
-.tutorial-progress {
-    font-size: 14px;
-    color: var(--text-muted);
-    background: rgba(0, 0, 0, 0.5);
-    padding: 5px 10px;
-    border-radius: 12px;
-}
-
-.tutorial-text {
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--text-light);
-    margin-bottom: 20px;
-}
-
-.tutorial-next-btn {
-    width: 100%;
-    padding: 12px 24px;
-    background: linear-gradient(135deg, var(--accent-rust) 0%, #8a3a2a 100%);
-    border: 2px solid var(--accent-warm);
-    border-radius: 8px;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.tutorial-next-btn:hover {
-    background: linear-gradient(135deg, #a04030 0%, #902a1a 100%);
-    box-shadow: 0 0 20px rgba(212, 165, 116, 0.5);
-    transform: scale(1.05);
-}
-
-.tutorial-action-hint {
-    text-align: center;
-    font-style: italic;
-    color: var(--accent-warm);
-    margin: 0;
+.quick-tutorial-icon {
+    font-size: 32px;
     animation: pulse 2s ease-in-out infinite;
 }
 
-.tutorial-highlight {
-    position: relative;
-    z-index: 2001 !important;
-    pointer-events: all !important;
-    box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.6),
-                0 0 30px rgba(212, 165, 116, 0.8) !important;
-    animation: tutorial-highlight-pulse 2s ease-in-out infinite;
+.quick-tutorial-text {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-light);
 }
 
-@keyframes tutorial-highlight-pulse {
-    0%, 100% {
-        box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.6),
-                    0 0 30px rgba(212, 165, 116, 0.8);
-    }
-    50% {
-        box-shadow: 0 0 0 6px rgba(212, 165, 116, 0.8),
-                    0 0 50px rgba(212, 165, 116, 1);
-    }
+.quick-tutorial-text strong {
+    color: var(--accent-warm);
+}
+
+.quick-tutorial-close {
+    background: transparent;
+    border: 1px solid var(--accent-warm);
+    color: var(--accent-warm);
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.quick-tutorial-close:hover {
+    background: var(--accent-warm);
+    color: var(--text-dark);
 }
 
 /* ================================================
@@ -7744,11 +7656,6 @@ class Game {
         // Accessibility System
         this.accessibility = new AccessibilityManager();
 
-        // Tutorial System
-        this.tutorialActive = false;
-        this.tutorialStep = 0;
-        this.tutorialCompleted = false;
-
         this.init();
     }
 
@@ -9735,157 +9642,62 @@ class Game {
             this.updateUI();
             this.checkPhaseProgression();
 
-            // Avvia sempre il tutorial all'avvio della sessione.  In precedenza veniva
-            // eseguito solo la prima volta, memorizzando un flag in localStorage.  Per
-            // consentire all'utente di rivedere il tutorial a ogni partita, si rimuove
-            // il controllo su `neveTutorialCompleted` e si avvia direttamente il tutorial.
-            setTimeout(() => this.startTutorial(), 1000);
+            // Show quick tutorial on first round
+            setTimeout(() => this.showQuickTutorial(), 1000);
         }, 1500);
     }
 
-    // === TUTORIAL SYSTEM ===
-    startTutorial() {
-        this.tutorialActive = true;
-        this.tutorialStep = 0;
-        this.showTutorialStep();
-    }
+    // === QUICK TUTORIAL SYSTEM ===
+    showQuickTutorial() {
+        // Skip if already seen in this session
+        if (this.tutorialShown) return;
+        this.tutorialShown = true;
 
-    showTutorialStep() {
-        const steps = [
-            {
-                title: "Benvenuto",
-                text: "Questa è la tua mano di carte. Ogni carta rappresenta un frammento della psiche di Neve.",
-                highlight: '.hand-container',
-                position: 'bottom'
-            },
-            {
-                title: "Il Campo di Gioco",
-                text: "Questi sono gli SLOT dove puoi posizionare le tue carte. Gli slot vuoti hanno un simbolo '+' al centro e sono evidenziati con un bordo luminoso che pulsa.",
-                highlight: '.player-field',
-                position: 'top'
-            },
-            {
-                title: "Giocare una Carta",
-                text: "Ora prova! Trascina una carta dalla tua mano in uno degli SLOT LUMINOSI (quelli con il '+') per giocarla. Alcune carte richiedono un sacrificio (🩸).",
-                highlight: '.player-field',
-                position: 'top',
-                requireAction: 'playCard'
-            },
-            {
-                title: "Attaccare",
-                text: "Al termine del tuo turno, le tue carte attaccheranno le carte avversarie o direttamente il . Clicca 'TERMINA TURNO' quando sei pronto.",
-                highlight: '#end-turn-btn',
-                position: 'left',
-                requireAction: 'endTurn'
-            },
-            {
-                title: "Stabilità e Frammenti",
-                text: "Monitora la tua Stabilità (❤️) e i Frammenti di Memoria (💎). Se la Stabilità raggiunge 0, la sessione finisce.",
-                highlight: '.stability-container',
-                position: 'right'
-            },
-            {
-                title: "Scartare Carte",
-                text: "Puoi scartare una carta dalla tua mano per pescarne una nuova. Usa questa opzione strategicamente per migliorare la tua mano.",
-                highlight: '#discard-btn',
-                position: 'left'
-            },
-            {
-                title: "Tutorial Completato!",
-                text: "Hai imparato le basi. Ma ricorda: in questa sessione, nulla è come sembra. La verità si nasconde oltre la superficie...",
-                highlight: null,
-                position: 'center'
-            }
+        const tips = [
+            { icon: '🎴', text: '<strong>Trascina</strong> le carte dalla tua mano agli slot per giocarle' },
+            { icon: '⚔️', text: '<strong>Clicca "TERMINA TURNO"</strong> per attaccare con le tue carte' },
+            { icon: '❤️', text: '<strong>Stabilità 0 = Game Over.</strong> Usa frammenti (💎) per evocare carte potenti' }
         ];
 
-        const step = steps[this.tutorialStep];
-        if (!step) {
-            this.endTutorial();
-            return;
-        }
+        let currentTip = 0;
 
-        // Create or update tutorial overlay
-        let overlay = document.querySelector('.tutorial-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.className = 'tutorial-overlay';
-            document.body.appendChild(overlay);
-        }
-
-        // Remove previous highlights
-        document.querySelectorAll('.tutorial-highlight').forEach(el => {
-            el.classList.remove('tutorial-highlight');
-        });
-
-        // Add highlight to target element
-        if (step.highlight) {
-            const target = document.querySelector(step.highlight);
-            if (target) {
-                target.classList.add('tutorial-highlight');
-            }
-        }
-
-        // Create tutorial popup
-        overlay.innerHTML = `
-            <div class="tutorial-popup tutorial-${step.position}">
-                <div class="tutorial-header">
-                    <h3 class="tutorial-title">${step.title}</h3>
-                    <div class="tutorial-progress">${this.tutorialStep + 1} / ${steps.length}</div>
-                </div>
-                <p class="tutorial-text">${step.text}</p>
-                ${!step.requireAction ? `
-                    <button class="tutorial-next-btn">
-                        ${this.tutorialStep < steps.length - 1 ? 'Avanti →' : 'Inizia Gioco!'}
-                    </button>
-                ` : `
-                    <p class="tutorial-action-hint">Completa l'azione per continuare</p>
-                `}
+        // Create tutorial container
+        const tutorial = document.createElement('div');
+        tutorial.className = 'quick-tutorial';
+        tutorial.innerHTML = `
+            <div class="quick-tutorial-content">
+                <div class="quick-tutorial-icon">${tips[0].icon}</div>
+                <div class="quick-tutorial-text">${tips[0].text}</div>
+                <button class="quick-tutorial-close">OK</button>
             </div>
         `;
+        document.body.appendChild(tutorial);
 
-        overlay.classList.add('visible');
+        // Show tutorial
+        setTimeout(() => tutorial.classList.add('visible'), 100);
 
-        // Handle next button
-        // FIX #2: Use {once: true} to prevent memory leak
-        const nextBtn = overlay.querySelector('.tutorial-next-btn');
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
-                this.tutorialStep++;
-                this.showTutorialStep();
-            }, {once: true});
-        }
-
-        // Store required action for this step
-        this.tutorialRequiredAction = step.requireAction || null;
-    }
-
-    advanceTutorialIfNeeded(action) {
-        if (!this.tutorialActive) return;
-        if (this.tutorialRequiredAction === action) {
-            this.tutorialStep++;
-            this.tutorialRequiredAction = null;
-            setTimeout(() => this.showTutorialStep(), 500);
-        }
-    }
-
-    endTutorial() {
-        this.tutorialActive = false;
-        this.tutorialCompleted = true;
-        localStorage.setItem('neveTutorialCompleted', 'true');
-
-        // Remove tutorial overlay
-        const overlay = document.querySelector('.tutorial-overlay');
-        if (overlay) {
-            overlay.classList.remove('visible');
-            setTimeout(() => overlay.remove(), 500);
-        }
-
-        // Remove highlights
-        document.querySelectorAll('.tutorial-highlight').forEach(el => {
-            el.classList.remove('tutorial-highlight');
+        // Close button
+        const closeBtn = tutorial.querySelector('.quick-tutorial-close');
+        closeBtn.addEventListener('click', () => {
+            currentTip++;
+            if (currentTip < tips.length) {
+                // Show next tip
+                tutorial.querySelector('.quick-tutorial-icon').textContent = tips[currentTip].icon;
+                tutorial.querySelector('.quick-tutorial-text').innerHTML = tips[currentTip].text;
+            } else {
+                // Close tutorial
+                tutorial.classList.remove('visible');
+                setTimeout(() => tutorial.remove(), 500);
+            }
         });
 
-        this.log("[ Tutorial completato! ]", "meta");
+        // Auto-close after 15 seconds
+        setTimeout(() => {
+            if (tutorial.parentElement) {
+                tutorial.classList.remove('visible');
+                setTimeout(() => tutorial.remove(), 500);
+            }
+        }, 15000);
     }
 
     resetGame() {
@@ -10044,9 +9856,6 @@ class Game {
         // Apply play sigils
         this.applyPlaySigils(card);
 
-        // Advance tutorial if needed
-        this.advanceTutorialIfNeeded('playCard');
-
         this.updateUI();
         this.checkAlterMessages();
     }
@@ -10158,9 +9967,6 @@ class Game {
         this.log("=== Fine del tuo turno ===");
         this.isPlayerTurn = false;
         this.setTherapistDialogue(this.getTherapistDialogue());
-
-        // Advance tutorial if needed
-        this.advanceTutorialIfNeeded('endTurn');
 
         setTimeout(() => {
             this.therapistTurn();
@@ -12251,7 +12057,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             isMenuVisible = true;
                         }
                     });
-                    if (isMenuVisible || g?.tutorialActive || g?.isPaused) {
+                    if (isMenuVisible || g?.isPaused) {
                         gm.confirmAction();
                     }
                 } catch (err) {
