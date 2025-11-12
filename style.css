@@ -325,6 +325,18 @@ body {
     height: 165px;
 }
 
+/* Carte nella mano del giocatore: dimensioni standard ottimali */
+#neve-hand .card {
+    width: 150px;
+    height: 225px;
+}
+
+/* Carte nella mano del terapista: dimensioni standard ottimali */
+#therapist-hand .card {
+    width: 150px;
+    height: 225px;
+}
+
 .card-frame {
     position: relative;
     width: 100%;
@@ -1941,7 +1953,21 @@ body.high-contrast {
         max-width: 700px;
     }
 
-    .card {
+    /* Carte sul campo: dimensioni ridotte per tablet */
+    .player-field .card,
+    .opponent-field .card {
+        width: 100px;
+        height: 150px;
+    }
+
+    /* Carte nella mano del giocatore: mantengono dimensioni ottimali */
+    #neve-hand .card {
+        width: 140px;
+        height: 210px;
+    }
+
+    /* Carte nella mano del terapista: mantengono dimensioni ottimali */
+    #therapist-hand .card {
         width: 140px;
         height: 210px;
     }
@@ -3002,9 +3028,23 @@ body.glitch-phase-5 .glitch-overlay::before {
         padding: 20px;
     }
 
-    .card {
+    /* Carte sul campo: dimensioni ridotte per tablet */
+    .player-field .card,
+    .opponent-field .card {
+        width: 90px;
+        height: 135px;
+    }
+
+    /* Carte nella mano del giocatore: mantengono dimensioni ottimali */
+    #neve-hand .card {
         width: 120px;
-        height: 170px;
+        height: 180px;
+    }
+
+    /* Carte nella mano del terapista: mantengono dimensioni ottimali */
+    #therapist-hand .card {
+        width: 120px;
+        height: 180px;
     }
 
     /* FIX L: Riduce slot width per far stare 4 slot da 185px (740px + gap = 785px overflow) */
@@ -3056,9 +3096,25 @@ body.glitch-phase-5 .glitch-overlay::before {
         padding: 15px;
     }
 
-    .card {
-        width: 80px;
-        height: 115px;
+    /* Carte sul campo: dimensioni ridotte per mobile */
+    .player-field .card,
+    .opponent-field .card {
+        width: 70px;
+        height: 105px;
+        font-size: 11px;
+    }
+
+    /* Carte nella mano del giocatore: dimensioni ridotte ma proporzionate */
+    #neve-hand .card {
+        width: 100px;
+        height: 150px;
+        font-size: 11px;
+    }
+
+    /* Carte nella mano del terapista: dimensioni ridotte ma proporzionate */
+    #therapist-hand .card {
+        width: 100px;
+        height: 150px;
         font-size: 11px;
     }
 
@@ -3181,9 +3237,26 @@ body.glitch-phase-5 .glitch-overlay::before {
 
 /* Small Mobile (max-width: 480px) */
 @media screen and (max-width: 480px) {
-    .card {
-        width: 70px;
-        height: 100px;
+    /* Carte sul campo: dimensioni ridotte per schermi piccoli */
+    .player-field .card,
+    .opponent-field .card {
+        width: 60px;
+        height: 90px;
+        font-size: 10px;
+    }
+
+    /* Carte nella mano del giocatore: dimensioni ridotte ma leggibili */
+    #neve-hand .card {
+        width: 80px;
+        height: 120px;
+        font-size: 10px;
+    }
+
+    /* Carte nella mano del terapista: dimensioni ridotte ma leggibili */
+    #therapist-hand .card {
+        width: 80px;
+        height: 120px;
+        font-size: 10px;
     }
 
     .session-info {
