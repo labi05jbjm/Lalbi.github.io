@@ -1152,9 +1152,60 @@ body {
     border: 2px solid var(--border-card);
     border-radius: 8px;
     padding: 15px;
+    padding-top: 40px; /* Spazio per il pulsante toggle */
     overflow-y: auto;
     z-index: 50;
     filter: url(#rough-edges);
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s ease;
+}
+
+/* Event log collapsed state */
+.event-log.collapsed {
+    max-height: 45px;
+    padding: 10px 15px;
+    padding-top: 40px;
+    overflow: hidden;
+}
+
+/* Event log toggle button */
+.event-log-toggle {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    background: rgba(212, 165, 116, 0.2);
+    border: 2px solid var(--border-card);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    color: var(--text-light);
+    font-size: 14px;
+    padding: 0;
+}
+
+.event-log-toggle:hover {
+    background: rgba(212, 165, 116, 0.4);
+    border-color: var(--accent-warm);
+    transform: scale(1.1);
+}
+
+.event-log-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Toggle icon rotation */
+.toggle-icon {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+}
+
+.event-log.collapsed .toggle-icon {
+    transform: rotate(-180deg);
 }
 
 .log-entry {

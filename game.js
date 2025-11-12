@@ -1830,6 +1830,7 @@ class Game {
             therapistCardField: document.getElementById('therapist-card-field'),
             neveCardField: document.getElementById('neve-card-field'),
             eventLog: document.getElementById('event-log'),
+            eventLogToggle: document.getElementById('event-log-toggle'),
 
             // Hand and actions
             neveHand: document.getElementById('neve-hand'),
@@ -1959,6 +1960,10 @@ class Game {
         }
         if (this.elements.discardBtn) {
             this.elements.discardBtn.addEventListener('click', () => this.toggleDiscardMode());
+        }
+        // Event log toggle
+        if (this.elements.eventLogToggle) {
+            this.elements.eventLogToggle.addEventListener('click', () => this.toggleEventLog());
         }
         // Discard choice modal buttons
         if (this.elements.discardSacrificeBtn) {
@@ -3500,6 +3505,12 @@ class Game {
             }, 50);
         } else {
             this.elements.pauseModal.classList.add('hidden');
+        }
+    }
+
+    toggleEventLog() {
+        if (this.elements.eventLog) {
+            this.elements.eventLog.classList.toggle('collapsed');
         }
     }
 

@@ -356,7 +356,7 @@
             </div>
 
             <!-- Blood Currency Indicator -->
-            <div id="blood-currency-indicator" style="position: fixed; top: 80px; left: 20px; background: rgba(138, 74, 58, 0.9); border: 2px solid rgba(212, 165, 116, 0.8); border-radius: 8px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: bold; color: var(--text-light); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); z-index: 150;">
+            <div id="blood-currency-indicator" style="position: fixed; top: 180px; left: 20px; background: rgba(138, 74, 58, 0.9); border: 2px solid rgba(212, 165, 116, 0.8); border-radius: 8px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: bold; color: var(--text-light); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); z-index: 150;">
                 <span style="font-size: 20px;">🩸</span>
                 <span>Sangue: <span id="blood-currency-count">0</span></span>
             </div>
@@ -383,7 +383,11 @@
             </div>
 
             <!-- Event Log (Bottom Left) -->
-            <div id="event-log" class="event-log"></div>
+            <div id="event-log" class="event-log">
+                <button id="event-log-toggle" class="event-log-toggle" aria-label="Comprimi/Espandi log eventi">
+                    <span class="toggle-icon">▼</span>
+                </button>
+            </div>
 
             <!-- Game Stats (Bottom Right) -->
             <div class="game-stats">
