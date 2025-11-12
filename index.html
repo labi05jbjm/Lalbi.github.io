@@ -263,6 +263,34 @@
         </div>
     </div>
 
+    <!-- DISCARD CHOICE MODAL -->
+    <div id="discard-choice-modal" class="narrative-modal hidden">
+        <div class="narrative-content" style="min-width: 400px;">
+            <h2 style="color: var(--accent-warm); margin-bottom: 20px; text-align: center;">SCARTA CARTA</h2>
+            <p id="discard-card-name" style="text-align: center; font-size: 16px; margin-bottom: 10px; color: var(--text-muted);"></p>
+            <p class="narrative-text" style="margin-bottom: 30px;">Cosa vuoi fare con questa carta?</p>
+            <div style="display: flex; gap: 15px; flex-direction: column;">
+                <button id="discard-sacrifice-btn" class="menu-button" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="font-size: 24px;">🩸</span>
+                    <div style="text-align: left;">
+                        <div style="font-weight: bold;">SACRIFICIO</div>
+                        <div style="font-size: 11px; opacity: 0.7;">Ottieni 1 punto sangue</div>
+                    </div>
+                </button>
+                <button id="discard-draw-btn" class="menu-button" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="font-size: 24px;">🎴</span>
+                    <div style="text-align: left;">
+                        <div style="font-weight: bold;">PESCA</div>
+                        <div style="font-size: 11px; opacity: 0.7;">Pesca una nuova carta</div>
+                    </div>
+                </button>
+                <button id="discard-cancel-btn" class="menu-button" style="background: rgba(138, 74, 58, 0.3); border-color: rgba(138, 74, 58, 0.5);">
+                    ANNULLA
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- GAME CONTAINER (3D Scene) -->
     <div id="game-container" class="game-container hidden">
         <div class="scene-3d">
@@ -327,10 +355,16 @@
                 </div>
             </div>
 
+            <!-- Blood Currency Indicator -->
+            <div id="blood-currency-indicator" style="position: fixed; top: 80px; left: 20px; background: rgba(138, 74, 58, 0.9); border: 2px solid rgba(212, 165, 116, 0.8); border-radius: 8px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: bold; color: var(--text-light); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); z-index: 150;">
+                <span style="font-size: 20px;">🩸</span>
+                <span>Sangue: <span id="blood-currency-count">0</span></span>
+            </div>
+
             <!-- Action Buttons -->
             <div class="action-buttons">
                 <button id="end-turn-btn" class="action-btn" data-tooltip="Termina il tuo turno e inizia la fase di combattimento">TERMINA TURNO</button>
-                <button id="discard-btn" class="action-btn" data-tooltip="Scarta una carta dalla tua mano per pescare una nuova carta">SCARTA</button>
+                <button id="discard-btn" class="action-btn" data-tooltip="Scarta una carta dalla tua mano per pescare una nuova carta o sacrificarla">SCARTA</button>
             </div>
 
             <!-- Therapist Hand (Far side, cards face down) -->

@@ -1675,6 +1675,7 @@ class Game {
         this.round = 1;
         this.stability = 100;
         this.fragments = 0;
+        this.bloodCurrency = 0; // Blood points from sacrificed discarded cards
         this.isPlayerTurn = true;
         this.gameStarted = false;
         this.sessionStartTime = null;
@@ -1836,6 +1837,17 @@ class Game {
             endTurnBtn: document.getElementById('end-turn-btn'),
             discardBtn: document.getElementById('discard-btn'),
 
+            // Discard choice modal
+            discardChoiceModal: document.getElementById('discard-choice-modal'),
+            discardCardName: document.getElementById('discard-card-name'),
+            discardSacrificeBtn: document.getElementById('discard-sacrifice-btn'),
+            discardDrawBtn: document.getElementById('discard-draw-btn'),
+            discardCancelBtn: document.getElementById('discard-cancel-btn'),
+
+            // Blood currency
+            bloodCurrencyIndicator: document.getElementById('blood-currency-indicator'),
+            bloodCurrencyCount: document.getElementById('blood-currency-count'),
+
             // Special effects
             cardWhisper: document.getElementById('card-whisper'),
             whisperText: document.getElementById('whisper-text'),
@@ -1947,6 +1959,16 @@ class Game {
         }
         if (this.elements.discardBtn) {
             this.elements.discardBtn.addEventListener('click', () => this.toggleDiscardMode());
+        }
+        // Discard choice modal buttons
+        if (this.elements.discardSacrificeBtn) {
+            this.elements.discardSacrificeBtn.addEventListener('click', () => this.discardAsSacrifice());
+        }
+        if (this.elements.discardDrawBtn) {
+            this.elements.discardDrawBtn.addEventListener('click', () => this.discardAndDraw());
+        }
+        if (this.elements.discardCancelBtn) {
+            this.elements.discardCancelBtn.addEventListener('click', () => this.cancelDiscard());
         }
 
         // Pause menu
@@ -2195,14 +2217,41 @@ class Game {
     }
 
     startSacrificeMode(card, slotIndex) {
+        const requiredCost = card.bloodCost;
+
+        // Check if player has enough blood currency
+        if (this.bloodCurrency >= requiredCost) {
+            // Use blood currency instead of sacrificing cards
+            this.bloodCurrency -= requiredCost;
+            this.log(`🩸 Hai usato ${requiredCost} punto${requiredCost > 1 ? 'i' : ''} sangue per giocare ${card.name}`);
+            this.audio.playSacrifice();
+
+            // Play the card directly
+            this.playerField[slotIndex] = card;
+            this.log(`Hai giocato: ${card.name}`);
+
+            // Card effects
+            if (card.type === 'voce') {
+                this.fragments++;
+            }
+
+            this.updateUI();
+            return;
+        }
+
+        // Not enough blood currency, start traditional sacrifice mode
         this.sacrificeMode = true;
         this.sacrificeTargetCard = card;
         this.sacrificeTargetSlot = slotIndex;
         this.sacrificedCards = [];
-        this.requiredSacrifices = card.bloodCost;
+        this.requiredSacrifices = requiredCost;
 
         this.elements.sacrificeZone.classList.add('active');
         this.log(`Devi sacrificare ${this.requiredSacrifices} carte per giocare ${card.name}`);
+        if (this.bloodCurrency > 0) {
+            this.log(`💡 Hai ${this.bloodCurrency} punto${this.bloodCurrency > 1 ? 'i' : ''} sangue, ma ne servono ${requiredCost}`);
+        }
+        if (this.elements.cancelSacrificeBtn) this.elements.cancelSacrificeBtn.style.display = 'block';
     }
 
     completeSacrifice() {
@@ -3962,13 +4011,41 @@ class Game {
     }
 
     toggleDiscardMode() {
-        // Simplified discard - just draw a new card
+        // Show modal with choice: sacrifice or draw
+        if (this.playerHand.length > 0 && !this.gameOver && !this.isPaused) {
+            const card = this.playerHand[0]; // Look at first card without removing it yet
+            this.elements.discardCardName.textContent = `"${card.name}"`;
+            this.elements.discardChoiceModal.classList.remove('hidden');
+        }
+    }
+
+    discardAsSacrifice() {
+        if (this.playerHand.length > 0) {
+            const card = this.playerHand.shift();
+            this.bloodCurrency++;
+            this.log(`🩸 Hai sacrificato: ${card.name} (+1 Sangue)`);
+            this.audio.playSacrifice();
+            this.elements.discardChoiceModal.classList.add('hidden');
+            this.updateUI();
+            // Hide discard button after use
+            this.elements.discardBtn.style.display = 'none';
+        }
+    }
+
+    discardAndDraw() {
         if (this.playerHand.length > 0) {
             const card = this.playerHand.shift();
             this.log(`Hai scartato: ${card.name}`);
             this.drawCard();
+            this.elements.discardChoiceModal.classList.add('hidden');
             this.updateUI();
+            // Hide discard button after use
+            this.elements.discardBtn.style.display = 'none';
         }
+    }
+
+    cancelDiscard() {
+        this.elements.discardChoiceModal.classList.add('hidden');
     }
 
     endTurn() {
@@ -4651,6 +4728,11 @@ class Game {
         this.elements.stabilityText.textContent = `${this.stability}%`;
         this.elements.fragmentsCount.textContent = this.fragments;
         this.elements.roundCount.textContent = this.round;
+
+        // Update blood currency
+        if (this.elements.bloodCurrencyCount) {
+            this.elements.bloodCurrencyCount.textContent = this.bloodCurrency;
+        }
 
         // Color stability bar based on value
         if (this.stability < 30) {
