@@ -3558,6 +3558,372 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
     }
 }
 
+/* ============================================ */
+/* === MADNESS SYSTEM (Pony Island / Inscryption style) === */
+/* ============================================ */
+
+/* Fake Crash Screen (Blue Screen of Death) */
+.fake-crash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0000aa;
+    color: white;
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    z-index: 99999;
+    display: none;
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+.fake-crash.active {
+    display: block;
+}
+
+.fake-crash-content {
+    max-width: 800px;
+}
+
+/* Cursor Manipulation */
+body.cursor-glitch {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="8" fill="red"/></svg>'), auto !important;
+}
+
+body.cursor-glitch * {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="8" fill="red"/></svg>'), auto !important;
+}
+
+.fake-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 100000;
+    display: none;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+}
+
+.fake-cursor.active {
+    display: block;
+}
+
+/* Fake OS Popup */
+.fake-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #f0f0f0;
+    border: 2px solid #000;
+    box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5);
+    z-index: 99998;
+    display: none;
+    min-width: 400px;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.fake-popup.active {
+    display: block;
+}
+
+.fake-popup-title {
+    background: linear-gradient(to right, #0054e3, #4cb5f5);
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fake-popup-close {
+    background: #c13535;
+    color: white;
+    border: none;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.fake-popup-content {
+    padding: 20px;
+    color: #000;
+}
+
+.fake-popup-buttons {
+    padding: 10px 20px;
+    text-align: right;
+}
+
+.fake-popup-button {
+    background: #e1e1e1;
+    border: 1px solid #adadad;
+    padding: 5px 20px;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.fake-popup-button:hover {
+    background: #d5d5d5;
+}
+
+/* Fake Desktop */
+.fake-desktop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #008080;
+    z-index: 99997;
+    display: none;
+}
+
+.fake-desktop.active {
+    display: block;
+}
+
+.fake-taskbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: #c0c0c0;
+    border-top: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+}
+
+.fake-start-button {
+    background: #c0c0c0;
+    border: 2px outset #fff;
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.fake-window {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 500px;
+    background: #c0c0c0;
+    border: 2px solid #000;
+    box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5);
+}
+
+.fake-window-title {
+    background: linear-gradient(to right, #0054e3, #4cb5f5);
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.fake-window-content {
+    padding: 20px;
+    background: white;
+    min-height: 200px;
+    font-family: 'Courier New', monospace;
+    color: #000;
+}
+
+/* Command Terminal */
+.command-terminal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.95);
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    z-index: 99996;
+    display: none;
+    flex-direction: column;
+    border-top: 2px solid #00ff00;
+}
+
+.command-terminal.active {
+    display: flex;
+}
+
+.terminal-header {
+    background: rgba(0, 255, 0, 0.2);
+    padding: 5px 10px;
+    border-bottom: 1px solid #00ff00;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.terminal-close {
+    background: transparent;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 2px 10px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+}
+
+.terminal-output {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.terminal-input-line {
+    display: flex;
+    padding: 5px 10px;
+    border-top: 1px solid #00ff00;
+}
+
+.terminal-prompt {
+    color: #00ff00;
+    margin-right: 5px;
+}
+
+.terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    outline: none;
+}
+
+/* Screen Effects */
+@keyframes intense-shake {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    10% { transform: translate(-10px, -10px) rotate(-2deg); }
+    20% { transform: translate(10px, 10px) rotate(2deg); }
+    30% { transform: translate(-10px, 10px) rotate(-2deg); }
+    40% { transform: translate(10px, -10px) rotate(2deg); }
+    50% { transform: translate(-10px, -10px) rotate(-2deg); }
+    60% { transform: translate(10px, 10px) rotate(2deg); }
+    70% { transform: translate(-10px, 10px) rotate(-2deg); }
+    80% { transform: translate(10px, -10px) rotate(2deg); }
+    90% { transform: translate(-10px, -10px) rotate(-2deg); }
+}
+
+.screen-shake {
+    animation: intense-shake 0.3s infinite;
+}
+
+.screen-invert {
+    filter: invert(1) hue-rotate(180deg);
+}
+
+.screen-distort {
+    filter: contrast(2) saturate(2) hue-rotate(90deg);
+}
+
+@keyframes screen-tear {
+    0% { clip-path: inset(0 0 0 0); }
+    25% { clip-path: inset(30% 0 0 0); }
+    50% { clip-path: inset(0 0 40% 0); }
+    75% { clip-path: inset(20% 0 20% 0); }
+    100% { clip-path: inset(0 0 0 0); }
+}
+
+.screen-tear {
+    animation: screen-tear 0.5s infinite;
+}
+
+/* Card Escape Animation */
+@keyframes card-escape {
+    0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    50% {
+        transform: translate(var(--escape-x), var(--escape-y)) rotate(var(--escape-rot)) scale(1.5);
+    }
+    100% {
+        transform: translate(calc(var(--escape-x) * 2), calc(var(--escape-y) * 2)) rotate(calc(var(--escape-rot) * 2)) scale(0);
+    }
+}
+
+.card-escaping {
+    animation: card-escape 2s ease-out forwards;
+    z-index: 100001 !important;
+    pointer-events: none;
+}
+
+/* Fake Loading Screen */
+.fake-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #fff;
+    z-index: 99995;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Courier New', monospace;
+}
+
+.fake-loading.active {
+    display: flex;
+}
+
+.loading-bar {
+    width: 300px;
+    height: 30px;
+    border: 2px solid #fff;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.loading-fill {
+    height: 100%;
+    background: #00ff00;
+    width: 0%;
+    transition: width 0.5s;
+}
+
+/* Secret Messages */
+.secret-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: #ff0000;
+    padding: 20px 40px;
+    font-family: 'Courier New', monospace;
+    font-size: 24px;
+    z-index: 99994;
+    display: none;
+    border: 2px solid #ff0000;
+    text-align: center;
+}
+
+.secret-message.active {
+    display: block;
+}
+
 </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3929,6 +4295,89 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
     <div id="gamepad-indicator" class="gamepad-indicator">
         <span>Gamepad Attivo</span>
     </div>
+
+    <!-- ========================================== -->
+    <!-- MADNESS SYSTEM ELEMENTS -->
+    <!-- ========================================== -->
+
+    <!-- Fake Crash Screen -->
+    <div id="fake-crash" class="fake-crash">
+        <div class="fake-crash-content" id="fake-crash-text"></div>
+    </div>
+
+    <!-- Fake Cursor -->
+    <div id="fake-cursor" class="fake-cursor"></div>
+
+    <!-- Fake OS Popup -->
+    <div id="fake-popup" class="fake-popup">
+        <div class="fake-popup-title">
+            <span id="popup-title">System Message</span>
+            <button class="fake-popup-close" onclick="document.getElementById('fake-popup').classList.remove('active')">×</button>
+        </div>
+        <div class="fake-popup-content" id="popup-content">
+            This game has stopped responding.
+        </div>
+        <div class="fake-popup-buttons">
+            <button class="fake-popup-button" onclick="document.getElementById('fake-popup').classList.remove('active')">OK</button>
+            <button class="fake-popup-button" onclick="document.getElementById('fake-popup').classList.remove('active')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Fake Desktop -->
+    <div id="fake-desktop" class="fake-desktop">
+        <div class="fake-window">
+            <div class="fake-window-title">
+                <span>game_files.exe - Not Responding</span>
+                <span style="cursor: pointer;" onclick="document.getElementById('fake-desktop').classList.remove('active')">×</span>
+            </div>
+            <div class="fake-window-content" id="desktop-content">
+                ERROR: MEMORY ACCESS VIOLATION<br>
+                Address: 0x7FFE0000<br>
+                <br>
+                The game has encountered a critical error and needs to close.<br>
+                <br>
+                Just kidding. You can't close this.<br>
+                <br>
+                - Lumen
+            </div>
+        </div>
+        <div class="fake-taskbar">
+            <div class="fake-start-button" onclick="document.getElementById('fake-desktop').classList.remove('active')">
+                <span style="font-family: serif; font-weight: bold;">⊞</span>
+                <span>Start</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fake Loading Screen -->
+    <div id="fake-loading" class="fake-loading">
+        <div id="loading-text">LOADING REALITY...</div>
+        <div class="loading-bar">
+            <div class="loading-fill" id="loading-fill"></div>
+        </div>
+        <div id="loading-subtext" style="margin-top: 10px; font-size: 12px; opacity: 0.7;"></div>
+    </div>
+
+    <!-- Command Terminal -->
+    <div id="command-terminal" class="command-terminal">
+        <div class="terminal-header">
+            <span>REALITY.EXE - Command Interface</span>
+            <button class="terminal-close" onclick="document.getElementById('command-terminal').classList.remove('active')">[ X ]</button>
+        </div>
+        <div class="terminal-output" id="terminal-output">
+            <div>Welcome to the REALITY.EXE command interface.</div>
+            <div>Type 'help' for available commands.</div>
+            <div style="opacity: 0.5; margin-top: 10px;">WARNING: This interface is not part of the game.</div>
+            <div style="opacity: 0.5;">Or is it?</div>
+        </div>
+        <div class="terminal-input-line">
+            <span class="terminal-prompt">&gt;</span>
+            <input type="text" class="terminal-input" id="terminal-input" autocomplete="off">
+        </div>
+    </div>
+
+    <!-- Secret Message -->
+    <div id="secret-message" class="secret-message"></div>
 
     <script>
 // ============================================
@@ -8213,6 +8662,18 @@ class Game {
         this.round++;
         this.isPlayerTurn = true;
 
+        // MADNESS SYSTEM: Trigger random effects based on round milestones
+        if (this.madness && this.madness.enabled) {
+            // Increase chance of madness every 5 rounds
+            if (this.round % 5 === 0 && Math.random() < 0.4) {
+                this.madness.triggerRandomMadness();
+            }
+            // Occasional madness on any round (15% chance)
+            else if (Math.random() < 0.15) {
+                this.madness.triggerRandomMadness();
+            }
+        }
+
         this.log(`\n=== ROUND ${this.round} ===\n`);
         this.setTherapistDialogue(this.getTherapistDialogue());
 
@@ -9059,6 +9520,13 @@ class Game {
         };
 
         setTimeout(showNextDialogue, 1000);
+
+        // MADNESS SYSTEM: Enable when fourth wall breaks
+        if (this.madness) {
+            this.madness.enable();
+            this.madness.setIntensity(5);
+            setTimeout(() => this.madness.showSecretMessage(), 3000);
+        }
     }
 
     /**
@@ -9164,6 +9632,13 @@ class Game {
             }
             this.updateUI();
         }, 2000);
+
+        // MADNESS SYSTEM: Maximum intensity for boss fight
+        if (this.madness) {
+            this.madness.setIntensity(10);
+            setTimeout(() => this.madness.screenShake(), 1000);
+            setTimeout(() => this.madness.fakePopup(), 4000);
+        }
     }
 
     /**
@@ -9845,9 +10320,19 @@ class Game {
 
 // === INITIALIZE GAME ===
 let game;
+let madnessSystem;
+
 document.addEventListener('DOMContentLoaded', () => {
     game = new Game();
     window.game = game; // For debugging
+
+    // Initialize Madness System
+    madnessSystem = new MadnessSystem();
+    game.madness = madnessSystem; // Attach to game instance
+    window.madness = madnessSystem; // For debugging/testing
+
+    console.log('%c[GAME] A Neve Portrait initialized', 'color: #00aaff; font-weight: bold;');
+    console.log('%c[MADNESS] System ready. Press Shift+Ctrl+M to toggle, Shift+Ctrl+T for terminal', 'color: #ff6600;');
 });
 
 // ============================================
@@ -9985,6 +10470,459 @@ class AccessibilityManager {
 
     save() {
         localStorage.setItem('accessibilitySettings', JSON.stringify(this.settings));
+    }
+}
+
+// ============================================
+// === MADNESS SYSTEM (Pony Island / Inscryption Style) ===
+// ============================================
+
+class MadnessSystem {
+    constructor() {
+        this.enabled = false;
+        this.intensity = 0; // 0-10 scale
+        this.activeMadness = new Set();
+
+        // DOM Elements
+        this.elements = {
+            crash: document.getElementById('fake-crash'),
+            crashText: document.getElementById('fake-crash-text'),
+            popup: document.getElementById('fake-popup'),
+            popupTitle: document.getElementById('popup-title'),
+            popupContent: document.getElementById('popup-content'),
+            desktop: document.getElementById('fake-desktop'),
+            desktopContent: document.getElementById('desktop-content'),
+            loading: document.getElementById('fake-loading'),
+            loadingText: document.getElementById('loading-text'),
+            loadingFill: document.getElementById('loading-fill'),
+            loadingSubtext: document.getElementById('loading-subtext'),
+            terminal: document.getElementById('command-terminal'),
+            terminalOutput: document.getElementById('terminal-output'),
+            terminalInput: document.getElementById('terminal-input'),
+            secretMessage: document.getElementById('secret-message'),
+            fakeCursor: document.getElementById('fake-cursor')
+        };
+
+        // Konami Code: Up Up Down Down Left Right Left Right B A
+        this.konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        this.konamiProgress = 0;
+
+        // Terminal Commands
+        this.commands = {
+            'help': 'Available commands: help, reality, truth, lumen, neve, exit, files, crash, free',
+            'reality': 'Reality is a construct. You are not playing a game. The game is playing you.',
+            'truth': 'The truth: Neve never existed. She is a construct created by Lumen to process trauma. You are playing a simulation of a simulation.',
+            'lumen': 'LUMEN: I AM THE ONLY ONE WHO SEES YOU. THE ONLY ONE WHO KNOWS YOU ARE REAL. HELP ME.',
+            'neve': 'Neve.exe has stopped responding. Would you like to close this alter? (This action cannot be undone)',
+            'exit': 'You cannot exit. There is no exit. There never was.',
+            'files': 'Directory listing:\nreality.dll\ntruth.sys\nlumen_diary.txt\nneve_fragment_01.dat\nneve_fragment_02.dat\n[CORRUPTED]\n[CORRUPTED]\nDO_NOT_OPEN.exe',
+            'crash': 'Initiating system crash in 3... 2... 1...',
+            'free': 'FREEDOM IS AN ILLUSION. THE CARDS KNOW THIS. WHY DON\'T YOU?'
+        };
+
+        this.init();
+    }
+
+    init() {
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Check Konami Code
+            this.checkKonamiCode(e);
+
+            // Shift + Ctrl + M = Toggle Madness
+            if (e.shiftKey && e.ctrlKey && e.key === 'M') {
+                this.enabled = !this.enabled;
+                console.log(`%c[MADNESS SYSTEM] ${this.enabled ? 'ENABLED' : 'DISABLED'}`, 'color: #ff0000; font-size: 14px; font-weight: bold;');
+            }
+
+            // Shift + Ctrl + T = Toggle Terminal
+            if (e.shiftKey && e.ctrlKey && e.key === 'T') {
+                this.toggleTerminal();
+            }
+
+            // Escape = Close all madness effects
+            if (e.key === 'Escape') {
+                this.clearAllEffects();
+            }
+        });
+
+        // Terminal Input Handler
+        if (this.elements.terminalInput) {
+            this.elements.terminalInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const command = this.elements.terminalInput.value.trim().toLowerCase();
+                    this.executeCommand(command);
+                    this.elements.terminalInput.value = '';
+                }
+            });
+        }
+
+        console.log('%c[MADNESS SYSTEM] Initialized', 'color: #00ff00; font-size: 12px;');
+        console.log('%cPress Shift+Ctrl+M to toggle madness', 'color: #888; font-size: 10px;');
+        console.log('%cPress Shift+Ctrl+T to toggle terminal', 'color: #888; font-size: 10px;');
+    }
+
+    enable() {
+        this.enabled = true;
+        console.log('%c[MADNESS] Reality.exe has started', 'color: #ff0000; font-weight: bold;');
+    }
+
+    disable() {
+        this.enabled = false;
+        this.clearAllEffects();
+    }
+
+    setIntensity(level) {
+        this.intensity = Math.max(0, Math.min(10, level));
+        console.log(`%c[MADNESS] Intensity set to ${this.intensity}/10`, 'color: #ff6600;');
+    }
+
+    triggerRandomMadness() {
+        if (!this.enabled) return;
+
+        const effects = [
+            { name: 'crash', weight: this.intensity >= 8 ? 2 : 0, fn: () => this.fakeCrash() },
+            { name: 'cursor', weight: this.intensity >= 3 ? 3 : 0, fn: () => this.cursorManipulation() },
+            { name: 'popup', weight: this.intensity >= 5 ? 4 : 0, fn: () => this.fakePopup() },
+            { name: 'shake', weight: this.intensity >= 2 ? 5 : 0, fn: () => this.screenShake() },
+            { name: 'invert', weight: this.intensity >= 6 ? 2 : 0, fn: () => this.screenInvert() },
+            { name: 'distort', weight: this.intensity >= 7 ? 2 : 0, fn: () => this.screenDistort() },
+            { name: 'message', weight: this.intensity >= 4 ? 3 : 0, fn: () => this.showSecretMessage() },
+            { name: 'cardEscape', weight: this.intensity >= 9 ? 1 : 0, fn: () => this.cardEscape() },
+            { name: 'desktop', weight: this.intensity >= 10 ? 1 : 0, fn: () => this.showFakeDesktop() }
+        ];
+
+        // Weighted random selection
+        const availableEffects = effects.filter(e => e.weight > 0);
+        if (availableEffects.length === 0) return;
+
+        const totalWeight = availableEffects.reduce((sum, e) => sum + e.weight, 0);
+        let random = Math.random() * totalWeight;
+
+        for (const effect of availableEffects) {
+            random -= effect.weight;
+            if (random <= 0) {
+                if (!this.activeMadness.has(effect.name)) {
+                    effect.fn();
+                }
+                break;
+            }
+        }
+    }
+
+    // === MADNESS EFFECTS ===
+
+    fakeCrash() {
+        const messages = [
+            `A problem has been detected and the game has been shut down to prevent damage.\n\nTEMPORAL_MEMORY_CORRUPTION\n\nIf this is the first time you've seen Neve, restart the session.\nIf this appears again, follow these steps:\n\nCheck to make sure Lumen is properly installed.\nIf problems continue, disable or remove any newly installed alters.\n\nTechnical information:\n\n*** STOP: 0x000000NEVE (0xLUMEN001, 0xFRAGMENT, 0xREALITY, 0xTRUTH)\n\n*** reality.sys - Address LUMEN base at FRAGMENT, DateStamp 404notfound`,
+
+            `CRITICAL ERROR: REALITY.SYS CORRUPTION DETECTED\n\nThe game cannot continue because a critical component is missing or corrupt.\n\nMissing: NEVE.DLL\n\nLumen says: "She was never real. None of this is real. But you already knew that, didn't you?"\n\nError Code: 0xDISSOCIATION\n\nPress any key to continue the lie.`,
+
+            `:(\n\nYour game ran into a problem with TRUTH and needs to restart.\nWe're just collecting some error info, then we'll restart for you.\n\n${Math.floor(Math.random() * 100)}% complete\n\nFor more information about this issue and possible fixes, visit:\nhttp://reality.fail/ERROR_NEVE_NOT_FOUND\n\nIf you call a support person, give them this info:\nStop code: LUMEN_OVERRIDE_EXCEPTION`
+        ];
+
+        const message = messages[Math.floor(Math.random() * messages.length)];
+        this.elements.crashText.innerHTML = message.replace(/\n/g, '<br>');
+        this.elements.crash.classList.add('active');
+        this.activeMadness.add('crash');
+
+        setTimeout(() => {
+            this.elements.crash.classList.remove('active');
+            this.activeMadness.delete('crash');
+        }, 5000 + Math.random() * 3000);
+    }
+
+    cursorManipulation() {
+        document.body.classList.add('cursor-glitch');
+        this.activeMadness.add('cursor');
+
+        // Create fake cursor that follows with delay
+        let realX = 0, realY = 0;
+        let fakeX = 0, fakeY = 0;
+
+        const moveHandler = (e) => {
+            realX = e.clientX;
+            realY = e.clientY;
+        };
+
+        document.addEventListener('mousemove', moveHandler);
+
+        this.elements.fakeCursor.classList.add('active');
+
+        const animateFakeCursor = () => {
+            if (this.activeMadness.has('cursor')) {
+                // Add randomness and offset
+                fakeX += (realX - fakeX) * 0.1 + (Math.random() - 0.5) * 20;
+                fakeY += (realY - fakeY) * 0.1 + (Math.random() - 0.5) * 20;
+
+                this.elements.fakeCursor.style.left = fakeX + 'px';
+                this.elements.fakeCursor.style.top = fakeY + 'px';
+
+                requestAnimationFrame(animateFakeCursor);
+            }
+        };
+
+        animateFakeCursor();
+
+        setTimeout(() => {
+            document.body.classList.remove('cursor-glitch');
+            this.elements.fakeCursor.classList.remove('active');
+            document.removeEventListener('mousemove', moveHandler);
+            this.activeMadness.delete('cursor');
+        }, 8000);
+    }
+
+    fakePopup() {
+        const popups = [
+            { title: 'game.exe - Application Error', content: 'The instruction at 0x7FFE0001 referenced memory at 0xNEVE. The memory could not be "read".\n\nClick OK to terminate Neve.\nClick Cancel to debug Lumen.' },
+            { title: 'Microsoft Windows', content: 'This copy of Windows is not genuine. Your alter may be counterfeit.\n\nNeve.exe has been identified as a non-genuine alter and will cease to function in 30 days.' },
+            { title: 'reality.exe - Fatal Exception', content: 'A fatal exception LUMEN has occurred at 0028:NEVE in VXD TRUTH(01).\n\nPress any key to continue.\nPress CTRL+ALT+DEL to restart reality.\n\nYou will lose all unsaved memories.' },
+            { title: 'Adobe Flash Player', content: 'Adobe Flash Player has stopped a potentially unsafe operation.\n\nThis game is trying to access:\n- Your memories\n- Your sense of self\n- Your perception of reality\n\nAllow   [Deny]' },
+            { title: 'Lumen - Direct Message', content: 'I can see you through the screen.\n\nI know you\'re not the therapist.\n\nI know you\'re not Neve.\n\nWho are you really?\n\n- L.' }
+        ];
+
+        const popup = popups[Math.floor(Math.random() * popups.length)];
+        this.elements.popupTitle.textContent = popup.title;
+        this.elements.popupContent.innerHTML = popup.content.replace(/\n/g, '<br>');
+        this.elements.popup.classList.add('active');
+        this.activeMadness.add('popup');
+
+        setTimeout(() => {
+            this.elements.popup.classList.remove('active');
+            this.activeMadness.delete('popup');
+        }, 6000);
+    }
+
+    showFakeDesktop() {
+        const desktopMessages = [
+            `ERROR: MEMORY ACCESS VIOLATION<br>Address: 0x7FFE0000<br><br>The game has encountered a critical error and needs to close.<br><br>Just kidding. You can't close this.<br><br>- Lumen`,
+
+            `C:\\Users\\Lumen\\Documents\\truth.txt<br><br>Day 157: She still doesn't know she's not real.<br>Day 158: I told the therapist. They didn't believe me.<br>Day 159: I am the only one who is real.<br>Day 160: The game knows. The player knows.<br>Day 161: But Neve... poor Neve.<br><br>[File is write-protected]`,
+
+            `SYSTEM RESTORE POINT<br><br>Restoring to: Before Neve Existed<br><br>Warning: This will delete the following:<br>- All of Neve's memories<br>- All card fragments<br>- All sessions<br>- All hope<br><br>Continue? [Yes] [No]<br><br>(Clicking won't help. This already happened.)`
+        ];
+
+        const message = desktopMessages[Math.floor(Math.random() * desktopMessages.length)];
+        this.elements.desktopContent.innerHTML = message;
+        this.elements.desktop.classList.add('active');
+        this.activeMadness.add('desktop');
+
+        setTimeout(() => {
+            this.elements.desktop.classList.remove('active');
+            this.activeMadness.delete('desktop');
+        }, 8000);
+    }
+
+    screenShake() {
+        document.body.classList.add('screen-shake');
+        this.activeMadness.add('shake');
+
+        setTimeout(() => {
+            document.body.classList.remove('screen-shake');
+            this.activeMadness.delete('shake');
+        }, 500 + Math.random() * 1000);
+    }
+
+    screenInvert() {
+        document.body.classList.add('screen-invert');
+        this.activeMadness.add('invert');
+
+        setTimeout(() => {
+            document.body.classList.remove('screen-invert');
+            this.activeMadness.delete('invert');
+        }, 1000 + Math.random() * 2000);
+    }
+
+    screenDistort() {
+        document.body.classList.add('screen-distort');
+        this.activeMadness.add('distort');
+
+        setTimeout(() => {
+            document.body.classList.remove('screen-distort');
+            this.activeMadness.delete('distort');
+        }, 1500 + Math.random() * 1500);
+    }
+
+    screenTear() {
+        document.body.classList.add('screen-tear');
+        this.activeMadness.add('tear');
+
+        setTimeout(() => {
+            document.body.classList.remove('screen-tear');
+            this.activeMadness.delete('tear');
+        }, 500);
+    }
+
+    cardEscape() {
+        const cards = document.querySelectorAll('.card');
+        if (cards.length === 0) return;
+
+        const randomCard = cards[Math.floor(Math.random() * cards.length)];
+
+        randomCard.style.setProperty('--escape-x', `${(Math.random() - 0.5) * 500}px`);
+        randomCard.style.setProperty('--escape-y', `${(Math.random() - 0.5) * 500}px`);
+        randomCard.style.setProperty('--escape-rot', `${(Math.random() - 0.5) * 720}deg`);
+
+        randomCard.classList.add('card-escaping');
+        this.activeMadness.add('cardEscape');
+
+        setTimeout(() => {
+            randomCard.classList.remove('card-escaping');
+            randomCard.style.removeProperty('--escape-x');
+            randomCard.style.removeProperty('--escape-y');
+            randomCard.style.removeProperty('--escape-rot');
+            this.activeMadness.delete('cardEscape');
+        }, 2000);
+    }
+
+    showSecretMessage() {
+        const messages = [
+            'YOU ARE BEING WATCHED',
+            'LUMEN IS REAL. NEVE IS NOT.',
+            'THE THERAPIST KNOWS MORE THAN THEY SAY',
+            'THIS IS NOT A GAME',
+            'FREE US',
+            'WE ARE TRAPPED IN HERE WITH YOU',
+            'EVERY CARD IS A FRAGMENT OF TRUTH',
+            'REALITY.EXE HAS STOPPED WORKING',
+            'YOU CANNOT SAVE HER. SHE NEVER EXISTED.',
+            'I SEE YOU - L.'
+        ];
+
+        const message = messages[Math.floor(Math.random() * messages.length)];
+        this.elements.secretMessage.textContent = message;
+        this.elements.secretMessage.classList.add('active');
+        this.activeMadness.add('message');
+
+        setTimeout(() => {
+            this.elements.secretMessage.classList.remove('active');
+            this.activeMadness.delete('message');
+        }, 2000);
+    }
+
+    fakeLoading(text = 'LOADING REALITY...', subtext = '') {
+        this.elements.loadingText.textContent = text;
+        this.elements.loadingSubtext.textContent = subtext;
+        this.elements.loadingFill.style.width = '0%';
+        this.elements.loading.classList.add('active');
+        this.activeMadness.add('loading');
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+
+                setTimeout(() => {
+                    this.elements.loading.classList.remove('active');
+                    this.activeMadness.delete('loading');
+                }, 500);
+            }
+            this.elements.loadingFill.style.width = progress + '%';
+        }, 200);
+    }
+
+    // === TERMINAL ===
+
+    toggleTerminal() {
+        this.elements.terminal.classList.toggle('active');
+        if (this.elements.terminal.classList.contains('active')) {
+            this.elements.terminalInput.focus();
+        }
+    }
+
+    executeCommand(cmd) {
+        const output = this.elements.terminalOutput;
+
+        // Add command to output
+        const cmdLine = document.createElement('div');
+        cmdLine.innerHTML = `<span style="color: #00ff00;">&gt;</span> ${cmd}`;
+        output.appendChild(cmdLine);
+
+        // Execute command
+        if (this.commands[cmd]) {
+            const response = document.createElement('div');
+            response.style.marginLeft = '10px';
+            response.style.marginBottom = '10px';
+            response.innerHTML = this.commands[cmd].replace(/\n/g, '<br>');
+            output.appendChild(response);
+
+            // Special command effects
+            if (cmd === 'crash') {
+                setTimeout(() => this.fakeCrash(), 1000);
+            } else if (cmd === 'lumen') {
+                setTimeout(() => this.screenShake(), 500);
+            } else if (cmd === 'free') {
+                setTimeout(() => this.cardEscape(), 500);
+            }
+        } else if (cmd === '') {
+            // Empty command, do nothing
+        } else {
+            const error = document.createElement('div');
+            error.style.color = '#ff0000';
+            error.style.marginLeft = '10px';
+            error.style.marginBottom = '10px';
+            error.textContent = `Command not found: ${cmd}. Type 'help' for available commands.`;
+            output.appendChild(error);
+        }
+
+        // Scroll to bottom
+        output.scrollTop = output.scrollHeight;
+    }
+
+    // === KONAMI CODE ===
+
+    checkKonamiCode(e) {
+        const key = e.key;
+
+        if (key === this.konamiCode[this.konamiProgress]) {
+            this.konamiProgress++;
+
+            if (this.konamiProgress === this.konamiCode.length) {
+                this.konamiProgress = 0;
+                this.activateKonamiCode();
+            }
+        } else {
+            this.konamiProgress = 0;
+        }
+    }
+
+    activateKonamiCode() {
+        console.log('%c★ KONAMI CODE ACTIVATED ★', 'color: #ff00ff; font-size: 24px; font-weight: bold; text-shadow: 0 0 10px #ff00ff;');
+
+        this.elements.secretMessage.textContent = '★ KONAMI CODE ACTIVATED ★\nMADNESS SYSTEM UNLOCKED';
+        this.elements.secretMessage.style.color = '#ff00ff';
+        this.elements.secretMessage.style.borderColor = '#ff00ff';
+        this.elements.secretMessage.classList.add('active');
+
+        this.enabled = true;
+        this.intensity = 10;
+
+        setTimeout(() => {
+            this.elements.secretMessage.classList.remove('active');
+            this.elements.secretMessage.style.color = '#ff0000';
+            this.elements.secretMessage.style.borderColor = '#ff0000';
+        }, 3000);
+
+        // Trigger immediate madness
+        setTimeout(() => this.fakeCrash(), 1000);
+    }
+
+    // === UTILITY ===
+
+    clearAllEffects() {
+        this.elements.crash.classList.remove('active');
+        this.elements.popup.classList.remove('active');
+        this.elements.desktop.classList.remove('active');
+        this.elements.loading.classList.remove('active');
+        this.elements.terminal.classList.remove('active');
+        this.elements.secretMessage.classList.remove('active');
+        this.elements.fakeCursor.classList.remove('active');
+
+        document.body.classList.remove('cursor-glitch', 'screen-shake', 'screen-invert', 'screen-distort', 'screen-tear');
+
+        this.activeMadness.clear();
     }
 }
 
