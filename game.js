@@ -923,14 +923,10 @@ class Card {
         cardEl.dataset.cardType = this.type;
         cardEl.dataset.bloodCost = this.bloodCost;
 
-        // Blood cost indicator
+        // Blood cost indicator - Hearthstone style crystal
         let bloodCostHTML = '';
         if (this.bloodCost > 0) {
-            bloodCostHTML = `<div class="blood-cost">`;
-            for (let i = 0; i < this.bloodCost; i++) {
-                bloodCostHTML += `<span class="blood-drop">🩸</span>`;
-            }
-            bloodCostHTML += `</div>`;
+            bloodCostHTML = `<div class="blood-cost" data-cost="${this.bloodCost}"></div>`;
         }
 
         // Sigils
