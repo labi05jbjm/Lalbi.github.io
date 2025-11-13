@@ -10950,8 +10950,8 @@ class Game {
 
     // === GAME FLOW ===
     startNewGame() {
-        // NON mostrare la UI di gioco qui - verrà mostrata dopo l'intro
-        // this.hideMainMenu(); // SPOSTATO in finishIntro()
+        // Hide main menu to show game container (intro dialogue will appear on top)
+        this.hideMainMenu();
 
         // META-NARRATIVE: Increment death loop counter
         this.deathLoopCount++;
