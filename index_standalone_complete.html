@@ -7549,9 +7549,9 @@ Empty Recycle Bin? [Y/N]
                 }
             }
 
-            // F12 = Easter Egg
+            // F12 = Allow DevTools to open (removed preventDefault)
             if (e.key === 'F12') {
-                e.preventDefault();
+                // Don't prevent default - allow browser DevTools to open
                 this.easterEggF12();
             }
 
