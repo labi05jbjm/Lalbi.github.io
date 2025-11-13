@@ -1898,6 +1898,195 @@ body {
     50% { transform: translateX(5px); opacity: 0.7; }
 }
 
+/* === LANGUAGE SELECTOR === */
+.language-selector {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000000;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 1s ease;
+}
+
+.language-selector.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.language-title {
+    font-size: 48px;
+    color: var(--accent-warm);
+    margin-bottom: 60px;
+    text-align: center;
+    font-weight: 300;
+    letter-spacing: 4px;
+    opacity: 0;
+    animation: calligraphy-draw 2s ease forwards;
+}
+
+@keyframes calligraphy-draw {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+        filter: blur(10px);
+    }
+    50% {
+        opacity: 0.5;
+        filter: blur(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+.language-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.language-option {
+    font-size: 32px;
+    padding: 20px 60px;
+    background: transparent;
+    border: 3px solid var(--accent-warm);
+    color: var(--accent-warm);
+    cursor: pointer;
+    font-family: 'Crimson Text', 'Georgia', serif;
+    letter-spacing: 3px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fade-in-option 0.8s ease forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+.language-option:nth-child(1) { animation-delay: 0.3s; }
+.language-option:nth-child(2) { animation-delay: 0.5s; }
+.language-option:nth-child(3) { animation-delay: 0.7s; }
+.language-option:nth-child(4) { animation-delay: 0.9s; }
+.language-option:nth-child(5) { animation-delay: 1.1s; }
+
+@keyframes fade-in-option {
+    0% {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.language-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.language-option:hover {
+    background: rgba(212, 165, 116, 0.15);
+    border-color: #f4d9b0;
+    color: #f4d9b0;
+    transform: translateX(10px);
+    box-shadow: 0 0 30px rgba(212, 165, 116, 0.4);
+}
+
+.language-option:hover::before {
+    left: 100%;
+}
+
+.language-option.selected {
+    background: rgba(212, 165, 116, 0.3);
+    border-color: #f4d9b0;
+    color: #f4d9b0;
+    box-shadow: 0 0 40px rgba(212, 165, 116, 0.6);
+}
+
+/* === LANGUAGE CONFIRMATION === */
+.language-confirmation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.language-confirmation.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.confirmation-message {
+    font-size: 28px;
+    color: var(--accent-danger);
+    text-align: center;
+    margin-bottom: 50px;
+    max-width: 600px;
+    line-height: 1.6;
+    animation: calligraphy-draw 1.5s ease forwards;
+}
+
+.confirmation-buttons {
+    display: flex;
+    gap: 30px;
+}
+
+.confirmation-btn {
+    font-size: 20px;
+    padding: 15px 40px;
+    background: transparent;
+    border: 2px solid var(--text-light);
+    color: var(--text-light);
+    cursor: pointer;
+    font-family: 'Crimson Text', 'Georgia', serif;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fade-in-option 0.8s ease forwards 0.5s;
+}
+
+.confirmation-btn:hover {
+    background: rgba(232, 236, 240, 0.1);
+    border-color: var(--accent-warm);
+    color: var(--accent-warm);
+    box-shadow: 0 0 20px rgba(212, 165, 116, 0.3);
+}
+
+.confirmation-btn.confirm {
+    border-color: var(--accent-warm);
+    color: var(--accent-warm);
+}
+
+.confirmation-btn.confirm:hover {
+    background: rgba(212, 165, 116, 0.2);
+    box-shadow: 0 0 30px rgba(212, 165, 116, 0.5);
+}
+
 /* === CONTENT WARNING === */
 .content-warning {
     background: var(--bg-dark);
@@ -5351,12 +5540,35 @@ body.game-started .hand-container {
         </div>
     </div>
 
+    <!-- LANGUAGE SELECTOR -->
+    <div id="language-selector" class="language-selector">
+        <h1 class="language-title" id="lang-selector-title">SELECT YOUR LANGUAGE</h1>
+        <div class="language-options">
+            <button class="language-option" data-lang="it">ITALIANO</button>
+            <button class="language-option" data-lang="en">ENGLISH</button>
+            <button class="language-option" data-lang="de">DEUTSCH</button>
+            <button class="language-option" data-lang="fr">FRANÇAIS</button>
+            <button class="language-option" data-lang="es">ESPAÑOL</button>
+        </div>
+    </div>
+
+    <!-- LANGUAGE CONFIRMATION -->
+    <div id="language-confirmation" class="language-confirmation">
+        <p class="confirmation-message" id="confirmation-message">
+            Choose carefully, you cannot change it later
+        </p>
+        <div class="confirmation-buttons">
+            <button class="confirmation-btn" id="back-btn">BACK</button>
+            <button class="confirmation-btn confirm" id="confirm-btn">CONFIRM LANGUAGE CHOICE</button>
+        </div>
+    </div>
+
     <!-- CONTENT WARNING -->
-    <div id="content-warning" class="content-warning menu-overlay">
+    <div id="content-warning" class="content-warning menu-overlay hidden">
         <div class="menu-content warning-content">
             <h1 class="warning-title">⚠ AVVISO SUI CONTENUTI</h1>
             <div class="warning-text">
-                <p><strong>Questo gioco contiene rappresentazioni esplicite di:</strong></p>
+                <p id="warning-intro-text"><strong>Questo gioco contiene rappresentazioni esplicite di:</strong></p>
                 <ul>
                     <li>Disturbo Dissociativo dell'Identità (DID)</li>
                     <li>Violenza psicologica e manipolazione emotiva</li>
@@ -5431,14 +5643,6 @@ body.game-started .hand-container {
     <div id="options-menu" class="options-menu menu-overlay hidden">
         <div class="menu-content" style="max-width: 500px;">
             <h2 class="menu-title" style="font-size: 36px;">OPZIONI</h2>
-
-            <div style="text-align: left; margin: 30px 0;">
-                <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--text-muted);">Lingua / Language</label>
-                <select id="language-select" style="width: 100%; padding: 12px; background: rgba(26, 20, 16, 0.8); border: 2px solid var(--border-card); color: var(--text-light); border-radius: 4px; font-size: 14px;">
-                    <option value="it">Italiano</option>
-                    <option value="en">English</option>
-                </select>
-            </div>
 
             <div style="text-align: left; margin: 30px 0;">
                 <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--text-muted);">Volume Effetti: <span id="volume-value">70%</span></label>
@@ -5812,18 +6016,45 @@ y Bar (Top Right) -->
 // === TRANSLATIONS ===
 const TRANSLATIONS = {
     it: {
+        // Language Selector
+        lang_selector_title: "SELEZIONA LA TUA LINGUA",
+        lang_confirm_message: "Scegli con cautela, non potrai cambiarla successivamente",
+        lang_back: "INDIETRO",
+        lang_confirm: "CONFERMO SCELTA LINGUISTICA",
+
         // Content Warning
         warning_title: "⚠ AVVISO SUI CONTENUTI",
+        warning_text_intro: "Questo gioco contiene rappresentazioni esplicite di:",
+        warning_item_1: "Disturbo Dissociativo dell'Identità (DID)",
+        warning_item_2: "Violenza psicologica e manipolazione emotiva",
+        warning_item_3: "Gaslighting e abuso terapeutico",
+        warning_item_4: "Temi di autolesionismo e ideazione suicidaria",
+        warning_item_5: "Frammentazione dell'identità e dissociazione",
+        warning_note_label: "Nota:",
+        warning_note: "Questo è un'opera di fiction interattiva.<br>Se stai vivendo una crisi, contatta un servizio di supporto psicologico.",
+        warning_age: "Sconsigliato a persone sotto i 18 anni o con sensibilità a questi temi.",
         warning_accept: "COMPRENDO, CONTINUA",
         warning_decline: "ESCI",
+        warning_skip: "Salta avviso (ho già letto)",
 
         // Menu
+        menu_title: "NEVE IN THE PORTRAIT",
+        menu_subtitle: '"Il confine tra realtà e frammentazione"',
         menu_new: "NUOVA SESSIONE",
         menu_continue: "CONTINUA SESSIONE",
         menu_options: "OPZIONI",
         menu_about: "INFORMAZIONI",
+        menu_version: "v1.0 | \"Ogni identità è una soglia\"",
 
-        // Game
+        // Options Menu
+        options_title: "OPZIONI",
+        options_volume: "Volume Effetti:",
+        options_text_speed: "Velocità Testo",
+        options_accessibility: "Accessibilità",
+        options_puzzle_hint: "Mostra suggerimento puzzle finale",
+        options_back: "TORNA AL MENU",
+
+        // Game UI
         session_label: "SESSIONE:",
         patient_label: "PAZIENTE: NEVE",
         stability_label: "Stabilità",
@@ -5832,21 +6063,58 @@ const TRANSLATIONS = {
 
         // Actions
         end_turn: "TERMINA TURNO",
-        discard: "SCARTA CARTA"
+        discard: "SCARTA CARTA",
+        pause: "PAUSA",
+
+        // Pause Menu
+        pause_title: "PAUSA",
+        pause_resume: "RIPRENDI",
+        pause_options: "OPZIONI",
+        pause_quit: "ABBANDONA SESSIONE",
+
+        // Gamepad
+        gamepad_active: "Gamepad Attivo"
     },
     en: {
+        // Language Selector
+        lang_selector_title: "SELECT YOUR LANGUAGE",
+        lang_confirm_message: "Choose carefully, you cannot change it later",
+        lang_back: "BACK",
+        lang_confirm: "CONFIRM LANGUAGE CHOICE",
+
         // Content Warning
         warning_title: "⚠ CONTENT WARNING",
+        warning_text_intro: "This game contains explicit representations of:",
+        warning_item_1: "Dissociative Identity Disorder (DID)",
+        warning_item_2: "Psychological violence and emotional manipulation",
+        warning_item_3: "Gaslighting and therapeutic abuse",
+        warning_item_4: "Themes of self-harm and suicidal ideation",
+        warning_item_5: "Identity fragmentation and dissociation",
+        warning_note_label: "Note:",
+        warning_note: "This is an interactive fiction work.<br>If you are experiencing a crisis, contact a psychological support service.",
+        warning_age: "Not recommended for persons under 18 or sensitive to these themes.",
         warning_accept: "I UNDERSTAND, CONTINUE",
         warning_decline: "EXIT",
+        warning_skip: "Skip warning (already read)",
 
         // Menu
+        menu_title: "SNOW IN THE PORTRAIT",
+        menu_subtitle: '"The boundary between reality and fragmentation"',
         menu_new: "NEW SESSION",
         menu_continue: "CONTINUE SESSION",
         menu_options: "OPTIONS",
         menu_about: "ABOUT",
+        menu_version: 'v1.0 | "Every identity is a threshold"',
 
-        // Game
+        // Options Menu
+        options_title: "OPTIONS",
+        options_volume: "Effects Volume:",
+        options_text_speed: "Text Speed",
+        options_accessibility: "Accessibility",
+        options_puzzle_hint: "Show final puzzle hint",
+        options_back: "BACK TO MENU",
+
+        // Game UI
         session_label: "SESSION:",
         patient_label: "PATIENT: SNOW",
         stability_label: "Stability",
@@ -5855,12 +6123,353 @@ const TRANSLATIONS = {
 
         // Actions
         end_turn: "END TURN",
-        discard: "DISCARD CARD"
+        discard: "DISCARD CARD",
+        pause: "PAUSE",
+
+        // Pause Menu
+        pause_title: "PAUSE",
+        pause_resume: "RESUME",
+        pause_options: "OPTIONS",
+        pause_quit: "ABANDON SESSION",
+
+        // Gamepad
+        gamepad_active: "Gamepad Active"
+    },
+    de: {
+        // Language Selector
+        lang_selector_title: "WÄHLE DEINE SPRACHE",
+        lang_confirm_message: "Wähle sorgfältig, du kannst sie später nicht ändern",
+        lang_back: "ZURÜCK",
+        lang_confirm: "SPRACHWAHL BESTÄTIGEN",
+
+        // Content Warning
+        warning_title: "⚠ INHALTSWARNUNG",
+        warning_text_intro: "Dieses Spiel enthält explizite Darstellungen von:",
+        warning_item_1: "Dissoziative Identitätsstörung (DIS)",
+        warning_item_2: "Psychische Gewalt und emotionale Manipulation",
+        warning_item_3: "Gaslighting und therapeutischer Missbrauch",
+        warning_item_4: "Themen wie Selbstverletzung und Suizidgedanken",
+        warning_item_5: "Identitätsfragmentierung und Dissoziation",
+        warning_note_label: "Hinweis:",
+        warning_note: "Dies ist ein interaktives Fiktionswerk.<br>Wenn Sie eine Krise erleben, wenden Sie sich an einen psychologischen Unterstützungsdienst.",
+        warning_age: "Nicht empfohlen für Personen unter 18 Jahren oder mit Empfindlichkeit gegenüber diesen Themen.",
+        warning_accept: "ICH VERSTEHE, FORTFAHREN",
+        warning_decline: "VERLASSEN",
+        warning_skip: "Warnung überspringen (bereits gelesen)",
+
+        // Menu
+        menu_title: "SCHNEE IM PORTRÄT",
+        menu_subtitle: '"Die Grenze zwischen Realität und Fragmentierung"',
+        menu_new: "NEUE SITZUNG",
+        menu_continue: "SITZUNG FORTSETZEN",
+        menu_options: "OPTIONEN",
+        menu_about: "ÜBER",
+        menu_version: 'v1.0 | "Jede Identität ist eine Schwelle"',
+
+        // Options Menu
+        options_title: "OPTIONEN",
+        options_volume: "Effektlautstärke:",
+        options_text_speed: "Textgeschwindigkeit",
+        options_accessibility: "Barrierefreiheit",
+        options_puzzle_hint: "Zeige Hinweis zum finalen Rätsel",
+        options_back: "ZURÜCK ZUM MENÜ",
+
+        // Game UI
+        session_label: "SITZUNG:",
+        patient_label: "PATIENT: SCHNEE",
+        stability_label: "Stabilität",
+        fragments_label: "Fragmente",
+        round_label: "Runde",
+
+        // Actions
+        end_turn: "ZUG BEENDEN",
+        discard: "KARTE ABWERFEN",
+        pause: "PAUSE",
+
+        // Pause Menu
+        pause_title: "PAUSE",
+        pause_resume: "FORTSETZEN",
+        pause_options: "OPTIONEN",
+        pause_quit: "SITZUNG VERLASSEN",
+
+        // Gamepad
+        gamepad_active: "Gamepad Aktiv"
+    },
+    fr: {
+        // Language Selector
+        lang_selector_title: "SÉLECTIONNEZ VOTRE LANGUE",
+        lang_confirm_message: "Choisissez avec prudence, vous ne pourrez pas la changer plus tard",
+        lang_back: "RETOUR",
+        lang_confirm: "CONFIRMER LE CHOIX DE LANGUE",
+
+        // Content Warning
+        warning_title: "⚠ AVERTISSEMENT DE CONTENU",
+        warning_text_intro: "Ce jeu contient des représentations explicites de:",
+        warning_item_1: "Trouble Dissociatif de l'Identité (TDI)",
+        warning_item_2: "Violence psychologique et manipulation émotionnelle",
+        warning_item_3: "Gaslighting et abus thérapeutique",
+        warning_item_4: "Thèmes d'automutilation et d'idéation suicidaire",
+        warning_item_5: "Fragmentation de l'identité et dissociation",
+        warning_note_label: "Note:",
+        warning_note: "Ceci est une œuvre de fiction interactive.<br>Si vous vivez une crise, contactez un service de soutien psychologique.",
+        warning_age: "Déconseillé aux personnes de moins de 18 ans ou sensibles à ces thèmes.",
+        warning_accept: "JE COMPRENDS, CONTINUER",
+        warning_decline: "QUITTER",
+        warning_skip: "Passer l'avertissement (déjà lu)",
+
+        // Menu
+        menu_title: "NEIGE DANS LE PORTRAIT",
+        menu_subtitle: '"La frontière entre réalité et fragmentation"',
+        menu_new: "NOUVELLE SESSION",
+        menu_continue: "CONTINUER LA SESSION",
+        menu_options: "OPTIONS",
+        menu_about: "À PROPOS",
+        menu_version: 'v1.0 | "Chaque identité est un seuil"',
+
+        // Options Menu
+        options_title: "OPTIONS",
+        options_volume: "Volume des Effets:",
+        options_text_speed: "Vitesse du Texte",
+        options_accessibility: "Accessibilité",
+        options_puzzle_hint: "Afficher l'indice du puzzle final",
+        options_back: "RETOUR AU MENU",
+
+        // Game UI
+        session_label: "SESSION:",
+        patient_label: "PATIENT: NEIGE",
+        stability_label: "Stabilité",
+        fragments_label: "Fragments",
+        round_label: "Tour",
+
+        // Actions
+        end_turn: "TERMINER LE TOUR",
+        discard: "DÉFAUSSER UNE CARTE",
+        pause: "PAUSE",
+
+        // Pause Menu
+        pause_title: "PAUSE",
+        pause_resume: "REPRENDRE",
+        pause_options: "OPTIONS",
+        pause_quit: "ABANDONNER LA SESSION",
+
+        // Gamepad
+        gamepad_active: "Manette Active"
+    },
+    es: {
+        // Language Selector
+        lang_selector_title: "SELECCIONA TU IDIOMA",
+        lang_confirm_message: "Elige con cuidado, no podrás cambiarlo después",
+        lang_back: "ATRÁS",
+        lang_confirm: "CONFIRMAR ELECCIÓN DE IDIOMA",
+
+        // Content Warning
+        warning_title: "⚠ ADVERTENCIA DE CONTENIDO",
+        warning_text_intro: "Este juego contiene representaciones explícitas de:",
+        warning_item_1: "Trastorno de Identidad Disociativo (TID)",
+        warning_item_2: "Violencia psicológica y manipulación emocional",
+        warning_item_3: "Gaslighting y abuso terapéutico",
+        warning_item_4: "Temas de autolesión e ideación suicida",
+        warning_item_5: "Fragmentación de la identidad y disociación",
+        warning_note_label: "Nota:",
+        warning_note: "Esta es una obra de ficción interactiva.<br>Si estás viviendo una crisis, contacta un servicio de apoyo psicológico.",
+        warning_age: "No recomendado para personas menores de 18 años o sensibles a estos temas.",
+        warning_accept: "COMPRENDO, CONTINUAR",
+        warning_decline: "SALIR",
+        warning_skip: "Saltar advertencia (ya leída)",
+
+        // Menu
+        menu_title: "NIEVE EN EL RETRATO",
+        menu_subtitle: '"El límite entre realidad y fragmentación"',
+        menu_new: "NUEVA SESIÓN",
+        menu_continue: "CONTINUAR SESIÓN",
+        menu_options: "OPCIONES",
+        menu_about: "ACERCA DE",
+        menu_version: 'v1.0 | "Cada identidad es un umbral"',
+
+        // Options Menu
+        options_title: "OPCIONES",
+        options_volume: "Volumen de Efectos:",
+        options_text_speed: "Velocidad del Texto",
+        options_accessibility: "Accesibilidad",
+        options_puzzle_hint: "Mostrar pista del puzzle final",
+        options_back: "VOLVER AL MENÚ",
+
+        // Game UI
+        session_label: "SESIÓN:",
+        patient_label: "PACIENTE: NIEVE",
+        stability_label: "Estabilidad",
+        fragments_label: "Fragmentos",
+        round_label: "Ronda",
+
+        // Actions
+        end_turn: "TERMINAR TURNO",
+        discard: "DESCARTAR CARTA",
+        pause: "PAUSA",
+
+        // Pause Menu
+        pause_title: "PAUSA",
+        pause_resume: "REANUDAR",
+        pause_options: "OPCIONES",
+        pause_quit: "ABANDONAR SESIÓN",
+
+        // Gamepad
+        gamepad_active: "Gamepad Activo"
     }
 };
 
-// Current language
-let currentLang = 'it';
+// Current language - will be set by language selector
+let currentLang = null;
+
+// Helper function to get translation
+function t(key) {
+    if (!currentLang) return key;
+    return TRANSLATIONS[currentLang][key] || key;
+}
+
+// === LANGUAGE SELECTOR LOGIC ===
+function initLanguageSelector() {
+    const selector = document.getElementById('language-selector');
+    const confirmation = document.getElementById('language-confirmation');
+    const langTitle = document.getElementById('lang-selector-title');
+    const confirmMessage = document.getElementById('confirmation-message');
+    const backBtn = document.getElementById('back-btn');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const languageOptions = document.querySelectorAll('.language-option');
+
+    let selectedLang = null;
+
+    // Check if language was already selected
+    const savedLang = localStorage.getItem('selectedLanguage');
+    if (savedLang && TRANSLATIONS[savedLang]) {
+        currentLang = savedLang;
+        selector.style.display = 'none';
+        confirmation.style.display = 'none';
+        applyTranslations();
+        return;
+    }
+
+    // Language selection
+    languageOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            languageOptions.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+            selectedLang = option.dataset.lang;
+
+            // Update confirmation screen with selected language
+            setTimeout(() => {
+                confirmMessage.textContent = TRANSLATIONS[selectedLang].lang_confirm_message;
+                backBtn.textContent = TRANSLATIONS[selectedLang].lang_back;
+                confirmBtn.textContent = TRANSLATIONS[selectedLang].lang_confirm;
+
+                // Show confirmation
+                confirmation.classList.add('show');
+            }, 300);
+        });
+    });
+
+    // Back button
+    backBtn.addEventListener('click', () => {
+        confirmation.classList.remove('show');
+        languageOptions.forEach(opt => opt.classList.remove('selected'));
+        selectedLang = null;
+    });
+
+    // Confirm button
+    confirmBtn.addEventListener('click', () => {
+        if (selectedLang) {
+            currentLang = selectedLang;
+            localStorage.setItem('selectedLanguage', selectedLang);
+
+            // Fade out both screens
+            confirmation.classList.remove('show');
+            setTimeout(() => {
+                selector.classList.add('fade-out');
+                setTimeout(() => {
+                    selector.style.display = 'none';
+                    confirmation.style.display = 'none';
+                    applyTranslations();
+                    // Show content warning after language selection
+                    document.getElementById('content-warning').classList.remove('hidden');
+                }, 1000);
+            }, 500);
+        }
+    });
+}
+
+// Apply translations to all static UI elements
+function applyTranslations() {
+    if (!currentLang) return;
+
+    // Content Warning
+    const warningTitle = document.querySelector('.warning-title');
+    const warningIntroText = document.getElementById('warning-intro-text');
+    const warningList = document.querySelector('.warning-content ul');
+    const warningNote = document.querySelector('.warning-content p[style*="margin-top: 20px"]');
+    const warningAge = document.querySelector('.warning-content p[style*="color: var(--accent-danger)"]');
+    const acceptBtn = document.getElementById('accept-warning-btn');
+    const declineBtn = document.getElementById('decline-warning-btn');
+    const skipLink = document.getElementById('skip-warning-link');
+
+    if (warningTitle) warningTitle.textContent = t('warning_title');
+    if (warningIntroText) warningIntroText.innerHTML = `<strong>${t('warning_text_intro')}</strong>`;
+    if (warningList) {
+        warningList.innerHTML = `
+            <li>${t('warning_item_1')}</li>
+            <li>${t('warning_item_2')}</li>
+            <li>${t('warning_item_3')}</li>
+            <li>${t('warning_item_4')}</li>
+            <li>${t('warning_item_5')}</li>
+        `;
+    }
+    if (warningNote) warningNote.innerHTML = `<strong>${t('warning_note_label')}</strong> ${t('warning_note')}`;
+    if (warningAge) warningAge.textContent = t('warning_age');
+    if (acceptBtn) acceptBtn.textContent = t('warning_accept');
+    if (declineBtn) declineBtn.textContent = t('warning_decline');
+    if (skipLink) skipLink.textContent = t('warning_skip');
+
+    // Main Menu
+    const menuTitle = document.querySelector('.menu-title');
+    const menuSubtitle = document.querySelector('#main-menu p[style*="font-style: italic"]');
+    const newGameBtn = document.getElementById('new-game-btn');
+    const continueBtn = document.getElementById('continue-btn');
+    const optionsBtn = document.getElementById('options-btn');
+    const aboutBtn = document.getElementById('about-game-btn');
+    const versionText = document.querySelector('#main-menu p[style*="margin-top: 40px"]');
+
+    if (menuTitle) menuTitle.textContent = t('menu_title');
+    if (menuSubtitle) menuSubtitle.textContent = t('menu_subtitle');
+    if (newGameBtn) newGameBtn.textContent = t('menu_new');
+    if (continueBtn) continueBtn.textContent = t('menu_continue');
+    if (optionsBtn) optionsBtn.textContent = t('menu_options');
+    if (aboutBtn) aboutBtn.textContent = t('menu_about');
+    if (versionText) versionText.innerHTML = t('menu_version');
+
+    // Options Menu
+    const optionsTitle = document.querySelector('#options-menu .menu-title');
+    if (optionsTitle) optionsTitle.textContent = t('options_title');
+
+    // Game UI
+    const endTurnBtn = document.getElementById('end-turn-btn');
+    const discardBtn = document.getElementById('discard-btn');
+    const pauseBtn = document.getElementById('pause-btn');
+    const gamepadIndicator = document.querySelector('#gamepad-indicator span');
+
+    if (endTurnBtn) endTurnBtn.textContent = t('end_turn');
+    if (discardBtn) discardBtn.textContent = t('discard');
+    if (pauseBtn) pauseBtn.textContent = t('pause');
+    if (gamepadIndicator) gamepadIndicator.textContent = t('gamepad_active');
+
+    // Pause Menu
+    const pauseTitle = document.querySelector('#pause-menu .menu-title');
+    const resumeBtn = document.getElementById('resume-btn');
+    const pauseOptionsBtn = document.getElementById('pause-options-btn');
+    const quitBtn = document.getElementById('quit-btn');
+
+    if (pauseTitle) pauseTitle.textContent = t('pause_title');
+    if (resumeBtn) resumeBtn.textContent = t('pause_resume');
+    if (pauseOptionsBtn) pauseOptionsBtn.textContent = t('pause_options');
+    if (quitBtn) quitBtn.textContent = t('pause_quit');
+}
 
 // === INTRO SEQUENCE ===
 const IntroSequence = [
@@ -8401,7 +9010,6 @@ class Game {
 
             // Options menu
             optionsMenu: document.getElementById('options-menu'),
-            languageSelect: document.getElementById('language-select'),
             volumeSlider: document.getElementById('volume-slider'),
             volumeValue: document.getElementById('volume-value'),
             textSpeedSelect: document.getElementById('text-speed-select'),
@@ -8527,9 +9135,6 @@ class Game {
         // Options
         if (this.elements.closeOptionsBtn) {
             this.elements.closeOptionsBtn.addEventListener('click', () => this.hideOptions());
-        }
-        if (this.elements.languageSelect) {
-            this.elements.languageSelect.addEventListener('change', (e) => this.changeLanguage(e.target.value));
         }
         if (this.elements.volumeSlider && this.elements.volumeValue) {
             this.elements.volumeSlider.addEventListener('input', (e) => {
@@ -13007,6 +13612,9 @@ else if (this.round >= 10) { cardsToPlay = 2;
 let game;
 let madnessSystem;
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Language Selector FIRST
+    initLanguageSelector();
+
     game = new Game();
     window.game = game; // For debugging
 
