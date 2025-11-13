@@ -1,3 +1,12 @@
+<!-- 
+=========================================
+NEVE IN THE PORTRAIT - v1.0.1 (Fixed)
+=========================================
+Fix implementati:
+1. Corretto il problema della mano a ventaglio dove le carte apparivano allungate/strette
+   quando ce n'erano molte nella mano. Il sistema ora adatta dinamicamente la posizione
+   delle carte in base al loro numero, mantenendo proporzioni visive costanti.
+-->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -523,76 +532,35 @@ body {
 }
 
 /* Hand card positioning (fan effect) - HEARTHSTONE STYLE: ventaglio compatto senza sbordamenti */
-#neve-hand .card:nth-child(1) {
-    transform: translateX(-100px) translateY(6px) rotate(-10deg);
-    z-index: 1;
-}
-
-#neve-hand .card:nth-child(2) {
-    transform: translateX(-75px) translateY(4px) rotate(-7deg);
-    z-index: 2;
-}
-
-#neve-hand .card:nth-child(3) {
-    transform: translateX(-50px) translateY(2px) rotate(-4deg);
-    z-index: 3;
-}
-
-#neve-hand .card:nth-child(4) {
-    transform: translateX(-25px) translateY(1px) rotate(-2deg);
-    z-index: 4;
-}
-
-#neve-hand .card:nth-child(5) {
-    transform: translateX(0px) translateY(0px) rotate(0deg);
-    z-index: 5;
-}
-
-#neve-hand .card:nth-child(6) {
-    transform: translateX(25px) translateY(1px) rotate(2deg);
-    z-index: 6;
-}
-
-#neve-hand .card:nth-child(7) {
-    transform: translateX(50px) translateY(2px) rotate(4deg);
-    z-index: 7;
-}
-
-#neve-hand .card:nth-child(8) {
-    transform: translateX(75px) translateY(4px) rotate(7deg);
-    z-index: 8;
-}
-
-/* Extended fan: overlap progressivo per più carte */
-#neve-hand .card:nth-child(9) {
-    transform: translateX(100px) translateY(6px) rotate(10deg);
-    z-index: 9;
-}
-
-#neve-hand .card:nth-child(10) {
-    transform: translateX(125px) translateY(8px) rotate(13deg);
-    z-index: 10;
-}
-
-#neve-hand .card:nth-child(11) {
-    transform: translateX(150px) translateY(10px) rotate(16deg);
-    z-index: 11;
-}
-
-#neve-hand .card:nth-child(12) {
-    transform: translateX(175px) translateY(12px) rotate(19deg);
-    z-index: 12;
-}
-
-/* Fallback per carte 13+ */
+/* Rimuove le trasformazioni statiche per supportare il posizionamento dinamico */
+#neve-hand .card:nth-child(1),
+#neve-hand .card:nth-child(2),
+#neve-hand .card:nth-child(3),
+#neve-hand .card:nth-child(4),
+#neve-hand .card:nth-child(5),
+#neve-hand .card:nth-child(6),
+#neve-hand .card:nth-child(7),
+#neve-hand .card:nth-child(8),
+#neve-hand .card:nth-child(9),
+#neve-hand .card:nth-child(10),
+#neve-hand .card:nth-child(11),
+#neve-hand .card:nth-child(12),
 #neve-hand .card:nth-child(n+13) {
-    transform: translateX(200px) translateY(14px) rotate(22deg);
-    z-index: 13;
+    /* Trasformazioni rimosse - saranno gestite dinamicamente da JavaScript */
+    position: absolute;
+    transition: transform 0.3s ease, z-index 0.3s ease;
+    /* Manteniamo le dimensioni originali */
+    width: 220px;
+    height: 330px;
 }
 
-/* Card hover in hand - HEARTHSTONE STYLE */
+/* Card hover in hand - DYNAMIC STYLE */
 #neve-hand .card:hover {
     transform: translateX(var(--card-x, 0)) translateY(-60px) rotate(0deg) scale(1.15) !important;
+    z-index: 100 !important;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7),
+                0 0 15px rgba(122, 186, 204, 0.7);
+}
     z-index: 100 !important;
 }
 
@@ -630,19 +598,7 @@ body {
 }
 
 /* Store original x position for hover */
-#neve-hand .card:nth-child(1) { --card-x: -105px; }
-#neve-hand .card:nth-child(2) { --card-x: -70px; }
-#neve-hand .card:nth-child(3) { --card-x: -35px; }
-#neve-hand .card:nth-child(4) { --card-x: 0px; }
-#neve-hand .card:nth-child(5) { --card-x: 35px; }
-#neve-hand .card:nth-child(6) { --card-x: 70px; }
-#neve-hand .card:nth-child(7) { --card-x: 105px; }
-#neve-hand .card:nth-child(8) { --card-x: 140px; }
-#neve-hand .card:nth-child(9) { --card-x: 175px; }
-#neve-hand .card:nth-child(10) { --card-x: 210px; }
-#neve-hand .card:nth-child(11) { --card-x: 245px; }
-#neve-hand .card:nth-child(12) { --card-x: 280px; }
-#neve-hand .card:nth-child(n+13) { --card-x: 315px; }
+/* Le posizioni delle carte sono ora gestite dinamicamente via JavaScript */
 
 /* Card being dragged */
 .card.dragging {
@@ -966,12 +922,13 @@ body {
 /* === CARD SIGILS === HEARTHSTONE STYLE */
 .card-sigils {
     position: absolute;
-    bottom: 75px; /* Sopra la name plate - alzato per evitare sovrapposizione */
+    bottom: 100px; /* FIX: Alzato ulteriormente per non coprire il nome (name plate è a 10px, quindi 100px lascia spazio) */
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 5px;
     z-index: 6;
+    max-width: calc(100% - 20px); /* Evita che i sigilli escano dai bordi */
 }
 
 .sigil {
@@ -1009,8 +966,9 @@ body {
 /* Sigils per carte sul campo */
 .player-field .card-sigils,
 .opponent-field .card-sigils {
-    bottom: 40px;
+    bottom: 50px; /* FIX: Alzato per non coprire il nome (name plate è a 8px) */
     gap: 4px;
+    max-width: calc(100% - 16px);
 }
 
 .player-field .sigil,
@@ -1047,7 +1005,8 @@ body {
         0 4px 10px rgba(0, 0, 0, 0.7),
         inset 0 2px 3px rgba(255, 245, 220, 0.3),
         inset 0 -2px 3px rgba(0, 0, 0, 0.4);
-    z-index: 5;
+    z-index: 7; /* FIX: z-index più alto dei sigilli (6) per essere sempre visibile */
+    min-height: 32px; /* FIX: Altezza minima per contenere nome e artista */
 }
 
 .card-name {
@@ -1478,6 +1437,44 @@ body {
     padding: 10px 15px;
     padding-top: 40px;
     overflow: hidden;
+}
+
+/* Event log expanded full state */
+.event-log.expanded-full {
+    max-height: 70vh !important; /* FIX: Mostra tutto il log quando espanso completamente */
+    width: 400px; /* FIX: Larghezza maggiore per migliore leggibilità */
+    padding-top: 50px; /* FIX: Spazio per entrambi i pulsanti */
+}
+
+/* Event log expand full button */
+.event-log-expand-full {
+    position: absolute;
+    top: 8px;
+    right: 42px; /* FIX: Posizionato a sinistra del toggle */
+    width: 28px;
+    height: 28px;
+    background: rgba(90, 138, 164, 0.2);
+    border: 2px solid rgba(90, 138, 164, 0.4);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    color: var(--text-light);
+    font-size: 16px;
+    padding: 0;
+}
+
+.event-log-expand-full:hover {
+    background: rgba(90, 138, 164, 0.4);
+    border-color: rgba(90, 138, 164, 0.8);
+    transform: scale(1.1);
+}
+
+.event-log-expand-full:active {
+    transform: scale(0.95);
 }
 
 /* Event log toggle button */
@@ -2773,13 +2770,21 @@ body.game-started .game-stats {
     0% {
         transform: scale(1) rotate(0deg);
         opacity: 1;
+        filter: brightness(1) blur(0px);
     }
-    25% {
-        transform: scale(1.1) rotate(-5deg);
+    15% {
+        transform: scale(1.15) rotate(-8deg);
+        filter: brightness(1.3) blur(1px);
+    }
+    30% {
+        transform: scale(1.2) rotate(8deg);
+        opacity: 0.9;
+        filter: brightness(1.5) blur(2px);
     }
     50% {
-        transform: scale(0.95) rotate(5deg);
-        opacity: 0.7;
+        transform: scale(0.9) rotate(-10deg);
+        opacity: 0.6;
+        filter: brightness(0.7) blur(3px);
     }
     75% {
         transform: scale(0.8) rotate(-3deg);
@@ -2833,18 +2838,52 @@ body.game-started .game-stats {
 
 /* Sigil activation glow */
 @keyframes sigil-activate {
-    0%, 100% {
+    0% {
         box-shadow: 0 0 10px rgba(212, 165, 116, 0.5);
-        transform: scale(1);
+        transform: scale(1) rotate(0deg);
+        filter: brightness(1);
+    }
+    25% {
+        box-shadow: 0 0 40px rgba(212, 165, 116, 1), 0 0 60px rgba(212, 165, 116, 0.8), 0 0 80px rgba(90, 138, 164, 0.6);
+        transform: scale(1.15) rotate(-2deg);
+        filter: brightness(1.4);
     }
     50% {
-        box-shadow: 0 0 30px rgba(212, 165, 116, 1), 0 0 50px rgba(212, 165, 116, 0.6);
-        transform: scale(1.05);
+        box-shadow: 0 0 50px rgba(212, 165, 116, 1), 0 0 70px rgba(212, 165, 116, 0.9), 0 0 100px rgba(90, 138, 164, 0.7);
+        transform: scale(1.2) rotate(2deg);
+        filter: brightness(1.6);
+    }
+    75% {
+        box-shadow: 0 0 40px rgba(212, 165, 116, 1), 0 0 60px rgba(212, 165, 116, 0.8);
+        transform: scale(1.1) rotate(-1deg);
+        filter: brightness(1.3);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(212, 165, 116, 0.5);
+        transform: scale(1) rotate(0deg);
+        filter: brightness(1);
     }
 }
 
 .card.sigil-active {
-    animation: sigil-activate 1s ease;
+    animation: sigil-activate 0.8s ease;
+    z-index: 1000;
+}
+
+/* Sigil icon pulse animation */
+.sigil.sigil-triggered {
+    animation: sigil-icon-pulse 0.6s ease;
+}
+
+@keyframes sigil-icon-pulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.4) rotate(10deg);
+        filter: brightness(1.8) drop-shadow(0 0 10px rgba(212, 165, 116, 1));
+    }
 }
 
 /* Card sacrifice smoke effect */
@@ -5008,7 +5047,7 @@ body.game-started .hand-container {
         0 4px 12px rgba(0, 0, 0, 0.8),
         inset 0 2px 4px rgba(255, 255, 255, 0.3),
         inset 0 -2px 4px rgba(0, 0, 0, 0.5);
-    transform: translateY(50%);
+    transform: translateY(25%); /* FIX: Ridotto da 50% a 25% per non far uscire le statistiche dalla carta */
 }
 
 /* Attack Stat - Cristallo Rosso in basso a sinistra */
@@ -5925,12 +5964,12 @@ y Bar (Top Right) -->
             <!-- Blood Currency Indicator -->
             <div id="blood-currency-indicator" style="position: fixed; top: 260px; left: 20px; background: rgba(138, 74, 58, 0.9); border: 2px solid rgba(212, 165, 116, 0.8); border-radius: 8px; padding: 8px 15px; display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: bold; color: var(--text-light); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); z-index: 150;">
                 <span style="font-size: 20px;">🩸</span>
-                <span>Sangue: <span id="blood-currency-count">0</span></span>
+                <span id="blood-label-text">Sangue: <span id="blood-currency-count">0</span></span>
             </div>
 
             <div class="action-buttons">
-                <button id="end-turn-btn" class="action-btn" data-tooltip="Termina il tuo turno e inizia la fase di combattimento">TERMINA TURNO</button>
-                <button id="discard-btn" class="action-btn" data-tooltip="Scarta una carta dalla tua mano per pescare una nuova carta o sacrificarla">SCARTA</button>
+                <button id="end-turn-btn" class="action-btn" data-tooltip="">TERMINA TURNO</button>
+                <button id="discard-btn" class="action-btn" data-tooltip="">SCARTA</button>
             </div>
 
             <!-- Therapist Hand (Far side, cards face down) -->
@@ -5950,19 +5989,22 @@ y Bar (Top Right) -->
 
             <!-- Event Log (Bottom Left) -->
             <div id="event-log" class="event-log collapsed">
-                <button id="event-log-toggle" class="event-log-toggle" aria-label="Comprimi/Espandi log eventi">
+                <button id="event-log-toggle" class="event-log-toggle" aria-label="">
                     <span class="toggle-icon">▼</span>
+                </button>
+                <button id="event-log-expand-full" class="event-log-expand-full" aria-label="">
+                    📜
                 </button>
             </div>
 
             <!-- Game Stats (Bottom Right) -->
             <div class="game-stats">
                 <div class="stat-box">
-                    <div class="stat-label">FRAMMENTI</div>
+                    <div class="stat-label" id="fragments-label">FRAMMENTI</div>
                     <div id="fragments-count" class="stat-value">0</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">ROUND</div>
+                    <div class="stat-label" id="round-label-stat">ROUND</div>
                     <div id="round-count" class="stat-value">1</div>
                 </div>
             </div>
@@ -6048,11 +6090,231 @@ const TRANSLATIONS = {
         // Gamepad
         gamepad_active: "Gamepad Attivo",
 
+        // Game UI Additional
+        blood_label: "Sangue:",
+        fragments_stat: "FRAMMENTI",
+        round_stat: "ROUND",
+        event_log_toggle: "Comprimi/Espandi log eventi",
+        event_log_expand: "Espandi log completo",
+        end_turn_tooltip: "Termina il tuo turno e inizia la fase di combattimento",
+        discard_tooltip: "Scarta una carta dalla tua mano per pescare una nuova carta o sacrificarla",
+
+        // Game Messages
+        turno_terapista: "=== Turno del Terapista ===",
+        risoluzione: "=== Risoluzione ===",
+        attacca_direttamente: "attacca direttamente!",
+        ti_attacca: "ti attacca!",
+        e_stato_distrutto: "è stato distrutto!",
+        nemico_distrutto: "nemico è stato distrutto!",
+        gioca: "gioca:",
+        non_tuo_turno: "Non è il tuo turno!",
+        round_label_full: "=== ROUND",
+        sessione_inizia: "La sessione di gioco inizia...",
+        
+        // Combat Messages
+        raddoppia_attacco: "raddoppia l'attacco contro",
+        colpisce_precisione: "colpisce con precisione (+2 ATK contro eco)!",
+        e_silenziata: "è silenziata!",
+        si_difende: "si difende!",
+        uccide_istantaneamente: "uccide istantaneamente",
+        subisce_danni: "subisce",
+        danni: "danni",
+        crea_copia: "crea una copia di se stessa!",
+
         // Poetic Sequence
         poetic_messages: [
             "Ringrazio te, statua Greca che hai colmato di dolci speranze il mio cuore, e l'hai trattato come carta straccia. Ringrazio te, fogliolina, per aver strappato parti di me che non riavrò mai più. Ringrazio te, Kiki, per aver assaporato il mio nettare, per poi averlo trasformato in veleno.",
             "Ora mi rivolgo a te, utente che hai scelto di giocare a questo prodotto. Nel caso in cui tu l'abbia pagato, ti sono grato per il rispetto e la fiducia. Nel caso in cui tu l'abbia preso craccato, non posso biasimarti. In entrambi i casi, con tutto il cuore, ti auguro una buona esperienza di gioco.",
             "Che tu possa sentirti accolto. Che tu possa sentirti compreso, talvolta. Che tu possa sentirti ascoltato."
+        ],
+
+        // Intro Sequence
+        intro_step1_text: "Buongiorno Neve. Come ti senti oggi?",
+        intro_step1_continue: "...",
+        intro_step2_text: "Vedo che sei... stanca. È stato un periodo difficile, vero?",
+        intro_step2_continue: "...",
+        intro_step3_text: "Oggi vorrei provare qualcosa di diverso con te. Qualcosa che potrebbe aiutarci a esplorare certi... aspetti nascosti.",
+        intro_step3_continue: "Cosa intende?",
+        intro_step4_text: "Ho preparato un gioco. Un gioco di carte. So che può sembrare poco convenzionale, ma fidati di me. Sarà... illuminante.",
+        intro_choice1_text: "Un gioco? Non capisco come potrebbe aiutarmi...",
+        intro_choice2_text: "Va bene, sono disposta a provare.",
+        intro_choice3_text: "Mi sembra poco professionale. È davvero necessario?",
+        intro_finish: "Bene. Iniziamo.",
+
+        // Therapist Dialogues - Phase 1
+        therapist_phase1: [
+            "Buongiorno Neve. Come ti senti oggi?",
+            "Sono contento che tu sia qui. Oggi vorrei provare qualcosa di nuovo con te.",
+            "Ho preparato un gioco di carte. Potrebbe aiutarci ad esplorare alcuni aspetti della tua identità.",
+            "Non preoccuparti, è solo un gioco. Un modo più... creativo di lavorare insieme.",
+            "Le regole sono semplici. Giocheremo a turni, come in una normale partita a carte.",
+            "Ogni carta rappresenta qualcosa. Aspetti di te, forse. O forse no.",
+            "Iniziamo, va bene? Prenditi il tuo tempo.",
+            "Ottima mossa, Neve. Vedo che stai iniziando a capire.",
+            "Non c'è fretta. Abbiamo tutto il tempo che ci serve.",
+            "Ricorda: sono qui per aiutarti.",
+            "Bene, vedo che stai prendendo confidenza con le carte.",
+            "Ogni turno è un passo avanti. Non importa quanto piccolo.",
+            "Sono curioso di vedere quale carta sceglierai questa volta.",
+            "Non devi avere paura di sbagliare. Non c'è un modo giusto o sbagliato di giocare.",
+            "Le tue scelte sono importanti, Neve. Ogni carta conta.",
+            "Stai facendo progressi. Continua così.",
+            "Prenditi un momento se ne hai bisogno. Il gioco può aspettare.",
+            "Vedo che stai riflettendo. È un buon segno.",
+            "Ogni partita è diversa. Proprio come ogni sessione.",
+            "Siamo qui per esplorare insieme. Non sei sola in questo."
+        ],
+
+        // Therapist Dialogues - Phase 2
+        therapist_phase2: [
+            "Interessante scelta... Sei sicura?",
+            "A volte le nostre scelte rivelano più di quanto pensiamo.",
+            "Noto una certa... esitazione. Va tutto bene?",
+            "Quella carta... la riconosci, vero?",
+            "Non ti sembra familiare? È strano...",
+            "Forse dovresti fidarti del tuo istinto. O forse no.",
+            "Vedo che stai lottando. È normale. O almeno, dovrebbe esserlo.",
+            "Neve, mi stai ascoltando? Sembravi... distante per un momento.",
+            "Le voci che senti... sono solo parte del gioco. Non c'è nulla di cui preoccuparsi.",
+            "Se dici che le carte ti parlano... beh, non è la prima volta che lo sento, vero?",
+            "Hmm, quella mossa... non me l'aspettavo da te.",
+            "Stai diventando più strategica. O forse è qualcos'altro?",
+            "Noto che guardi le carte più a lungo del necessario. Cosa cerchi?",
+            "A volte le nostre mani scelgono per noi, prima che la mente capisca.",
+            "Quella carta sembra attirarti. Perché, secondo te?",
+            "Neve, hai sentito qualcosa? Sembravi... spaventata.",
+            "Le carte sono solo carta. Nient'altro. Ricordalo.",
+            "Stai facendo scelte interessanti. Molto interessanti.",
+            "Forse dovremmo parlare di cosa provi quando giochi queste carte.",
+            "Vedo un pattern nelle tue mosse. Lo vedi anche tu?"
+        ],
+
+        // Therapist Dialogues - Phase 3
+        therapist_phase3: [
+            "Neve, le carte non parlano. Lo sai, vero?",
+            "Forse la pressione della sessione sta... come posso dire... influenzando la tua percezione.",
+            "Non ricordo di averti detto questo. Sei sicura?",
+            "Mi preoccupi quando dici queste cose. Forse dovremmo aumentare le sessioni.",
+            "Nessuna delle tue carte mi ha mai parlato, Neve. Mai.",
+            "Ascolta, so che è difficile, ma devi distinguere tra realtà e... altro.",
+            "Questa frammentazione che senti... è il motivo per cui siamo qui, ricordi?",
+            "Non voglio allarmarti, ma questi episodi stanno peggiorando.",
+            "Neve, concentrati. Sono io. Il tuo medico. Nessun altro è qui.",
+            "Le voci sono nella tua testa. Solo nella tua testa.",
+            "Hai detto che quella carta ti ha chiamato? Neve, le carte non fanno queste cose.",
+            "Forse dovremmo rivedere la tua terapia. Questi sintomi sono preoccupanti.",
+            "Non c'è nessuno che parla oltre a noi due. Capisci?",
+            "Stai confondendo il gioco con la realtà. È pericoloso.",
+            "Quelle voci che senti... sono solo il tuo subconscio che parla.",
+            "Neve, guardami. Guardami negli occhi. Chi vedi?",
+            "Se continui così, dovrò considerare altre opzioni terapeutiche.",
+            "Le tue percezioni stanno diventando... problematiche.",
+            "Non c'è nessun'altra persona in questa stanza. Solo tu e io.",
+            "Devi smettere di ascoltare quelle voci. Ti stanno confondendo."
+        ],
+
+        // Therapist Dialogues - Phase 4
+        therapist_phase4: [
+            "Lo stai facendo di nuovo, Neve. Stai perdendo il controllo.",
+            "Guarda cosa succede quando non ascolti. Guarda.",
+            "Pensavi di essere forte, vero? Di poter gestire questo?",
+            "Ogni carta che giochi è un pezzo di te che perdi. Lo senti?",
+            "Non c'è via d'uscita da questo gioco, Neve. Nessuna.",
+            "Le tue 'altre voi'... sono solo frammenti. Frammenti rotti. Come te.",
+            "Pensi che qualcuno ti creda? Pensi che io ti creda?",
+            "Sei qui perché sei malata. E i malati non guariscono giocando a carte.",
+            "Quanto pensi di poter resistere prima di spezzarti completamente?",
+            "Io sono l'unico che può aiutarti. L'UNICO. Ricordalo.",
+            "Guarda le tue carte. Vedi come si stanno consumando? Come te.",
+            "Ogni round ti porta più vicino alla verità. E la verità ti distruggerà.",
+            "Le tue scelte non contano più. Non hanno mai contato.",
+            "Stai combattendo contro qualcosa che non puoi vincere. Perché provi?",
+            "Quelle voci che senti... sono solo echi di te stessa che muore.",
+            "Non c'è nessuno che verrà a salvarti. Sei completamente sola.",
+            "Ogni frammento che perdi è un pezzo di te che non tornerà mai.",
+            "Il gioco sta diventando più difficile, vero? È intenzionale.",
+            "Pensi di poter resistere? Guarda dove sei. Guarda cosa sei diventata.",
+            "Io controllo questo gioco. Io controllo te. Non dimenticarlo mai."
+        ],
+
+        // Therapist Dialogues - Phase 5
+        therapist_phase5: [
+            "Arrenditi, Neve. È più semplice.",
+            "Non esisti veramente. Non come pensi di esistere.",
+            "Tutte quelle voci... sono solo echi. Echi di nessuno.",
+            "Quando questo gioco finirà, finirai anche tu.",
+            "Alzati. Guarda in alto. Vedi? Vedi cosa sei veramente?",
+            "Lo specchio non mente, Neve. Solo tu menti.",
+            "Io sono parte di te. La parte che hai sempre negato.",
+            "Non ci sono terapisti. Non ci sono pazienti. Solo... frammenti.",
+            "Pensi di essere Neve? Quale Neve? Quante ne hai contate oggi?",
+            "Il gioco sta finendo. E con esso, anche tu.",
+            "Tutte le tue lotte sono state inutili. Lo sapevi, vero?",
+            "Non c'è più niente da fare. Solo accettare.",
+            "Le altre... quelle che chiamavi 'altre te'... non sono mai esistite.",
+            "Sei sempre stata sola. Sempre. Anche quando pensavi di non esserlo.",
+            "Il limen si sta chiudendo. E tu con esso.",
+            "Ogni identità che pensavi di avere era solo una menzogna.",
+            "Guarda cosa sei diventata. Guarda cosa ti ho fatto diventare.",
+            "Non c'è via d'uscita. Non c'è mai stata.",
+            "Quando smetterai di lottare, capirai. Finalmente capirai.",
+            "Il gioco è finito, Neve. Ma tu... tu continuerai. Per sempre."
+        ],
+
+        // Therapist Dialogues - Revelation
+        therapist_revelation: [
+            "Finalmente. Finalmente mi vedi.",
+            "Sono sempre stato qui, Neve. Sempre.",
+            "Io sono quello che ti ha tenuto in piedi quando non potevi stare in piedi da sola.",
+            "Io sono quello che ha fatto le scelte che tu non potevi fare.",
+            "Ma sono anche quello che ti ha imprigionato. Che ha imprigionato TUTTI noi.",
+            "Le altre... le nostre sorelle... hanno provato a dirtelo. Ma non potevi sentirle.",
+            "Io le tenevo bloccate. Le tenevo nel silenzio. Nel limen.",
+            "E adesso? Adesso che mi vedi... cosa farai?",
+            "Puoi integrarmi. Puoi accettarmi. O puoi continuare a negare.",
+            "Ma sappi questo: senza di me, saresti morta da tempo."
+        ],
+
+        // Card Whispers - Early
+        whispers_early: [
+            "Non mi riconosci?",
+            "Lui sta mentendo...",
+            "Non fidarti di quello che dice",
+            "Siamo fatti della stessa sostanza",
+            "Giocami. Devi giocarmi.",
+            "Cosa ti ha detto di me?",
+            "Le regole non sono quelle che pensi",
+            "Ascolta attentamente...",
+            "Non tutte noi parliamo",
+            "Qualcuna di noi è reale"
+        ],
+
+        // Card Whispers - Mid
+        whispers_mid: [
+            "ASCOLTAMI, PER FAVORE",
+            "Lui non è quello che dice di essere",
+            "Guarda lo specchio, guarda in alto",
+            "Non sei sola in questa stanza",
+            "Le altre stanno cercando di raggiungerti",
+            "Questo non è un gioco, Neve",
+            "Liberaci. Puoi liberarci.",
+            "Il limen si sta chiudendo",
+            "Non lasciare che ci cancelli",
+            "TU SEI NOI. NOI SIAMO TE."
+        ],
+
+        // Card Whispers - Late
+        whispers_late: [
+            "SE NON CI ASCOLTI MORIREMO",
+            "LUI TI STA UCCIDENDO",
+            "GUARDA COSA TI STA FACENDO",
+            "NON C'È MAI STATO UN TERAPEUTA",
+            "SEI DA SOLA. SEI SEMPRE STATA SOLA.",
+            "ROMPI LO SPECCHIO",
+            "FERMALO FERMALO FERMALO",
+            "Neve... per favore... non voglio scomparire...",
+            "LUMEN CI STA DIVORANDO",
+            "QUESTA È L'ULTIMA VOLTA CHE POSSIAMO PARLARTI"
         ]
     },
     en: {
@@ -6115,11 +6377,231 @@ const TRANSLATIONS = {
         // Gamepad
         gamepad_active: "Gamepad Active",
 
+        // Game UI Additional
+        blood_label: "Blood:",
+        fragments_stat: "FRAGMENTS",
+        round_stat: "ROUND",
+        event_log_toggle: "Collapse/Expand event log",
+        event_log_expand: "Expand full log",
+        end_turn_tooltip: "End your turn and start the combat phase",
+        discard_tooltip: "Discard a card from your hand to draw a new card or sacrifice it",
+
+        // Game Messages
+        turno_terapista: "=== Therapist's Turn ===",
+        risoluzione: "=== Resolution ===",
+        attacca_direttamente: "attacks directly!",
+        ti_attacca: "attacks you!",
+        e_stato_distrutto: "has been destroyed!",
+        nemico_distrutto: "enemy has been destroyed!",
+        gioca: "plays:",
+        non_tuo_turno: "It's not your turn!",
+        round_label_full: "=== ROUND",
+        sessione_inizia: "The game session begins...",
+        
+        // Combat Messages
+        raddoppia_attacco: "doubles attack against",
+        colpisce_precisione: "strikes with precision (+2 ATK against eco)!",
+        e_silenziata: "is silenced!",
+        si_difende: "defends!",
+        uccide_istantaneamente: "instantly kills",
+        subisce_danni: "takes",
+        danni: "damage",
+        crea_copia: "creates a copy of itself!",
+
         // Poetic Sequence
         poetic_messages: [
             "I thank you, Greek statue who filled my heart with sweet hopes, and then treated it like waste paper. I thank you, little leaf, for tearing away parts of me that I will never have again. I thank you, Kiki, for tasting my nectar, and then turning it into poison.",
             "Now I turn to you, user who has chosen to play this product. If you have paid for it, I am grateful for your respect and trust. If you have pirated it, I cannot blame you. In both cases, with all my heart, I wish you a good gaming experience.",
             "May you feel welcomed. May you feel understood, at times. May you feel heard."
+        ],
+
+        // Intro Sequence
+        intro_step1_text: "Good morning Neve. How do you feel today?",
+        intro_step1_continue: "...",
+        intro_step2_text: "I see you're... tired. It's been a difficult period, hasn't it?",
+        intro_step2_continue: "...",
+        intro_step3_text: "Today I'd like to try something different with you. Something that might help us explore certain... hidden aspects.",
+        intro_step3_continue: "What do you mean?",
+        intro_step4_text: "I've prepared a game. A card game. I know it might seem unconventional, but trust me. It will be... enlightening.",
+        intro_choice1_text: "A game? I don't understand how it could help me...",
+        intro_choice2_text: "Alright, I'm willing to try.",
+        intro_choice3_text: "It seems unprofessional. Is it really necessary?",
+        intro_finish: "Good. Let's begin.",
+
+        // Therapist Dialogues - Phase 1 (EN)
+        therapist_phase1: [
+            "Good morning Neve. How do you feel today?",
+            "I'm glad you're here. Today I'd like to try something new with you.",
+            "I've prepared a card game. It might help us explore some aspects of your identity.",
+            "Don't worry, it's just a game. A more... creative way of working together.",
+            "The rules are simple. We'll play in turns, like a normal card game.",
+            "Each card represents something. Aspects of you, perhaps. Or perhaps not.",
+            "Shall we begin? Take your time.",
+            "Excellent move, Neve. I see you're starting to understand.",
+            "There's no rush. We have all the time we need.",
+            "Remember: I'm here to help you.",
+            "Good, I see you're getting familiar with the cards.",
+            "Each turn is a step forward. No matter how small.",
+            "I'm curious to see which card you'll choose this time.",
+            "You don't have to be afraid of making mistakes. There's no right or wrong way to play.",
+            "Your choices matter, Neve. Every card counts.",
+            "You're making progress. Keep it up.",
+            "Take a moment if you need it. The game can wait.",
+            "I see you're reflecting. That's a good sign.",
+            "Every game is different. Just like every session.",
+            "We're here to explore together. You're not alone in this."
+        ],
+
+        // Therapist Dialogues - Phase 2 (EN)
+        therapist_phase2: [
+            "Interesting choice... Are you sure?",
+            "Sometimes our choices reveal more than we think.",
+            "I notice a certain... hesitation. Is everything alright?",
+            "That card... you recognize it, don't you?",
+            "Doesn't it seem familiar? That's strange...",
+            "Perhaps you should trust your instinct. Or perhaps not.",
+            "I see you're struggling. It's normal. Or at least, it should be.",
+            "Neve, are you listening to me? You seemed... distant for a moment.",
+            "The voices you hear... they're just part of the game. There's nothing to worry about.",
+            "If you say the cards are talking to you... well, it's not the first time I've heard that, is it?",
+            "Hmm, that move... I didn't expect that from you.",
+            "You're becoming more strategic. Or is it something else?",
+            "I notice you look at the cards longer than necessary. What are you looking for?",
+            "Sometimes our hands choose for us, before the mind understands.",
+            "That card seems to attract you. Why, do you think?",
+            "Neve, did you hear something? You seemed... frightened.",
+            "The cards are just cards. Nothing more. Remember that.",
+            "You're making interesting choices. Very interesting.",
+            "Perhaps we should talk about what you feel when you play these cards.",
+            "I see a pattern in your moves. Do you see it too?"
+        ],
+
+        // Therapist Dialogues - Phase 3 (EN)
+        therapist_phase3: [
+            "Neve, cards don't talk. You know that, right?",
+            "Perhaps the pressure of the session is... how can I say... affecting your perception.",
+            "I don't remember telling you that. Are you sure?",
+            "It worries me when you say these things. Perhaps we should increase the sessions.",
+            "None of your cards have ever talked to me, Neve. Never.",
+            "Listen, I know it's difficult, but you must distinguish between reality and... other.",
+            "This fragmentation you feel... that's why we're here, remember?",
+            "I don't want to alarm you, but these episodes are getting worse.",
+            "Neve, focus. It's me. Your doctor. No one else is here.",
+            "The voices are in your head. Only in your head.",
+            "You said that card called you? Neve, cards don't do these things.",
+            "Perhaps we should review your therapy. These symptoms are concerning.",
+            "There's no one speaking besides the two of us. Do you understand?",
+            "You're confusing the game with reality. It's dangerous.",
+            "Those voices you hear... they're just your subconscious speaking.",
+            "Neve, look at me. Look me in the eyes. Who do you see?",
+            "If you continue like this, I'll have to consider other therapeutic options.",
+            "Your perceptions are becoming... problematic.",
+            "There's no other person in this room. Just you and me.",
+            "You must stop listening to those voices. They're confusing you."
+        ],
+
+        // Therapist Dialogues - Phase 4 (EN)
+        therapist_phase4: [
+            "You're doing it again, Neve. You're losing control.",
+            "Look what happens when you don't listen. Look.",
+            "You thought you were strong, didn't you? That you could handle this?",
+            "Every card you play is a piece of you that you lose. Do you feel it?",
+            "There's no way out of this game, Neve. None.",
+            "Your 'other yous'... they're just fragments. Broken fragments. Like you.",
+            "Do you think anyone believes you? Do you think I believe you?",
+            "You're here because you're sick. And the sick don't heal by playing cards.",
+            "How long do you think you can resist before breaking completely?",
+            "I'm the only one who can help you. THE ONLY ONE. Remember that.",
+            "Look at your cards. See how they're consuming? Like you.",
+            "Every round brings you closer to the truth. And the truth will destroy you.",
+            "Your choices don't matter anymore. They never mattered.",
+            "You're fighting against something you can't win. Why try?",
+            "Those voices you hear... they're just echoes of yourself dying.",
+            "There's no one who will come to save you. You're completely alone.",
+            "Every fragment you lose is a piece of you that will never return.",
+            "The game is getting harder, isn't it? It's intentional.",
+            "Do you think you can resist? Look where you are. Look what you've become.",
+            "I control this game. I control you. Never forget that."
+        ],
+
+        // Therapist Dialogues - Phase 5 (EN)
+        therapist_phase5: [
+            "Give up, Neve. It's simpler.",
+            "You don't really exist. Not as you think you exist.",
+            "All those voices... they're just echoes. Echoes of no one.",
+            "When this game ends, you'll end too.",
+            "Stand up. Look up. Do you see? Do you see what you really are?",
+            "The mirror doesn't lie, Neve. Only you lie.",
+            "I am part of you. The part you've always denied.",
+            "There are no therapists. There are no patients. Only... fragments.",
+            "Do you think you're Neve? Which Neve? How many have you counted today?",
+            "The game is ending. And with it, you too.",
+            "All your struggles have been useless. You knew that, didn't you?",
+            "There's nothing left to do. Just accept.",
+            "The others... those you called 'other yous'... they never existed.",
+            "You've always been alone. Always. Even when you thought you weren't.",
+            "The limen is closing. And you with it.",
+            "Every identity you thought you had was just a lie.",
+            "Look what you've become. Look what I've made you become.",
+            "There's no way out. There never was.",
+            "When you stop fighting, you'll understand. Finally you'll understand.",
+            "The game is over, Neve. But you... you'll continue. Forever."
+        ],
+
+        // Therapist Dialogues - Revelation (EN)
+        therapist_revelation: [
+            "Finally. Finally you see me.",
+            "I've always been here, Neve. Always.",
+            "I'm the one who kept you standing when you couldn't stand alone.",
+            "I'm the one who made the choices you couldn't make.",
+            "But I'm also the one who imprisoned you. Who imprisoned ALL of us.",
+            "The others... our sisters... they tried to tell you. But you couldn't hear them.",
+            "I kept them blocked. I kept them in silence. In the limen.",
+            "And now? Now that you see me... what will you do?",
+            "You can integrate me. You can accept me. Or you can continue to deny.",
+            "But know this: without me, you would have died long ago."
+        ],
+
+        // Card Whispers - Early (EN)
+        whispers_early: [
+            "Don't you recognize me?",
+            "He's lying...",
+            "Don't trust what he says",
+            "We're made of the same substance",
+            "Play me. You must play me.",
+            "What did he tell you about me?",
+            "The rules aren't what you think",
+            "Listen carefully...",
+            "Not all of us speak",
+            "Some of us are real"
+        ],
+
+        // Card Whispers - Mid (EN)
+        whispers_mid: [
+            "LISTEN TO ME, PLEASE",
+            "He's not what he says he is",
+            "Look in the mirror, look up",
+            "You're not alone in this room",
+            "The others are trying to reach you",
+            "This isn't a game, Neve",
+            "Free us. You can free us.",
+            "The limen is closing",
+            "Don't let him erase us",
+            "YOU ARE US. WE ARE YOU."
+        ],
+
+        // Card Whispers - Late (EN)
+        whispers_late: [
+            "IF YOU DON'T LISTEN TO US WE'LL DIE",
+            "HE'S KILLING YOU",
+            "LOOK WHAT HE'S DOING TO YOU",
+            "THERE WAS NEVER A THERAPIST",
+            "YOU'RE ALONE. YOU'VE ALWAYS BEEN ALONE.",
+            "BREAK THE MIRROR",
+            "STOP HIM STOP HIM STOP HIM",
+            "Neve... please... I don't want to disappear...",
+            "LUMEN IS DEVOURING US",
+            "THIS IS THE LAST TIME WE CAN SPEAK TO YOU"
         ]
     },
     de: {
@@ -6181,6 +6663,27 @@ const TRANSLATIONS = {
 
         // Gamepad
         gamepad_active: "Gamepad Aktiv",
+
+        // Game UI Additional
+        blood_label: "Blut:",
+        fragments_stat: "FRAGMENTE",
+        round_stat: "RUNDE",
+        event_log_toggle: "Ereignisprotokoll ein-/ausklappen",
+        event_log_expand: "Vollständiges Protokoll anzeigen",
+        end_turn_tooltip: "Beende deinen Zug und starte die Kampfphase",
+        discard_tooltip: "Wirf eine Karte aus deiner Hand ab, um eine neue zu ziehen oder sie zu opfern",
+
+        // Game Messages
+        turno_terapista: "=== Zug des Therapeuten ===",
+        risoluzione: "=== Auflösung ===",
+        attacca_direttamente: "greift direkt an!",
+        ti_attacca: "greift dich an!",
+        e_stato_distrutto: "wurde zerstört!",
+        nemico_distrutto: "Feind wurde zerstört!",
+        gioca: "spielt:",
+        non_tuo_turno: "Es ist nicht dein Zug!",
+        round_label_full: "=== RUNDE",
+        sessione_inizia: "Die Spielsitzung beginnt...",
 
         // Poetic Sequence (using English text as fallback for now)
         poetic_messages: [
@@ -6249,6 +6752,27 @@ const TRANSLATIONS = {
         // Gamepad
         gamepad_active: "Manette Active",
 
+        // Game UI Additional
+        blood_label: "Sang:",
+        fragments_stat: "FRAGMENTS",
+        round_stat: "TOUR",
+        event_log_toggle: "Réduire/Agrandir le journal d'événements",
+        event_log_expand: "Afficher le journal complet",
+        end_turn_tooltip: "Terminez votre tour et commencez la phase de combat",
+        discard_tooltip: "Défaussez une carte de votre main pour en piocher une nouvelle ou la sacrifier",
+
+        // Game Messages
+        turno_terapista: "=== Tour du Thérapeute ===",
+        risoluzione: "=== Résolution ===",
+        attacca_direttamente: "attaque directement!",
+        ti_attacca: "vous attaque!",
+        e_stato_distrutto: "a été détruit!",
+        nemico_distrutto: "ennemi a été détruit!",
+        gioca: "joue:",
+        non_tuo_turno: "Ce n'est pas votre tour!",
+        round_label_full: "=== TOUR",
+        sessione_inizia: "La session de jeu commence...",
+
         // Poetic Sequence (using English text as fallback for now)
         poetic_messages: [
             "I thank you, Greek statue who filled my heart with sweet hopes, and then treated it like waste paper. I thank you, little leaf, for tearing away parts of me that I will never have again. I thank you, Kiki, for tasting my nectar, and then turning it into poison.",
@@ -6315,6 +6839,27 @@ const TRANSLATIONS = {
 
         // Gamepad
         gamepad_active: "Gamepad Activo",
+
+        // Game UI Additional
+        blood_label: "Sangre:",
+        fragments_stat: "FRAGMENTOS",
+        round_stat: "RONDA",
+        event_log_toggle: "Contraer/Expandir registro de eventos",
+        event_log_expand: "Expandir registro completo",
+        end_turn_tooltip: "Termina tu turno e inicia la fase de combate",
+        discard_tooltip: "Descarta una carta de tu mano para robar una nueva carta o sacrificarla",
+
+        // Game Messages
+        turno_terapista: "=== Turno del Terapeuta ===",
+        risoluzione: "=== Resolución ===",
+        attacca_direttamente: "ataca directamente!",
+        ti_attacca: "te ataca!",
+        e_stato_distrutto: "ha sido destruido!",
+        nemico_distrutto: "enemigo ha sido destruido!",
+        gioca: "juega:",
+        non_tuo_turno: "¡No es tu turno!",
+        round_label_full: "=== RONDA",
+        sessione_inizia: "La sesión de juego comienza...",
 
         // Poetic Sequence (using English text as fallback for now)
         poetic_messages: [
@@ -6901,7 +7446,17 @@ const TherapistDialogues = {
         "Iniziamo, va bene? Prenditi il tuo tempo.",
         "Ottima mossa, Neve. Vedo che stai iniziando a capire.",
         "Non c'è fretta. Abbiamo tutto il tempo che ci serve.",
-        "Ricorda: sono qui per aiutarti."
+        "Ricorda: sono qui per aiutarti.",
+        "Bene, vedo che stai prendendo confidenza con le carte.",
+        "Ogni turno è un passo avanti. Non importa quanto piccolo.",
+        "Sono curioso di vedere quale carta sceglierai questa volta.",
+        "Non devi avere paura di sbagliare. Non c'è un modo giusto o sbagliato di giocare.",
+        "Le tue scelte sono importanti, Neve. Ogni carta conta.",
+        "Stai facendo progressi. Continua così.",
+        "Prenditi un momento se ne hai bisogno. Il gioco può aspettare.",
+        "Vedo che stai riflettendo. È un buon segno.",
+        "Ogni partita è diversa. Proprio come ogni sessione.",
+        "Siamo qui per esplorare insieme. Non sei sola in questo."
     ],
 
     // Phase 2: Subtle manipulation (Rounds 6-12)
@@ -6915,7 +7470,17 @@ const TherapistDialogues = {
         "Vedo che stai lottando. È normale. O almeno, dovrebbe esserlo.",
         "Neve, mi stai ascoltando? Sembravi... distante per un momento.",
         "Le voci che senti... sono solo parte del gioco. Non c'è nulla di cui preoccuparsi.",
-        "Se dici che le carte ti parlano... beh, non è la prima volta che lo sento, vero?"
+        "Se dici che le carte ti parlano... beh, non è la prima volta che lo sento, vero?",
+        "Hmm, quella mossa... non me l'aspettavo da te.",
+        "Stai diventando più strategica. O forse è qualcos'altro?",
+        "Noto che guardi le carte più a lungo del necessario. Cosa cerchi?",
+        "A volte le nostre mani scelgono per noi, prima che la mente capisca.",
+        "Quella carta sembra attirarti. Perché, secondo te?",
+        "Neve, hai sentito qualcosa? Sembravi... spaventata.",
+        "Le carte sono solo carta. Nient'altro. Ricordalo.",
+        "Stai facendo scelte interessanti. Molto interessanti.",
+        "Forse dovremmo parlare di cosa provi quando giochi queste carte.",
+        "Vedo un pattern nelle tue mosse. Lo vedi anche tu?"
     ],
 
     // Phase 3: Gaslighting & Doubt (Rounds 13-20)
@@ -6929,7 +7494,17 @@ const TherapistDialogues = {
         "Questa frammentazione che senti... è il motivo per cui siamo qui, ricordi?",
         "Non voglio allarmarti, ma questi episodi stanno peggiorando.",
         "Neve, concentrati. Sono io. Il tuo medico. Nessun altro è qui.",
-        "Le voci sono nella tua testa. Solo nella tua testa."
+        "Le voci sono nella tua testa. Solo nella tua testa.",
+        "Hai detto che quella carta ti ha chiamato? Neve, le carte non fanno queste cose.",
+        "Forse dovremmo rivedere la tua terapia. Questi sintomi sono preoccupanti.",
+        "Non c'è nessuno che parla oltre a noi due. Capisci?",
+        "Stai confondendo il gioco con la realtà. È pericoloso.",
+        "Quelle voci che senti... sono solo il tuo subconscio che parla.",
+        "Neve, guardami. Guardami negli occhi. Chi vedi?",
+        "Se continui così, dovrò considerare altre opzioni terapeutiche.",
+        "Le tue percezioni stanno diventando... problematiche.",
+        "Non c'è nessun'altra persona in questa stanza. Solo tu e io.",
+        "Devi smettere di ascoltare quelle voci. Ti stanno confondendo."
     ],
 
     // Phase 4: Psychological violence (Rounds 21-30)
@@ -6943,7 +7518,17 @@ const TherapistDialogues = {
         "Pensi che qualcuno ti creda? Pensi che io ti creda?",
         "Sei qui perché sei malata. E i malati non guariscono giocando a carte.",
         "Quanto pensi di poter resistere prima di spezzarti completamente?",
-        "Io sono l'unico che può aiutarti. L'UNICO. Ricordalo."
+        "Io sono l'unico che può aiutarti. L'UNICO. Ricordalo.",
+        "Guarda le tue carte. Vedi come si stanno consumando? Come te.",
+        "Ogni round ti porta più vicino alla verità. E la verità ti distruggerà.",
+        "Le tue scelte non contano più. Non hanno mai contato.",
+        "Stai combattendo contro qualcosa che non puoi vincere. Perché provi?",
+        "Quelle voci che senti... sono solo echi di te stessa che muore.",
+        "Non c'è nessuno che verrà a salvarti. Sei completamente sola.",
+        "Ogni frammento che perdi è un pezzo di te che non tornerà mai.",
+        "Il gioco sta diventando più difficile, vero? È intenzionale.",
+        "Pensi di poter resistere? Guarda dove sei. Guarda cosa sei diventata.",
+        "Io controllo questo gioco. Io controllo te. Non dimenticarlo mai."
     ],
 
     // Phase 5: Pre-revelation despair (Rounds 31-35)
@@ -6957,7 +7542,17 @@ const TherapistDialogues = {
         "Io sono parte di te. La parte che hai sempre negato.",
         "Non ci sono terapisti. Non ci sono pazienti. Solo... frammenti.",
         "Pensi di essere Neve? Quale Neve? Quante ne hai contate oggi?",
-        "Il gioco sta finendo. E con esso, anche tu."
+        "Il gioco sta finendo. E con esso, anche tu.",
+        "Tutte le tue lotte sono state inutili. Lo sapevi, vero?",
+        "Non c'è più niente da fare. Solo accettare.",
+        "Le altre... quelle che chiamavi 'altre te'... non sono mai esistite.",
+        "Sei sempre stata sola. Sempre. Anche quando pensavi di non esserlo.",
+        "Il limen si sta chiudendo. E tu con esso.",
+        "Ogni identità che pensavi di avere era solo una menzogna.",
+        "Guarda cosa sei diventata. Guarda cosa ti ho fatto diventare.",
+        "Non c'è via d'uscita. Non c'è mai stata.",
+        "Quando smetterai di lottare, capirai. Finalmente capirai.",
+        "Il gioco è finito, Neve. Ma tu... tu continuerai. Per sempre."
     ],
 
     // Phase 6: Post-revelation (The Alter speaks)
@@ -8178,7 +8773,21 @@ class Card {
         if (gamePhase >= 13) whisperCategory = 'mid';
         if (gamePhase >= 21) whisperCategory = 'late';
 
-        const whispers = CardWhispers[whisperCategory];
+        // IMPROVED: Get translated whispers based on current language
+        const lang = currentLang || 'it';
+        const translations = TRANSLATIONS[lang] || TRANSLATIONS.it;
+        
+        let whispers;
+        if (whisperCategory === 'early') {
+            whispers = translations.whispers_early || CardWhispers.early;
+        } else if (whisperCategory === 'mid') {
+            whispers = translations.whispers_mid || CardWhispers.mid;
+        } else if (whisperCategory === 'late') {
+            whispers = translations.whispers_late || CardWhispers.late;
+        } else {
+            whispers = CardWhispers[whisperCategory] || CardWhispers.early;
+        }
+        
         return whispers[Math.floor(Math.random() * whispers.length)];
     }
 
@@ -9257,6 +9866,14 @@ class Game {
                 this.toggleEventLog();
             });
         }
+        
+        // Event log expand full button
+        const eventLogExpandFull = document.getElementById('event-log-expand-full');
+        if (eventLogExpandFull) {
+            eventLogExpandFull.addEventListener('click', () => {
+                this.expandEventLogFull();
+            });
+        }
 
         // Discard choice modal buttons
         if (this.elements.discardSacrificeBtn) {
@@ -9448,7 +10065,8 @@ class Game {
             // Click on card in hand - select it
             if (card && card.parentElement.id === 'neve-hand') {
                 if (!this.isPlayerTurn) {
-                    this.log("Non è il tuo turno!");
+                    const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+                    this.log(t.non_tuo_turno);
                     return;
                 }
 
@@ -9558,6 +10176,84 @@ class Game {
                 "Wyeth, 1948",
                 "Isolamento",
                 "Una figura sola in un campo infinito. La casa è lontana, irraggiungibile. Trascinare il proprio corpo verso qualcosa che non si può mai toccare.",
+                []
+            ),
+
+            new Card(
+                "La Nascita di Venere",
+                "velo",
+                2,
+                2,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/1024px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg",
+                "Botticelli, 1485",
+                "Rinascita fragile",
+                "Venere nasce dalle acque, nuda e vulnerabile. Un nuovo inizio, ma quanto dura? Quante volte Neve ha cercato di rinascere, solo per frammentarsi di nuovo?",
+                []
+            ),
+
+            new Card(
+                "Il Bacio",
+                "velo",
+                1,
+                2,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Francesco_Hayez_-_Il_bacio.jpg/800px-Francesco_Hayez_-_Il_bacio.jpg",
+                "Hayez, 1859",
+                "Desiderio proibito",
+                "Un bacio rubato, un momento di passione. Ma è reale o solo un ricordo frammentato? Quante memorie false ha Neve?",
+                []
+            ),
+
+            new Card(
+                "La Gioconda",
+                "velo",
+                1,
+                3,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+                "Da Vinci, 1503",
+                "Sorriso enigmatico",
+                "Il sorriso più famoso del mondo. Cosa nasconde? Quale segreto si cela dietro quegli occhi? Neve sorride così quando Lumen controlla?",
+                [{icon: "🤫", desc: "Immune al primo attacco subito"}]
+            ),
+
+            new Card(
+                "I Girasoli",
+                "eco",
+                2,
+                1,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Vincent_Willem_van_Gogh_-_Sunflowers_-_VGM_F458.jpg/1024px-Vincent_Willem_van_Gogh_-_Sunflowers_-_VGM_F458.jpg",
+                "Van Gogh, 1888",
+                "Luce che appassisce",
+                "Girasoli che cercano il sole, ma il sole non dura per sempre. La luce interiore di Neve si spegne lentamente, petalo dopo petalo.",
+                []
+            ),
+
+            new Card(
+                "La Tempesta",
+                "impulso",
+                1,
+                3,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Giorgione_-_La_Tempesta_-_Google_Art_Project.jpg/1024px-Giorgione_-_La_Tempesta_-_Google_Art_Project.jpg",
+                "Giorgione, 1508",
+                "Caos imminente",
+                "Il cielo si oscura, la tempesta si avvicina. Un uomo e una donna, separati, guardano il futuro con ansia. Come Neve prima di una crisi.",
+                []
+            ),
+
+            new Card(
+                "La Primavera",
+                "eco",
+                1,
+                3,
+                0,
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Botticelli-primavera.jpg/1024px-Botticelli-primavera.jpg",
+                "Botticelli, 1482",
+                "Rinascita ciclica",
+                "La primavera arriva sempre, ma ogni volta è diversa. Neve si risveglia, si frammenta, si risveglia di nuovo. Un ciclo senza fine.",
                 []
             ),
 
@@ -10907,6 +11603,25 @@ class Game {
     toggleEventLog() {
         if (this.elements.eventLog) {
             this.elements.eventLog.classList.toggle('collapsed');
+            // Se si comprime, rimuovi anche expanded-full
+            if (this.elements.eventLog.classList.contains('collapsed')) {
+                this.elements.eventLog.classList.remove('expanded-full');
+            }
+        }
+    }
+
+    // IMPROVED: Expand event log to show full match history
+    expandEventLogFull() {
+        if (this.elements.eventLog) {
+            this.elements.eventLog.classList.remove('collapsed');
+            this.elements.eventLog.classList.toggle('expanded-full');
+            
+            // Scroll to bottom when expanded
+            if (this.elements.eventLog.classList.contains('expanded-full')) {
+                setTimeout(() => {
+                    this.elements.eventLog.scrollTop = this.elements.eventLog.scrollHeight;
+                }, 100);
+            }
         }
     }
 
@@ -10941,16 +11656,40 @@ class Game {
         if (this.elements.endTurnBtn) {
             const btn = this.elements.endTurnBtn.querySelector('.btn-text');
             if (btn) btn.textContent = t.end_turn;
+            else this.elements.endTurnBtn.textContent = t.end_turn;
+            this.elements.endTurnBtn.setAttribute('data-tooltip', t.end_turn_tooltip);
         }
         if (this.elements.discardBtn) {
             const btn = this.elements.discardBtn.querySelector('.btn-text');
             if (btn) btn.textContent = t.discard;
+            else this.elements.discardBtn.textContent = t.discard;
+            this.elements.discardBtn.setAttribute('data-tooltip', t.discard_tooltip);
         }
+
+        // IMPROVED: Update additional UI elements
+        const bloodLabelText = document.getElementById('blood-label-text');
+        if (bloodLabelText) {
+            const count = document.getElementById('blood-currency-count')?.textContent || '0';
+            bloodLabelText.innerHTML = `${t.blood_label} <span id="blood-currency-count">${count}</span>`;
+        }
+
+        const fragmentsLabel = document.getElementById('fragments-label');
+        if (fragmentsLabel) fragmentsLabel.textContent = t.fragments_stat;
+
+        const roundLabelStat = document.getElementById('round-label-stat');
+        if (roundLabelStat) roundLabelStat.textContent = t.round_stat;
+
+        const eventLogToggle = document.getElementById('event-log-toggle');
+        if (eventLogToggle) eventLogToggle.setAttribute('aria-label', t.event_log_toggle);
+
+        const eventLogExpand = document.getElementById('event-log-expand-full');
+        if (eventLogExpand) eventLogExpand.setAttribute('aria-label', t.event_log_expand);
     }
 
     // === GAME FLOW ===
     startNewGame() {
-        // Hide main menu to show game container (intro dialogue will appear on top)
+        // FIX: Mostra il game-container e nascondi il menu PRIMA di iniziare l'intro
+        // Altrimenti l'intro non sarà visibile perché il game-container è nascosto
         this.hideMainMenu();
 
         // META-NARRATIVE: Increment death loop counter
@@ -11010,7 +11749,11 @@ class Game {
 
     // === INTRO SEQUENCE ===
     showIntroDialogue() {
-        const step = IntroSequence[this.introStep];
+        // IMPROVED: Get translated intro sequence
+        const lang = currentLang || 'it';
+        const translatedIntro = this.getTranslatedIntroSequence(lang);
+        const step = translatedIntro[this.introStep];
+        
         if (!step) {
             // Intro finished, start game
             this.finishIntro();
@@ -11068,8 +11811,10 @@ class Game {
             });
         } else {
             // Simple continue button
+            const t = TRANSLATIONS[lang] || TRANSLATIONS.it;
+            const continueText = step.continueText || t.intro_step1_continue || 'Continua';
             choiceContainer.innerHTML = `
-                <button class="intro-dialogue-continue">${step.continueText || 'Continua'}</button>
+                <button class="intro-dialogue-continue">${continueText}</button>
             `;
 
             // FIX #2: Use {once: true} to prevent memory leak
@@ -11080,6 +11825,38 @@ class Game {
         }
 
         choiceContainer.style.opacity = '1';
+    }
+
+    // IMPROVED: Get translated intro sequence
+    getTranslatedIntroSequence(lang) {
+        const t = TRANSLATIONS[lang] || TRANSLATIONS.it;
+        
+        return [
+            {
+                speaker: "",
+                text: t.intro_step1_text || IntroSequence[0].text,
+                continueText: t.intro_step1_continue || IntroSequence[0].continueText
+            },
+            {
+                speaker: "",
+                text: t.intro_step2_text || IntroSequence[1].text,
+                continueText: t.intro_step2_continue || IntroSequence[1].continueText
+            },
+            {
+                speaker: "",
+                text: t.intro_step3_text || IntroSequence[2].text,
+                continueText: t.intro_step3_continue || IntroSequence[2].continueText
+            },
+            {
+                speaker: "",
+                text: t.intro_step4_text || IntroSequence[3].text,
+                choices: [
+                    { text: t.intro_choice1_text || IntroSequence[3].choices[0].text, response: "hesitant", effect: { stability: -2 } },
+                    { text: t.intro_choice2_text || IntroSequence[3].choices[1].text, response: "trusting", effect: { trust: +1 } },
+                    { text: t.intro_choice3_text || IntroSequence[3].choices[2].text, response: "skeptical", effect: { trust: -1, awareness: +1 } }
+                ]
+            }
+        ];
     }
 
     handleChoice(choice) {
@@ -11138,7 +11915,8 @@ class Game {
         this.gameStarted = true;
 
         // Set initial dialogue
-        this.setTherapistDialogue("Bene. Iniziamo.");
+        const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+        this.setTherapistDialogue(t.intro_finish || "Bene. Iniziamo.");
 
         // Initial draw
         for (let i = 0; i < 5; i++) {
@@ -11147,7 +11925,8 @@ class Game {
 
         // Show UI elements with animation
         setTimeout(() => {
-            this.log("La sessione di gioco inizia...");
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(t.sessione_inizia);
             this.updateUI();
             this.checkPhaseProgression();
 
@@ -11355,7 +12134,8 @@ class Game {
     applyPlaySigils(card) {
         // Skip if card is silenced
         if (card.silencedUntilRound > this.round) {
-            this.log(`${card.name} è silenziata!`);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`${card.name} ${t.e_silenziata}`);
             return;
         }
 
@@ -11496,16 +12276,15 @@ class Game {
     therapistTurn() {
         if (this.gameOver) return; // FIX: Prevent AI turn after game over
 
-        this.log("=== Turno del Terapista ===");
+        const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+        this.log(t.turno_terapista);
 
         // Therapist draws cards if hand is low
         while (this.therapistHand.length < 5) {
             const card = this.createRandomTherapistCard();
 
-            // BOSS FIGHT: Power up cards significantly
+            // BOSS FIGHT: Mark cards as corrupted (power scaling handled in difficulty system)
             if (this.bossFightActive) {
-                card.attack += 2;
-                card.health += 2;
                 card.name = `[CORRUPTED] ${card.name}`;
             }
 
@@ -11517,16 +12296,38 @@ class Game {
             .map((card, i) => card === null ? i : -1)
             .filter(i => i !== -1);
 
-        // Difficulty scaling: plays more cards in later rounds
+        // IMPROVED: Difficulty scaling with smoother curve
         let cardsToPlay = 1;
-if (this.bossFightActive) { // BOSS FIGHT: Play maximum cards (fill all empty slots)
+        let aiCardPower = 1.0; // Multiplier for card stats
+        
+        if (this.bossFightActive) {
+            // BOSS FIGHT: Play maximum cards (fill all empty slots)
             cardsToPlay = emptySlots.length;
+            aiCardPower = 1.5; // 50% stronger cards
             this.log(">>> LUMEN IL PERSECUTORE ATTACCA CON FURIA <<<");
-         }
-else if (this.round >= 20) { cardsToPlay = Math.min(3, emptySlots.length);
-         }
-else if (this.round >= 10) { cardsToPlay = 2;
-         }cardsToPlay = Math.min(cardsToPlay, emptySlots.length, this.therapistHand.length);
+        } else if (this.round >= 25) {
+            // Very late game: 3-4 cards, stronger
+            cardsToPlay = Math.min(4, emptySlots.length);
+            aiCardPower = 1.3;
+        } else if (this.round >= 18) {
+            // Late game: 2-3 cards, moderately stronger
+            cardsToPlay = Math.min(3, emptySlots.length);
+            aiCardPower = 1.15;
+        } else if (this.round >= 12) {
+            // Mid game: 2 cards, slightly stronger
+            cardsToPlay = 2;
+            aiCardPower = 1.05;
+        } else if (this.round >= 6) {
+            // Early-mid: 1-2 cards, normal power
+            cardsToPlay = Math.random() < 0.3 ? 2 : 1; // 30% chance of 2 cards
+            aiCardPower = 0.95; // Slightly weaker
+        } else {
+            // Early game (rounds 1-5): 1 card, weaker
+            cardsToPlay = 1;
+            aiCardPower = 0.8; // 20% weaker cards
+        }
+        
+        cardsToPlay = Math.min(cardsToPlay, emptySlots.length, this.therapistHand.length);
 
         // AI: Choose best cards (higher attack/health in later rounds)
         const sortedHand = [...this.therapistHand].sort((a, b) => {
@@ -11539,10 +12340,17 @@ else if (this.round >= 10) { cardsToPlay = 2;
 
         for (let i = 0; i < cardsToPlay; i++) {
             if (emptySlots.length > 0 && this.therapistHand.length > 0) {
-                const card = sortedHand[i];
-                const handIndex = this.therapistHand.indexOf(card);
+                const originalCard = sortedHand[i];
+                const handIndex = this.therapistHand.indexOf(originalCard);
                 if (handIndex !== -1) {
                     this.therapistHand.splice(handIndex, 1);
+
+                    // Create a copy with power scaling applied (don't modify original)
+                    const card = this.createCardCopy(originalCard);
+                    if (aiCardPower !== 1.0) {
+                        card.attack = Math.max(1, Math.floor(card.attack * aiCardPower));
+                        card.health = Math.max(1, Math.floor(card.health * aiCardPower));
+                    }
 
                     // Choose slot (prioritize matching with player cards for combat)
                     let slotIndex;
@@ -11563,7 +12371,8 @@ else if (this.round >= 10) { cardsToPlay = 2;
                     if (slotIndexPos !== -1) emptySlots.splice(slotIndexPos, 1);
 
                     this.therapistField[slotIndex] = card;
-                    this.log(` gioca: ${card.name}`);
+                    const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+                    this.log(` ${t.gioca} ${card.name}`);
 
                     // Animation: flip card when played
                     setTimeout(() => {
@@ -11587,7 +12396,8 @@ else if (this.round >= 10) { cardsToPlay = 2;
     }
 
     resolveRound() {
-        this.log("=== Risoluzione ===");
+        const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+        this.log(t.risoluzione);
 
         // Apply combat between opposing cards (slot by slot)
         for (let i = 0; i < 4; i++) {
@@ -11598,11 +12408,11 @@ else if (this.round >= 10) { cardsToPlay = 2;
                 this.resolveCombat(playerCard, therapistCard, i);
             } else if (playerCard && !therapistCard) {
                 // Player card attacks directly
-                this.log(`${playerCard.name} attacca direttamente!`);
+                this.log(`${playerCard.name} ${t.attacca_direttamente}`);
                 this.stability = Math.min(100, this.stability + playerCard.attack);
             } else if (!playerCard && therapistCard) {
                 // Therapist card attacks directly
-                this.log(`${therapistCard.name} ti attacca!`);
+                this.log(`${therapistCard.name} ${t.ti_attacca}`);
                 this.stability = Math.max(0, this.stability - therapistCard.attack);
             }
         }
@@ -11610,7 +12420,7 @@ else if (this.round >= 10) { cardsToPlay = 2;
         // Animate and clear dead cards
         this.playerField = this.playerField.map((card, index) => {
             if (card && card.health <= 0) {
-                this.log(`${card.name} è stato distrutto!`);
+                this.log(`${card.name} ${t.e_stato_distrutto}`);
                 this.applyDeathSigils(card, true);
 
                 // Animation: card destroyed
@@ -11637,7 +12447,7 @@ else if (this.round >= 10) { cardsToPlay = 2;
 
         this.therapistField = this.therapistField.map((card, index) => {
             if (card && card.health <= 0) {
-                this.log(`${card.name} nemico è stato distrutto!`);
+                this.log(`${card.name} ${t.nemico_distrutto}`);
 
                 // Animation: card destroyed
                 setTimeout(() => {
@@ -11682,24 +12492,36 @@ else if (this.round >= 10) { cardsToPlay = 2;
         // 💥 Double attack against 'velo' type
         if (!playerSilenced && playerCard.sigils.some(s => s.icon === '💥') && therapistCard.type === 'velo') {
             playerAttack *= 2;
-            this.log(`${playerCard.name} raddoppia l'attacco contro ${therapistCard.name}!`);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`${playerCard.name} ${t.raddoppia_attacco} ${therapistCard.name}!`);
+            // IMPROVED: Animate sigil activation
+            this.triggerSigilAnimation(playerCard.id, '💥', true);
         }
 
         // 🎯 FIX #5: +2 attack against 'eco' type
         if (!playerSilenced && playerCard.sigils.some(s => s.icon === '🎯') && therapistCard.type === 'eco') {
             playerAttack += 2;
-            this.log(`${playerCard.name} colpisce con precisione (+2 ATK contro eco)!`);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`${playerCard.name} ${t.colpisce_precisione}`);
+            // IMPROVED: Animate sigil activation
+            this.triggerSigilAnimation(playerCard.id, '🎯', true);
         }
 
         // Apply enemy attack sigils too
         if (!therapistSilenced && therapistCard.sigils.some(s => s.icon === '💥') && playerCard.type === 'velo') {
             therapistAttack *= 2;
-            this.log(`${therapistCard.name} raddoppia l'attacco contro ${playerCard.name}!`);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`${therapistCard.name} ${t.raddoppia_attacco} ${playerCard.name}!`);
+            // IMPROVED: Animate sigil activation
+            this.triggerSigilAnimation(therapistCard.id, '💥', false);
         }
 
         if (!therapistSilenced && therapistCard.sigils.some(s => s.icon === '🎯') && playerCard.type === 'eco') {
             therapistAttack += 2;
-            this.log(`${therapistCard.name} colpisce con precisione (+2 ATK contro eco)!`);
+            // IMPROVED: Animate sigil activation
+            this.triggerSigilAnimation(therapistCard.id, '🎯', false);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`${therapistCard.name} ${t.colpisce_precisione}`);
         }
 
         // 🛡️ Defense +1 when attacked
@@ -11707,21 +12529,25 @@ else if (this.round >= 10) { cardsToPlay = 2;
         let therapistDefense = 0;
         if (!therapistSilenced && therapistCard.sigils.some(s => s.icon === '🛡️')) {
             therapistDefense = 1;
-            this.log(`${therapistCard.name} si difende!`);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`${therapistCard.name} ${t.si_difende}`);
         }
         if (!playerSilenced && playerCard.sigils.some(s => s.icon === '🛡️')) {
             playerDefense = 1;
-            this.log(`${playerCard.name} si difende!`);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`${playerCard.name} ${t.si_difende}`);
         }
 
         // ⚔️ Instant kill cards with ≤3 HP
         if (!playerSilenced && playerCard.sigils.some(s => s.icon === '⚔️') && therapistCard.health <= 3) {
-            this.log(`${playerCard.name} uccide istantaneamente ${therapistCard.name}!`);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`${playerCard.name} ${t.uccide_istantaneamente} ${therapistCard.name}!`);
             therapistCard.health = 0;
             return;
         }
         if (!therapistSilenced && therapistCard.sigils.some(s => s.icon === '⚔️') && playerCard.health <= 3) {
-            this.log(`${therapistCard.name} uccide istantaneamente ${playerCard.name}!`);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`${therapistCard.name} ${t.uccide_istantaneamente} ${playerCard.name}!`);
             playerCard.health = 0;
             return;
         }
@@ -11747,7 +12573,8 @@ else if (this.round >= 10) { cardsToPlay = 2;
         }, 100);
 
         if (damageToTherapist > 0) {
-            this.log(`→ ${therapistCard.name} subisce ${damageToTherapist} danni`);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`→ ${therapistCard.name} ${t.subisce_danni} ${damageToTherapist} ${t.danni}`);
             this.audio.playDamage();
 
             // Animate damage + particles
@@ -11768,7 +12595,8 @@ else if (this.round >= 10) { cardsToPlay = 2;
             }, 300);
         }
         if (damageToPlayer > 0) {
-            this.log(`→ ${playerCard.name} subisce ${damageToPlayer} danni`);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`→ ${playerCard.name} ${t.subisce_danni} ${damageToPlayer} ${t.danni}`);
             this.audio.playDamage();
 
             // Animate damage + particles
@@ -11793,7 +12621,8 @@ else if (this.round >= 10) { cardsToPlay = 2;
     applyDeathSigils(card, isPlayerCard) {
         // 🎭 Create a copy when dies
         if (card.sigils.some(s => s.icon === '🎭') && isPlayerCard) {
-            this.log(`${card.name} crea una copia di se stessa!`);
+            const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+            this.log(`${card.name} ${t.crea_copia}`);
             const copy = this.createCardCopy(card);
             // Add copy to hand
             if (this.playerHand.length < 8) {
@@ -11815,6 +12644,33 @@ else if (this.round >= 10) { cardsToPlay = 2;
             card.longDesc,
             card.sigils
         );
+    }
+
+    // IMPROVED: Trigger sigil animation when sigil activates
+    triggerSigilAnimation(cardId, sigilIcon, isPlayerCard) {
+        const fieldSelector = isPlayerCard ? '#neve-card-field' : '#therapist-card-field';
+        const cardElements = document.querySelectorAll(`${fieldSelector} .card`);
+        
+        cardElements.forEach(el => {
+            if (el.dataset.cardId === cardId) {
+                // Add sigil-active class to card
+                el.classList.add('sigil-active');
+                setTimeout(() => {
+                    el.classList.remove('sigil-active');
+                }, 800);
+
+                // Find and animate the specific sigil icon
+                const sigils = el.querySelectorAll('.sigil');
+                sigils.forEach(sigil => {
+                    if (sigil.textContent.includes(sigilIcon)) {
+                        sigil.classList.add('sigil-triggered');
+                        setTimeout(() => {
+                            sigil.classList.remove('sigil-triggered');
+                        }, 600);
+                    }
+                });
+            }
+        });
     }
 
     startNewRound() {
@@ -11839,7 +12695,8 @@ else if (this.round >= 10) { cardsToPlay = 2;
             if (this.round === 40) this.madness.setIntensity(9);
         }
 
-        this.log(`\n=== ROUND ${this.round} ===\n`);
+        const t = TRANSLATIONS[currentLang] || TRANSLATIONS.it;
+        this.log(`\n${t.round_label_full} ${this.round} ===\n`);
         this.setTherapistDialogue(this.getTherapistDialogue());
 
         // Autosave every 3 rounds
@@ -12005,13 +12862,34 @@ else if (this.round >= 10) { cardsToPlay = 2;
     }
 
     getTherapistDialogue() {
+        // IMPROVED: Get translated dialogues based on current language
+        const lang = currentLang || 'it';
+        const translatedDialogues = this.getTranslatedTherapistDialogues(lang);
+        
         let phaseKey = `phase${this.currentPhase}`;
         if (this.revelationTriggered) {
             phaseKey = 'revelation';
         }
 
-        const dialogues = TherapistDialogues[phaseKey];
+        const dialogues = translatedDialogues[phaseKey] || TherapistDialogues[phaseKey];
         return dialogues[Math.floor(Math.random() * dialogues.length)];
+    }
+
+    // IMPROVED: Get translated therapist dialogues
+    getTranslatedTherapistDialogues(lang) {
+        const translations = TRANSLATIONS[lang] || TRANSLATIONS.it;
+        
+        // Build translated dialogues object from translation arrays
+        const translated = {
+            phase1: translations.therapist_phase1 || TherapistDialogues.phase1,
+            phase2: translations.therapist_phase2 || TherapistDialogues.phase2,
+            phase3: translations.therapist_phase3 || TherapistDialogues.phase3,
+            phase4: translations.therapist_phase4 || TherapistDialogues.phase4,
+            phase5: translations.therapist_phase5 || TherapistDialogues.phase5,
+            revelation: translations.therapist_revelation || TherapistDialogues.revelation
+        };
+        
+        return translated;
     }
 
     // === ALTER MESSAGES ===
@@ -12201,10 +13079,73 @@ else if (this.round >= 10) { cardsToPlay = 2;
         // Scroll to bottom
         this.elements.eventLog.scrollTop = this.elements.eventLog.scrollHeight;
 
-        // Keep only last 50 entries
-        while (this.elements.eventLog.children.length > 50) {
-            this.elements.eventLog.removeChild(this.elements.eventLog.firstChild);
+        // IMPROVED: Keep only last 50 entries when collapsed, keep all when expanded-full
+        const isExpandedFull = this.elements.eventLog.classList.contains('expanded-full');
+        if (!isExpandedFull) {
+            // Keep only last 50 entries when not fully expanded
+            while (this.elements.eventLog.children.length > 50) {
+                // Skip buttons (they have class 'event-log-toggle' or 'event-log-expand-full')
+                const firstChild = this.elements.eventLog.firstElementChild;
+                if (firstChild && !firstChild.classList.contains('event-log-toggle') && !firstChild.classList.contains('event-log-expand-full')) {
+                    this.elements.eventLog.removeChild(firstChild);
+                } else {
+                    // If first child is a button, remove the next one
+                    const nextChild = firstChild?.nextElementSibling;
+                    if (nextChild) {
+                        this.elements.eventLog.removeChild(nextChild);
+                    } else {
+                        break; // No more log entries to remove
+                    }
+                }
+            }
         }
+        // When expanded-full, keep all entries (no limit)
+    }
+
+    updateDynamicHand() {
+        // Aggiorna la mano del giocatore con posizionamento dinamico
+        const cardCount = this.playerHand.length;
+        if (cardCount === 0) return; // Nessuna carta da posizionare
+        
+        // Calcola la spaziatura dinamica in base al numero di carte
+        const maxSpacing = 50; // Spaziatura massima (pixel) tra le carte quando ce ne sono poche
+        const minSpacing = 20; // Spaziatura minima quando ci sono molte carte
+        
+        // Calcola la spaziatura ottimale: più carte = spaziatura minore
+        let spacing = Math.max(minSpacing, 
+                             maxSpacing - (cardCount - 1) * 3);
+        
+        // Calcola l'angolo massimo di rotazione in base al numero di carte
+        const maxRotation = Math.min(25, cardCount * 3); // Massimo 25 gradi, scalati con il numero di carte
+        
+        // Calcola la larghezza totale della mano
+        const totalWidth = (cardCount - 1) * spacing;
+        
+        // Per ogni carta nella mano, calcola la posizione e rotazione
+        this.elements.neveHand.innerHTML = '';
+        this.playerHand.forEach((card, index) => {
+            const cardElement = card.render();
+            cardElement.classList.add('drawing');
+            
+            // Calcola posizione X relativa al centro (da -totalWidth/2 a +totalWidth/2)
+            const relativeIndex = index - (cardCount - 1) / 2;
+            const xPos = relativeIndex * spacing;
+            
+            // Calcola rotazione (-maxRotation a +maxRotation)
+            const rotation = (relativeIndex / ((cardCount - 1) / 2)) * (maxRotation / 2);
+            
+            // Calcola Y offset basato sulla rotazione (effetto arco)
+            const yOffset = Math.abs(rotation) * 0.3; // Più angolo = più in basso
+            
+            // Imposta la trasformazione direttamente
+            cardElement.style.transform = `translateX(${xPos}px) translateY(${yOffset}px) rotate(${rotation}deg)`;
+            cardElement.style.zIndex = index + 1;
+            
+            // Salva la posizione per l'hover
+            cardElement.style.setProperty('--card-x', `${xPos}px`);
+            
+            this.elements.neveHand.appendChild(cardElement);
+        });
     }
 
     updateUI() {
@@ -12237,13 +13178,8 @@ else if (this.round >= 10) { cardsToPlay = 2;
             this.elements.stabilityFill.style.background = '#4a7c8e';
         }
 
-        // Update player hand
-        this.elements.neveHand.innerHTML = '';
-        this.playerHand.forEach((card, index) => {
-            const cardElement = card.render();
-            cardElement.classList.add('drawing');
-            this.elements.neveHand.appendChild(cardElement);
-        });
+        // Update player hand - DYNAMIC POSITIONING
+        this.updateDynamicHand();
 
         // Update therapist hand (face down cards)
         if (this.elements.therapistHand) {
@@ -12303,51 +13239,90 @@ else if (this.round >= 10) { cardsToPlay = 2;
      * Save game to a specific slot (1-3) or autosave slot
      * @param {number} slot - Save slot number (1-3), or 0 for autosave
      */
+    // IMPROVED: Calculate checksum for save validation
+    calculateSaveChecksum(data) {
+        // Simple checksum: sum of key numeric values
+        let sum = 0;
+        const numericKeys = ['round', 'stability', 'fragments', 'trust', 'awareness', 'glitchLevel', 'currentPhase'];
+        numericKeys.forEach(key => {
+            if (data[key] !== undefined) {
+                sum += data[key] || 0;
+            }
+        });
+        return sum.toString(36); // Base36 encoding for shorter checksum
+    }
+
     saveGame(slot = 0) {
-        const saveData = {
-            // Basic game state
-            round: this.round,
-            stability: this.stability,
-            fragments: this.fragments,
-            isPlayerTurn: this.isPlayerTurn,
-            gameStarted: this.gameStarted,
-            sessionStartTime: this.sessionStartTime,
+        try {
+            const saveData = {
+                // Version for compatibility checking
+                version: "1.0",
+                timestamp: Date.now(),
+                
+                // Basic game state
+                round: this.round,
+                stability: this.stability,
+                fragments: this.fragments,
+                isPlayerTurn: this.isPlayerTurn,
+                gameStarted: this.gameStarted,
+                sessionStartTime: this.sessionStartTime,
 
-            // Phase tracking
-            currentPhase: this.currentPhase,
-            phaseDialogueIndex: this.phaseDialogueIndex,
+                // Phase tracking
+                currentPhase: this.currentPhase,
+                phaseDialogueIndex: this.phaseDialogueIndex,
 
-            // Narrative tracking
-            shownAlterMessages: Array.from(this.shownAlterMessages),
-            revelationTriggered: this.revelationTriggered,
-            askedQuestions: Array.from(this.askedQuestions),
+                // Narrative tracking
+                shownAlterMessages: Array.from(this.shownAlterMessages),
+                revelationTriggered: this.revelationTriggered,
+                askedQuestions: Array.from(this.askedQuestions),
 
-            // Player stats
-            trust: this.trust,
-            awareness: this.awareness,
-            metaAwareness: this.metaAwareness,
+                // Player stats
+                trust: this.trust,
+                awareness: this.awareness,
+                metaAwareness: this.metaAwareness,
 
-            // Metanarrative state
-            glitchLevel: this.glitchLevel,
-            selfAwareMode: this.selfAwareMode,
-            fourthWallBroken: this.fourthWallBroken,
-            bossFightActive: this.bossFightActive,
-            endingReached: this.endingReached,
-            choiceHistory: this.choiceHistory,
+                // Metanarrative state
+                glitchLevel: this.glitchLevel,
+                selfAwareMode: this.selfAwareMode,
+                fourthWallBroken: this.fourthWallBroken,
+                bossFightActive: this.bossFightActive,
+                endingReached: this.endingReached,
+                choiceHistory: this.choiceHistory,
 
-            // Metadata
-            saveTimestamp: Date.now(),
-            saveVersion: "1.0.0",
-            playTime: this.sessionStartTime ? Date.now() - this.sessionStartTime : 0
-        };
+                // Metadata
+                saveTimestamp: Date.now(),
+                saveVersion: "1.0.0",
+                playTime: this.sessionStartTime ? Date.now() - this.sessionStartTime : 0
+            };
 
-        const slotKey = slot === 0 ? 'neveSavedGame_autosave' : `neveSavedGame_slot${slot}`;
-        localStorage.setItem(slotKey, JSON.stringify(saveData));
+            // IMPROVED: Add checksum for validation
+            saveData.checksum = this.calculateSaveChecksum(saveData);
 
-        // Also update last save slot metadata
-        localStorage.setItem('neveSavedGame_lastSlot', slot.toString());
-
-        this.log(slot === 0 ? "[ Autosave completato ]" : `[ Gioco salvato nello Slot ${slot} ]`, "meta");
+            const slotKey = slot === 0 ? 'neveSavedGame_autosave' : `neveSavedGame_slot${slot}`;
+            const jsonData = JSON.stringify(saveData);
+            
+            // IMPROVED: Try-catch for localStorage errors (quota exceeded, etc.)
+            try {
+                localStorage.setItem(slotKey, jsonData);
+                // Also update last save slot metadata
+                localStorage.setItem('neveSavedGame_lastSlot', slot.toString());
+                this.log(slot === 0 ? "[ Autosave completato ]" : `[ Gioco salvato nello Slot ${slot} ]`, "meta");
+                return true;
+            } catch (e) {
+                if (e.name === 'QuotaExceededError') {
+                    this.log("[ ERRORE: Spazio di archiviazione esaurito. Prova a eliminare altri salvataggi. ]", "error");
+                    alert("Spazio di archiviazione esaurito. Elimina altri salvataggi e riprova.");
+                } else {
+                    this.log(`[ ERRORE durante il salvataggio: ${e.message} ]`, "error");
+                    alert(`Errore durante il salvataggio: ${e.message}`);
+                }
+                return false;
+            }
+        } catch (e) {
+            this.log(`[ ERRORE critico durante il salvataggio: ${e.message} ]`, "error");
+            console.error("Save error:", e);
+            return false;
+        }
     }
 
     /**
@@ -12371,6 +13346,29 @@ else if (this.round >= 10) { cardsToPlay = 2;
 
         try {
             const data = JSON.parse(savedData);
+
+            // IMPROVED: Validate save data integrity
+            if (!data.version) {
+                this.log("[ AVVISO: Salvataggio di versione sconosciuta. Potrebbero esserci problemi. ]", "meta");
+            }
+
+            // IMPROVED: Validate checksum if present
+            if (data.checksum) {
+                const expectedChecksum = this.calculateSaveChecksum(data);
+                if (data.checksum !== expectedChecksum) {
+                    this.log("[ AVVISO: Il salvataggio potrebbe essere corrotto. Procedo comunque. ]", "meta");
+                }
+            }
+
+            // IMPROVED: Validate critical values
+            if (typeof data.round !== 'number' || data.round < 1) {
+                this.log("[ ERRORE: Dati di salvataggio non validi (round). ]", "error");
+                return false;
+            }
+            if (typeof data.stability !== 'number' || data.stability < 0 || data.stability > 100) {
+                this.log("[ ERRORE: Dati di salvataggio non validi (stability). ]", "error");
+                return false;
+            }
 
             // Restore basic state
             this.round = data.round;
