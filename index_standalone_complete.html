@@ -7549,11 +7549,10 @@ Empty Recycle Bin? [Y/N]
                 }
             }
 
-            // F12 = Allow DevTools to open (removed preventDefault)
-            if (e.key === 'F12') {
-                // Don't prevent default - allow browser DevTools to open
-                this.easterEggF12();
-            }
+            // F12 = Allow DevTools to open (easter egg disabled to not interfere)
+            // if (e.key === 'F12') {
+            //     this.easterEggF12(); // Disabled - was calling console.clear() and interfering with DevTools
+            // }
 
             // Escape = Close all madness effects
             if (e.key === 'Escape') {
