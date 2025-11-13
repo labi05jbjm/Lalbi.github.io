@@ -5383,6 +5383,88 @@ body.game-started .hand-container {
     }
 }
 
+/* ============================================ */
+/* === POETIC SEQUENCE === */
+/* ============================================ */
+.poetic-sequence {
+    background: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 1s ease-in;
+    transition: opacity 1s ease-in-out;
+}
+
+.poetic-content {
+    max-width: 900px;
+    width: 90%;
+    padding: 40px;
+}
+
+.poetic-text {
+    color: #ffffff;
+    font-family: 'Crimson Text', serif;
+    font-size: 28px;
+    line-height: 1.8;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s ease-in;
+    transition: opacity 0.8s ease-in-out;
+}
+
+/* Typewriter effect */
+.typewriter {
+    overflow: hidden;
+    white-space: pre-wrap;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Brush stroke effect for transition to warning */
+@keyframes brushStroke {
+    0% {
+        clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    }
+    25% {
+        clip-path: polygon(0 0, 30% 0, 25% 100%, 0 100%);
+    }
+    50% {
+        clip-path: polygon(0 0, 60% 0, 55% 100%, 0 100%);
+    }
+    75% {
+        clip-path: polygon(0 0, 85% 0, 80% 100%, 0 100%);
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+}
+
+.brush-reveal {
+    animation: brushStroke 2s ease-in-out forwards;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .poetic-text {
+        font-size: 20px;
+        line-height: 1.6;
+        padding: 15px;
+    }
+}
+
 </style>
 
 <style id="neve-redesign-fallback-css">
@@ -5560,6 +5642,13 @@ body.game-started .hand-container {
         <div class="confirmation-buttons">
             <button class="confirmation-btn" id="back-btn">BACK</button>
             <button class="confirmation-btn confirm" id="confirm-btn">CONFIRM LANGUAGE CHOICE</button>
+        </div>
+    </div>
+
+    <!-- POETIC SEQUENCE -->
+    <div id="poetic-sequence" class="poetic-sequence menu-overlay hidden">
+        <div class="poetic-content">
+            <p id="poetic-text" class="poetic-text"></p>
         </div>
     </div>
 
@@ -6073,7 +6162,14 @@ const TRANSLATIONS = {
         pause_quit: "ABBANDONA SESSIONE",
 
         // Gamepad
-        gamepad_active: "Gamepad Attivo"
+        gamepad_active: "Gamepad Attivo",
+
+        // Poetic Sequence
+        poetic_messages: [
+            "Ringrazio te, statua Greca che hai colmato di dolci speranze il mio cuore, e l'hai trattato come carta straccia. Ringrazio te, fogliolina, per aver strappato parti di me che non riavrò mai più. Ringrazio te, Kiki, per aver assaporato il mio nettare, per poi averlo trasformato in veleno.",
+            "Ora mi rivolgo a te, utente che hai scelto di giocare a questo prodotto. Nel caso in cui tu l'abbia pagato, ti sono grato per il rispetto e la fiducia. Nel caso in cui tu l'abbia preso craccato, non posso biasimarti. In entrambi i casi, con tutto il cuore, ti auguro una buona esperienza di gioco.",
+            "Che tu possa sentirti accolto. Che tu possa sentirti compreso, talvolta. Che tu possa sentirti ascoltato."
+        ]
     },
     en: {
         // Language Selector
@@ -6133,7 +6229,14 @@ const TRANSLATIONS = {
         pause_quit: "ABANDON SESSION",
 
         // Gamepad
-        gamepad_active: "Gamepad Active"
+        gamepad_active: "Gamepad Active",
+
+        // Poetic Sequence
+        poetic_messages: [
+            "I thank you, Greek statue who filled my heart with sweet hopes, and then treated it like waste paper. I thank you, little leaf, for tearing away parts of me that I will never have again. I thank you, Kiki, for tasting my nectar, and then turning it into poison.",
+            "Now I turn to you, user who has chosen to play this product. If you have paid for it, I am grateful for your respect and trust. If you have pirated it, I cannot blame you. In both cases, with all my heart, I wish you a good gaming experience.",
+            "May you feel welcomed. May you feel understood, at times. May you feel heard."
+        ]
     },
     de: {
         // Language Selector
@@ -6193,7 +6296,14 @@ const TRANSLATIONS = {
         pause_quit: "SITZUNG VERLASSEN",
 
         // Gamepad
-        gamepad_active: "Gamepad Aktiv"
+        gamepad_active: "Gamepad Aktiv",
+
+        // Poetic Sequence (using English text as fallback for now)
+        poetic_messages: [
+            "I thank you, Greek statue who filled my heart with sweet hopes, and then treated it like waste paper. I thank you, little leaf, for tearing away parts of me that I will never have again. I thank you, Kiki, for tasting my nectar, and then turning it into poison.",
+            "Now I turn to you, user who has chosen to play this product. If you have paid for it, I am grateful for your respect and trust. If you have pirated it, I cannot blame you. In both cases, with all my heart, I wish you a good gaming experience.",
+            "May you feel welcomed. May you feel understood, at times. May you feel heard."
+        ]
     },
     fr: {
         // Language Selector
@@ -6253,7 +6363,14 @@ const TRANSLATIONS = {
         pause_quit: "ABANDONNER LA SESSION",
 
         // Gamepad
-        gamepad_active: "Manette Active"
+        gamepad_active: "Manette Active",
+
+        // Poetic Sequence (using English text as fallback for now)
+        poetic_messages: [
+            "I thank you, Greek statue who filled my heart with sweet hopes, and then treated it like waste paper. I thank you, little leaf, for tearing away parts of me that I will never have again. I thank you, Kiki, for tasting my nectar, and then turning it into poison.",
+            "Now I turn to you, user who has chosen to play this product. If you have paid for it, I am grateful for your respect and trust. If you have pirated it, I cannot blame you. In both cases, with all my heart, I wish you a good gaming experience.",
+            "May you feel welcomed. May you feel understood, at times. May you feel heard."
+        ]
     },
     es: {
         // Language Selector
@@ -6313,7 +6430,14 @@ const TRANSLATIONS = {
         pause_quit: "ABANDONAR SESIÓN",
 
         // Gamepad
-        gamepad_active: "Gamepad Activo"
+        gamepad_active: "Gamepad Activo",
+
+        // Poetic Sequence (using English text as fallback for now)
+        poetic_messages: [
+            "I thank you, Greek statue who filled my heart with sweet hopes, and then treated it like waste paper. I thank you, little leaf, for tearing away parts of me that I will never have again. I thank you, Kiki, for tasting my nectar, and then turning it into poison.",
+            "Now I turn to you, user who has chosen to play this product. If you have paid for it, I am grateful for your respect and trust. If you have pirated it, I cannot blame you. In both cases, with all my heart, I wish you a good gaming experience.",
+            "May you feel welcomed. May you feel understood, at times. May you feel heard."
+        ]
     }
 };
 
@@ -6388,12 +6512,89 @@ function initLanguageSelector() {
                     selector.style.display = 'none';
                     confirmation.style.display = 'none';
                     applyTranslations();
-                    // Show content warning after language selection
-                    document.getElementById('content-warning').classList.remove('hidden');
+                    // Show poetic sequence before content warning
+                    startPoeticSequence();
                 }, 1000);
             }, 500);
         }
     });
+}
+
+// === POETIC SEQUENCE FUNCTIONS ===
+let currentPoeticMessageIndex = 0;
+
+function startPoeticSequence() {
+    // Show poetic sequence container
+    const poeticSequence = document.getElementById('poetic-sequence');
+    const poeticText = document.getElementById('poetic-text');
+
+    poeticSequence.classList.remove('hidden');
+
+    // Get poetic messages in selected language
+    const messages = TRANSLATIONS[currentLang].poetic_messages;
+
+    // Display messages one by one
+    currentPoeticMessageIndex = 0;
+    displayPoeticMessage(messages, poeticText, poeticSequence);
+}
+
+function displayPoeticMessage(messages, poeticText, poeticSequence) {
+    if (currentPoeticMessageIndex >= messages.length) {
+        // All messages shown, transition to warning with brush effect
+        setTimeout(() => {
+            showWarningWithBrushEffect(poeticSequence);
+        }, 2000);
+        return;
+    }
+
+    const message = messages[currentPoeticMessageIndex];
+    poeticText.textContent = '';
+
+    // Typewriter effect
+    typewriterEffect(message, poeticText, () => {
+        // Wait 3 seconds before showing next message
+        setTimeout(() => {
+            // Fade out current message
+            poeticText.style.opacity = '0';
+            setTimeout(() => {
+                currentPoeticMessageIndex++;
+                poeticText.style.opacity = '1';
+                displayPoeticMessage(messages, poeticText, poeticSequence);
+            }, 800);
+        }, 3000);
+    });
+}
+
+function typewriterEffect(text, element, callback) {
+    let index = 0;
+    const speed = 30; // milliseconds per character
+
+    const type = () => {
+        if (index < text.length) {
+            element.textContent += text.charAt(index);
+            index++;
+            setTimeout(type, speed);
+        } else {
+            if (callback) callback();
+        }
+    };
+
+    type();
+}
+
+function showWarningWithBrushEffect(poeticSequence) {
+    // Hide poetic sequence
+    poeticSequence.style.opacity = '0';
+
+    setTimeout(() => {
+        poeticSequence.classList.add('hidden');
+        poeticSequence.style.opacity = '1';
+
+        // Show warning with brush reveal effect
+        const contentWarning = document.getElementById('content-warning');
+        contentWarning.classList.remove('hidden');
+        contentWarning.classList.add('brush-reveal');
+    }, 1000);
 }
 
 // Apply translations to all static UI elements

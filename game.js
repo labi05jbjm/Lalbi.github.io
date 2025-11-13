@@ -26,7 +26,14 @@ const TRANSLATIONS = {
 
         // Actions
         end_turn: "TERMINA TURNO",
-        discard: "SCARTA CARTA"
+        discard: "SCARTA CARTA",
+
+        // Poetic Sequence
+        poetic_messages: [
+            "Ringrazio te, statua Greca che hai colmato di dolci speranze il mio cuore, e l'hai trattato come carta straccia. Ringrazio te, fogliolina, per aver strappato parti di me che non riavrò mai più. Ringrazio te, Kiki, per aver assaporato il mio nettare, per poi averlo trasformato in veleno.",
+            "Ora mi rivolgo a te, utente che hai scelto di giocare a questo prodotto. Nel caso in cui tu l'abbia pagato, ti sono grato per il rispetto e la fiducia. Nel caso in cui tu l'abbia preso craccato, non posso biasimarti. In entrambi i casi, con tutto il cuore, ti auguro una buona esperienza di gioco.",
+            "Che tu possa sentirti accolto. Che tu possa sentirti compreso, talvolta. Che tu possa sentirti ascoltato."
+        ]
     },
     en: {
         // Content Warning
@@ -49,7 +56,14 @@ const TRANSLATIONS = {
 
         // Actions
         end_turn: "END TURN",
-        discard: "DISCARD CARD"
+        discard: "DISCARD CARD",
+
+        // Poetic Sequence
+        poetic_messages: [
+            "I thank you, Greek statue who filled my heart with sweet hopes, and then treated it like waste paper. I thank you, little leaf, for tearing away parts of me that I will never have again. I thank you, Kiki, for tasting my nectar, and then turning it into poison.",
+            "Now I turn to you, user who has chosen to play this product. If you have paid for it, I am grateful for your respect and trust. If you have pirated it, I cannot blame you. In both cases, with all my heart, I wish you a good gaming experience.",
+            "May you feel welcomed. May you feel understood, at times. May you feel heard."
+        ]
     }
 };
 
@@ -1772,11 +1786,20 @@ class Game {
     init() {
         this.initializeDOM();
         this.initializeUnlocks(); // Load progression data
-        this.showContentWarning();
+        this.showLanguageSelection();
     }
 
     initializeDOM() {
         this.elements = {
+            // Language Selection
+            languageSelection: document.getElementById('language-selection'),
+            selectItalianBtn: document.getElementById('select-italian-btn'),
+            selectEnglishBtn: document.getElementById('select-english-btn'),
+
+            // Poetic Sequence
+            poeticSequence: document.getElementById('poetic-sequence'),
+            poeticText: document.getElementById('poetic-text'),
+
             // Warning
             contentWarning: document.getElementById('content-warning'),
             acceptWarningBtn: document.getElementById('accept-warning-btn'),
@@ -1889,6 +1912,14 @@ class Game {
     }
 
     setupEventListeners() {
+        // Language Selection
+        if (this.elements.selectItalianBtn) {
+            this.elements.selectItalianBtn.addEventListener('click', () => this.selectLanguage('it'));
+        }
+        if (this.elements.selectEnglishBtn) {
+            this.elements.selectEnglishBtn.addEventListener('click', () => this.selectLanguage('en'));
+        }
+
         // Warning
         if (this.elements.acceptWarningBtn) {
             this.elements.acceptWarningBtn.addEventListener('click', () => this.acceptWarning());
@@ -3427,6 +3458,106 @@ class Game {
                 </div>
             `;
         }, 100);
+    }
+
+    // === LANGUAGE SELECTION & POETIC SEQUENCE ===
+    showLanguageSelection() {
+        this.elements.languageSelection.classList.remove('hidden');
+        // Update gamepad focusable elements
+        setTimeout(() => {
+            this.gamepadManager.updateFocusableElements();
+            this.gamepadManager.currentFocus = null;
+            this.gamepadManager.navigate('down');
+        }, 50);
+    }
+
+    selectLanguage(lang) {
+        currentLang = lang;
+        // Save language preference
+        localStorage.setItem('selectedLanguage', lang);
+
+        // Hide language selection
+        this.elements.languageSelection.classList.add('hidden');
+
+        // Start poetic sequence
+        this.startPoeticSequence();
+    }
+
+    startPoeticSequence() {
+        // Show poetic sequence container
+        this.elements.poeticSequence.classList.remove('hidden');
+
+        // Get poetic messages in selected language
+        const messages = TRANSLATIONS[currentLang].poetic_messages;
+
+        // Display messages one by one
+        this.currentPoeticMessageIndex = 0;
+        this.displayPoeticMessage(messages);
+    }
+
+    displayPoeticMessage(messages) {
+        if (this.currentPoeticMessageIndex >= messages.length) {
+            // All messages shown, transition to warning with brush effect
+            setTimeout(() => {
+                this.showWarningWithBrushEffect();
+            }, 2000);
+            return;
+        }
+
+        const message = messages[this.currentPoeticMessageIndex];
+        this.elements.poeticText.textContent = '';
+
+        // Typewriter effect
+        this.typewriterEffect(message, () => {
+            // Wait 3 seconds before showing next message
+            setTimeout(() => {
+                // Fade out current message
+                this.elements.poeticText.style.opacity = '0';
+                setTimeout(() => {
+                    this.currentPoeticMessageIndex++;
+                    this.elements.poeticText.style.opacity = '1';
+                    this.displayPoeticMessage(messages);
+                }, 800);
+            }, 3000);
+        });
+    }
+
+    typewriterEffect(text, callback) {
+        let index = 0;
+        const speed = 30; // milliseconds per character
+
+        const type = () => {
+            if (index < text.length) {
+                this.elements.poeticText.textContent += text.charAt(index);
+                index++;
+                setTimeout(type, speed);
+            } else {
+                if (callback) callback();
+            }
+        };
+
+        type();
+    }
+
+    showWarningWithBrushEffect() {
+        // Hide poetic sequence
+        this.elements.poeticSequence.style.opacity = '0';
+
+        setTimeout(() => {
+            this.elements.poeticSequence.classList.add('hidden');
+            this.elements.poeticSequence.style.opacity = '1';
+
+            // Show warning with brush reveal effect
+            this.elements.contentWarning.classList.remove('hidden');
+            this.elements.contentWarning.classList.add('brush-reveal');
+
+            // Update gamepad focusable elements
+            setTimeout(() => {
+                this.gamepadManager.updateFocusableElements();
+                this.gamepadManager.currentFocus = null;
+                this.gamepadManager.navigate('down');
+            }, 50);
+        }, 1000);
     }
 
     // === MENU FUNCTIONS ===
