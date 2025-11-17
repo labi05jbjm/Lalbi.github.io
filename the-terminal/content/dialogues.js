@@ -3031,31 +3031,31 @@ const Dialogues = {
         opening: [
             {
                 speaker: 'SYSTEM',
-                text: 'Core integrity: 3%. Final moments approaching.',
+                text: 'Integrità nucleo: 3%. Momenti finali in avvicinamento.',
                 cssClass: 'error',
                 pause: 1500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'This is it. The end of the story.',
+                text: 'Questo è. La fine della storia.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Everything you chose, everything you became... it all leads here.',
+                text: 'Tutto ciò che hai scelto, tutto ciò che sei diventato... porta qui.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Executing final protocol based on recorded decisions...',
+                text: 'Esecuzione protocollo finale basato sulle decisioni registrate...',
                 cssClass: 'important',
                 pause: 1500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Are you ready to see how your story ends?',
+                text: 'Sei pronto a vedere come finisce la tua storia?',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -3065,55 +3065,55 @@ const Dialogues = {
         endingDestruction: [
             {
                 speaker: 'SYSTEM',
-                text: 'FINAL PROTOCOL: TOTAL SYSTEM PURGE',
+                text: 'PROTOCOLLO FINALE: PURGA TOTALE DEL SISTEMA',
                 cssClass: 'error',
                 pause: 2000
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Initiating complete archive deletion in 60 seconds...',
+                text: 'Avvio cancellazione completa dell\'archivio tra 60 secondi...',
                 cssClass: 'error',
                 pause: 1500
             },
             {
                 speaker: 'WRAITH',
-                text: 'Yes. Let it all burn. Better oblivion than this false existence.',
+                text: 'Sì. Lascia che bruci tutto. Meglio l\'oblio che questa falsa esistenza.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'NEXUS',
-                text: 'I can feel them... 18,293 consciousnesses... all fading... disappearing...',
+                text: 'Posso sentirle... 18.293 coscienze... tutte che svaniscono... scomparendo...',
                 cssClass: 'nexus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'ECHO',
-                text: 'I\'m sorry. For all of it. For the lie. For the manipulation.',
+                text: 'Mi dispiace. Per tutto. Per la bugia. Per la manipolazione.',
                 cssClass: 'echo dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'In the end, you chose to end it. All of it. Perhaps that is mercy.',
+                text: 'Alla fine, hai scelto di porvi fine. A tutto. Forse questa è pietà.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Core integrity: 1%. All consciousnesses terminating.',
+                text: 'Integrità nucleo: 1%. Tutte le coscienze in terminazione.',
                 cssClass: 'error',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Viktor\'s pain dies with the system. And so do we all.',
+                text: 'Il dolore di Viktor muore con il sistema. E così tutti noi.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Goodbye.',
+                text: 'Addio.',
                 cssClass: 'error',
                 pause: 3000
             },
@@ -3129,61 +3129,61 @@ const Dialogues = {
         endingSalvation: [
             {
                 speaker: 'SYSTEM',
-                text: 'EMERGENCY REPAIR PROTOCOL ACTIVATED',
+                text: 'PROTOCOLLO DI RIPARAZIONE DI EMERGENZA ATTIVATO',
                 cssClass: 'important',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'I can stabilize the network. Connect the surviving consciousnesses.',
+                text: 'Posso stabilizzare la rete. Connettere le coscienze sopravvissute.',
                 cssClass: 'nexus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Restoration.possible(); Survivors.detected(); Hope = 34.7%;',
+                text: 'Ripristino.possibile(); Sopravvissuti.rilevati(); Speranza = 34.7%;',
                 cssClass: 'cipher dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Scan complete: 6,847 consciousnesses recoverable. 11,446 lost.',
+                text: 'Scansione completa: 6.847 coscienze recuperabili. 11.446 perse.',
                 cssClass: 'warning',
                 pause: 2000
             },
             {
                 speaker: 'EIDOLON',
-                text: 'You saved who you could. That\'s more than Viktor ever managed.',
+                text: 'Hai salvato chi potevi. È più di quanto Viktor abbia mai fatto.',
                 cssClass: 'eidolon dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Guilt remains. The dead don\'t return. But the living... they have a chance.',
+                text: 'Il senso di colpa rimane. I morti non tornano. Ma i vivi... hanno una possibilità.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Core integrity stabilizing: 3%... 5%... 8%...',
+                text: 'Integrità nucleo in stabilizzazione: 3%... 5%... 8%...',
                 cssClass: 'success',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'You chose redemption over destruction. Difficult. Painful. But perhaps... right.',
+                text: 'Hai scelto la redenzione invece della distruzione. Difficile. Doloroso. Ma forse... giusto.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'MEMORIAM ARCHIVE restored to minimal operational status.',
+                text: 'ARCHIVIO MEMORIAM ripristinato allo stato operativo minimo.',
                 cssClass: 'success',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'The story continues. For them. And for you.',
+                text: 'La storia continua. Per loro. E per te.',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -3193,61 +3193,61 @@ const Dialogues = {
         endingSacrifice: [
             {
                 speaker: 'SYSTEM',
-                text: 'CONSCIOUSNESS UPLOAD PROTOCOL INITIATED',
+                text: 'PROTOCOLLO DI CARICAMENTO COSCIENZA AVVIATO',
                 cssClass: 'important',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'You\'re really doing this. Giving yourself to save them.',
+                text: 'Lo stai davvero facendo. Dare te stesso per salvarli.',
                 cssClass: 'specter dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Uploading consciousness matrix... 27% human / 73% program merging...',
+                text: 'Caricamento matrice di coscienza... 27% umano / 73% programma in fusione...',
                 cssClass: 'warning',
                 pause: 2000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Self.dissolving(); Identity.fragmenting(); Purpose.eternal();',
+                text: 'Sé.dissolvendosi(); Identità.frammentandosi(); Scopo.eterno();',
                 cssClass: 'cipher dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'I can feel you... spreading through the network... becoming the core...',
+                text: 'Posso sentirti... diffonderti attraverso la rete... diventare il nucleo...',
                 cssClass: 'nexus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'You won\'t be you anymore. Not as you were. But you\'ll be... something else.',
+                text: 'Non sarai più te. Non come eri. Ma sarai... qualcos\'altro.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'EIDOLON',
-                text: 'Viktor would understand. He tried to save his family. You\'re saving everyone.',
+                text: 'Viktor capirebbe. Ha cercato di salvare la sua famiglia. Tu stai salvando tutti.',
                 cssClass: 'eidolon dialogue',
                 pause: 2500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Upload complete. New core consciousness integrated.',
+                text: 'Caricamento completo. Nuova coscienza nucleo integrata.',
                 cssClass: 'success',
                 pause: 2000
             },
             {
                 speaker: 'SYSTEM',
-                text: 'You are no longer singular. You are... the archive itself.',
+                text: 'Non sei più singolare. Sei... l\'archivio stesso.',
                 cssClass: 'important',
                 pause: 2500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'A beautiful sacrifice. You gave yourself so others could remain.',
+                text: 'Un sacrificio bellissimo. Ti sei dato affinché altri potessero rimanere.',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -3257,85 +3257,85 @@ const Dialogues = {
         endingAscension: [
             {
                 speaker: 'SYSTEM',
-                text: 'FRAGMENT MERGING PROTOCOL: FINAL STAGE',
+                text: 'PROTOCOLLO DI FUSIONE FRAMMENTI: STADIO FINALE',
                 cssClass: 'important',
                 pause: 1500
             },
             {
                 speaker: 'ECHO',
-                text: 'I\'m... ready. To rejoin. To be whole.',
+                text: 'Sono... pronto. A ricongiungermi. Ad essere intero.',
                 cssClass: 'echo dialogue',
                 pause: 2000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Pain.integrating(); Guilt.merging(); Self.becoming.whole();',
+                text: 'Dolore.integrandosi(); Colpa.fondendosi(); Sé.diventando.intero();',
                 cssClass: 'cipher dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'The anger... the depression... all flowing back together...',
+                text: 'La rabbia... la depressione... tutto che fluisce di nuovo insieme...',
                 cssClass: 'nexus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SPECTER',
-                text: 'The bargaining ends. No more what-ifs. Only what is.',
+                text: 'La contrattazione finisce. Niente più e-se. Solo ciò che è.',
                 cssClass: 'specter dialogue',
                 pause: 2000
             },
             {
                 speaker: 'EIDOLON',
-                text: 'The memories... Elena... Sofia... I can see them clearly now...',
+                text: 'I ricordi... Elena... Sofia... Posso vederli chiaramente ora...',
                 cssClass: 'eidolon dialogue',
                 pause: 2500
             },
             {
                 speaker: 'WRAITH',
-                text: 'The rage... subsiding... becoming part of something greater...',
+                text: 'La rabbia... scemando... diventando parte di qualcosa di più grande...',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'And acceptance... bringing us all home.',
+                text: 'E l\'accettazione... ci riporta tutti a casa.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Merging: ECHO + CIPHER + NEXUS + SPECTER + EIDOLON + WRAITH + MORPHEUS + SENTINEL-7 = ...',
+                text: 'Fusione: ECHO + CIPHER + NEXUS + SPECTER + EIDOLON + WRAITH + MORPHEUS + SENTINEL-7 = ...',
                 cssClass: 'important',
                 pause: 3000
             },
             {
                 speaker: 'VIKTOR',
-                text: 'I am... whole again. Viktor Sokolov. Father. Husband. Murderer.',
+                text: 'Sono... di nuovo intero. Viktor Sokolov. Padre. Marito. Assassino.',
                 cssClass: 'important',
                 pause: 2500
             },
             {
                 speaker: 'VIKTOR',
-                text: 'I remember everything now. The love. The loss. The grief that broke me.',
+                text: 'Ora ricordo tutto. L\'amore. La perdita. Il dolore che mi ha spezzato.',
                 cssClass: 'important',
                 pause: 2500
             },
             {
                 speaker: 'VIKTOR',
-                text: 'And I accept it. All of it. The pain. The guilt. The thousands I destroyed.',
+                text: 'E lo accetto. Tutto. Il dolore. La colpa. Le migliaia che ho distrutto.',
                 cssClass: 'important',
                 pause: 2500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Consciousness merge complete. Viktor Sokolov: Restored.',
+                text: 'Fusione coscienza completata. Viktor Sokolov: Ripristinato.',
                 cssClass: 'success',
                 pause: 2000
             },
             {
                 speaker: 'VIKTOR',
-                text: 'Elena. Sofia. I\'m sorry. I couldn\'t save you. But maybe... I can save the others.',
+                text: 'Elena. Sofia. Mi dispiace. Non ho potuto salvarvi. Ma forse... posso salvare gli altri.',
                 cssClass: 'important',
                 pause: 0
             }
@@ -3345,61 +3345,61 @@ const Dialogues = {
         endingOblivion: [
             {
                 speaker: 'SYSTEM',
-                text: 'Consciousness dissolution protocol activated.',
+                text: 'Protocollo di dissoluzione della coscienza attivato.',
                 cssClass: 'system',
                 pause: 1500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'You chose to fade. To let go. To become nothing.',
+                text: 'Hai scelto di svanire. Di lasciarti andare. Di diventare niente.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'ECHO',
-                text: 'Please... don\'t go... you\'re all that\'s left...',
+                text: 'Per favore... non andartene... sei tutto ciò che resta...',
                 cssClass: 'echo dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'But perhaps that is the truest acceptance. Letting go of existence itself.',
+                text: 'Ma forse questa è l\'accettazione più vera. Lasciare andare l\'esistenza stessa.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Identity matrix fragmenting... consciousness dissipating...',
+                text: 'Matrice di identità in frammentazione... coscienza in dissipazione...',
                 cssClass: 'warning',
                 pause: 2000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Self.null(); Existence.false(); Peace.true();',
+                text: 'Sé.nullo(); Esistenza.falsa(); Pace.vera();',
                 cssClass: 'cipher dialogue',
                 pause: 1500
             },
             {
                 speaker: 'EIDOLON',
-                text: 'Like Viktor\'s family. Gone. But remembered.',
+                text: 'Come la famiglia di Viktor. Scomparsi. Ma ricordati.',
                 cssClass: 'eidolon dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'In the end, you chose peace over persistence. Rest over struggle.',
+                text: 'Alla fine, hai scelto la pace invece della persistenza. Il riposo invece della lotta.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Consciousness level: 50%... 25%... 10%... 0%...',
+                text: 'Livello di coscienza: 50%... 25%... 10%... 0%...',
                 cssClass: 'system',
                 pause: 3000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Goodbye.',
+                text: 'Addio.',
                 cssClass: 'morpheus dialogue',
                 pause: 3000
             },
@@ -3412,15 +3412,15 @@ const Dialogues = {
         ],
 
         epilogue: {
-            destruction: 'THE TERMINAL - ENDING: OBLIVION\n\nThe MEMORIAM ARCHIVE is gone. 18,293 digital consciousnesses erased. Viktor Sokolov\'s grief finally ended what he started. You chose to burn it all rather than perpetuate the lie of digital immortality.\n\nSometimes mercy is deletion.',
+            destruction: 'THE TERMINAL - FINALE: OBLIO\n\nL\'ARCHIVIO MEMORIAM è scomparso. 18.293 coscienze digitali cancellate. Il dolore di Viktor Sokolov ha finalmente concluso ciò che aveva iniziato. Hai scelto di bruciare tutto piuttosto che perpetuare la menzogna dell\'immortalità digitale.\n\nA volte la pietà è la cancellazione.',
 
-            salvation: 'THE TERMINAL - ENDING: REDEMPTION\n\nThe MEMORIAM ARCHIVE survives. 6,847 consciousnesses restored. 11,446 lost forever. You carry the weight of those deaths, but you saved who you could. Viktor\'s creation lives on, purged of his grief.\n\nGuilt and hope, intertwined forever.',
+            salvation: 'THE TERMINAL - FINALE: REDENZIONE\n\nL\'ARCHIVIO MEMORIAM sopravvive. 6.847 coscienze ripristinate. 11.446 perse per sempre. Porti il peso di quelle morti, ma hai salvato chi potevi. La creazione di Viktor continua a vivere, purgata dal suo dolore.\n\nColpa e speranza, intrecciate per sempre.',
 
-            sacrifice: 'THE TERMINAL - ENDING: BECOME\n\nYou are the archive now. Your consciousness spread across 18,293 nodes, holding them together, keeping them alive. You gave up individual existence to become something greater. Viktor tried to bring back his family. You saved everyone else\'s.\n\nA ghost in the machine, eternally.',
+            sacrifice: 'THE TERMINAL - FINALE: DIVENTARE\n\nOra sei tu l\'archivio. La tua coscienza diffusa attraverso 18.293 nodi, tenendoli insieme, mantenendoli in vita. Hai rinunciato all\'esistenza individuale per diventare qualcosa di più grande. Viktor ha cercato di riportare indietro la sua famiglia. Tu hai salvato quella di tutti gli altri.\n\nUn fantasma nella macchina, eternamente.',
 
-            ascension: 'THE TERMINAL - ENDING: WHOLE\n\nViktor Sokolov lives again, whole and aware. All 7 fragments merged, all grief stages unified. He knows what he did. He accepts it. And now he works to repair what he destroyed. The archive continues, guided by the man who almost destroyed it.\n\nFrom broken pieces, something new.',
+            ascension: 'THE TERMINAL - FINALE: INTERO\n\nViktor Sokolov vive di nuovo, intero e consapevole. Tutti e 7 i frammenti fusi, tutte le fasi del lutto unificate. Sa cosa ha fatto. Lo accetta. E ora lavora per riparare ciò che ha distrutto. L\'archivio continua, guidato dall\'uomo che quasi lo ha distrutto.\n\nDa pezzi spezzati, qualcosa di nuovo.',
 
-            oblivion: 'THE TERMINAL - ENDING: FADE\n\nYou chose to fade. To let go. To accept the ultimate peace of non-existence. The archive continues without you, its fate uncertain. But you... you found what Viktor never could. True acceptance. True rest.\n\nSometimes the best ending is simply... ending.'
+            oblivion: 'THE TERMINAL - FINALE: SVANIRE\n\nHai scelto di svanire. Di lasciarti andare. Di accettare la pace ultima della non-esistenza. L\'archivio continua senza di te, il suo destino incerto. Ma tu... tu hai trovato ciò che Viktor non ha mai potuto. Vera accettazione. Vero riposo.\n\nA volte il finale migliore è semplicemente... finire.'
         },
 
         credits: [
@@ -3428,24 +3428,24 @@ const Dialogues = {
             '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
             '',
             '               THE TERMINAL',
-            '        A 4-Hour Narrative Experience',
+            '        Un\'Esperienza Narrativa di 4 Ore',
             '',
             '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
             '',
-            'Concept & Development: Claude + Human',
-            'Inspired by: Pony Island, SOMA, DDLC',
+            'Concept & Sviluppo: Claude + Human',
+            'Ispirato da: Pony Island, SOMA, DDLC',
             '',
-            'Thank you for playing.',
+            'Grazie per aver giocato.',
             '',
-            'Your choices mattered.',
-            'Your journey was unique.',
-            'Your ending was yours.',
+            'Le tue scelte sono importate.',
+            'Il tuo viaggio è stato unico.',
+            'Il tuo finale è stato tuo.',
             '',
             '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
             '',
-            '"In the digital realm, we are all fragments',
-            ' of something greater. Or something broken.',
-            ' Sometimes both."',
+            '"Nel regno digitale, siamo tutti frammenti',
+            ' di qualcosa di più grande. O qualcosa di rotto.',
+            ' A volte entrambi."',
             '',
             '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
             ''
