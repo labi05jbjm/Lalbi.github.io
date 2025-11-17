@@ -29,12 +29,14 @@
 
     <!-- Core Engine -->
     <script src="core/state.js"></script>
+    <script src="core/language.js"></script>
     <script src="core/narrative.js"></script>
     <script src="core/terminal.js"></script>
     <script src="core/engine.js"></script>
 
     <!-- Content -->
     <script src="content/dialogues.js"></script>
+    <script src="content/dialogues_it.js"></script>
     <script src="content/files.js"></script>
     <script src="content/puzzles.js"></script>
 
@@ -50,8 +52,8 @@
 
     <!-- Initialize -->
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            GameEngine.init();
+        window.addEventListener('DOMContentLoaded', async () => {
+            await GameEngine.init();
         });
     </script>
 </body>

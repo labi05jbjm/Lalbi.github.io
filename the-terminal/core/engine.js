@@ -8,12 +8,23 @@ const GameEngine = {
     blocks: {},
     initialized: false,
 
-    init() {
+    async init() {
         console.log('[ENGINE] Initializing The Terminal...');
 
-        // Inizializza i sottosistemi
+        // Inizializza i sottosistemi di base
         StateManager.init();
         Terminal.init();
+
+        // Inizializza il language manager
+        LanguageManager.init();
+
+        // Se la lingua non è stata selezionata, mostra la schermata di selezione
+        if (LanguageManager.needsLanguageSelection()) {
+            console.log('[ENGINE] Language selection needed');
+            await LanguageManager.showLanguageSelection();
+        }
+
+        // Inizializza il narrative engine (dopo aver selezionato la lingua)
         NarrativeEngine.init();
 
         // Registra i blocchi
