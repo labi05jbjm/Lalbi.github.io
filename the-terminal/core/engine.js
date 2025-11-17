@@ -14,23 +14,12 @@ const GameEngine = {
         // Inizializza i sottosistemi di base
         StateManager.init();
         Terminal.init();
-
-        // Inizializza il language manager
-        LanguageManager.init();
-
-        // Se la lingua non è stata selezionata, mostra la schermata di selezione
-        if (LanguageManager.needsLanguageSelection()) {
-            console.log('[ENGINE] Language selection needed');
-            await LanguageManager.showLanguageSelection();
-        }
-
-        // Inizializza il narrative engine (dopo aver selezionato la lingua)
         NarrativeEngine.init();
 
         // Registra i blocchi
         this.registerBlocks();
 
-        // Mostra il menu principale invece di caricare direttamente il gioco
+        // Mostra il menu principale
         await MainMenu.show();
 
         this.initialized = true;

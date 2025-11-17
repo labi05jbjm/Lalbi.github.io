@@ -1,75 +1,10 @@
 /**
  * MAIN MENU
- * Menu principale del gioco
+ * Main game menu
  */
 
 const MainMenu = {
     menuActive: false,
-
-    // Testi del menu (bilingue)
-    text: {
-        en: {
-            title: 'THE TERMINAL',
-            subtitle: 'A Digital Descent into Memory',
-            newGame: 'NEW GAME',
-            continue: 'CONTINUE',
-            settings: 'SETTINGS',
-            credits: 'CREDITS',
-            confirmNewGame: 'Starting a new game will erase your current progress. Continue?',
-            yes: 'YES',
-            no: 'NO',
-            languageOption: 'Language',
-            backToMenu: 'BACK TO MENU',
-
-            // Credits
-            creditsTitle: 'CREDITS',
-            creditsGame: 'THE TERMINAL',
-            creditsDesign: 'Design & Narrative',
-            creditsDevelopment: 'Development',
-            creditsInspiration: 'Inspired by',
-            creditsInspiredBy: 'Pony Island, The Stanley Parable, and classic cyberpunk noir',
-            creditsThanks: 'Thank you for playing',
-
-            // Settings
-            settingsTitle: 'SETTINGS',
-            currentLanguage: 'Current Language',
-            changeLanguage: 'Change Language',
-            languageChanged: 'Language changed. Menu will reload.',
-        },
-        it: {
-            title: 'THE TERMINAL',
-            subtitle: 'Una Discesa Digitale nella Memoria',
-            newGame: 'NUOVA PARTITA',
-            continue: 'CONTINUA',
-            settings: 'IMPOSTAZIONI',
-            credits: 'CREDITI',
-            confirmNewGame: 'Iniziare una nuova partita cancellerà i tuoi progressi attuali. Continuare?',
-            yes: 'SÌ',
-            no: 'NO',
-            languageOption: 'Lingua',
-            backToMenu: 'TORNA AL MENU',
-
-            // Crediti
-            creditsTitle: 'CREDITI',
-            creditsGame: 'THE TERMINAL',
-            creditsDesign: 'Design e Narrativa',
-            creditsDevelopment: 'Sviluppo',
-            creditsInspiration: 'Ispirato da',
-            creditsInspiredBy: 'Pony Island, The Stanley Parable e il cyberpunk noir classico',
-            creditsThanks: 'Grazie per aver giocato',
-
-            // Impostazioni
-            settingsTitle: 'IMPOSTAZIONI',
-            currentLanguage: 'Lingua Corrente',
-            changeLanguage: 'Cambia Lingua',
-            languageChanged: 'Lingua cambiata. Il menu verrà ricaricato.',
-        }
-    },
-
-    getText(key) {
-        const lang = LanguageManager.getLanguage();
-        return this.text[lang][key] || this.text.en[key] || key;
-    },
 
     async show() {
         console.log('[MENU] Showing main menu');
@@ -104,7 +39,7 @@ const MainMenu = {
 ║                                                      ║
 ╚══════════════════════════════════════════════════════╝
 </pre>
-<div style="color: #888; font-style: italic; margin-top: 10px;">${this.getText('subtitle')}</div>
+<div style="color: #888; font-style: italic; margin-top: 10px;">A Digital Descent into Memory</div>
         `;
         output.appendChild(titleDiv);
 
@@ -117,7 +52,7 @@ const MainMenu = {
         const hasSavedGame = StateManager.state.currentBlock > 1 || StateManager.state.playTime > 0;
 
         // New Game button
-        const btnNewGame = this.createMenuButton(this.getText('newGame'), () => {
+        const btnNewGame = this.createMenuButton('NEW GAME', () => {
             if (hasSavedGame) {
                 this.showConfirmDialog();
             } else {
@@ -128,20 +63,14 @@ const MainMenu = {
 
         // Continue button (only if there's a saved game)
         if (hasSavedGame) {
-            const btnContinue = this.createMenuButton(this.getText('continue'), () => {
+            const btnContinue = this.createMenuButton('CONTINUE', () => {
                 this.continueGame();
             });
             menuContainer.appendChild(btnContinue);
         }
 
-        // Settings button
-        const btnSettings = this.createMenuButton(this.getText('settings'), () => {
-            this.showSettings();
-        });
-        menuContainer.appendChild(btnSettings);
-
         // Credits button
-        const btnCredits = this.createMenuButton(this.getText('credits'), () => {
+        const btnCredits = this.createMenuButton('CREDITS', () => {
             this.showCredits();
         });
         menuContainer.appendChild(btnCredits);
@@ -172,18 +101,18 @@ const MainMenu = {
         dialogDiv.style.cssText = 'text-align: center; margin-top: 60px;';
         dialogDiv.innerHTML = `
             <div style="color: #ff6b6b; font-size: 18px; margin-bottom: 30px;">
-                ⚠️ ${this.getText('confirmNewGame')}
+                ⚠️ Starting a new game will erase your current progress. Continue?
             </div>
         `;
 
         const btnContainer = document.createElement('div');
         btnContainer.style.cssText = 'display: flex; justify-content: center; gap: 20px;';
 
-        const btnYes = this.createMenuButton(this.getText('yes'), () => {
+        const btnYes = this.createMenuButton('YES', () => {
             this.startNewGame();
         });
 
-        const btnNo = this.createMenuButton(this.getText('no'), () => {
+        const btnNo = this.createMenuButton('NO', () => {
             dialogDiv.remove();
             this.show();
         });
@@ -226,59 +155,6 @@ const MainMenu = {
         }
     },
 
-    showSettings() {
-        const output = document.getElementById('terminal-output');
-
-        // Remove menu
-        const menu = document.getElementById('main-menu-container');
-        if (menu) menu.remove();
-
-        // Settings screen
-        const settingsDiv = document.createElement('div');
-        settingsDiv.id = 'settings-screen';
-        settingsDiv.style.cssText = 'text-align: center; margin-top: 60px;';
-
-        const currentLang = LanguageManager.getLanguage();
-        const langName = currentLang === 'en' ? 'English' : 'Italiano';
-
-        settingsDiv.innerHTML = `
-            <div style="font-size: 24px; margin-bottom: 40px; color: #00ff41;">
-                ${this.getText('settingsTitle')}
-            </div>
-            <div style="font-size: 16px; margin-bottom: 20px; color: #888;">
-                ${this.getText('currentLanguage')}: <span style="color: #00ff41;">${langName}</span>
-            </div>
-        `;
-
-        const btnContainer = document.createElement('div');
-        btnContainer.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 30px;';
-
-        // Language buttons
-        const btnEN = this.createMenuButton('🇬🇧 English', () => {
-            LanguageManager.setLanguage('en');
-            Terminal.clear();
-            this.show();
-        });
-
-        const btnIT = this.createMenuButton('🇮🇹 Italiano', () => {
-            LanguageManager.setLanguage('it');
-            Terminal.clear();
-            this.show();
-        });
-
-        const btnBack = this.createMenuButton(this.getText('backToMenu'), () => {
-            settingsDiv.remove();
-            this.show();
-        });
-
-        btnContainer.appendChild(btnEN);
-        btnContainer.appendChild(btnIT);
-        btnContainer.appendChild(btnBack);
-        settingsDiv.appendChild(btnContainer);
-        output.appendChild(settingsDiv);
-        Terminal.scrollToBottom();
-    },
-
     showCredits() {
         const output = document.getElementById('terminal-output');
 
@@ -292,31 +168,31 @@ const MainMenu = {
         creditsDiv.style.cssText = 'text-align: center; margin-top: 40px;';
         creditsDiv.innerHTML = `
             <div style="font-size: 24px; margin-bottom: 30px; color: #00ff41;">
-                ${this.getText('creditsTitle')}
+                CREDITS
             </div>
             <div style="font-size: 20px; margin-bottom: 40px; color: #fff;">
-                ${this.getText('creditsGame')}
+                THE TERMINAL
             </div>
             <div style="font-size: 14px; color: #888; line-height: 2;">
                 <div style="margin-bottom: 20px;">
-                    <div style="color: #00ff41;">${this.getText('creditsDesign')}</div>
+                    <div style="color: #00ff41;">Design & Narrative</div>
                     <div>Claude & User</div>
                 </div>
                 <div style="margin-bottom: 20px;">
-                    <div style="color: #00ff41;">${this.getText('creditsDevelopment')}</div>
+                    <div style="color: #00ff41;">Development</div>
                     <div>Pure HTML5/CSS3/JavaScript</div>
                 </div>
                 <div style="margin-bottom: 30px;">
-                    <div style="color: #00ff41;">${this.getText('creditsInspiration')}</div>
-                    <div>${this.getText('creditsInspiredBy')}</div>
+                    <div style="color: #00ff41;">Inspired by</div>
+                    <div>Pony Island, The Stanley Parable,<br>and classic cyberpunk noir</div>
                 </div>
                 <div style="font-size: 16px; color: #00ff41; margin-top: 40px;">
-                    ${this.getText('creditsThanks')}
+                    Thank you for playing
                 </div>
             </div>
         `;
 
-        const btnBack = this.createMenuButton(this.getText('backToMenu'), () => {
+        const btnBack = this.createMenuButton('BACK TO MENU', () => {
             creditsDiv.remove();
             this.show();
         });
