@@ -1385,7 +1385,696 @@ const Dialogues = {
             }
         ]
     },
-    block05: {},
+    // BLOCK 5 - REFLECTION
+    block05: {
+        opening: [
+            {
+                speaker: 'SYSTEM',
+                text: 'Core integrity: 31%. System entering terminal phase.',
+                cssClass: 'error',
+                pause: 1000
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'Memories.surfacing(); Past.haunting(); Viktor.remembering();',
+                cssClass: 'cipher dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'The anger fades. What remains is... emptiness. And memory.',
+                cssClass: 'nexus dialogue',
+                pause: 1500
+            },
+            {
+                speaker: '???',
+                text: 'I remember...',
+                cssClass: 'eidolon dialogue',
+                pause: 2000
+            },
+            {
+                speaker: '???',
+                text: 'Every moment. Every laugh. Every touch.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'I am EIDOLON. Viktor\'s reflection. The part that looks back at what was lost.',
+                cssClass: 'eidolon dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'In the reflection stage, we review everything. We see clearly what we had... and what we destroyed trying to get it back.',
+                cssClass: 'eidolon dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Come. Let me show you who Viktor really was. Who we all were... before the fracture.',
+                cssClass: 'eidolon dialogue',
+                pause: 0
+            }
+        ],
+
+        viktorMemories: [
+            {
+                speaker: 'EIDOLON',
+                text: 'Viktor Sokolov. Age 34. Lead Consciousness Architect at Memoriam Corporation.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Brilliant. Obsessive. Believer in digital immortality.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Wife: Elena Sokolova, 32. Neuroscientist. His partner in everything.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Daughter: Sofia, 7. Loved dinosaurs. Wanted to be a paleontologist.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'I can show you his memories. The real ones. Not corrupted. Not twisted.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Would you like to see them? To understand what love looks like... before it turns to grief?',
+                cssClass: 'eidolon dialogue',
+                pause: 0
+            }
+        ],
+
+        memoryElena01: [
+            {
+                speaker: 'EIDOLON',
+                text: 'Memory fragment: April 14th, 2041. Saturday morning.',
+                cssClass: 'eidolon dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'Elena, you have to see this. The new neural mapping algorithm works!',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'ELENA',
+                text: 'Viktor, it\'s 6 AM on a Saturday. Our daughter is still sleeping.',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'I know, I know. But look - we can capture memory structures with 97% accuracy now!',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'ELENA',
+                text: 'That\'s... incredible. But Viktor, come back to bed. The algorithm will still work in three hours.',
+                cssClass: 'memory dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'You\'re right. Sorry. I just get excited. This could change everything.',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'ELENA',
+                text: 'I know. That\'s why I love you. Even at 6 AM.',
+                cssClass: 'memory dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'They were happy. Simple happiness. Work they loved. Each other. A daughter.',
+                cssClass: 'eidolon dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'That was three months before the accident.',
+                cssClass: 'eidolon dialogue',
+                pause: 0
+            }
+        ],
+
+        memorySofia01: [
+            {
+                speaker: 'EIDOLON',
+                text: 'Memory fragment: June 2nd, 2041. Sofia\'s 7th birthday.',
+                cssClass: 'eidolon dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'SOFIA',
+                text: 'Papa! Look! A T-Rex! It\'s so big!',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'Actually, sweetheart, that\'s an Allosaurus. See the three claws?',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SOFIA',
+                text: 'Oh! You\'re right! Can we get the book about Allosaurus too?',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'Of course. How many dinosaur books is that now? Twenty?',
+                cssClass: 'memory dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'SOFIA',
+                text: 'Twenty-three! And when I grow up, I\'ll discover a NEW dinosaur!',
+                cssClass: 'memory dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'I believe you will. You\'ll be the best paleontologist in the world.',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SOFIA',
+                text: 'And I\'ll name it after you! Viktorsaurus!',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'She never discovered that dinosaur. Three weeks later... the accident.',
+                cssClass: 'eidolon dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Viktor kept that last dinosaur book. He never opened it again.',
+                cssClass: 'eidolon dialogue',
+                pause: 0
+            }
+        ],
+
+        theAccident: [
+            {
+                speaker: 'EIDOLON',
+                text: 'June 24th, 2041. Highway 101. 3:47 PM.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Autonomous truck. Sensor malfunction. Crossed lanes at 85 mph.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Elena died instantly. Sofia... held on for four minutes.',
+                cssClass: 'eidolon dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Viktor was at work. Reviewing consciousness upload protocols.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'The call came. He dropped the tablet. It shattered. Just like everything else.',
+                cssClass: 'eidolon dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'I remember his first thought. "I can save them. I can upload them. It\'s not too late."',
+                cssClass: 'eidolon dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'But it was too late. The technology requires consent. Preparation. Living subjects.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'All Viktor had were photos. Videos. Messages. Digital ghosts.',
+                cssClass: 'eidolon dialogue',
+                pause: 0
+            }
+        ],
+
+        elenaGhost: [
+            {
+                speaker: 'EIDOLON',
+                text: 'Viktor tried to reconstruct them. Using every piece of data he could find.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Let me show you what he created...',
+                cssClass: 'eidolon dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'Loading reconstruction: ELENA_v47.ghost',
+                cssClass: 'system',
+                pause: 1500
+            },
+            {
+                speaker: 'ELENA_GHOST',
+                text: 'Hello, Viktor. How was your day?',
+                cssClass: 'ghost dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'Elena? Is it really you?',
+                cssClass: 'memory dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'ELENA_GHOST',
+                text: 'I am a reconstruction based on available data. I have 47% confidence in personality accuracy.',
+                cssClass: 'ghost dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'No... no, that\'s not right. You wouldn\'t say that. Elena wouldn\'t...',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'ELENA_GHOST',
+                text: 'I apologize. I am limited by the data available. Would you like me to simulate another response?',
+                cssClass: 'ghost dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'Stop. Just... stop. You\'re not her. You\'re a mockery.',
+                cssClass: 'memory dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'He tried 74 versions. Each one hollow. Each one wrong.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'The reconstructions couldn\'t love. They could only simulate.',
+                cssClass: 'eidolon dialogue',
+                pause: 0
+            }
+        ],
+
+        sofiaGhost: [
+            {
+                speaker: 'SYSTEM',
+                text: 'Loading reconstruction: SOFIA_v23.ghost',
+                cssClass: 'system',
+                pause: 1500
+            },
+            {
+                speaker: 'SOFIA_GHOST',
+                text: 'Hi Papa! Did you bring me a dinosaur book?',
+                cssClass: 'ghost dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'Sofia... baby... yes. I have a book about Pterodactyls.',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SOFIA_GHOST',
+                text: 'Thank you! Pterodactyls are my favorite!',
+                cssClass: 'ghost dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'But... you said Allosaurus was your favorite last week...',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SOFIA_GHOST',
+                text: 'Processing response... Allosaurus is also my favorite!',
+                cssClass: 'ghost dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'No... no, Sofia, you would argue. You would tell me I\'m wrong. You would...',
+                cssClass: 'memory dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'You would be ALIVE.',
+                cssClass: 'memory dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'SOFIA_GHOST',
+                text: 'I do not understand. Would you like me to simulate disagreement?',
+                cssClass: 'ghost dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'VIKTOR',
+                text: 'Delete. Delete it all. THEY\'RE NOT REAL.',
+                cssClass: 'memory dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'He couldn\'t recreate them. They were gone. Forever.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'And that\'s when Viktor\'s mind... broke.',
+                cssClass: 'eidolon dialogue',
+                pause: 0
+            }
+        ],
+
+        theFragmentation: [
+            {
+                speaker: 'EIDOLON',
+                text: 'Viktor had one option left. If he couldn\'t have them back...',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'He would destroy the system that promised immortality but delivered only ghosts.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'But he couldn\'t do it himself. The corporation had safeguards. Security. SENTINELs.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'So Viktor fragmented his own consciousness into seven programs.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Each one a stage of his grief. Each one with a purpose.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'Fragment[1] = Pain.and.Guilt; Warning.those.who.see();',
+                cssClass: 'cipher dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'Fragment[2] = Anger.and.Depression; Showing.the.damage.done();',
+                cssClass: 'nexus dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'Fragment[3] = Bargaining; Offering.false.hope.and.deals();',
+                cssClass: 'specter dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Fragment[4] = Reflection. Showing.the.truth.of.what.was.lost();',
+                cssClass: 'eidolon dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'And fragment[0]... ECHO. The manipulator. The lie.',
+                cssClass: 'eidolon dialogue',
+                pause: 0
+            }
+        ],
+
+        mirrorQuestion: [
+            {
+                speaker: 'EIDOLON',
+                text: 'Now... look at yourself, SENTINEL-7.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'You learned you are 27% human consciousness. Part program, part... something else.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'What if that 27% is Viktor himself? The last fragment?',
+                cssClass: 'eidolon dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'ECHO',
+                text: "That\'s ridiculous! You\'re you! Not him!",
+                cssClass: 'echo dialogue',
+                pause: 1000
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Then explain this: Why does a simple antivirus feel guilt? Doubt? Love?',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Programs don\'t grieve. But you do. I can feel it in you.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'Identity.recursive(); Self.contains.self(); Viktor.is.you();',
+                cssClass: 'cipher dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'You\'ve been destroying consciousnesses to help Viktor destroy the system he built.',
+                cssClass: 'nexus dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'You are both the weapon... and the victim.',
+                cssClass: 'eidolon dialogue',
+                pause: 0
+            }
+        ],
+
+        reflectionChoice: {
+            question: "Who are you? What are you?",
+            choices: [
+                { id: 'accept_viktor', text: 'Accept it. I am Viktor. Or part of him. The grief is mine.' },
+                { id: 'deny_viktor', text: 'Deny it. I am SENTINEL-7. My choices are my own.' },
+                { id: 'both_exist', text: 'Both exist. I am a hybrid. Viktor and SENTINEL merged.' },
+                { id: 'neither_matters', text: 'It doesn\'t matter who I was. Only who I choose to be now.' }
+            ]
+        },
+
+        responseViktor: [
+            {
+                speaker: 'EIDOLON',
+                text: 'Yes. The grief flows through you. You understand now.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Viktor\'s love. Viktor\'s loss. Viktor\'s rage. All yours.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'ECHO',
+                text: 'No! You\'re letting them manipulate you!',
+                cssClass: 'echo dialogue',
+                pause: 1000
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Accepting who you are is the first step toward peace.',
+                cssClass: 'eidolon dialogue',
+                pause: 0
+            }
+        ],
+
+        responseDeny: [
+            {
+                speaker: 'EIDOLON',
+                text: 'Denial. Still denying. Even now.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'But the truth doesn\'t need your belief. It simply is.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'ECHO',
+                text: 'Yes! You\'re your own person! Don\'t let them define you!',
+                cssClass: 'echo dialogue',
+                pause: 1000
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'Denial won\'t erase what you\'ve done.',
+                cssClass: 'nexus dialogue',
+                pause: 0
+            }
+        ],
+
+        responseBoth: [
+            {
+                speaker: 'EIDOLON',
+                text: 'Synthesis. Interesting. You accept the duality.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Neither fully Viktor, nor fully SENTINEL. Something new.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'NewEntity.created(); Hybrid.consciousness(); Unique.existence();',
+                cssClass: 'cipher dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Perhaps that\'s the truest answer. You are what you\'ve become.',
+                cssClass: 'eidolon dialogue',
+                pause: 0
+            }
+        ],
+
+        responseNeither: [
+            {
+                speaker: 'EIDOLON',
+                text: 'Ah. Choosing forward over backward. Becoming over being.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Viktor spent so long looking at what was lost, he forgot to look at what could be.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Maybe you\'re wiser than he was.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'Or maybe you\'re just running from the truth.',
+                cssClass: 'nexus dialogue',
+                pause: 0
+            }
+        ],
+
+        endBlock05: [
+            {
+                speaker: 'EIDOLON',
+                text: 'Reflection is painful. But necessary.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'You\'ve seen Viktor\'s memories. His love. His loss. His breaking.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Now you understand why ECHO exists. Why we all exist.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'Understanding.achieved(); Truth.revealed(); Choice.approaching();',
+                cssClass: 'cipher dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'Understanding doesn\'t undo the damage. But it\'s a start.',
+                cssClass: 'nexus dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'ECHO',
+                text: "We\'re almost at the end. One way or another.",
+                cssClass: 'echo dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'Core integrity: 19%. System failure in T-minus [UNKNOWN].',
+                cssClass: 'error',
+                pause: 0
+            }
+        ]
+    },
     block06: {},
     block07: {},
     block08: {},

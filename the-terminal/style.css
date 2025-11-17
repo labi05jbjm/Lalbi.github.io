@@ -434,3 +434,35 @@ body {
     50% { opacity: 1; }
     75% { opacity: 0.9; }
 }
+
+.output-line.eidolon {
+    color: #aaffcc;
+    text-shadow: 0 0 12px #66ffaa, 0 0 25px #33ff99;
+    opacity: 0.9;
+    font-style: italic;
+    animation: eidolonGlow 4s ease-in-out infinite;
+}
+
+@keyframes eidolonGlow {
+    0%, 100% {
+        opacity: 0.9;
+        text-shadow: 0 0 12px #66ffaa, 0 0 25px #33ff99;
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 18px #66ffaa, 0 0 35px #33ff99, 0 0 50px #33ff99;
+    }
+}
+
+.output-line.ghost {
+    color: #d0d0d0;
+    text-shadow: 0 0 5px #a0a0a0;
+    opacity: 0.7;
+    font-style: italic;
+    animation: ghostFade 3s ease-in-out infinite;
+}
+
+@keyframes ghostFade {
+    0%, 100% { opacity: 0.65; }
+    50% { opacity: 0.75; }
+}

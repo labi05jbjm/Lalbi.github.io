@@ -54,7 +54,15 @@ The game is divided into 8 blocks, each ~30 minutes:
 - Philosophical paradox puzzle
 - 4-way bargain choice
 
-**🚧 BLOCKS 5-8 - IN DEVELOPMENT**
+**✅ BLOCK 5 (REFLECTION) - COMPLETE**
+- EIDOLON introduction (Reflection fragment)
+- Viktor's memories (Elena & Sofia happiness)
+- Ghost reconstructions (failed attempts to bring them back)
+- The accident and fragmentation revealed
+- Mirror moment - "Are you Viktor?"
+- 4-way identity reflection choice
+
+**🚧 BLOCKS 6-8 - IN DEVELOPMENT**
 
 ## How to Play
 

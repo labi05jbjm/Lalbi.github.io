@@ -254,6 +254,23 @@ const NarrativeEngine = {
         await this.wait(pause);
     },
 
+    // Sistema di narrazione EIDOLON
+    async eidolonSays(text, options = {}) {
+        const {
+            typeEffect = true,
+            pause = 900,
+            glitch = false
+        } = options;
+
+        if (glitch) {
+            this.triggerGlitch(150);
+            await this.wait(150);
+        }
+
+        await this.showDialogue('EIDOLON', text, 'eidolon dialogue', typeEffect);
+        await this.wait(pause);
+    },
+
     // Sistema di narrazione SYSTEM
     async systemMessage(text, cssClass = 'system', options = {}) {
         const {
