@@ -271,6 +271,23 @@ const NarrativeEngine = {
         await this.wait(pause);
     },
 
+    // Sistema di narrazione WRAITH
+    async wraithSays(text, options = {}) {
+        const {
+            typeEffect = true,
+            pause = 1000,
+            glitch = true
+        } = options;
+
+        if (glitch) {
+            this.triggerGlitch(300);
+            await this.wait(300);
+        }
+
+        await this.showDialogue('WRAITH', text, 'wraith dialogue', typeEffect);
+        await this.wait(pause);
+    },
+
     // Sistema di narrazione SYSTEM
     async systemMessage(text, cssClass = 'system', options = {}) {
         const {

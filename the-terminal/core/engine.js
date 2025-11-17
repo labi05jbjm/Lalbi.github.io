@@ -43,11 +43,11 @@ const GameEngine = {
         if (typeof Block04_Fractures !== 'undefined') {
             this.blocks[4] = Block04_Fractures;
         }
-        if (typeof Block05_Revelation !== 'undefined') {
-            this.blocks[5] = Block05_Revelation;
+        if (typeof Block05_Reflection !== 'undefined') {
+            this.blocks[5] = Block05_Reflection;
         }
-        if (typeof Block06_Consequences !== 'undefined') {
-            this.blocks[6] = Block06_Consequences;
+        if (typeof Block06_Rage !== 'undefined') {
+            this.blocks[6] = Block06_Rage;
         }
         if (typeof Block07_TheChoice !== 'undefined') {
             this.blocks[7] = Block07_TheChoice;

@@ -466,3 +466,40 @@ body {
     0%, 100% { opacity: 0.65; }
     50% { opacity: 0.75; }
 }
+
+.output-line.wraith {
+    color: #ff0000;
+    text-shadow: 0 0 15px #ff0000, 0 0 30px #cc0000, 0 0 45px #990000;
+    opacity: 1;
+    font-weight: bold;
+    text-transform: uppercase;
+    animation: wraithRage 0.8s infinite;
+}
+
+@keyframes wraithRage {
+    0% {
+        opacity: 1;
+        text-shadow: 0 0 15px #ff0000, 0 0 30px #cc0000, 0 0 45px #990000;
+        transform: translateX(0);
+    }
+    25% {
+        opacity: 0.95;
+        text-shadow: 0 0 20px #ff0000, 0 0 40px #cc0000, 0 0 60px #990000;
+        transform: translateX(-1px);
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 25px #ff0000, 0 0 50px #cc0000, 0 0 75px #990000;
+        transform: translateX(1px);
+    }
+    75% {
+        opacity: 0.95;
+        text-shadow: 0 0 20px #ff0000, 0 0 40px #cc0000, 0 0 60px #990000;
+        transform: translateX(-1px);
+    }
+    100% {
+        opacity: 1;
+        text-shadow: 0 0 15px #ff0000, 0 0 30px #cc0000, 0 0 45px #990000;
+        transform: translateX(0);
+    }
+}

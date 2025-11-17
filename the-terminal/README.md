@@ -62,7 +62,15 @@ The game is divided into 8 blocks, each ~30 minutes:
 - Mirror moment - "Are you Viktor?"
 - 4-way identity reflection choice
 
-**🚧 BLOCKS 6-8 - IN DEVELOPMENT**
+**✅ BLOCK 6 (RAGE) - COMPLETE**
+- WRAITH introduction (Rage fragment)
+- WRAITH confronts ECHO directly
+- ECHO revealed as Viktor's shame/denial
+- System collapse visualization (12% -> 8%)
+- Point of no return moment
+- 4-way final choice (destruction/salvation/sacrifice/merge)
+
+**🚧 BLOCKS 7-8 - IN DEVELOPMENT**
 
 ## How to Play
 
