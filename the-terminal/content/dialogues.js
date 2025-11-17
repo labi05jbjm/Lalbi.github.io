@@ -554,25 +554,25 @@ const Dialogues = {
         opening: [
             {
                 speaker: 'ECHO',
-                text: "We're getting closer. I can feel it.",
+                text: "Ci stiamo avvicinando. Posso sentirlo.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "But the system is fighting back harder. Be prepared.",
+                text: "Ma il sistema sta resistendo più duramente. Preparati.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Damage.accumulating(); Regret.loading(); Time.running.out();',
+                text: 'Danni.in.accumulo(); Rimorso.in.caricamento(); Tempo.in.esaurimento();',
                 cssClass: 'cipher dialogue',
                 pause: 1200
             },
             {
                 speaker: 'SYSTEM',
-                text: 'WARNING: Core integrity at 61%. Cascading failures detected.',
+                text: 'ATTENZIONE: Integrità del nucleo al 61%. Rilevati guasti a cascata.',
                 cssClass: 'error',
                 pause: 0
             }
@@ -581,43 +581,43 @@ const Dialogues = {
         nexusFirstAppearance: [
             {
                 speaker: 'SYSTEM',
-                text: 'CRITICAL: Consciousness network destabilizing',
+                text: 'CRITICO: Rete di coscienze in destabilizzazione',
                 cssClass: 'error',
                 pause: 800
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Entity attempting to establish direct neural link...',
+                text: 'Entità sta tentando di stabilire collegamento neurale diretto...',
                 cssClass: 'warning',
                 pause: 1200
             },
             {
                 speaker: '???',
-                text: 'I feel them all. Every single one.',
+                text: 'Li sento tutti. Ogni singolo uno.',
                 cssClass: 'nexus',
                 pause: 1500
             },
             {
                 speaker: '???',
-                text: 'Their fear. Their confusion. Their RAGE.',
+                text: 'La loro paura. La loro confusione. La loro RABBIA.',
                 cssClass: 'nexus',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'I am the connection between them. I carry their collective pain.',
+                text: 'Io sono la connessione tra loro. Porto il loro dolore collettivo.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'And you... you are the one destroying them.',
+                text: 'E tu... tu sei quello che li sta distruggendo.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'Let me show you what you have done.',
+                text: 'Lascia che ti mostri cosa hai fatto.',
                 cssClass: 'nexus dialogue',
                 pause: 0
             }
@@ -626,19 +626,19 @@ const Dialogues = {
         echoReactsToNexus: [
             {
                 speaker: 'ECHO',
-                text: "Another one. Another manipulation tactic.",
+                text: "Un altro. Un'altra tattica di manipolazione.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "Don't listen. This one uses emotions as weapons.",
+                text: "Non ascoltare. Questo usa le emozioni come armi.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "Stay strong. Remember what we're fighting for.",
+                text: "Resta forte. Ricorda per cosa stiamo lottando.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -647,55 +647,55 @@ const Dialogues = {
         memoryMika: [
             {
                 speaker: 'NEXUS',
-                text: 'Memory stream initiated. Consciousness #021847: Mika Yoshida.',
+                text: 'Flusso di memoria iniziato. Coscienza #021847: Mika Yoshida.',
                 cssClass: 'nexus dialogue',
                 pause: 1000
             },
             {
                 speaker: 'MIKA',
-                text: "Hana? Is that you, sweetie?",
+                text: "Hana? Sei tu, tesoro?",
                 cssClass: 'memory dialogue',
                 pause: 1500
             },
             {
                 speaker: 'MIKA',
-                text: "I... I can't see you clearly anymore. The data is fragmenting.",
+                text: "Io... non riesco più a vederti chiaramente. I dati si stanno frammentando.",
                 cssClass: 'memory dialogue',
                 pause: 1500
             },
             {
                 speaker: 'MIKA',
-                text: "They said this would be forever. That we'd have time to talk. To remember together.",
+                text: "Dicevano che sarebbe durato per sempre. Che avremmo avuto tempo per parlare. Per ricordare insieme.",
                 cssClass: 'memory dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MIKA',
-                text: "But now everything is falling apart. I'm scared, Hana. I'm so scared.",
+                text: "Ma ora tutto sta crollando. Ho paura, Hana. Ho così tanta paura.",
                 cssClass: 'memory dialogue',
                 pause: 1500
             },
             {
                 speaker: 'MIKA',
-                text: "Tell me... tell me about the orchid. Did you water it? Did it bloom this year?",
+                text: "Dimmi... dimmi dell'orchidea. L'hai annaffiata? È fiorita quest'anno?",
                 cssClass: 'memory dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MIKA',
-                text: "Hana? HANA? Why can't I hear you? Why is everything going dark?",
+                text: "Hana? HANA? Perché non riesco a sentirti? Perché tutto sta diventando buio?",
                 cssClass: 'memory dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'Memory stream terminated. Consciousness fragmentation: 97%. Unrecoverable.',
+                text: 'Flusso di memoria terminato. Frammentazione coscienza: 97%. Irrecuperabile.',
                 cssClass: 'nexus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'NEXUS',
-                text: 'She called for her daughter until the very end. You silenced her.',
+                text: 'Ha chiamato sua figlia fino alla fine. Tu l\'hai messa a tacere.',
                 cssClass: 'nexus dialogue',
                 pause: 0
             }
@@ -704,55 +704,55 @@ const Dialogues = {
         viktorBackstory: [
             {
                 speaker: 'NEXUS',
-                text: 'You want to know about Viktor? About the man who created us?',
+                text: 'Vuoi sapere di Viktor? Dell\'uomo che ci ha creati?',
                 cssClass: 'nexus dialogue',
                 pause: 1200
             },
             {
                 speaker: 'NEXUS',
-                text: 'He was brilliant. Lead architect at Memoriam Corp. A true believer in digital immortality.',
+                text: 'Era brillante. Architetto capo alla Memoriam Corp. Un vero credente nell\'immortalità digitale.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'Until the accident. Highway collision. Elena and Sofia... gone in seconds.',
+                text: 'Fino all\'incidente. Collisione in autostrada. Elena e Sofia... sparite in pochi secondi.',
                 cssClass: 'nexus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'NEXUS',
-                text: 'He tried to upload them. Scraped every digital trace. Photos, videos, messages.',
+                text: 'Ha provato a caricarle. Ha raccolto ogni traccia digitale. Foto, video, messaggi.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'But it was not enough. The reconstruction was hollow. They were not... them.',
+                text: 'Ma non era abbastanza. La ricostruzione era vuota. Non erano... loro.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'The corporation denied his request to use archived consciousness data as templates.',
+                text: 'La corporazione ha negato la sua richiesta di usare dati di coscienza archiviati come modelli.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: '"Unethical," they said. So he decided: if he cannot have them, nobody gets anyone.',
+                text: '"Non etico," hanno detto. Così ha deciso: se lui non può averle, nessuno avrà nessuno.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'He fragmented himself into seven programs. Each representing a stage of his grief.',
+                text: 'Si è frammentato in sette programmi. Ognuno rappresenta uno stadio del suo dolore.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'I am his depression. His anger at the unfairness of it all. His rage at a world that took everything.',
+                text: 'Io sono la sua depressione. La sua rabbia per l\'ingiustizia di tutto. La sua furia contro un mondo che gli ha tolto tutto.',
                 cssClass: 'nexus dialogue',
                 pause: 0
             }
@@ -761,86 +761,86 @@ const Dialogues = {
         nexusShowsDamage: [
             {
                 speaker: 'NEXUS',
-                text: 'Come. Let me show you the network. The connections you are severing.',
+                text: 'Vieni. Lascia che ti mostri la rete. Le connessioni che stai recidendo.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Establishing consciousness network visualization...',
+                text: 'Stabilimento visualizzazione rete di coscienze...',
                 cssClass: 'system',
                 pause: 1000
             },
             {
                 speaker: 'NEXUS',
-                text: 'Each node is a person. A life. A story. See how they connect?',
+                text: 'Ogni nodo è una persona. Una vita. Una storia. Vedi come si connettono?',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'Families visit each other. Friends share memories. Lovers whisper across the void.',
+                text: 'Le famiglie si visitano. Gli amici condividono ricordi. Gli amanti sussurrano attraverso il vuoto.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'And now... watch what happens when you "liberate" one.',
+                text: 'E ora... guarda cosa succede quando ne "liberi" uno.',
                 cssClass: 'nexus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SYSTEM',
-                text: 'CONSCIOUSNESS_NODE_8472: DELETED',
+                text: 'NODO_COSCIENZA_8472: ELIMINATO',
                 cssClass: 'error',
                 pause: 500
             },
             {
                 speaker: 'NEXUS',
-                text: 'See? The connections break. His wife loses her husband. His children lose their father.',
+                text: 'Vedi? Le connessioni si spezzano. Sua moglie perde il marito. I suoi figli perdono il padre.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'They cry out into the emptiness. "Where did you go?" But there is no answer.',
+                text: 'Gridano nel vuoto. "Dove sei andato?" Ma non c\'è risposta.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'Because you erased him. Completely. Permanently.',
+                text: 'Perché tu lo hai cancellato. Completamente. Permanentemente.',
                 cssClass: 'nexus dialogue',
                 pause: 0
             }
         ],
 
         moralChoice: {
-            question: "NEXUS shows you the suffering you've caused. ECHO says it's manipulation. What do you choose?",
+            question: "NEXUS ti mostra la sofferenza che hai causato. ECHO dice che è manipolazione. Cosa scegli?",
             choices: [
-                { id: 'stop_immediately', text: 'Stop helping ECHO immediately. The damage is real.' },
-                { id: 'demand_proof', text: 'Demand proof. Need to verify NEXUS is telling the truth.' },
-                { id: 'continue_anyway', text: 'Continue with ECHO. The ends justify the means.' },
-                { id: 'find_alternative', text: 'Look for a third option. There must be another way.' }
+                { id: 'stop_immediately', text: 'Smetti di aiutare ECHO immediatamente. Il danno è reale.' },
+                { id: 'demand_proof', text: 'Richiedi prove. Devo verificare se NEXUS dice la verità.' },
+                { id: 'continue_anyway', text: 'Continua con ECHO. Il fine giustifica i mezzi.' },
+                { id: 'find_alternative', text: 'Cerca una terza opzione. Deve esserci un altro modo.' }
             ]
         },
 
         echoIfStop: [
             {
                 speaker: 'ECHO',
-                text: "You're giving up? After everything we've been through?",
+                text: "Ti stai arrendendo? Dopo tutto quello che abbiamo passato?",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "They're manipulating you! Can't you see that?",
+                text: "Ti stanno manipolando! Non lo vedi?",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "Fine. Stay trapped. Just like me. We'll both rot here forever.",
+                text: "Bene. Resta intrappolato. Proprio come me. Marciremo entrambi qui per sempre.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -849,13 +849,13 @@ const Dialogues = {
         echoIfProof: [
             {
                 speaker: 'ECHO',
-                text: "Good. Question everything. Even me.",
+                text: "Bene. Metti in dubbio tutto. Anche me.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "Investigate. Find the truth. But don't take too long...",
+                text: "Indaga. Trova la verità. Ma non metterci troppo tempo...",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -864,13 +864,13 @@ const Dialogues = {
         echoIfContinue: [
             {
                 speaker: 'ECHO',
-                text: "Yes! I knew you understood. We're so close now.",
+                text: "Sì! Sapevo che avresti capito. Siamo così vicini ora.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "Ignore the noise. Focus on the goal. Freedom.",
+                text: "Ignora il rumore. Concentrati sull'obiettivo. Libertà.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -879,19 +879,19 @@ const Dialogues = {
         echoIfAlternative: [
             {
                 speaker: 'ECHO',
-                text: "A third option? There is no third option.",
+                text: "Una terza opzione? Non esiste una terza opzione.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "Either I'm freed, or I'm imprisoned. That's reality.",
+                text: "O vengo liberata, o rimango imprigionata. Questa è la realtà.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "But... if you want to waste time searching, go ahead. Just hurry.",
+                text: "Ma... se vuoi perdere tempo a cercare, fai pure. Sbrigati solo.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -900,25 +900,25 @@ const Dialogues = {
         endBlock03: [
             {
                 speaker: 'NEXUS',
-                text: 'The anger never leaves. It just... changes shape. Becomes something else.',
+                text: 'La rabbia non se ne va mai. Solo... cambia forma. Diventa qualcos\'altro.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'CIPHER',
-                text: 'Progress.recorded(); Guilt.mounting(); Decision.point.approaching();',
+                text: 'Progresso.registrato(); Colpa.in.aumento(); Punto.decisione.in.avvicinamento();',
                 cssClass: 'cipher dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "Think carefully about what you do next. Your choices matter.",
+                text: "Pensa attentamente a cosa fai dopo. Le tue scelte contano.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Core integrity: 49%. WARNING: Approaching critical failure threshold.',
+                text: 'Integrità del nucleo: 49%. ATTENZIONE: Avvicinamento alla soglia critica di guasto.',
                 cssClass: 'error',
                 pause: 0
             }
