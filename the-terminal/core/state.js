@@ -90,6 +90,61 @@ const StateManager = {
         location.reload();
     },
 
+    resetGame() {
+        // Reset game state without reloading the page
+        this.state = {
+            currentBlock: 1,
+            progress: 0,
+            timePlayedMinutes: 0,
+
+            // Player knowledge
+            knowsAboutSentinel: false,
+            knowsAboutLuca: false,
+            trustsLuca: 100,
+            suspicionLevel: 0,
+
+            // Flags di progressione
+            flags: {
+                firstContact: false,
+                firstPuzzleComplete: false,
+                sawCorruptedFile: false,
+                readMissionBriefing: false,
+                lucaRevealed: false,
+            },
+
+            // Statistiche azioni
+            stats: {
+                filesLiberated: 0,
+                filesCorrupted: 0,
+                consciousnessDestroyed: 0,
+                puzzlesSolved: 0,
+                commandsExecuted: 0,
+                questionsAsked: 0,
+            },
+
+            // File system state
+            fileSystem: {
+                corrupted: [],
+                accessed: [],
+                unlocked: [],
+            },
+
+            // Dialogue history
+            dialogueHistory: [],
+
+            // Choices made
+            choices: [],
+
+            // Timestamp
+            startTime: Date.now(),
+            lastSaveTime: Date.now(),
+        };
+
+        localStorage.removeItem('the_terminal_save');
+        this.save();
+        console.log('[STATE] Game reset');
+    },
+
     startAutoSave() {
         setInterval(() => {
             this.save();

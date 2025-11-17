@@ -522,3 +522,67 @@ body {
         text-shadow: 0 0 20px #6699ff, 0 0 40px #3366ff, 0 0 60px #0033cc;
     }
 }
+
+/* ==================== MENU STYLES ==================== */
+
+.menu-button, .language-button {
+    background: rgba(0, 255, 65, 0.1);
+    border: 2px solid #00ff41;
+    color: #00ff41;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    min-width: 200px;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+.menu-button:hover, .language-button:hover {
+    background: rgba(0, 255, 65, 0.2);
+    border-color: #00ff88;
+    color: #00ff88;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+    transform: translateY(-2px);
+}
+
+.menu-button:active, .language-button:active {
+    transform: translateY(0);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+}
+
+.menu-title {
+    text-align: center;
+    animation: titleGlow 2s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% {
+        opacity: 0.9;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.ascii-art {
+    font-family: 'Share Tech Mono', monospace;
+    line-height: 1.2;
+    font-size: 12px;
+}
+
+.language-selection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.language-selection-title {
+    text-align: center;
+    color: #00ff41;
+    font-size: 18px;
+}

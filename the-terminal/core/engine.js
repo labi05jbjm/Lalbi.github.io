@@ -30,8 +30,8 @@ const GameEngine = {
         // Registra i blocchi
         this.registerBlocks();
 
-        // Carica il blocco corrente
-        this.loadCurrentBlock();
+        // Mostra il menu principale invece di caricare direttamente il gioco
+        await MainMenu.show();
 
         this.initialized = true;
         console.log('[ENGINE] Initialization complete');
