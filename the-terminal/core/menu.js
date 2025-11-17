@@ -25,24 +25,41 @@ const MainMenu = {
 
         const output = document.getElementById('terminal-output');
 
-        // ASCII Art Title - Simpler and cleaner
+        // ASCII Art Title - Free and animated
         const titleDiv = document.createElement('div');
-        titleDiv.className = 'menu-title';
-        titleDiv.style.cssText = 'text-align: center; margin: 30px 0 15px 0;';
+        titleDiv.className = 'menu-title-animated';
+        titleDiv.style.cssText = 'text-align: center; margin: 40px 0 20px 0;';
         titleDiv.innerHTML = `
-<pre class="ascii-art" style="color: #00ff41; text-shadow: 0 0 10px #00ff41; font-size: 11px;">
-╔═══════════════════════════════════════════════╗
-║                                               ║
-║         ▀█▀ █ █ █▀▀   ▀█▀ █▀▀ █▀▀█ █▀▄▀█      ║
-║          █  █▀█ █▀▀    █  █▀▀ █▄▄▀ █ ▀ █      ║
-║          ▀  ▀ ▀ ▀▀▀    ▀  ▀▀▀ ▀ ▀▀ ▀   ▀      ║
-║                                               ║
-║              █ █▄ █ █▀▄ █              ║
-║              █ █ ▀█ █▀█ █▄▄            ║
-║                                               ║
-╚═══════════════════════════════════════════════╝
+<pre class="title-logo" style="
+    color: #00ff41;
+    text-shadow:
+        0 0 10px #00ff41,
+        0 0 20px #00ff41,
+        0 0 30px #00ff41,
+        0 0 40px #00aa33;
+    font-size: 14px;
+    line-height: 1.1;
+    letter-spacing: 2px;
+    animation: titlePulse 3s ease-in-out infinite, titleGlitch 8s infinite;
+">
+▀█▀ █ █ █▀▀   ▀█▀ █▀▀ █▀▀█ █▀▄▀█ █ █▄ █ ▄▀▄ █
+ █  █▀█ █▀▀    █  █▀▀ █▄▄▀ █ ▀ █ █ █ ▀█ █▀█ █
+ ▀  ▀ ▀ ▀▀▀    ▀  ▀▀▀ ▀ ▀▀ ▀   ▀ ▀ ▀  ▀ ▀ ▀ ▀▀▀
 </pre>
-<div style="color: #888; font-style: italic; margin-top: 8px; font-size: 13px;">A Digital Descent into Memory</div>
+<div class="subtitle" style="
+    color: #888;
+    font-style: italic;
+    margin-top: 15px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    animation: subtitleFade 4s ease-in-out infinite;
+">A Digital Descent into Memory</div>
+<div class="version" style="
+    color: #00ff4144;
+    font-size: 10px;
+    margin-top: 10px;
+    letter-spacing: 2px;
+">v1.0.0 - MEMORIAM ARCHIVE</div>
         `;
         output.appendChild(titleDiv);
 
