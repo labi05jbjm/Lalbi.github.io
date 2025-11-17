@@ -699,3 +699,28 @@ body {
 .version:hover {
     opacity: 0.7;
 }
+
+/* ==================== BLACK & WHITE THEME (Language Selection) ==================== */
+
+body.bw-theme {
+    background: #000000 !important;
+}
+
+body.bw-theme * {
+    color: #ffffff !important;
+}
+
+body.bw-theme #terminal-container {
+    background: rgba(0, 0, 0, 0.98) !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 50px rgba(255, 255, 255, 0.05) !important;
+}
+
+body.bw-theme #terminal-header {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: #ffffff !important;
+}
+
+body.bw-theme .output-line {
+    color: #ffffff !important;
+}

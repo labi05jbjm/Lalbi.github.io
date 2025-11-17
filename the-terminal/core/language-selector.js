@@ -10,25 +10,39 @@ const LanguageSelector = {
     async show() {
         console.log('[LANG-SELECT] Showing language selection terminal');
 
-        // Apply B&W theme
+        // Apply B&W theme FIRST
         this.applyBlackWhiteTheme();
+
+        // Wait for theme to apply
+        await this.wait(100);
 
         // Clear terminal and show boot sequence
         Terminal.clear();
         Terminal.disableInput();
+
+        // Hide the input line completely
+        const inputLine = document.getElementById('terminal-input-line');
+        if (inputLine) {
+            inputLine.style.display = 'none';
+        }
 
         await this.showBootSequence();
         await this.showLanguagePrompt();
     },
 
     applyBlackWhiteTheme() {
+        // Add B&W class to body for global styling
+        document.body.classList.add('bw-theme');
+
         const container = document.getElementById('terminal-container');
         const output = document.getElementById('terminal-output');
+        const header = document.getElementById('terminal-header');
 
         if (container) {
             container.style.transition = 'all 0.5s ease';
             container.style.border = '2px solid #ffffff';
-            container.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3)';
+            container.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 50px rgba(255, 255, 255, 0.05)';
+            container.style.background = 'rgba(0, 0, 0, 0.98)';
             container.classList.remove('crt-curved');
         }
 
@@ -36,7 +50,16 @@ const LanguageSelector = {
             output.style.color = '#ffffff';
         }
 
-        // Hide CRT overlay temporarily
+        if (header) {
+            header.style.borderColor = '#ffffff';
+            header.style.background = 'rgba(255, 255, 255, 0.1)';
+            const systemName = document.getElementById('system-name');
+            const systemStatus = document.getElementById('system-status');
+            if (systemName) systemName.style.color = '#ffffff';
+            if (systemStatus) systemStatus.style.color = '#ffffff';
+        }
+
+        // Hide CRT overlay
         const crtOverlay = document.getElementById('crt-overlay');
         if (crtOverlay) {
             crtOverlay.style.display = 'none';
@@ -63,6 +86,7 @@ const LanguageSelector = {
         for (const msg of bootMessages) {
             const line = Terminal.addOutput(msg, 'system');
             line.style.color = '#ffffff';
+            line.style.textShadow = '0 0 5px rgba(255, 255, 255, 0.5)';
             await this.wait(150);
         }
 
@@ -72,6 +96,7 @@ const LanguageSelector = {
     async showLanguagePrompt() {
         const promptLine = Terminal.addOutput('> AVAILABLE LANGUAGES:', 'system');
         promptLine.style.color = '#ffffff';
+        promptLine.style.fontWeight = 'bold';
         await this.wait(300);
 
         const itLine = Terminal.addOutput('  - LINGUA ITALIANA', 'system');
@@ -89,63 +114,85 @@ const LanguageSelector = {
 
         await this.wait(500);
 
-        // Enable custom input handler
-        this.enableLanguageInput();
+        // Show custom input line for language selection
+        this.showCustomInput();
     },
 
-    enableLanguageInput() {
-        Terminal.enableInput();
+    showCustomInput() {
+        const output = document.getElementById('terminal-output');
 
-        const input = document.getElementById('terminal-input');
-        const prompt = document.getElementById('prompt');
+        // Create custom input container
+        const inputContainer = document.createElement('div');
+        inputContainer.id = 'lang-input-container';
+        inputContainer.style.cssText = 'display: flex; align-items: center; margin-top: 10px; font-family: "Share Tech Mono", monospace;';
 
-        if (prompt) {
-            prompt.textContent = 'language@system:~$';
-            prompt.style.color = '#ffffff';
-        }
+        const prompt = document.createElement('span');
+        prompt.textContent = 'language@system:~$ ';
+        prompt.style.cssText = 'color: #ffffff; margin-right: 5px;';
 
-        if (input) {
-            input.style.color = '#ffffff';
-        }
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = 'lang-input';
+        input.autocomplete = 'off';
+        input.spellcheck = false;
+        input.style.cssText = `
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #ffffff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 14px;
+            flex: 1;
+            caret-color: #ffffff;
+        `;
 
-        // Override command handler temporarily
-        const originalHandler = Terminal.handleCommand;
+        inputContainer.appendChild(prompt);
+        inputContainer.appendChild(input);
+        output.appendChild(inputContainer);
 
-        Terminal.handleCommand = () => {
-            const userInput = input.value.trim().toLowerCase();
+        Terminal.scrollToBottom();
+        input.focus();
 
-            // Add user input to output
-            const inputLine = Terminal.addOutput(`language@system:~$ ${input.value}`, 'system');
-            inputLine.style.color = '#aaaaaa';
-            input.value = '';
+        // Handle enter key
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const userInput = input.value.trim().toLowerCase();
 
-            // Check language choice
-            if (userInput === 'lingua italiana' || userInput === 'italiana' || userInput === 'italiano') {
-                this.selectedLanguage = 'it';
-                this.showConfirmation();
-            } else if (userInput === 'lingua inglese' || userInput === 'inglese' || userInput === 'english') {
-                this.selectedLanguage = 'en';
-                this.showConfirmation();
-            } else {
-                const errorLine = Terminal.addOutput('> ERROR: INVALID LANGUAGE CHOICE', 'error');
-                errorLine.style.color = '#ff6666';
-                const retryLine = Terminal.addOutput('> PLEASE TYPE: "lingua italiana" OR "lingua inglese"', 'system');
-                retryLine.style.color = '#ffffff';
+                // Add user input to output
+                const inputLine = Terminal.addOutput(`language@system:~$ ${input.value}`, 'system');
+                inputLine.style.color = '#aaaaaa';
+
+                // Remove input container
+                inputContainer.remove();
+
+                // Check language choice
+                if (userInput === 'lingua italiana' || userInput === 'italiana' || userInput === 'italiano') {
+                    this.selectedLanguage = 'it';
+                    this.showConfirmation();
+                } else if (userInput === 'lingua inglese' || userInput === 'inglese' || userInput === 'english') {
+                    this.selectedLanguage = 'en';
+                    this.showConfirmation();
+                } else {
+                    const errorLine = Terminal.addOutput('> ERROR: INVALID LANGUAGE CHOICE', 'error');
+                    errorLine.style.color = '#ff6666';
+                    errorLine.style.fontWeight = 'bold';
+                    const retryLine = Terminal.addOutput('> PLEASE TYPE: "lingua italiana" OR "lingua inglese"', 'system');
+                    retryLine.style.color = '#ffffff';
+                    // Show input again
+                    setTimeout(() => this.showCustomInput(), 500);
+                }
             }
-        };
-
-        this.originalHandler = originalHandler;
+        });
     },
 
     async showConfirmation() {
-        Terminal.disableInput();
-
         await this.wait(300);
         Terminal.addOutput('', 'system');
 
         const warningLine = Terminal.addOutput('> ⚠ SEI SICURO UTENTE? NON POTRAI CAMBIARE OPZIONE LINGUISTICA', 'warning');
         warningLine.style.color = '#ffff00';
         warningLine.style.fontWeight = 'bold';
+        warningLine.style.textShadow = '0 0 10px rgba(255, 255, 0, 0.5)';
 
         await this.wait(500);
         Terminal.addOutput('', 'system');
@@ -219,18 +266,17 @@ const LanguageSelector = {
         const container = document.querySelector('.language-confirmation-container');
         if (container) container.remove();
 
-        Terminal.disableInput();
-
         await this.wait(300);
         Terminal.addOutput('', 'system');
         const confirmLine = Terminal.addOutput('> LANGUAGE CONFIRMED', 'success');
         confirmLine.style.color = '#00ff00';
+        confirmLine.style.textShadow = '0 0 10px rgba(0, 255, 0, 0.8)';
 
         await this.wait(500);
         const initLine = Terminal.addOutput('> INITIALIZING SYSTEM WITH SELECTED LANGUAGE...', 'system');
         initLine.style.color = '#ffffff';
 
-        await this.wait(800);
+        await this.wait(1000);
 
         // Start Matrix animation
         await this.startMatrixAnimation();
@@ -239,7 +285,7 @@ const LanguageSelector = {
     async startMatrixAnimation() {
         console.log('[LANG-SELECT] Starting Matrix rain animation');
 
-        // Create Matrix canvas overlay
+        // Create Matrix canvas overlay with fade-in
         const canvas = document.createElement('canvas');
         canvas.id = 'matrix-canvas';
         canvas.style.cssText = `
@@ -249,7 +295,9 @@ const LanguageSelector = {
             width: 100%;
             height: 100%;
             z-index: 9999;
-            background: #000000;
+            background: transparent;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         `;
         document.body.appendChild(canvas);
 
@@ -262,6 +310,7 @@ const LanguageSelector = {
         const drops = new Array(columns).fill(1);
 
         let colorPhase = 0; // 0 = white, 1 = transitioning, 2 = green
+        let frameCount = 0;
 
         const drawMatrix = () => {
             // Semi-transparent black to create trail effect
@@ -273,11 +322,11 @@ const LanguageSelector = {
             if (colorPhase === 0) {
                 textColor = '#ffffff';
             } else if (colorPhase === 1) {
-                // Transition from white to green
-                const progress = (Date.now() % 1000) / 1000;
-                const r = Math.floor(255 * (1 - progress));
-                const g = Math.floor(255);
-                const b = Math.floor(255 * (1 - progress) * 0.3);
+                // Smooth transition from white to green
+                const transitionProgress = (frameCount - 60) / 60; // 0 to 1 over 60 frames
+                const r = Math.floor(255 * (1 - transitionProgress));
+                const g = 255;
+                const b = Math.floor(65 * transitionProgress);
                 textColor = `rgb(${r}, ${g}, ${b})`;
             } else {
                 textColor = '#00ff41';
@@ -303,8 +352,11 @@ const LanguageSelector = {
             }
         };
 
-        // Animation phases
-        let frameCount = 0;
+        // Fade in canvas
+        await this.wait(100);
+        canvas.style.opacity = '1';
+
+        // Animation loop
         const interval = setInterval(() => {
             drawMatrix();
             frameCount++;
@@ -339,43 +391,58 @@ const LanguageSelector = {
         // Remove canvas
         canvas.remove();
 
-        // Restore normal theme and show menu
+        // Restore normal theme
         this.restoreNormalTheme();
 
-        await this.wait(500);
-
-        // Restore original command handler
-        if (this.originalHandler) {
-            Terminal.handleCommand = this.originalHandler;
-        }
+        await this.wait(300);
 
         // Show main menu
         await MainMenu.show();
     },
 
     restoreNormalTheme() {
+        // Remove B&W class
+        document.body.classList.remove('bw-theme');
+
         const container = document.getElementById('terminal-container');
         const output = document.getElementById('terminal-output');
+        const header = document.getElementById('terminal-header');
 
         if (container) {
             container.style.border = '2px solid var(--primary-color)';
             container.style.boxShadow = '0 0 20px rgba(0, 255, 136, 0.3), inset 0 0 100px rgba(0, 255, 136, 0.03)';
+            container.style.background = 'rgba(10, 14, 20, 0.95)';
         }
 
         if (output) {
             output.style.color = 'var(--text-color)';
         }
 
+        if (header) {
+            header.style.borderColor = 'var(--primary-color)';
+            header.style.background = 'rgba(0, 255, 136, 0.1)';
+            const systemName = document.getElementById('system-name');
+            const systemStatus = document.getElementById('system-status');
+            if (systemName) systemName.style.color = 'var(--primary-color)';
+            if (systemStatus) systemStatus.style.color = 'var(--primary-color)';
+        }
+
         document.body.style.background = 'var(--bg-color)';
+
+        // Show input line again
+        const inputLine = document.getElementById('terminal-input-line');
+        if (inputLine) {
+            inputLine.style.display = 'flex';
+        }
 
         // Restore CRT effects based on options
         const crtOverlay = document.getElementById('crt-overlay');
-        if (crtOverlay && MainMenu.options.crtEffects) {
+        if (crtOverlay && MainMenu.options && MainMenu.options.crtEffects) {
             crtOverlay.style.display = 'block';
         }
 
         // Apply saved options
-        if (MainMenu.options.crtCurved) {
+        if (MainMenu.options && MainMenu.options.crtCurved) {
             container.classList.add('crt-curved');
         }
     },
