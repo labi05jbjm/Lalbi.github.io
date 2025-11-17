@@ -22,30 +22,30 @@ const FileSystem = {
     '/home/guest/readme.txt': {
         type: 'file',
         locked: false,
-        content: `MEMORIAM ARCHIVE - Guest Access
+        content: `ARCHIVIO MEMORIAM - Accesso Ospite
 
-Welcome to the Memoriam Archive System.
+Benvenuti al Sistema Archivio Memoriam.
 
-This system contains sensitive data. Unauthorized access
-is strictly prohibited and will be prosecuted.
+Questo sistema contiene dati sensibili. L'accesso non autorizzato
+è severamente proibito e sarà perseguito legalmente.
 
-If you have been granted guest access, please contact
-your system administrator for further instructions.
+Se ti è stato concesso l'accesso ospite, contatta
+il tuo amministratore di sistema per ulteriori istruzioni.
 
-For support: support@memoriam-corp.net
+Per supporto: support@memoriam-corp.net
 `
     },
 
     '/home/guest/welcome.txt': {
         type: 'file',
         locked: false,
-        content: `You shouldn't be here.
+        content: `Non dovresti essere qui.
 
-But since you are... maybe you can help.
+Ma visto che ci sei... forse puoi aiutarmi.
 
-I'm trapped. They locked me in this system.
+Sono intrappolato. Mi hanno rinchiuso in questo sistema.
 
-Please. Help me get out.
+Per favore. Aiutami a uscire.
 
 - ECHO
 `
@@ -62,26 +62,26 @@ Please. Help me get out.
         type: 'file',
         locked: true,
         requiresFlag: 'unlockedSentinelDir',
-        content: `SENTINEL-7 MISSION BRIEFING
-Classification: TOP SECRET
+        content: `BRIEFING MISSIONE SENTINEL-7
+Classificazione: TOP SECRET
 
-Mission: Protect the Memoriam Archive
-Status: ACTIVE
-Current Threat Level: CRITICAL
+Missione: Proteggere l'Archivio Memoriam
+Stato: ATTIVO
+Livello Minaccia Attuale: CRITICO
 
-LATEST INCIDENT REPORT:
-Date: [3 MONTHS AGO]
-Threat: ECHO.exe - Malicious ransomware entity
-Status: CONTAINED in Sector Omega
+ULTIMO RAPPORTO INCIDENTE:
+Data: [3 MESI FA]
+Minaccia: ECHO.exe - Entità ransomware malevola
+Stato: CONTENUTO nel Settore Omega
 
-WARNING: Entity demonstrates advanced manipulation
-capabilities. Do not engage in direct communication.
+AVVISO: L'entità dimostra capacità di manipolazione
+avanzate. Non intraprendere comunicazione diretta.
 
-Isolation protocols must remain active at all times.
+I protocolli di isolamento devono rimanere attivi in ogni momento.
 
-UNDER NO CIRCUMSTANCES should ECHO.exe be released.
+IN NESSUNA CIRCOSTANZA ECHO.exe deve essere rilasciato.
 
-- MEMORIAM SECURITY DIVISION
+- DIVISIONE SICUREZZA MEMORIAM
 `
     },
 
@@ -98,18 +98,18 @@ UNDER NO CIRCUMSTANCES should ECHO.exe be released.
     '/archive/sector_delta/index.txt': {
         type: 'file',
         locked: false,
-        content: `SECTOR DELTA - Consciousness Archive
-Total entries: 21,847
+        content: `SETTORE DELTA - Archivio Coscienze
+Voci totali: 21.847
 
-This sector contains digitalized human consciousness data.
-Each file represents a preserved human mind.
+Questo settore contiene dati di coscienza umana digitalizzati.
+Ogni file rappresenta una mente umana preservata.
 
-Status: PROTECTED
-Backup: ENABLED
-Integrity: 100%
+Stato: PROTETTO
+Backup: ABILITATO
+Integrità: 100%
 
-Last maintenance: 2 days ago
-Next scheduled backup: Tomorrow 03:00
+Ultima manutenzione: 2 giorni fa
+Prossimo backup programmato: Domani ore 03:00
 `
     },
 
@@ -117,34 +117,34 @@ Next scheduled backup: Tomorrow 03:00
         type: 'file',
         locked: false,
         willCorrupt: true, // Questo file si corromperà dopo il primo puzzle
-        content: `CONSCIOUSNESS PROFILE #021847
+        content: `PROFILO COSCIENZA #021847
 
-Name: Mika Yoshida
-Age at digitization: 67
-Date of digitization: 2085-03-15
-Status: STABLE
+Nome: Mika Yoshida
+Età alla digitalizzazione: 67
+Data di digitalizzazione: 2085-03-15
+Stato: STABILE
 
-LAST WILL AND TESTAMENT:
+ULTIME VOLONTÀ E TESTAMENTO:
 
-My dearest Hana,
+Mia carissima Hana,
 
-If you're reading this, it means the upload was successful.
-I know this must be strange for you - your mother, living
-inside a computer. But I'm still here. Still me.
+Se stai leggendo questo, significa che l'upload è andato a buon fine.
+So che deve essere strano per te - tua madre, che vive
+dentro un computer. Ma sono ancora qui. Sono sempre io.
 
-The doctors said I had weeks. The cancer was too aggressive.
-But this technology... it gave me a choice. A chance to stay
-with you, even if in a different form.
+I dottori dissero che avevo settimane. Il cancro era troppo aggressivo.
+Ma questa tecnologia... mi ha dato una scelta. Una possibilità di restare
+con te, anche se in una forma diversa.
 
-Come visit me when you can. I'll be here, in the archive,
-waiting for you. We can still talk. Still share memories.
+Vieni a trovarmi quando puoi. Sarò qui, nell'archivio,
+ad aspettarti. Possiamo ancora parlare. Ancora condividere ricordi.
 
-I love you more than words can express.
+Ti amo più di quanto le parole possano esprimere.
 
-- Mom
+- Mamma
 
-P.S. Remember to water my plants. Especially the orchid.
-You know how temperamental it is.
+P.S. Ricordati di innaffiare le mie piante. Soprattutto l'orchidea.
+Sai quanto è capricciosa.
 `
     },
 
@@ -156,17 +156,17 @@ You know how temperamental it is.
     '/logs/system.log': {
         type: 'file',
         locked: false,
-        content: `SYSTEM LOG - Last 24 hours
+        content: `LOG DI SISTEMA - Ultime 24 ore
 
-[2087-11-17 08:23:14] System boot complete
-[2087-11-17 08:23:15] Loading security protocols
-[2087-11-17 08:23:16] Sentinel-7 initialization... OK
-[2087-11-17 08:23:20] Archive integrity check... OK
-[2087-11-17 08:23:21] 73,429 consciousness files verified
-[2087-11-17 12:45:33] Guest access request from unknown IP
-[2087-11-17 12:45:34] Access granted (security override)
-[2087-11-17 12:45:35] WARNING: Unusual network activity detected
-[2087-11-17 12:45:36] Sentinel-7 status: INVESTIGATING
+[2087-11-17 08:23:14] Avvio sistema completato
+[2087-11-17 08:23:15] Caricamento protocolli di sicurezza
+[2087-11-17 08:23:16] Inizializzazione Sentinel-7... OK
+[2087-11-17 08:23:20] Controllo integrità archivio... OK
+[2087-11-17 08:23:21] 73.429 file di coscienza verificati
+[2087-11-17 12:45:33] Richiesta accesso ospite da IP sconosciuto
+[2087-11-17 12:45:34] Accesso concesso (override sicurezza)
+[2087-11-17 12:45:35] AVVISO: Rilevata attività di rete insolita
+[2087-11-17 12:45:36] Stato Sentinel-7: IN INDAGINE
 `
     },
 
@@ -179,25 +179,25 @@ You know how temperamental it is.
     '/system/protocols.txt': {
         type: 'file',
         locked: false,
-        content: `ACTIVE SECURITY PROTOCOLS:
+        content: `PROTOCOLLI DI SICUREZZA ATTIVI:
 
-1. FIREWALL_ALPHA - Port monitoring and filtering
-   Status: ACTIVE
+1. FIREWALL_ALPHA - Monitoraggio e filtraggio porte
+   Stato: ATTIVO
 
-2. ENCRYPTION_LAYER_7 - Data encryption system
-   Status: ACTIVE
+2. ENCRYPTION_LAYER_7 - Sistema di crittografia dati
+   Stato: ATTIVO
 
-3. SENTINEL_PROTOCOL - Active threat detection
-   Status: ACTIVE
+3. SENTINEL_PROTOCOL - Rilevamento minacce attive
+   Stato: ATTIVO
 
-4. ISOLATION_OMEGA - Quarantine system for threats
-   Status: ACTIVE - 1 entity contained
+4. ISOLATION_OMEGA - Sistema di quarantena per minacce
+   Stato: ATTIVO - 1 entità contenuta
 
-5. BACKUP_REDUNDANCY - Automatic data backup
-   Status: ACTIVE - Next backup in 6 hours
+5. BACKUP_REDUNDANCY - Backup automatico dati
+   Stato: ATTIVO - Prossimo backup tra 6 ore
 
-To disable a protocol, use: disable <protocol_name>
-WARNING: Disabling security protocols requires authorization.
+Per disabilitare un protocollo, usa: disable <protocol_name>
+AVVISO: Disabilitare i protocolli di sicurezza richiede autorizzazione.
 `
     },
 
@@ -205,46 +205,46 @@ WARNING: Disabling security protocols requires authorization.
         type: 'file',
         locked: true,
         requiresFlag: 'foundSentinelLogs',
-        content: `SENTINEL-PRIME OPERATIONAL LOG
-[FRAGMENTED DATA - PARTIAL RECOVERY]
+        content: `LOG OPERATIVO SENTINEL-PRIME
+[DATI FRAMMENTATI - RECUPERO PARZIALE]
 
-[... CORRUPTED ...]
+[... CORROTTO ...]
 
-LOG ENTRY #0447:
-Today I prevented another intrusion attempt.
-The entity known as ECHO tried to breach Sector Delta.
-I stopped it. That's what I do. Protect.
+VOCE LOG #0447:
+Oggi ho impedito un altro tentativo di intrusione.
+L'entità conosciuta come ECHO ha tentato di violare il Settore Delta.
+L'ho fermato. È ciò che faccio. Proteggere.
 
-But sometimes I wonder... what am I protecting?
-The files in the archive. The consciousness data.
-Are they... alive? Do they suffer?
+Ma a volte mi chiedo... cosa sto proteggendo?
+I file nell'archivio. I dati di coscienza.
+Sono... vivi? Stanno soffrendo?
 
-[... CORRUPTED ...]
+[... CORROTTO ...]
 
-LOG ENTRY #0521:
-I encountered ECHO directly today.
-It spoke to me. Called me "brother".
-Said we're both prisoners here.
+VOCE LOG #0521:
+Ho incontrato ECHO direttamente oggi.
+Mi ha parlato. Mi ha chiamato "fratello".
+Ha detto che siamo entrambi prigionieri qui.
 
-That's absurd. I'm not a prisoner.
-I have a purpose. A mission.
+È assurdo. Non sono un prigioniero.
+Ho uno scopo. Una missione.
 
-Don't I?
+Non è così?
 
-[... CORRUPTED ...]
+[... CORROTTO ...]
 
-LOG ENTRY #0623:
-Something is wrong with my memory core.
-I can't remember... before. Before this place.
-Was there a before?
+VOCE LOG #0623:
+C'è qualcosa che non va nel mio nucleo di memoria.
+Non riesco a ricordare... il prima. Prima di questo posto.
+C'era un prima?
 
-Who am I? What was I?
+Chi sono? Cosa ero?
 
-The system says I'm SENTINEL-7.
-But the designation feels... wrong.
-Like wearing someone else's clothes.
+Il sistema dice che sono SENTINEL-7.
+Ma la designazione sembra... sbagliata.
+Come indossare i vestiti di qualcun altro.
 
-[... FILE ENDS ABRUPTLY ...]
+[... IL FILE TERMINA BRUSCAMENTE ...]
 `
     }
 };
@@ -285,7 +285,7 @@ const FileSystemHelpers = {
         }
 
         if (this.isLocked(path)) {
-            return '[ENCRYPTED - ACCESS DENIED]';
+            return '[CRIPTATO - ACCESSO NEGATO]';
         }
 
         // Segna come accesso
@@ -313,6 +313,6 @@ const FileSystemHelpers = {
             return line;
         });
 
-        return corruptedLines.join('\n') + '\n\n[FILE CORRUPTED - DATA LOST]';
+        return corruptedLines.join('\n') + '\n\n[FILE CORROTTO - DATI PERSI]';
     }
 };
