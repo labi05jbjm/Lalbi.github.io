@@ -54,7 +54,7 @@ const MainMenu = {
     font-size: 14px;
     letter-spacing: 1px;
     animation: subtitleFade 4s ease-in-out infinite;
-">A Digital Descent into Memory</div>
+">Una Discesa Digitale nella Memoria</div>
 <div class="version" style="
     color: #00ff4144;
     font-size: 10px;
@@ -73,7 +73,7 @@ const MainMenu = {
         const hasSavedGame = StateManager.state.currentBlock > 1 || StateManager.state.playTime > 0;
 
         // New Game button
-        const btnNewGame = this.createMenuButton('NEW GAME', () => {
+        const btnNewGame = this.createMenuButton('NUOVA PARTITA', () => {
             if (hasSavedGame) {
                 this.showConfirmDialog();
             } else {
@@ -84,26 +84,26 @@ const MainMenu = {
 
         // Continue button (only if there's a saved game)
         if (hasSavedGame) {
-            const btnContinue = this.createMenuButton('CONTINUE', () => {
+            const btnContinue = this.createMenuButton('CONTINUA', () => {
                 this.continueGame();
             });
             menuContainer.appendChild(btnContinue);
         }
 
         // Options button
-        const btnOptions = this.createMenuButton('OPTIONS', () => {
+        const btnOptions = this.createMenuButton('OPZIONI', () => {
             this.showOptions();
         });
         menuContainer.appendChild(btnOptions);
 
         // Credits button
-        const btnCredits = this.createMenuButton('CREDITS', () => {
+        const btnCredits = this.createMenuButton('CREDITI', () => {
             this.showCredits();
         });
         menuContainer.appendChild(btnCredits);
 
         // Quit button
-        const btnQuit = this.createMenuButton('QUIT GAME', () => {
+        const btnQuit = this.createMenuButton('ESCI DAL GIOCO', () => {
             this.showQuitConfirmation();
         });
         menuContainer.appendChild(btnQuit);
@@ -145,10 +145,10 @@ const MainMenu = {
         dialogDiv.style.cssText = 'text-align: center; margin-top: 60px;';
         dialogDiv.innerHTML = `
             <div style="color: #ff6b6b; font-size: 16px; margin-bottom: 30px;">
-                ⚠️ WARNING ⚠️<br><br>
-                Starting a new game will erase your current progress.<br>
-                This action cannot be undone.<br><br>
-                Continue?
+                ⚠️ ATTENZIONE ⚠️<br><br>
+                Iniziare una nuova partita cancellerà i tuoi progressi attuali.<br>
+                Questa azione non può essere annullata.<br><br>
+                Continuare?
             </div>
         `;
 
@@ -160,7 +160,7 @@ const MainMenu = {
             this.show();
         });
 
-        const btnYes = this.createMenuButton('YES', () => {
+        const btnYes = this.createMenuButton('SÌ', () => {
             this.startNewGame();
         });
 
@@ -184,8 +184,8 @@ const MainMenu = {
         dialogDiv.style.cssText = 'text-align: center; margin-top: 60px;';
         dialogDiv.innerHTML = `
             <div style="color: #ffaa00; font-size: 16px; margin-bottom: 30px;">
-                Are you sure you want to quit?<br><br>
-                <span style="font-size: 13px; color: #888;">Your progress has been saved.</span>
+                Sei sicuro di voler uscire?<br><br>
+                <span style="font-size: 13px; color: #888;">I tuoi progressi sono stati salvati.</span>
             </div>
         `;
 
@@ -197,17 +197,17 @@ const MainMenu = {
             this.show();
         });
 
-        const btnYes = this.createMenuButton('YES', () => {
+        const btnYes = this.createMenuButton('SÌ', () => {
             window.close();
             // If window.close() doesn't work (not opened by script), show message
             setTimeout(() => {
                 dialogDiv.innerHTML = `
                     <div style="color: #00ff41; font-size: 16px;">
-                        You can now close this window/tab.<br><br>
-                        <span style="font-size: 13px; color: #888;">Thank you for playing THE TERMINAL.</span>
+                        Puoi ora chiudere questa finestra/scheda.<br><br>
+                        <span style="font-size: 13px; color: #888;">Grazie per aver giocato a THE TERMINAL.</span>
                     </div>
                 `;
-                const btnBack = this.createMenuButton('BACK TO MENU', () => {
+                const btnBack = this.createMenuButton('TORNA AL MENU', () => {
                     dialogDiv.remove();
                     this.show();
                 });
@@ -237,7 +237,7 @@ const MainMenu = {
 
         const title = document.createElement('div');
         title.style.cssText = 'font-size: 22px; margin-bottom: 30px; color: #00ff41;';
-        title.textContent = 'OPTIONS';
+        title.textContent = 'OPZIONI';
         optionsDiv.appendChild(title);
 
         // Options container
@@ -246,9 +246,9 @@ const MainMenu = {
 
         // CRT Effects
         optionsContainer.appendChild(this.createOptionToggle(
-            'CRT Effects',
+            'Effetti CRT',
             'crtEffects',
-            'Enables screen curvature and phosphor glow effects',
+            'Attiva curvatura dello schermo ed effetti di bagliore fosforico',
             (value) => {
                 const crtOverlay = document.getElementById('crt-overlay');
                 if (crtOverlay) {
@@ -259,9 +259,9 @@ const MainMenu = {
 
         // CRT Curved Screen
         optionsContainer.appendChild(this.createOptionToggle(
-            'CRT Curved Screen',
+            'Schermo CRT Curvo',
             'crtCurved',
-            'Curved screen like old CRT tube monitors',
+            'Schermo curvo come i vecchi monitor a tubo catodico',
             (value) => {
                 const terminal = document.getElementById('terminal-container');
                 if (terminal) {
@@ -276,9 +276,9 @@ const MainMenu = {
 
         // Scanlines
         optionsContainer.appendChild(this.createOptionToggle(
-            'Scanlines',
+            'Linee di Scansione',
             'scanlines',
-            'Displays horizontal scanlines for retro terminal effect',
+            'Mostra linee di scansione orizzontali per effetto terminale retro',
             (value) => {
                 const crtOverlay = document.getElementById('crt-overlay');
                 if (crtOverlay) {
@@ -289,23 +289,23 @@ const MainMenu = {
 
         // Glitch Effects
         optionsContainer.appendChild(this.createOptionToggle(
-            'Glitch Effects',
+            'Effetti Glitch',
             'glitchEffects',
-            'Random visual glitches during gameplay'
+            'Glitch visivi casuali durante il gioco'
         ));
 
         // Typewriter Effect
         optionsContainer.appendChild(this.createOptionToggle(
-            'Typewriter Effect',
+            'Effetto Macchina da Scrivere',
             'typewriterEffect',
-            'Text appears character by character'
+            'Il testo appare carattere per carattere'
         ));
 
         // Sound Effects
         optionsContainer.appendChild(this.createOptionToggle(
-            'Sound Effects',
+            'Effetti Sonori',
             'soundEffects',
-            'Enable all game sound effects and audio feedback',
+            'Attiva tutti gli effetti sonori e feedback audio del gioco',
             (value) => {
                 if (SoundManager) {
                     SoundManager.setEnabled(value);
@@ -320,7 +320,7 @@ const MainMenu = {
         optionsDiv.appendChild(optionsContainer);
 
         // Back button
-        const btnBack = this.createMenuButton('BACK TO MENU', () => {
+        const btnBack = this.createMenuButton('TORNA AL MENU', () => {
             optionsDiv.remove();
             this.show();
         });
@@ -352,7 +352,7 @@ const MainMenu = {
             border: 2px solid ${this.options[optionKey] ? '#00ff41' : '#ff3366'};
             color: ${this.options[optionKey] ? '#00ff41' : '#ff3366'};
         `;
-        toggle.textContent = this.options[optionKey] ? 'ON' : 'OFF';
+        toggle.textContent = this.options[optionKey] ? 'ATTIVO' : 'DISATTIVO';
 
         toggle.onclick = () => {
             this.options[optionKey] = !this.options[optionKey];
@@ -362,7 +362,7 @@ const MainMenu = {
             toggle.style.background = this.options[optionKey] ? 'rgba(0, 255, 65, 0.3)' : 'rgba(255, 0, 0, 0.2)';
             toggle.style.borderColor = this.options[optionKey] ? '#00ff41' : '#ff3366';
             toggle.style.color = this.options[optionKey] ? '#00ff41' : '#ff3366';
-            toggle.textContent = this.options[optionKey] ? 'ON' : 'OFF';
+            toggle.textContent = this.options[optionKey] ? 'ATTIVO' : 'DISATTIVO';
 
             // Call onChange callback if provided
             if (onChange) {
@@ -427,34 +427,34 @@ const MainMenu = {
         creditsDiv.style.cssText = 'text-align: center; margin-top: 40px;';
         creditsDiv.innerHTML = `
             <div style="font-size: 22px; margin-bottom: 25px; color: #00ff41;">
-                CREDITS
+                CREDITI
             </div>
             <div style="font-size: 18px; margin-bottom: 35px; color: #fff;">
                 THE TERMINAL
             </div>
             <div style="font-size: 13px; color: #888; line-height: 2;">
                 <div style="margin-bottom: 18px;">
-                    <div style="color: #00ff41; font-size: 14px;">Design & Narrative</div>
+                    <div style="color: #00ff41; font-size: 14px;">Design & Narrativa</div>
                     <div>Claude & User</div>
                 </div>
                 <div style="margin-bottom: 18px;">
-                    <div style="color: #00ff41; font-size: 14px;">Development</div>
-                    <div>Pure HTML5/CSS3/JavaScript</div>
-                    <div style="font-size: 11px; margin-top: 5px;">No external dependencies</div>
+                    <div style="color: #00ff41; font-size: 14px;">Sviluppo</div>
+                    <div>Puro HTML5/CSS3/JavaScript</div>
+                    <div style="font-size: 11px; margin-top: 5px;">Nessuna dipendenza esterna</div>
                 </div>
                 <div style="margin-bottom: 25px;">
-                    <div style="color: #00ff41; font-size: 14px;">Inspired by</div>
+                    <div style="color: #00ff41; font-size: 14px;">Ispirato da</div>
                     <div>Pony Island</div>
                     <div>The Stanley Parable</div>
-                    <div>Classic Cyberpunk Noir</div>
+                    <div>Classico Cyberpunk Noir</div>
                 </div>
                 <div style="font-size: 15px; color: #00ff41; margin-top: 35px;">
-                    ❖ Thank you for playing ❖
+                    ❖ Grazie per aver giocato ❖
                 </div>
             </div>
         `;
 
-        const btnBack = this.createMenuButton('BACK TO MENU', () => {
+        const btnBack = this.createMenuButton('TORNA AL MENU', () => {
             creditsDiv.remove();
             this.show();
         });

@@ -70,16 +70,16 @@ const LanguageSelector = {
 
     async showBootSequence() {
         const bootMessages = [
-            '> INITIALIZING SYSTEM...',
-            '> LOADING CORE MODULES...',
-            '> CHECKING MEMORY INTEGRITY... [OK]',
-            '> MOUNTING FILE SYSTEMS... [OK]',
-            '> STARTING NETWORK SERVICES... [OK]',
-            '> LOADING MEMORIAM ARCHIVE v3.7.2...',
-            '> SYSTEM READY',
+            '> INIZIALIZZAZIONE SISTEMA...',
+            '> CARICAMENTO MODULI PRINCIPALI...',
+            '> VERIFICA INTEGRITÀ MEMORIA... [OK]',
+            '> MONTAGGIO FILE SYSTEM... [OK]',
+            '> AVVIO SERVIZI DI RETE... [OK]',
+            '> CARICAMENTO ARCHIVIO MEMORIAM v3.7.2...',
+            '> SISTEMA PRONTO',
             '',
-            '> LANGUAGE CONFIGURATION REQUIRED',
-            '> PLEASE SELECT YOUR PREFERRED LANGUAGE',
+            '> CONFIGURAZIONE LINGUISTICA RICHIESTA',
+            '> SI PREGA DI SELEZIONARE LA LINGUA PREFERITA',
             '',
         ];
 
@@ -94,7 +94,7 @@ const LanguageSelector = {
     },
 
     async showLanguagePrompt() {
-        const promptLine = Terminal.addOutput('> AVAILABLE LANGUAGES:', 'system');
+        const promptLine = Terminal.addOutput('> LINGUE DISPONIBILI:', 'system');
         promptLine.style.color = '#ffffff';
         promptLine.style.fontWeight = 'bold';
         await this.wait(300);
@@ -108,7 +108,7 @@ const LanguageSelector = {
         await this.wait(300);
 
         Terminal.addOutput('', 'system');
-        const instructLine = Terminal.addOutput('> TYPE YOUR CHOICE BELOW:', 'system');
+        const instructLine = Terminal.addOutput('> DIGITA LA TUA SCELTA QUI SOTTO:', 'system');
         instructLine.style.color = '#ffffff';
         instructLine.style.fontWeight = 'bold';
 
@@ -173,10 +173,10 @@ const LanguageSelector = {
                     this.selectedLanguage = 'en';
                     this.showConfirmation();
                 } else {
-                    const errorLine = Terminal.addOutput('> ERROR: INVALID LANGUAGE CHOICE', 'error');
+                    const errorLine = Terminal.addOutput('> ERRORE: SCELTA LINGUISTICA NON VALIDA', 'error');
                     errorLine.style.color = '#ff6666';
                     errorLine.style.fontWeight = 'bold';
-                    const retryLine = Terminal.addOutput('> PLEASE TYPE: "lingua italiana" OR "lingua inglese"', 'system');
+                    const retryLine = Terminal.addOutput('> SI PREGA DI DIGITARE: "lingua italiana" OPPURE "lingua inglese"', 'system');
                     retryLine.style.color = '#ffffff';
                     // Show input again
                     setTimeout(() => this.showCustomInput(), 500);
@@ -210,7 +210,7 @@ const LanguageSelector = {
             container.remove();
             this.selectedLanguage = null;
             Terminal.addOutput('', 'system');
-            const backLine = Terminal.addOutput('> RETURNING TO LANGUAGE SELECTION...', 'system');
+            const backLine = Terminal.addOutput('> RITORNO ALLA SELEZIONE LINGUISTICA...', 'system');
             backLine.style.color = '#ffffff';
             this.wait(500).then(() => this.showLanguagePrompt());
         });
@@ -268,12 +268,12 @@ const LanguageSelector = {
 
         await this.wait(300);
         Terminal.addOutput('', 'system');
-        const confirmLine = Terminal.addOutput('> LANGUAGE CONFIRMED', 'success');
+        const confirmLine = Terminal.addOutput('> LINGUA CONFERMATA', 'success');
         confirmLine.style.color = '#00ff00';
         confirmLine.style.textShadow = '0 0 10px rgba(0, 255, 0, 0.8)';
 
         await this.wait(500);
-        const initLine = Terminal.addOutput('> INITIALIZING SYSTEM WITH SELECTED LANGUAGE...', 'system');
+        const initLine = Terminal.addOutput('> INIZIALIZZAZIONE SISTEMA CON LINGUA SELEZIONATA...', 'system');
         initLine.style.color = '#ffffff';
 
         await this.wait(1000);
