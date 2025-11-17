@@ -13,6 +13,7 @@ const GameEngine = {
 
         // Inizializza i sottosistemi di base
         StateManager.init();
+        SoundManager.init();
         Terminal.init();
         NarrativeEngine.init();
 

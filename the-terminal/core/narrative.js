@@ -37,14 +37,49 @@ const NarrativeEngine = {
         const prefix = `[${speaker}] `;
         element.textContent = prefix;
 
+        // Play appropriate voice SFX based on speaker
+        const playSpeakerSound = () => {
+            if (!SoundManager) return;
+
+            switch(speaker.toUpperCase()) {
+                case 'ECHO':
+                    SoundManager.echoSpeak();
+                    break;
+                case 'LUCA':
+                    SoundManager.lucaSpeak();
+                    break;
+                case 'EIDOLON':
+                    SoundManager.eidolonSpeak();
+                    break;
+                case 'WRAITH':
+                    SoundManager.wraithSpeak();
+                    break;
+                case 'MORPHEUS':
+                    SoundManager.morpheusSpeak();
+                    break;
+                case 'SYSTEM':
+                    // No voice for system messages
+                    break;
+                default:
+                    // Generic voice for other speakers
+                    SoundManager.lucaSpeak();
+            }
+        };
+
+        // Play voice sound at start of dialogue
+        playSpeakerSound();
+
         const interval = setInterval(() => {
             if (index < text.length) {
                 element.textContent += text[index];
                 index++;
 
-                // Suono typing (se implementato)
-                if (window.AudioManager) {
-                    AudioManager.playTyping();
+                // Check typewriter option and play keystroke sound
+                if (window.gameOptions && window.gameOptions.typewriterEffect) {
+                    // Play keystroke every 3rd character to reduce noise
+                    if (index % 3 === 0 && SoundManager) {
+                        SoundManager.keystroke();
+                    }
                 }
             } else {
                 clearInterval(interval);
@@ -92,7 +127,16 @@ const NarrativeEngine = {
             const button = document.createElement('button');
             button.className = 'choice-button';
             button.textContent = `${index + 1}. ${choice.text}`;
+
+            // Hover sound
+            button.onmouseenter = () => {
+                if (SoundManager) SoundManager.choiceSelect();
+            };
+
             button.onclick = () => {
+                // Play confirmation sound
+                if (SoundManager) SoundManager.choiceConfirm();
+
                 // Registra la scelta
                 StateManager.addChoice(choice.id, choice.text);
 

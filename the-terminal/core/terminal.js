@@ -85,6 +85,8 @@ const Terminal = {
         };
 
         if (systemCommands[cmd]) {
+            // Play success sound for system commands
+            if (SoundManager) SoundManager.commandSuccess();
             systemCommands[cmd]();
             return;
         }
@@ -93,9 +95,16 @@ const Terminal = {
         if (GameEngine.handleCommand) {
             const handled = GameEngine.handleCommand(cmd, args);
             if (!handled) {
+                // Play error sound for invalid commands
+                if (SoundManager) SoundManager.commandError();
                 this.addOutput(`Command not found: ${cmd}. Type 'help' for available commands.`, 'error');
+            } else {
+                // Play success sound for valid game commands
+                if (SoundManager) SoundManager.commandSuccess();
             }
         } else {
+            // Play error sound
+            if (SoundManager) SoundManager.commandError();
             this.addOutput(`Command not found: ${cmd}. Type 'help' for available commands.`, 'error');
         }
     },

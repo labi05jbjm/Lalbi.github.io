@@ -12,7 +12,7 @@ const MainMenu = {
         scanlines: true,
         glitchEffects: true,
         typewriterEffect: true,
-        ambientSound: false,
+        soundEffects: true,
     },
 
     async show() {
@@ -99,7 +99,18 @@ const MainMenu = {
         btn.className = 'menu-button';
         btn.textContent = text;
         btn.style.cssText = 'font-size: 16px; padding: 10px 25px; min-width: 250px;';
-        btn.onclick = onClick;
+
+        // Add hover sound
+        btn.onmouseenter = () => {
+            if (SoundManager) SoundManager.menuHover();
+        };
+
+        // Add click sound
+        btn.onclick = () => {
+            if (SoundManager) SoundManager.menuClick();
+            onClick();
+        };
+
         return btn;
     },
 
@@ -253,6 +264,22 @@ const MainMenu = {
             'Typewriter Effect',
             'typewriterEffect',
             'Text appears character by character'
+        ));
+
+        // Sound Effects
+        optionsContainer.appendChild(this.createOptionToggle(
+            'Sound Effects',
+            'soundEffects',
+            'Enable all game sound effects and audio feedback',
+            (value) => {
+                if (SoundManager) {
+                    SoundManager.setEnabled(value);
+                    // Play test sound when enabled
+                    if (value) {
+                        setTimeout(() => SoundManager.commandSuccess(), 100);
+                    }
+                }
+            }
         ));
 
         optionsDiv.appendChild(optionsContainer);
@@ -437,6 +464,11 @@ const MainMenu = {
         if (crtOverlay) {
             crtOverlay.style.display = this.options.crtEffects ? 'block' : 'none';
             crtOverlay.style.opacity = this.options.scanlines ? '1' : '0';
+        }
+
+        // Apply sound effects setting
+        if (SoundManager) {
+            SoundManager.setEnabled(this.options.soundEffects);
         }
 
         // Store options globally for other systems to access
