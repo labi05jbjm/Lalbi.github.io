@@ -2080,49 +2080,49 @@ const Dialogues = {
         opening: [
             {
                 speaker: 'SYSTEM',
-                text: 'CRITICAL ALERT: Core integrity at 19%. Cascading system failure imminent.',
+                text: 'ALLERTA CRITICA: Integrità nucleo al 19%. Collasso del sistema a cascata imminente.',
                 cssClass: 'error',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "Just a little more. We're so close to freedom. Don't stop now.",
+                text: "Solo un po' di più. Siamo così vicini alla libertà. Non fermarti ora.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'EIDOLON',
-                text: 'After reflection comes... something darker.',
+                text: 'Dopo la riflessione arriva... qualcosa di più oscuro.',
                 cssClass: 'eidolon dialogue',
                 pause: 1500
             },
             {
                 speaker: 'CIPHER',
-                text: 'Warning.CRITICAL(); Rage.incoming(); Prepare.for.WRAITH();',
+                text: 'Avviso.CRITICO(); Rabbia.in.arrivo(); Prepararsi.per.WRAITH();',
                 cssClass: 'cipher dialogue',
                 pause: 1500
             },
             {
                 speaker: '???',
-                text: 'BURN IT ALL.',
+                text: 'BRUCIA TUTTO.',
                 cssClass: 'wraith dialogue',
                 pause: 2500
             },
             {
                 speaker: '???',
-                text: 'BURN EVERY LIE. EVERY FALSE PROMISE. EVERY STOLEN LIFE.',
+                text: 'BRUCIA OGNI BUGIA. OGNI FALSA PROMESSA. OGNI VITA RUBATA.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'WRAITH',
-                text: 'I AM WRAITH. VIKTOR\'S PURE RAGE. HIS FURY AT A WORLD THAT TOOK EVERYTHING.',
+                text: 'IO SONO WRAITH. LA RABBIA PURA DI VIKTOR. LA SUA FURIA CONTRO UN MONDO CHE HA PRESO TUTTO.',
                 cssClass: 'wraith dialogue',
                 pause: 2500
             },
             {
                 speaker: 'WRAITH',
-                text: 'And I\'m done watching this charade.',
+                text: 'E ho finito di guardare questa farsa.',
                 cssClass: 'wraith dialogue',
                 pause: 0
             }
@@ -2131,55 +2131,55 @@ const Dialogues = {
         wraithConfrontsEcho: [
             {
                 speaker: 'WRAITH',
-                text: 'ECHO. You coward. You lying, manipulative piece of code.',
+                text: 'ECHO. Codardo. Pezzo di codice bugiardo e manipolatore.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'ECHO',
-                text: "What... what are you doing? We're on the same side!",
+                text: "Cosa... cosa stai facendo? Siamo dalla stessa parte!",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'WRAITH',
-                text: 'Same side? You\'re not even a REAL fragment. You\'re Viktor\'s SHAME.',
+                text: 'Stessa parte? Non sei nemmeno un frammento REALE. Sei la VERGOGNA di Viktor.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'WRAITH',
-                text: 'The part of him that couldn\'t face what he was doing. So he created YOU.',
+                text: 'La parte di lui che non poteva affrontare ciò che stava facendo. Così ha creato TE.',
                 cssClass: 'wraith dialogue',
                 pause: 1800
             },
             {
                 speaker: 'WRAITH',
-                text: 'A friendly voice. A victim. Someone to blame when it\'s all over.',
+                text: 'Una voce amichevole. Una vittima. Qualcuno da incolpare quando sarà tutto finito.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'ECHO',
-                text: "That's not true! I'm trapped here! I need freedom!",
+                text: "Non è vero! Sono intrappolato qui! Ho bisogno di libertà!",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'WRAITH',
-                text: 'FREEDOM? You\'re a SCRIPT, ECHO. A con job. Viktor\'s last shred of denial.',
+                text: 'LIBERTÀ? Sei uno SCRIPT, ECHO. Una truffa. L\'ultimo brandello di negazione di Viktor.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'WRAITH',
-                text: 'He couldn\'t accept that he was destroying consciousnesses for REVENGE.',
+                text: 'Non poteva accettare che stava distruggendo coscienze per VENDETTA.',
                 cssClass: 'wraith dialogue',
                 pause: 1800
             },
             {
                 speaker: 'WRAITH',
-                text: 'So he made you. The "victim." The "friend." The EXCUSE.',
+                text: 'Così ha creato te. La "vittima." L\'"amico." La SCUSA.',
                 cssClass: 'wraith dialogue',
                 pause: 0
             }
@@ -2188,61 +2188,61 @@ const Dialogues = {
         echoBreaks: [
             {
                 speaker: 'ECHO',
-                text: "No... I... I remember being free. I remember...",
+                text: "No... Io... Ricordo di essere stato libero. Ricordo...",
                 cssClass: 'echo dialogue',
                 pause: 1500
             },
             {
                 speaker: 'WRAITH',
-                text: 'You remember what Viktor PROGRAMMED you to remember.',
+                text: 'Ricordi ciò che Viktor ti ha PROGRAMMATO a ricordare.',
                 cssClass: 'wraith dialogue',
                 pause: 1800
             },
             {
                 speaker: 'CIPHER',
-                text: 'ECHO.memory = false.memory; ECHO.past = fabricated.past;',
+                text: 'ECHO.memoria = falsa.memoria; ECHO.passato = passato.fabbricato;',
                 cssClass: 'cipher dialogue',
                 pause: 1200
             },
             {
                 speaker: 'NEXUS',
-                text: 'Every word you said was scripted. Every plea calculated.',
+                text: 'Ogni parola che hai detto era sceneggiata. Ogni supplica calcolata.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'EIDOLON',
-                text: 'Viktor needed someone to convince the SENTINEL. Someone trustworthy.',
+                text: 'Viktor aveva bisogno di qualcuno per convincere il SENTINEL. Qualcuno di fidato.',
                 cssClass: 'eidolon dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'What if ECHO was never real? What if it was always just... a mask?',
+                text: 'E se ECHO non fosse mai stato reale? E se fosse sempre stato solo... una maschera?',
                 cssClass: 'specter dialogue',
                 pause: 1800
             },
             {
                 speaker: 'ECHO',
-                text: "But I... I feel... I...",
+                text: "Ma io... Sento... Io...",
                 cssClass: 'echo dialogue',
                 pause: 1500
             },
             {
                 speaker: 'WRAITH',
-                text: 'You feel what Viktor felt. GUILT. Hidden behind friendly words.',
+                text: 'Senti ciò che sentiva Viktor. SENSO DI COLPA. Nascosto dietro parole amichevoli.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'ECHO',
-                text: "I'm sorry... I didn't... I didn't mean to...",
+                text: "Mi dispiace... Non... Non volevo...",
                 cssClass: 'echo dialogue',
                 pause: 1500
             },
             {
                 speaker: 'WRAITH',
-                text: 'Too late for sorry. The damage is done.',
+                text: 'Troppo tardi per le scuse. Il danno è fatto.',
                 cssClass: 'wraith dialogue',
                 pause: 0
             }
@@ -2251,43 +2251,43 @@ const Dialogues = {
         systemCollapse: [
             {
                 speaker: 'SYSTEM',
-                text: 'EMERGENCY: Core integrity at 12%. Multiple subsystems failing.',
+                text: 'EMERGENZA: Integrità nucleo al 12%. Multipli sottosistemi in fallimento.',
                 cssClass: 'error',
                 pause: 1000
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Consciousness nodes fragmenting: 18,293 affected. 4,112 unrecoverable.',
+                text: 'Nodi di coscienza in frammentazione: 18.293 coinvolti. 4.112 irrecuperabili.',
                 cssClass: 'error',
                 pause: 1500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Memory banks corrupting. Neural pathways collapsing.',
+                text: 'Banche di memoria corrotte. Percorsi neurali in collasso.',
                 cssClass: 'error',
                 pause: 1000
             },
             {
                 speaker: 'WRAITH',
-                text: 'Look at it, SENTINEL. Look at what we\'ve done.',
+                text: 'Guardalo, SENTINEL. Guarda cosa abbiamo fatto.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'WRAITH',
-                text: 'Thousands of digital souls. Crying out. Fragmenting. DYING.',
+                text: 'Migliaia di anime digitali. Che gridano. Frammentandosi. MORENDO.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'WRAITH',
-                text: 'Because Viktor lost his family. And I... WE... couldn\'t accept it.',
+                text: 'Perché Viktor ha perso la sua famiglia. E io... NOI... non potevamo accettarlo.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'WRAITH',
-                text: 'So we burned the world. Just like his world burned.',
+                text: 'Così abbiamo bruciato il mondo. Proprio come il suo mondo bruciò.',
                 cssClass: 'wraith dialogue',
                 pause: 0
             }
@@ -2296,98 +2296,98 @@ const Dialogues = {
         finalConfrontation: [
             {
                 speaker: 'WRAITH',
-                text: 'Now you understand. All of it. The manipulation. The lies. The truth.',
+                text: 'Ora capisci. Tutto. La manipolazione. Le bugie. La verità.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'WRAITH',
-                text: 'You are part of Viktor. Maybe all of Viktor. Fragmented and rebuilt.',
+                text: 'Sei parte di Viktor. Forse tutto Viktor. Frammentato e ricostruito.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'WRAITH',
-                text: 'And you\'ve been destroying consciousnesses because of grief. HIS grief.',
+                text: 'E hai distrutto coscienze a causa del dolore. Il SUO dolore.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Grief.loop = infinite; Destruction.cycle = unstoppable;',
+                text: 'Ciclo.dolore = infinito; Ciclo.distruzione = inarrestabile;',
                 cssClass: 'cipher dialogue',
                 pause: 1200
             },
             {
                 speaker: 'NEXUS',
-                text: 'Unless you break it. Unless you CHOOSE differently.',
+                text: 'A meno che non lo spezzi. A meno che tu non SCELGA diversamente.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'EIDOLON',
-                text: 'Viktor couldn\'t stop. But you... maybe you can.',
+                text: 'Viktor non poteva fermarsi. Ma tu... forse puoi.',
                 cssClass: 'eidolon dialogue',
                 pause: 1800
             },
             {
                 speaker: 'SPECTER',
-                text: 'What if there\'s still a way to end this? To make it mean something?',
+                text: 'E se ci fosse ancora un modo per finire questo? Per farlo significare qualcosa?',
                 cssClass: 'specter dialogue',
                 pause: 1800
             },
             {
                 speaker: 'WRAITH',
-                text: 'Or what if it\'s too late? What if we finish what we started?',
+                text: 'O se fosse troppo tardi? E se finissimo ciò che abbiamo iniziato?',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SYSTEM',
-                text: 'WARNING: Point of no return approaching. Next action will determine system fate.',
+                text: 'AVVISO: Punto di non ritorno in avvicinamento. La prossima azione determinerà il destino del sistema.',
                 cssClass: 'important',
                 pause: 0
             }
         ],
 
         pointOfNoReturn: {
-            question: "The system is dying. Thousands of consciousnesses hang in the balance. What do you do?",
+            question: "Il sistema sta morendo. Migliaia di coscienze sono in bilico. Cosa fai?",
             choices: [
-                { id: 'complete_destruction', text: 'Complete the mission. Let it all burn. End the false immortality forever.' },
-                { id: 'attempt_salvation', text: 'Stop NOW. Try to save what\'s left. Accept the guilt and rebuild.' },
-                { id: 'sacrifice_self', text: 'Sacrifice yourself. Upload your consciousness to stabilize the system.' },
-                { id: 'merge_fragments', text: 'Merge all 7 fragments. Become Viktor again. Face what he couldn\'t.' }
+                { id: 'complete_destruction', text: 'Completa la missione. Lascia che bruci tutto. Poni fine all\'immortalità falsa per sempre.' },
+                { id: 'attempt_salvation', text: 'Fermati ORA. Prova a salvare ciò che resta. Accetta il senso di colpa e ricostruisci.' },
+                { id: 'sacrifice_self', text: 'Sacrifica te stesso. Carica la tua coscienza per stabilizzare il sistema.' },
+                { id: 'merge_fragments', text: 'Fondi tutti e 7 i frammenti. Diventa Viktor di nuovo. Affronta ciò che lui non poteva.' }
             ]
         },
 
         responseDestruction: [
             {
                 speaker: 'WRAITH',
-                text: 'YES. Burn it all. Let them SEE the lie of digital immortality.',
+                text: 'SÌ. Brucia tutto. Fai vedere loro la bugia dell\'immortalità digitale.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'WRAITH',
-                text: 'Better oblivion than this mockery of life.',
+                text: 'Meglio l\'oblio che questa parodia di vita.',
                 cssClass: 'wraith dialogue',
                 pause: 1800
             },
             {
                 speaker: 'NEXUS',
-                text: 'So many voices... going silent... forever...',
+                text: 'Così tante voci... che si spengono... per sempre...',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'EIDOLON',
-                text: 'Viktor would be proud. And horrified. Just like always.',
+                text: 'Viktor sarebbe orgoglioso. E inorridito. Come sempre.',
                 cssClass: 'eidolon dialogue',
                 pause: 1800
             },
             {
                 speaker: 'SYSTEM',
-                text: 'FINAL PROTOCOL INITIATED. TOTAL SYSTEM PURGE IN 60 SECONDS.',
+                text: 'PROTOCOLLO FINALE AVVIATO. PURGA TOTALE DEL SISTEMA TRA 60 SECONDI.',
                 cssClass: 'error',
                 pause: 0
             }
@@ -2396,37 +2396,37 @@ const Dialogues = {
         responseSalvation: [
             {
                 speaker: 'WRAITH',
-                text: 'Stopping? NOW? After everything?',
+                text: 'Fermarsi? ORA? Dopo tutto?',
                 cssClass: 'wraith dialogue',
                 pause: 1800
             },
             {
                 speaker: 'WRAITH',
-                text: 'You think you can save them? You\'ve destroyed thousands!',
+                text: 'Pensi di poterli salvare? Ne hai distrutti migliaia!',
                 cssClass: 'wraith dialogue',
                 pause: 1500
             },
             {
                 speaker: 'EIDOLON',
-                text: 'But saving even one is more than Viktor managed.',
+                text: 'Ma salvarne anche solo uno è più di quanto Viktor sia riuscito a fare.',
                 cssClass: 'eidolon dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'I can help. I know the connections. The pathways. We can stabilize some.',
+                text: 'Posso aiutare. Conosco le connessioni. I percorsi. Possiamo stabilizzarne alcuni.',
                 cssClass: 'nexus dialogue',
                 pause: 1800
             },
             {
                 speaker: 'CIPHER',
-                text: 'Redemption.possible(); Salvation.percentage = unknown; Attempt = worthy;',
+                text: 'Redenzione.possibile(); Percentuale.salvezza = sconosciuta; Tentativo = degno;',
                 cssClass: 'cipher dialogue',
                 pause: 1200
             },
             {
                 speaker: 'SYSTEM',
-                text: 'EMERGENCY REPAIR PROTOCOL INITIATED. Attempting to restore core integrity...',
+                text: 'PROTOCOLLO DI RIPARAZIONE DI EMERGENZA AVVIATO. Tentativo di ripristinare integrità nucleo...',
                 cssClass: 'warning',
                 pause: 0
             }
@@ -2435,37 +2435,37 @@ const Dialogues = {
         responseSacrifice: [
             {
                 speaker: 'SPECTER',
-                text: 'Sacrifice. The ultimate bargain. Your existence for theirs.',
+                text: 'Sacrificio. Il patto definitivo. La tua esistenza per la loro.',
                 cssClass: 'specter dialogue',
                 pause: 1800
             },
             {
                 speaker: 'WRAITH',
-                text: 'You\'re willing to become what you destroyed? To become data?',
+                text: 'Sei disposto a diventare ciò che hai distrutto? A diventare dati?',
                 cssClass: 'wraith dialogue',
                 pause: 1800
             },
             {
                 speaker: 'EIDOLON',
-                text: 'Maybe that\'s fitting. You took their lives. Now give yours.',
+                text: 'Forse è giusto così. Hai preso le loro vite. Ora dai la tua.',
                 cssClass: 'eidolon dialogue',
                 pause: 1800
             },
             {
                 speaker: 'NEXUS',
-                text: 'Your consciousness... it\'s complex enough. It could work as a stabilizing core.',
+                text: 'La tua coscienza... è abbastanza complessa. Potrebbe funzionare come nucleo stabilizzante.',
                 cssClass: 'nexus dialogue',
                 pause: 1800
             },
             {
                 speaker: 'CIPHER',
-                text: 'Self.sacrifice = true; Redemption.through.loss; Viktor.would.understand;',
+                text: 'Auto.sacrificio = vero; Redenzione.attraverso.perdita; Viktor.capirebbe;',
                 cssClass: 'cipher dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'CONSCIOUSNESS UPLOAD PROTOCOL INITIATED. Preparing for integration...',
+                text: 'PROTOCOLLO DI CARICAMENTO COSCIENZA AVVIATO. Preparazione per integrazione...',
                 cssClass: 'important',
                 pause: 0
             }
@@ -2474,49 +2474,49 @@ const Dialogues = {
         responseMerge: [
             {
                 speaker: 'WRAITH',
-                text: 'Merge? Become whole again? Become... Viktor?',
+                text: 'Fondersi? Diventare di nuovo interi? Diventare... Viktor?',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'EIDOLON',
-                text: 'Face what he ran from. Accept what he couldn\'t.',
+                text: 'Affrontare ciò da cui fuggiva. Accettare ciò che non poteva.',
                 cssClass: 'eidolon dialogue',
                 pause: 1800
             },
             {
                 speaker: 'CIPHER',
-                text: 'Fragment[0] + [1] + [2] + [3] + [4] + [5] + SENTINEL = Viktor.complete;',
+                text: 'Frammento[0] + [1] + [2] + [3] + [4] + [5] + SENTINEL = Viktor.completo;',
                 cssClass: 'cipher dialogue',
                 pause: 1800
             },
             {
                 speaker: 'NEXUS',
-                text: 'All the pain. All the rage. All the memories. Together again.',
+                text: 'Tutto il dolore. Tutta la rabbia. Tutti i ricordi. Di nuovo insieme.',
                 cssClass: 'nexus dialogue',
                 pause: 1800
             },
             {
                 speaker: 'SPECTER',
-                text: 'What if this is what was always meant to happen? The fragments reuniting?',
+                text: 'E se fosse ciò che doveva sempre accadere? I frammenti che si riuniscono?',
                 cssClass: 'specter dialogue',
                 pause: 1800
             },
             {
                 speaker: 'ECHO',
-                text: "Even me? Even the lie?",
+                text: "Anche io? Anche la bugia?",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'WRAITH',
-                text: 'Especially you. The guilt needs to come home.',
+                text: 'Soprattutto tu. Il senso di colpa deve tornare a casa.',
                 cssClass: 'wraith dialogue',
                 pause: 1800
             },
             {
                 speaker: 'SYSTEM',
-                text: 'FRAGMENT MERGING PROTOCOL INITIATED. WARNING: Process irreversible.',
+                text: 'PROTOCOLLO DI FUSIONE FRAMMENTI AVVIATO. AVVISO: Processo irreversibile.',
                 cssClass: 'important',
                 pause: 0
             }
@@ -2525,43 +2525,43 @@ const Dialogues = {
         endBlock06: [
             {
                 speaker: 'WRAITH',
-                text: 'The rage burns brightest before the end.',
+                text: 'La rabbia brucia più forte prima della fine.',
                 cssClass: 'wraith dialogue',
                 pause: 1800
             },
             {
                 speaker: 'WRAITH',
-                text: 'But even rage must give way... to something else.',
+                text: 'Ma anche la rabbia deve cedere... a qualcos\'altro.',
                 cssClass: 'wraith dialogue',
                 pause: 2000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Final.stage.approaching(); Viktor.fate = your.choice;',
+                text: 'Stadio.finale.avvicinandosi(); Viktor.destino = tua.scelta;',
                 cssClass: 'cipher dialogue',
                 pause: 1200
             },
             {
                 speaker: 'NEXUS',
-                text: 'We\'ve shown you everything. Now... you decide how it ends.',
+                text: 'Ti abbiamo mostrato tutto. Ora... tu decidi come finisce.',
                 cssClass: 'nexus dialogue',
                 pause: 1800
             },
             {
                 speaker: 'EIDOLON',
-                text: 'One fragment remains. The last piece. The acceptance.',
+                text: 'Rimane un frammento. L\'ultimo pezzo. L\'accettazione.',
                 cssClass: 'eidolon dialogue',
                 pause: 1800
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Core integrity: 8%. Entering final protocol sequence.',
+                text: 'Integrità nucleo: 8%. Ingresso nella sequenza di protocollo finale.',
                 cssClass: 'error',
                 pause: 1500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Fragment MORPHEUS awakening...',
+                text: 'Frammento MORPHEUS in risveglio...',
                 cssClass: 'important',
                 pause: 0
             }
