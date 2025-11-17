@@ -25,7 +25,8 @@ const GameEngine = {
             console.log('[ENGINE] First time - showing language selection');
             await LanguageSelector.show();
         } else {
-            console.log('[ENGINE] Language already selected - showing main menu');
+            console.log('[ENGINE] Language already selected - showing terminal boot and main menu');
+            await Terminal.showBootSequence();
             await MainMenu.show();
         }
 
