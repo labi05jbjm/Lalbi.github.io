@@ -113,6 +113,43 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* CRT Curved Screen Effect */
+#terminal-container.crt-curved {
+    border-radius: 30px;
+    box-shadow:
+        0 0 40px rgba(0, 255, 136, 0.4),
+        0 0 80px rgba(0, 255, 136, 0.2),
+        inset 0 0 120px rgba(0, 255, 136, 0.05),
+        inset 0 0 30px rgba(0, 0, 0, 0.5);
+    transform: perspective(1000px) rotateX(0deg);
+    border: 3px solid var(--primary-color);
+}
+
+#terminal-container.crt-curved::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.02) 0%,
+        rgba(0, 0, 0, 0.3) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 28px;
+}
+
+#terminal-container.crt-curved #terminal-header,
+#terminal-container.crt-curved #terminal-output,
+#terminal-container.crt-curved #terminal-input-line {
+    position: relative;
+    z-index: 2;
 }
 
 /* Terminal Header */

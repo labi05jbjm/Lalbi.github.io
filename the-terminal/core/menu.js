@@ -9,6 +9,7 @@ const MainMenu = {
     // Game options (stored in localStorage)
     options: {
         crtEffects: true,
+        crtCurved: true,
         scanlines: true,
         glitchEffects: true,
         typewriterEffect: true,
@@ -256,6 +257,23 @@ const MainMenu = {
             }
         ));
 
+        // CRT Curved Screen
+        optionsContainer.appendChild(this.createOptionToggle(
+            'CRT Curved Screen',
+            'crtCurved',
+            'Curved screen like old CRT tube monitors',
+            (value) => {
+                const terminal = document.getElementById('terminal-container');
+                if (terminal) {
+                    if (value) {
+                        terminal.classList.add('crt-curved');
+                    } else {
+                        terminal.classList.remove('crt-curved');
+                    }
+                }
+            }
+        ));
+
         // Scanlines
         optionsContainer.appendChild(this.createOptionToggle(
             'Scanlines',
@@ -481,6 +499,16 @@ const MainMenu = {
         if (crtOverlay) {
             crtOverlay.style.display = this.options.crtEffects ? 'block' : 'none';
             crtOverlay.style.opacity = this.options.scanlines ? '1' : '0';
+        }
+
+        // Apply CRT curved screen
+        const terminal = document.getElementById('terminal-container');
+        if (terminal) {
+            if (this.options.crtCurved) {
+                terminal.classList.add('crt-curved');
+            } else {
+                terminal.classList.remove('crt-curved');
+            }
         }
 
         // Apply sound effects setting
