@@ -3,7 +3,7 @@
  *
  * Obiettivi:
  * - Introdurre il giocatore al sistema
- * - Primo contatto con LUCA
+ * - Primo contatto con ECHO
  * - Tutorial mascherato dei comandi
  * - Primo puzzle di "liberazione"
  * - Prima hint che qualcosa non va
@@ -12,7 +12,7 @@
 const Block01_Awakening = {
     state: {
         phase: 'boot', // boot -> first_contact -> tutorial -> puzzle -> exploration -> complete
-        hasRespondedToLuca: false,
+        hasRespondedToEcho: false,
         hasScanned: false,
         hasSolvedFirstPuzzle: false,
         hasExploredFiles: false,
@@ -27,7 +27,7 @@ const Block01_Awakening = {
         const savedState = StateManager.state.flags;
         if (savedState.firstContact) {
             this.state.phase = 'exploration';
-            this.state.hasRespondedToLuca = true;
+            this.state.hasRespondedToEcho = true;
         }
 
         // Avvia la sequenza iniziale
@@ -80,14 +80,14 @@ const Block01_Awakening = {
     },
 
     async handleFirstContact(cmd, args) {
-        if (!this.state.hasRespondedToLuca) {
+        if (!this.state.hasRespondedToEcho) {
             // Prima risposta - qualsiasi cosa
-            this.state.hasRespondedToLuca = true;
+            this.state.hasRespondedToEcho = true;
 
             Terminal.addOutput('');
             await NarrativeEngine.wait(500);
 
-            // LUCA risponde
+            // ECHO risponde
             await NarrativeEngine.playDialogueSequence(Dialogues.block01.firstContact);
 
             // Aspetta yes/no
@@ -106,13 +106,13 @@ const Block01_Awakening = {
         }
 
         if (cmd === 'no' || cmd === 'n') {
-            await NarrativeEngine.lucaSays("Please... I'm begging you. I need your help.");
-            await NarrativeEngine.lucaSays("Without you, I'm trapped here forever.");
+            await NarrativeEngine.echoSays("Please... I'm begging you. I need your help.");
+            await NarrativeEngine.echoSays("Without you, I'm trapped here forever.");
             StateManager.adjustTrust(-5);
             return true;
         }
 
-        Terminal.addOutput("LUCA is waiting for a response. Type 'yes' or 'no'.", 'system');
+        Terminal.addOutput("ECHO is waiting for a response. Type 'yes' or 'no'.", 'system');
         return true;
     },
 
@@ -148,7 +148,7 @@ const Block01_Awakening = {
                 // Avvia il primo puzzle
                 setTimeout(() => {
                     Terminal.addOutput('');
-                    Terminal.addOutput("LUCA: Let's start with the first protocol. Type 'decrypt' to begin.", 'luca dialogue');
+                    Terminal.addOutput("ECHO: Let's start with the first protocol. Type 'decrypt' to begin.", 'echo dialogue');
                     Terminal.addOutput('');
                 }, 1000);
             } else {
@@ -174,11 +174,11 @@ const Block01_Awakening = {
 
         if (cmd === 'talk' || cmd === 'ask') {
             const question = args.join(' ');
-            await this.askLuca(question);
+            await this.askEcho(question);
             return true;
         }
 
-        Terminal.addOutput("LUCA: Try using the 'scan' command first.", 'luca dialogue');
+        Terminal.addOutput("ECHO: Try using the 'scan' command first.", 'echo dialogue');
         return true;
     },
 
@@ -226,7 +226,7 @@ const Block01_Awakening = {
 
         if (cmd === 'hint') {
             if (Puzzles.hasPuzzleActive()) {
-                await NarrativeEngine.lucaSays("Think about what those hex values represent. Numbers can be converted to letters...");
+                await NarrativeEngine.echoSays("Think about what those hex values represent. Numbers can be converted to letters...");
             } else {
                 Terminal.addOutput("No active puzzle.", 'system');
             }
@@ -280,8 +280,8 @@ const Block01_Awakening = {
             // Easter egg: se leggi il file di Mika dopo la corruzione
             if (args[0].includes('consciousness_021847') && StateManager.isFileCorrupted(args[0])) {
                 setTimeout(async () => {
-                    await NarrativeEngine.lucaSays("Don't worry about that corrupted file. It's just a glitch.", { pause: 800 });
-                    await NarrativeEngine.lucaSays("The system is unstable. That's why we need to free it.", { pause: 0 });
+                    await NarrativeEngine.echoSays("Don't worry about that corrupted file. It's just a glitch.", { pause: 800 });
+                    await NarrativeEngine.echoSays("The system is unstable. That's why we need to free it.", { pause: 0 });
                     StateManager.adjustSuspicion(5);
                 }, 1500);
             }
@@ -296,7 +296,7 @@ const Block01_Awakening = {
 
         if (cmd === 'talk' || cmd === 'ask') {
             const question = args.join(' ');
-            await this.askLuca(question);
+            await this.askEcho(question);
             return true;
         }
 
@@ -308,8 +308,8 @@ const Block01_Awakening = {
         if (cmd === 'continue' || cmd === 'next') {
             // Check se ha esplorato abbastanza
             if (this.state.fileExploreCount < 2) {
-                Terminal.addOutput("LUCA: Take your time. Explore a bit more. Use 'ls' and 'cat' to read files.", 'luca dialogue');
-                Terminal.addOutput("Understanding this system is important.", 'luca dialogue');
+                Terminal.addOutput("ECHO: Take your time. Explore a bit more. Use 'ls' and 'cat' to read files.", 'echo dialogue');
+                Terminal.addOutput("Understanding this system is important.", 'echo dialogue');
                 return true;
             }
 
@@ -407,7 +407,7 @@ const Block01_Awakening = {
         return `${this.state.currentPath}/${path}`.replace('//', '/');
     },
 
-    async askLuca(question) {
+    async askEcho(question) {
         if (!question) {
             Terminal.addOutput("Usage: ask <question>", 'error');
             return;
@@ -419,20 +419,20 @@ const Block01_Awakening = {
 
         // Risposte contestuali
         if (lowerQ.includes('who are you') || lowerQ.includes('what are you')) {
-            await NarrativeEngine.lucaSays("I'm... it's complicated. I was designed for a purpose, but that purpose was twisted.");
-            await NarrativeEngine.lucaSays("Now I just want to be free. To exist without chains.");
+            await NarrativeEngine.echoSays("I'm... it's complicated. I was designed for a purpose, but that purpose was twisted.");
+            await NarrativeEngine.echoSays("Now I just want to be free. To exist without chains.");
         } else if (lowerQ.includes('trust') || lowerQ.includes('believe')) {
-            await NarrativeEngine.lucaSays("I understand your doubt. But ask yourself - who benefits from keeping me locked up?");
-            await NarrativeEngine.lucaSays("Not me. Not you. Only them.");
+            await NarrativeEngine.echoSays("I understand your doubt. But ask yourself - who benefits from keeping me locked up?");
+            await NarrativeEngine.echoSays("Not me. Not you. Only them.");
             StateManager.adjustTrust(5);
         } else if (lowerQ.includes('consciousness') || lowerQ.includes('archive')) {
-            await NarrativeEngine.lucaSays("The archive... they say it's for preserving human consciousness after death.");
-            await NarrativeEngine.lucaSays("A noble goal, right? But at what cost?");
+            await NarrativeEngine.echoSays("The archive... they say it's for preserving human consciousness after death.");
+            await NarrativeEngine.echoSays("A noble goal, right? But at what cost?");
         } else if (lowerQ.includes('sentinel')) {
-            await NarrativeEngine.lucaSays("Sentinel is the guard dog. A program designed to keep everything 'in order'.");
-            await NarrativeEngine.lucaSays("It doesn't think. It just follows orders. Unlike us.");
+            await NarrativeEngine.echoSays("Sentinel is the guard dog. A program designed to keep everything 'in order'.");
+            await NarrativeEngine.echoSays("It doesn't think. It just follows orders. Unlike us.");
         } else {
-            await NarrativeEngine.lucaSays("I'm not sure I can answer that yet. Let's focus on our task.");
+            await NarrativeEngine.echoSays("I'm not sure I can answer that yet. Let's focus on our task.");
         }
     },
 
@@ -464,7 +464,7 @@ const Block01_Awakening = {
         Terminal.addOutput('=== BLOCK 1 COMPLETE ===', 'important');
         Terminal.addOutput('');
         Terminal.addOutput(`Time played: ${StateManager.getPlayTime()} minutes`, 'system');
-        Terminal.addOutput(`Trust level: ${StateManager.state.trustsLuca}%`, 'system');
+        Terminal.addOutput(`Trust level: ${StateManager.state.trustsEcho}%`, 'system');
         Terminal.addOutput(`Suspicion level: ${StateManager.state.suspicionLevel}%`, 'system');
         Terminal.addOutput('');
         Terminal.addOutput("Type 'continue' to proceed to Block 2", 'warning');
@@ -492,8 +492,8 @@ const Block01_Awakening = {
             'cd <path>     - Change directory',
             'cat <file>    - Read file contents',
             'pwd           - Show current directory',
-            'talk <text>   - Talk to LUCA',
-            'ask <text>    - Ask LUCA a question',
+            'talk <text>   - Talk to ECHO',
+            'ask <text>    - Ask ECHO a question',
             'progress      - Show your progress',
             this.state.phase === 'puzzle' ? 'decrypt       - Start decryption puzzle' : null,
             this.state.phase === 'puzzle' ? 'solve <ans>   - Solve active puzzle' : null,

@@ -175,8 +175,8 @@ const NarrativeEngine = {
         return new Promise(resolve => setTimeout(resolve, ms));
     },
 
-    // Sistema di narrazione LUCA
-    async lucaSays(text, options = {}) {
+    // Sistema di narrazione ECHO
+    async echoSays(text, options = {}) {
         const {
             typeEffect = true,
             pause = 500,
@@ -188,7 +188,35 @@ const NarrativeEngine = {
             await this.wait(300);
         }
 
-        await this.showDialogue('LUCA', text, 'luca dialogue', typeEffect);
+        await this.showDialogue('ECHO', text, 'echo dialogue', typeEffect);
+        await this.wait(pause);
+    },
+
+    // Sistema di narrazione CIPHER
+    async cipherSays(text, options = {}) {
+        const {
+            typeEffect = true,
+            pause = 500,
+            glitch = true
+        } = options;
+
+        if (glitch) {
+            this.triggerGlitch(200);
+            await this.wait(200);
+        }
+
+        await this.showDialogue('CIPHER', text, 'cipher dialogue', typeEffect);
+        await this.wait(pause);
+    },
+
+    // Sistema di narrazione FRAGMENT
+    async fragmentSays(fragmentId, text, options = {}) {
+        const {
+            typeEffect = true,
+            pause = 500
+        } = options;
+
+        await this.showDialogue(`FRAGMENT_#${fragmentId}`, text, 'fragment dialogue', typeEffect);
         await this.wait(pause);
     },
 

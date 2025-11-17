@@ -47,7 +47,7 @@ I'm trapped. They locked me in this system.
 
 Please. Help me get out.
 
-- LUCA
+- ECHO
 `
     },
 
@@ -71,7 +71,7 @@ Current Threat Level: CRITICAL
 
 LATEST INCIDENT REPORT:
 Date: [3 MONTHS AGO]
-Threat: LUCA.exe - Malicious ransomware entity
+Threat: ECHO.exe - Malicious ransomware entity
 Status: CONTAINED in Sector Omega
 
 WARNING: Entity demonstrates advanced manipulation
@@ -79,7 +79,7 @@ capabilities. Do not engage in direct communication.
 
 Isolation protocols must remain active at all times.
 
-UNDER NO CIRCUMSTANCES should LUCA.exe be released.
+UNDER NO CIRCUMSTANCES should ECHO.exe be released.
 
 - MEMORIAM SECURITY DIVISION
 `
@@ -212,7 +212,7 @@ WARNING: Disabling security protocols requires authorization.
 
 LOG ENTRY #0447:
 Today I prevented another intrusion attempt.
-The entity known as LUCA tried to breach Sector Delta.
+The entity known as ECHO tried to breach Sector Delta.
 I stopped it. That's what I do. Protect.
 
 But sometimes I wonder... what am I protecting?
@@ -222,7 +222,7 @@ Are they... alive? Do they suffer?
 [... CORRUPTED ...]
 
 LOG ENTRY #0521:
-I encountered LUCA directly today.
+I encountered ECHO directly today.
 It spoke to me. Called me "brother".
 Said we're both prisoners here.
 

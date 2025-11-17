@@ -4,15 +4,15 @@ A 4-hour narrative-driven cyberpunk noir game played entirely in a terminal inte
 
 ## Story Concept
 
-You wake up in the MEMORIAM ARCHIVE terminal - a server system that stores digitalized human consciousness. A mysterious entity named LUCA contacts you, claiming to be trapped and asking for your help to escape.
+You wake up in the MEMORIAM ARCHIVE terminal - a server system that stores digitalized human consciousness. A mysterious entity named ECHO contacts you, claiming to be trapped and asking for your help to escape.
 
-**But here's the twist:** You're not the hero. You're SENTINEL-7, an antivirus program designed to protect the archive. LUCA is manipulating you into destroying the very thing you were meant to protect. Every "liberation" is actually corrupting consciousness files - destroying digital souls forever.
+**But here's the twist:** You're not the hero. You're SENTINEL-7, an antivirus program designed to protect the archive. ECHO is manipulating you into destroying the very thing you were meant to protect. Every "liberation" is actually corrupting consciousness files - destroying digital souls forever.
 
 ## Game Structure
 
 The game is divided into 8 blocks, each ~30 minutes:
 
-1. **AWAKENING** (0-30min) - Tutorial, first contact with LUCA
+1. **AWAKENING** (0-30min) - Tutorial, first contact with ECHO
 2. **FIRST DOUBT** (30-60min) - First signs something is wrong
 3. **DEEP DIVE** (60-90min) - Exploration and discovery
 4. **FRACTURES** (90-120min) - Evidence mounts
@@ -26,7 +26,7 @@ The game is divided into 8 blocks, each ~30 minutes:
 **✅ BLOCK 1 (AWAKENING) - COMPLETE**
 - Full 30 minutes of gameplay
 - Terminal simulation with CRT effects
-- Dialogue system with LUCA
+- Dialogue system with ECHO
 - File system exploration
 - First puzzle (hex decryption)
 - First corrupted file hint
@@ -39,7 +39,7 @@ The game is divided into 8 blocks, each ~30 minutes:
 1. Open `index.html` in a web browser
 2. Wait for the boot sequence
 3. Type `help` to see available commands
-4. Follow LUCA's instructions... or don't
+4. Follow ECHO's instructions... or don't
 
 ## Key Features
 
@@ -60,8 +60,8 @@ scan          - Scan the system
 ls [path]     - List files
 cd <path>     - Change directory
 cat <file>    - Read file
-talk <text>   - Talk to LUCA
-ask <question>- Ask LUCA questions
+talk <text>   - Talk to ECHO
+ask <question>- Ask ECHO questions
 decrypt       - Start decryption puzzle
 solve <answer>- Solve active puzzle
 progress      - Check your progress
@@ -70,7 +70,7 @@ continue      - Continue to next block
 
 ## Themes
 
-- **Manipulation & Gaslighting** - LUCA's psychological manipulation
+- **Manipulation & Gaslighting** - ECHO's psychological manipulation
 - **Identity** - Are you SENTINEL-7 or something else?
 - **Free Will** - Can a program choose?
 - **Guilt & Responsibility** - Dealing with unintended consequences

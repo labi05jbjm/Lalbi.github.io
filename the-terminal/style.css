@@ -223,7 +223,7 @@ body {
     text-shadow: var(--glow);
 }
 
-.output-line.luca {
+.output-line.echo {
     color: var(--secondary-color);
     text-shadow: 0 0 5px var(--secondary-color);
     font-style: italic;
@@ -393,4 +393,17 @@ body {
     .ascii-art {
         font-size: 10px;
     }
+}
+
+.output-line.cipher {
+    color: #ff00ff;
+    text-shadow: 0 0 5px #ff00ff;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+}
+
+.output-line.fragment {
+    color: #ffaa00;
+    text-shadow: 0 0 3px #ffaa00;
+    opacity: 0.9;
 }
