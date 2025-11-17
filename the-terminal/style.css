@@ -572,3 +572,16 @@ body {
     line-height: 1.2;
     font-size: 12px;
 }
+
+.option-toggle {
+    font-family: 'Share Tech Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.option-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+}
