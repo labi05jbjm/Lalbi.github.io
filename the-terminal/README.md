@@ -70,7 +70,15 @@ The game is divided into 8 blocks, each ~30 minutes:
 - Point of no return moment
 - 4-way final choice (destruction/salvation/sacrifice/merge)
 
-**🚧 BLOCKS 7-8 - IN DEVELOPMENT**
+**✅ BLOCK 7 (ACCEPTANCE) - COMPLETE**
+- MORPHEUS introduction (Acceptance fragment)
+- Understanding what acceptance means
+- Review of all choices made throughout the game
+- All 7 fragments speak together
+- Final identity choice (guardian/viktor/hybrid/nothing)
+- Setup for multiple endings
+
+**🚧 BLOCK 8 - IN DEVELOPMENT**
 
 ## How to Play
 

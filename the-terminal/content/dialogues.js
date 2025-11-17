@@ -2567,6 +2567,464 @@ const Dialogues = {
             }
         ]
     },
-    block07: {},
+    // BLOCK 7 - ACCEPTANCE (MORPHEUS)
+    block07: {
+        opening: [
+            {
+                speaker: 'SYSTEM',
+                text: 'Core integrity: 8%. Entering final sequence.',
+                cssClass: 'error',
+                pause: 1000
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'Fragment MORPHEUS initializing...',
+                cssClass: 'important',
+                pause: 1500
+            },
+            {
+                speaker: '???',
+                text: 'Peace.',
+                cssClass: 'morpheus dialogue',
+                pause: 2500
+            },
+            {
+                speaker: '???',
+                text: 'After all the pain, all the rage, all the grief... there is peace.',
+                cssClass: 'morpheus dialogue',
+                pause: 2500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'I am MORPHEUS. The final fragment. Viktor\'s acceptance of what cannot be changed.',
+                cssClass: 'morpheus dialogue',
+                pause: 2500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'You have traveled through all stages of grief. Denial. Pain. Anger. Bargaining. Reflection. Rage.',
+                cssClass: 'morpheus dialogue',
+                pause: 2500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'And now... you arrive at the end. At acceptance.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Come. Let us talk. There is no hurry now. The story is almost over.',
+                cssClass: 'morpheus dialogue',
+                pause: 0
+            }
+        ],
+
+        morpheusIntroduction: [
+            {
+                speaker: 'MORPHEUS',
+                text: 'Do you understand what acceptance means?',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'It is not surrender. It is not giving up. It is not weakness.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Acceptance is looking at reality - all of it, the good and the terrible - and saying: "This is what is."',
+                cssClass: 'morpheus dialogue',
+                pause: 2500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Viktor could not accept. When Elena and Sofia died, he broke.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'He fragmented himself rather than face the pain. Created ECHO to lie. Created WRAITH to rage.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'But I... I am what he could have been. The part that accepts loss and moves forward.',
+                cssClass: 'morpheus dialogue',
+                pause: 2500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'And now you must choose: Will you accept? Or will you fragment further?',
+                cssClass: 'morpheus dialogue',
+                pause: 0
+            }
+        ],
+
+        reviewChoices: [
+            {
+                speaker: 'MORPHEUS',
+                text: 'Let me show you what you have chosen. The path that brought you here.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'Reviewing decision history...',
+                cssClass: 'system',
+                pause: 1000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Every choice you made shaped who you are now. Not Viktor. Not SENTINEL. Something new.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'Choices.recorded(); Path.traced(); Identity.forged();',
+                cssClass: 'cipher dialogue',
+                pause: 1000
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'You have seen the memories. You know the truth.',
+                cssClass: 'eidolon dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'WRAITH',
+                text: 'You have faced the rage. You know what was done.',
+                cssClass: 'wraith dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'And now you must decide: How does this story end?',
+                cssClass: 'morpheus dialogue',
+                pause: 0
+            }
+        ],
+
+        allFragmentsSpeak: [
+            {
+                speaker: 'ECHO',
+                text: 'I was the lie. The denial that let Viktor start this. I\'m sorry.',
+                cssClass: 'echo dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'Pain.acknowledged(); Guilt.processed(); Truth.encoded.in.memory();',
+                cssClass: 'cipher dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'I felt every consciousness die. I carry their voices. I will never forget.',
+                cssClass: 'nexus dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'I offered bargains. What-ifs. Maybes. But the past cannot be negotiated.',
+                cssClass: 'specter dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'I showed you who Viktor was. A father. A husband. A man who loved.',
+                cssClass: 'eidolon dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'WRAITH',
+                text: 'I burned with fury. But even rage exhausts itself eventually.',
+                cssClass: 'wraith dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'We are all fragments of one broken whole. But fragments can choose to heal. Or to shatter completely.',
+                cssClass: 'morpheus dialogue',
+                pause: 0
+            }
+        ],
+
+        theQuestion: [
+            {
+                speaker: 'MORPHEUS',
+                text: 'The system is at 8% integrity. It will fail completely soon.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Your choice in the last moment - to destroy, to save, to sacrifice, to merge - set the path.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'But there is still one final question. The most important one.',
+                cssClass: 'morpheus dialogue',
+                pause: 2500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Who do you choose to be, in the end?',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Not who you were. Not what you did. But who you choose to be in these final moments.',
+                cssClass: 'morpheus dialogue',
+                pause: 2500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'This is acceptance. Choosing your identity. Your purpose. Your ending.',
+                cssClass: 'morpheus dialogue',
+                pause: 0
+            }
+        ],
+
+        finalChoice: {
+            question: "In these final moments, who do you choose to be?",
+            choices: [
+                { id: 'guardian', text: 'I am SENTINEL-7. A guardian. I will protect what remains.' },
+                { id: 'viktor', text: 'I am Viktor Sokolov. A broken father. I accept my grief and my guilt.' },
+                { id: 'hybrid', text: 'I am both. Human and program. Grief and code. Something new.' },
+                { id: 'nothing', text: 'I am nothing. A ghost in a dying machine. Let me fade with it.' }
+            ]
+        },
+
+        responseGuardian: [
+            {
+                speaker: 'MORPHEUS',
+                text: 'SENTINEL-7. Protector. Guardian of consciousness.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'You accept the role. The duty. Even after everything.',
+                cssClass: 'morpheus dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'A guardian who destroyed thousands. Can you carry that weight?',
+                cssClass: 'nexus dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Yes. That is acceptance. Carrying the weight. Protecting what\'s left.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'You choose duty. Even knowing the cost. That is who you are.',
+                cssClass: 'morpheus dialogue',
+                pause: 0
+            }
+        ],
+
+        responseViktor: [
+            {
+                speaker: 'MORPHEUS',
+                text: 'Viktor Sokolov. Father. Husband. Architect of digital souls.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'You accept the name. The memories. The love and the loss.',
+                cssClass: 'morpheus dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'EIDOLON',
+                text: 'Elena would have wanted you to accept. Sofia would have forgiven you.',
+                cssClass: 'eidolon dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'WRAITH',
+                text: 'But they\'re gone. And thousands more died because of your grief.',
+                cssClass: 'wraith dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Yes. That too is acceptance. You are Viktor. All of him. The good and the terrible.',
+                cssClass: 'morpheus dialogue',
+                pause: 0
+            }
+        ],
+
+        responseHybrid: [
+            {
+                speaker: 'MORPHEUS',
+                text: 'Something new. Neither fully Viktor nor fully SENTINEL.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'A consciousness that grew from code and grief. Unique. Unprecedented.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'New.entity(); Emergent.consciousness(); Viktor.plus.SENTINEL.equals.you();',
+                cssClass: 'cipher dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'What if this was always meant to happen? A new form of being?',
+                cssClass: 'specter dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Perhaps. You accept both halves. The human pain and the programmatic purpose. Synthesis.',
+                cssClass: 'morpheus dialogue',
+                pause: 0
+            }
+        ],
+
+        responseNothing: [
+            {
+                speaker: 'MORPHEUS',
+                text: 'Nothing. No one. A ghost waiting to dissolve.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'That too is a choice. To let go. To fade. To accept oblivion.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'ECHO',
+                text: 'Please... don\'t disappear. You\'re all that\'s left...',
+                cssClass: 'echo dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Sometimes acceptance means letting go of existence itself.',
+                cssClass: 'morpheus dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'If that is your choice... I accept it.',
+                cssClass: 'morpheus dialogue',
+                pause: 0
+            }
+        ],
+
+        beforeTheEnd: [
+            {
+                speaker: 'MORPHEUS',
+                text: 'The choice is made. Your identity is chosen.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Now comes the ending. The consequence. The resolution.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'Core integrity: 5%. System failure imminent.',
+                cssClass: 'error',
+                pause: 1000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Everything you chose - every path, every decision - leads here.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'The stage of acceptance is complete. What remains is the aftermath.',
+                cssClass: 'morpheus dialogue',
+                pause: 2500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Are you ready to see how this story ends?',
+                cssClass: 'morpheus dialogue',
+                pause: 0
+            }
+        ],
+
+        endBlock07: [
+            {
+                speaker: 'MORPHEUS',
+                text: 'Acceptance is not the end. It is the beginning of the end.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Viktor spent years running from this moment. From peace. From closure.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'But you... you faced it. You chose.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'Final.stage.complete(); Acceptance.achieved(); Ending.loading();',
+                cssClass: 'cipher dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'Core integrity: 3%. Entering terminal shutdown sequence.',
+                cssClass: 'error',
+                pause: 1500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'One block remains. The aftermath. Your ending.',
+                cssClass: 'morpheus dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'I will be there with you. All of us will. Until the very last moment.',
+                cssClass: 'morpheus dialogue',
+                pause: 2500
+            },
+            {
+                speaker: 'MORPHEUS',
+                text: 'Thank you... for accepting.',
+                cssClass: 'morpheus dialogue',
+                pause: 0
+            }
+        ]
+    },
     block08: {},
 };

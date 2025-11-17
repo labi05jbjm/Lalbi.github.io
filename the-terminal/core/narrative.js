@@ -288,6 +288,23 @@ const NarrativeEngine = {
         await this.wait(pause);
     },
 
+    // Sistema di narrazione MORPHEUS
+    async morpheusSays(text, options = {}) {
+        const {
+            typeEffect = true,
+            pause = 1200,
+            glitch = false
+        } = options;
+
+        if (glitch) {
+            this.triggerGlitch(100);
+            await this.wait(100);
+        }
+
+        await this.showDialogue('MORPHEUS', text, 'morpheus dialogue', typeEffect);
+        await this.wait(pause);
+    },
+
     // Sistema di narrazione SYSTEM
     async systemMessage(text, cssClass = 'system', options = {}) {
         const {

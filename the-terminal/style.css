@@ -503,3 +503,22 @@ body {
         transform: translateX(0);
     }
 }
+
+.output-line.morpheus {
+    color: #99ccff;
+    text-shadow: 0 0 15px #6699ff, 0 0 30px #3366ff;
+    opacity: 0.95;
+    font-style: italic;
+    animation: morpheusPeace 6s ease-in-out infinite;
+}
+
+@keyframes morpheusPeace {
+    0%, 100% {
+        opacity: 0.92;
+        text-shadow: 0 0 15px #6699ff, 0 0 30px #3366ff;
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 20px #6699ff, 0 0 40px #3366ff, 0 0 60px #0033cc;
+    }
+}

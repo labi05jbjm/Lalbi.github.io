@@ -49,8 +49,8 @@ const GameEngine = {
         if (typeof Block06_Rage !== 'undefined') {
             this.blocks[6] = Block06_Rage;
         }
-        if (typeof Block07_TheChoice !== 'undefined') {
-            this.blocks[7] = Block07_TheChoice;
+        if (typeof Block07_Acceptance !== 'undefined') {
+            this.blocks[7] = Block07_Acceptance;
         }
         if (typeof Block08_Aftermath !== 'undefined') {
             this.blocks[8] = Block08_Aftermath;
