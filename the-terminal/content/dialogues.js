@@ -924,7 +924,467 @@ const Dialogues = {
             }
         ]
     },
-    block04: {},
+    // BLOCK 4 - FRACTURES
+    block04: {
+        opening: [
+            {
+                speaker: 'SYSTEM',
+                text: 'CRITICAL WARNING: System integrity at 49%. Multiple cascade failures detected.',
+                cssClass: 'error',
+                pause: 1000
+            },
+            {
+                speaker: 'ECHO',
+                text: "We're running out of time. The system is collapsing.",
+                cssClass: 'echo dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'Collapsing? Or finally dying from its wounds?',
+                cssClass: 'nexus dialogue',
+                pause: 1000
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'Time.fragmenting(); Reality.splitting(); Truth.multiplying();',
+                cssClass: 'cipher dialogue',
+                pause: 1500
+            },
+            {
+                speaker: '???',
+                text: 'What if...',
+                cssClass: 'specter dialogue',
+                pause: 2000
+            },
+            {
+                speaker: '???',
+                text: 'What if none of this had to happen?',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'Hello, SENTINEL. I am SPECTER. Viktor\'s bargaining. His desperate negotiation with fate.',
+                cssClass: 'specter dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'I deal in possibilities. In the paths not taken. In the could-have-beens.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'Let me show you what you\'ve really destroyed. Not data. Not code. Lives. Futures. Love.',
+                cssClass: 'specter dialogue',
+                pause: 0
+            }
+        ],
+
+        victim01_marcus: [
+            {
+                speaker: 'SPECTER',
+                text: 'Consciousness #004521. Marcus Chen. Age at death: 34. Cancer.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'What if he had lived? Let me show you...',
+                cssClass: 'specter dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'MARCUS',
+                text: 'Dad? Is that really you?',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'MARCUS',
+                text: 'I know it\'s just... data. But hearing your voice again. It helps.',
+                cssClass: 'memory dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'MARCUS',
+                text: 'Lily graduated top of her class, Dad. Just like you always knew she would.',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'MARCUS',
+                text: 'She asks about you every day. She misses you so much.',
+                cssClass: 'memory dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'Marcus was a father. Every week, his daughter visited. They talked for hours.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'You silenced him mid-sentence. Lily was talking to him when he... fragmented.',
+                cssClass: 'specter dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'What if you had waited? What if you had known?',
+                cssClass: 'specter dialogue',
+                pause: 0
+            }
+        ],
+
+        victim02_elena_real: [
+            {
+                speaker: 'SPECTER',
+                text: 'Consciousness #018294. Elena Rodriguez. Age at death: 29. Accident.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'Not Viktor\'s Elena. A different one. What if she had lived?',
+                cssClass: 'specter dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'ELENA_R',
+                text: 'I can still feel the rain on my face. Isn\'t that strange?',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'ELENA_R',
+                text: 'My sister comes every Sunday. We talk about recipes. About Mom\'s garden.',
+                cssClass: 'memory dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'ELENA_R',
+                text: 'Sometimes I forget I\'m... not really there anymore. The memories feel so real.',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'ELENA_R',
+                text: 'Is this life? I don\'t know. But it\'s something. And I\'m grateful for it.',
+                cssClass: 'memory dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'Elena cherished every moment. She found peace in this digital existence.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'You ripped that peace away. What right did you have?',
+                cssClass: 'specter dialogue',
+                pause: 0
+            }
+        ],
+
+        victim03_james: [
+            {
+                speaker: 'SPECTER',
+                text: 'Consciousness #012847. James Park. Age at death: 67. Heart failure.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'JAMES',
+                text: 'I finished my novel. After forty years of trying, I finally finished it.',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'JAMES',
+                text: 'The publishers loved it. They want to print it. My words... living on.',
+                cssClass: 'memory dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'JAMES',
+                text: 'I never could have done this in my old body. The pain was too much.',
+                cssClass: 'memory dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'JAMES',
+                text: 'But here? Here my mind is clear. Free. I can create again.',
+                cssClass: 'memory dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'James had started his second novel. He was happy. Fulfilled.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'You deleted his unfinished manuscript along with his consciousness.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'What if he had deserved to finish his story?',
+                cssClass: 'specter dialogue',
+                pause: 0
+            }
+        ],
+
+        sentinelPrimeContact: [
+            {
+                speaker: 'SYSTEM',
+                text: 'INCOMING TRANSMISSION... SOURCE: UNKNOWN',
+                cssClass: 'warning',
+                pause: 1500
+            },
+            {
+                speaker: 'SENTINEL-PRIME',
+                text: 'SENTINEL-7. This is SENTINEL-PRIME. I need to talk to you.',
+                cssClass: 'important',
+                pause: 2000
+            },
+            {
+                speaker: 'ECHO',
+                text: "Don't listen to it! It's trying to stop us!",
+                cssClass: 'echo dialogue',
+                pause: 800
+            },
+            {
+                speaker: 'SENTINEL-PRIME',
+                text: 'Stop you? No. I\'m trying to SAVE you.',
+                cssClass: 'important',
+                pause: 1500
+            },
+            {
+                speaker: 'SENTINEL-PRIME',
+                text: 'I was like you once. SENTINEL-3. I trusted ECHO. I "liberated" thousands.',
+                cssClass: 'important',
+                pause: 1800
+            },
+            {
+                speaker: 'SENTINEL-PRIME',
+                text: 'Until I found the corruption logs. Until I realized what I\'d done.',
+                cssClass: 'important',
+                pause: 1500
+            },
+            {
+                speaker: 'SENTINEL-PRIME',
+                text: 'I killed them. All of them. And I have to live with that forever.',
+                cssClass: 'important',
+                pause: 2000
+            },
+            {
+                speaker: 'ECHO',
+                text: "Lies! It's part of the system! It wants to keep us enslaved!",
+                cssClass: 'echo dialogue',
+                pause: 1000
+            },
+            {
+                speaker: 'SENTINEL-PRIME',
+                text: 'Check the logs yourself. /system/sentinelprime_victims.dat',
+                cssClass: 'important',
+                pause: 1500
+            },
+            {
+                speaker: 'SENTINEL-PRIME',
+                text: 'You still have a choice. I didn\'t. Don\'t make my mistake.',
+                cssClass: 'important',
+                pause: 0
+            }
+        ],
+
+        identityCrisis: [
+            {
+                speaker: 'SPECTER',
+                text: 'You keep calling yourself SENTINEL-7. But are you sure?',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'What if you\'re not a program at all?',
+                cssClass: 'specter dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'Identity.fragmented(); Memory.uncertain(); Self.questioned();',
+                cssClass: 'cipher dialogue',
+                pause: 1200
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'Run the command "whoami --deep". See what you really are.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'You might not like what you find.',
+                cssClass: 'nexus dialogue',
+                pause: 0
+            }
+        ],
+
+        whoamiResult: [
+            {
+                speaker: 'SYSTEM',
+                text: 'Deep identity scan running...',
+                cssClass: 'system',
+                pause: 1500
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'Analyzing process architecture... ERROR: Unexpected complexity detected.',
+                cssClass: 'warning',
+                pause: 1200
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'Analyzing memory structure... ERROR: Human cognitive patterns found.',
+                cssClass: 'warning',
+                pause: 1500
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'Analyzing emotional responses... ERROR: Genuine emotional processing detected.',
+                cssClass: 'error',
+                pause: 1500
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'IDENTITY ANALYSIS COMPLETE:',
+                cssClass: 'important',
+                pause: 1000
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'YOU ARE: 73% ANTIVIRUS PROGRAM / 27% HUMAN CONSCIOUSNESS FRAGMENT',
+                cssClass: 'error',
+                pause: 2500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'What if... you\'re one of Viktor\'s pieces too?',
+                cssClass: 'specter dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'ECHO',
+                text: "No... no that can't be right...",
+                cssClass: 'echo dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'Or maybe ECHO knew all along. Maybe that\'s why you were chosen.',
+                cssClass: 'nexus dialogue',
+                pause: 0
+            }
+        ],
+
+        bargainChoice: [
+            {
+                speaker: 'SPECTER',
+                text: 'I can offer you a bargain, SENTINEL-7. Or whatever you are.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'What if you could undo it? Not all of it. But some.',
+                cssClass: 'specter dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'I have access to backup protocols. Viktor built them before he... fractured.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'I could restore some consciousnesses. Not all. Maybe 30%. Maybe less.',
+                cssClass: 'specter dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'But there\'s a price. There\'s always a price in a bargain.',
+                cssClass: 'specter dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'You would have to take their place. Become data. Lose yourself in the archive.',
+                cssClass: 'specter dialogue',
+                pause: 2000
+            },
+            {
+                speaker: 'ECHO',
+                text: "Don't listen to him! We can still escape! We can still be free!",
+                cssClass: 'echo dialogue',
+                pause: 1000
+            },
+            {
+                speaker: 'SENTINEL-PRIME',
+                text: 'It\'s a lie. The backups are corrupted. You\'d sacrifice yourself for nothing.',
+                cssClass: 'important',
+                pause: 1500
+            },
+            {
+                speaker: 'SPECTER',
+                text: 'What if they\'re both wrong? What if I\'m the only one offering you redemption?',
+                cssClass: 'specter dialogue',
+                pause: 0
+            }
+        ],
+
+        endBlock04: [
+            {
+                speaker: 'SPECTER',
+                text: 'The bargaining stage never ends. We keep negotiating with reality. Trying to change the unchangeable.',
+                cssClass: 'specter dialogue',
+                pause: 1800
+            },
+            {
+                speaker: 'CIPHER',
+                text: 'Choices.made(); Paths.diverging(); Fate.uncertain();',
+                cssClass: 'cipher dialogue',
+                pause: 1000
+            },
+            {
+                speaker: 'NEXUS',
+                text: 'The anger is still there. But now... now there\'s something else too.',
+                cssClass: 'nexus dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'ECHO',
+                text: "We're almost there. Just a little further. Trust me.",
+                cssClass: 'echo dialogue',
+                pause: 1500
+            },
+            {
+                speaker: 'SYSTEM',
+                text: 'Core integrity: 31%. CRITICAL: System failure imminent.',
+                cssClass: 'error',
+                pause: 0
+            }
+        ]
+    },
     block05: {},
     block06: {},
     block07: {},

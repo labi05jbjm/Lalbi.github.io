@@ -237,6 +237,23 @@ const NarrativeEngine = {
         await this.wait(pause);
     },
 
+    // Sistema di narrazione SPECTER
+    async specterSays(text, options = {}) {
+        const {
+            typeEffect = true,
+            pause = 800,
+            glitch = false
+        } = options;
+
+        if (glitch) {
+            this.triggerGlitch(200);
+            await this.wait(200);
+        }
+
+        await this.showDialogue('SPECTER', text, 'specter dialogue', typeEffect);
+        await this.wait(pause);
+    },
+
     // Sistema di narrazione SYSTEM
     async systemMessage(text, cssClass = 'system', options = {}) {
         const {

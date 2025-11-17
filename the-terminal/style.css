@@ -420,3 +420,17 @@ body {
     opacity: 0.85;
     font-style: italic;
 }
+
+.output-line.specter {
+    color: #ccccff;
+    text-shadow: 0 0 10px #9999ff, 0 0 20px #6666ff;
+    opacity: 0.95;
+    animation: specterFlicker 3s infinite;
+}
+
+@keyframes specterFlicker {
+    0%, 100% { opacity: 0.95; }
+    25% { opacity: 0.85; }
+    50% { opacity: 1; }
+    75% { opacity: 0.9; }
+}

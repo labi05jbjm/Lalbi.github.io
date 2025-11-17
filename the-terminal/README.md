@@ -32,7 +32,29 @@ The game is divided into 8 blocks, each ~30 minutes:
 - First corrupted file hint
 - State management and save system
 
-**🚧 BLOCKS 2-8 - IN DEVELOPMENT**
+**✅ BLOCK 2 (FIRST DOUBT) - COMPLETE**
+- CIPHER introduction (Pain/Guilt fragment)
+- Deep system scan revealing corruption
+- Binary/ROT13 decipher puzzles
+- First consciousness fragment encounter
+- 3-way moral choice
+
+**✅ BLOCK 3 (DEEP DIVE) - COMPLETE**
+- NEXUS introduction (Anger/Depression fragment)
+- Memory stream of Mika Yoshida
+- ASCII network visualization
+- Complete Viktor backstory revelation
+- 4-way moral choice
+
+**✅ BLOCK 4 (FRACTURES) - COMPLETE**
+- SPECTER introduction (Bargaining fragment)
+- Past victims' stories (Marcus, Elena, James)
+- SENTINEL-PRIME direct contact
+- Identity crisis revelation (73% program / 27% human)
+- Philosophical paradox puzzle
+- 4-way bargain choice
+
+**🚧 BLOCKS 5-8 - IN DEVELOPMENT**
 
 ## How to Play
 
