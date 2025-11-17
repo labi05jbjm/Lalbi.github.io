@@ -130,7 +130,7 @@ const Block03_DeepDive = {
             const memoryId = args[1];
 
             if (!memoryId) {
-                Terminal.addOutput('Usage: view memory <id>', 'error');
+                Terminal.addOutput('Uso: view memory <id>', 'error');
                 Terminal.addOutput('Disponibile: 021847 (Mika Yoshida)', 'system');
                 return true;
             }
@@ -323,7 +323,7 @@ const Block03_DeepDive = {
 
     async handleTalkCommand(args) {
         if (args.length === 0) {
-            Terminal.addOutput('Usage: talk <echo|cipher|nexus> [message]', 'error');
+            Terminal.addOutput('Uso: talk <echo|cipher|nexus> [messaggio]', 'error');
             return true;
         }
 
@@ -457,7 +457,7 @@ const Block03_DeepDive = {
 
         if (cmd === 'cat') {
             if (args.length === 0) {
-                Terminal.addOutput('Usage: cat <filename>', 'error');
+                Terminal.addOutput('Uso: cat <nomefile>', 'error');
                 return true;
             }
             this.readFile(args[0]);

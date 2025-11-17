@@ -63,7 +63,7 @@ const Block05_Reflection = {
                 if (args[0]) {
                     await this.handleTalk(args[0], args.slice(1).join(' '));
                 } else {
-                    Terminal.addOutput('Usage: talk <entity>', 'error');
+                    Terminal.addOutput('Uso: talk <entità>', 'error');
                 }
                 return true;
 
@@ -118,7 +118,7 @@ const Block05_Reflection = {
 
             if (!memoryId) {
                 Terminal.addOutput('Ricordi disponibili: elena, sofia, accident', 'system');
-                Terminal.addOutput('Usage: explore memory <id>', 'system');
+                Terminal.addOutput('Uso: explore memory <id>', 'system');
                 return true;
             }
 
@@ -222,7 +222,7 @@ const Block05_Reflection = {
             }
 
             if (!target) {
-                Terminal.addOutput('Usage: view reconstruction <elena|sofia>', 'error');
+                Terminal.addOutput('Uso: view reconstruction <elena|sofia>', 'error');
                 return true;
             }
 

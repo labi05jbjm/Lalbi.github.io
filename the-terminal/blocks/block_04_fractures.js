@@ -68,7 +68,7 @@ const Block04_Fractures = {
                 if (args[0]) {
                     this.changeDirectory(args[0]);
                 } else {
-                    Terminal.addOutput('Usage: cd <directory>', 'error');
+                    Terminal.addOutput('Uso: cd <directory>', 'error');
                 }
                 return true;
 
@@ -76,7 +76,7 @@ const Block04_Fractures = {
                 if (args[0]) {
                     this.readFile(args[0]);
                 } else {
-                    Terminal.addOutput('Usage: cat <filename>', 'error');
+                    Terminal.addOutput('Uso: cat <nomefile>', 'error');
                 }
                 return true;
 
@@ -84,7 +84,7 @@ const Block04_Fractures = {
                 if (args[0]) {
                     await this.handleTalk(args[0], args.slice(1).join(' '));
                 } else {
-                    Terminal.addOutput('Usage: talk <entity>', 'error');
+                    Terminal.addOutput('Uso: talk <entità>', 'error');
                 }
                 return true;
 
@@ -131,7 +131,7 @@ const Block04_Fractures = {
 
             if (!victimId) {
                 Terminal.addOutput('Vittime disponibili: marcus, elena, james', 'system');
-                Terminal.addOutput('Usage: witness victim <id>', 'system');
+                Terminal.addOutput('Uso: witness victim <id>', 'system');
                 return true;
             }
 
