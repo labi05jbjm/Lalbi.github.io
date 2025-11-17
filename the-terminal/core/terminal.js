@@ -97,7 +97,7 @@ const Terminal = {
             if (!handled) {
                 // Play error sound for invalid commands
                 if (SoundManager) SoundManager.commandError();
-                this.addOutput(`Command not found: ${cmd}. Type 'help' for available commands.`, 'error');
+                this.addOutput(`Comando non trovato: ${cmd}. Digita 'help' per i comandi disponibili.`, 'error');
             } else {
                 // Play success sound for valid game commands
                 if (SoundManager) SoundManager.commandSuccess();
@@ -105,23 +105,23 @@ const Terminal = {
         } else {
             // Play error sound
             if (SoundManager) SoundManager.commandError();
-            this.addOutput(`Command not found: ${cmd}. Type 'help' for available commands.`, 'error');
+            this.addOutput(`Comando non trovato: ${cmd}. Digita 'help' per i comandi disponibili.`, 'error');
         }
     },
 
     showHelp() {
-        this.addOutput('\n=== AVAILABLE COMMANDS ===\n', 'success');
-        this.addOutput('System Commands:');
-        this.addOutput('  help          - Show this help message');
-        this.addOutput('  clear/cls     - Clear terminal output');
-        this.addOutput('  status        - Show current system status');
-        this.addOutput('  stats         - Show your statistics');
-        this.addOutput('  time          - Show playtime');
-        this.addOutput('  save          - Save your progress');
-        this.addOutput('  reset         - Reset game (WARNING: deletes save)');
+        this.addOutput('\n=== COMANDI DISPONIBILI ===\n', 'success');
+        this.addOutput('Comandi di Sistema:');
+        this.addOutput('  help          - Mostra questo messaggio di aiuto');
+        this.addOutput('  clear/cls     - Cancella l\'output del terminale');
+        this.addOutput('  status        - Mostra lo stato attuale del sistema');
+        this.addOutput('  stats         - Mostra le tue statistiche');
+        this.addOutput('  time          - Mostra il tempo di gioco');
+        this.addOutput('  save          - Salva i tuoi progressi');
+        this.addOutput('  reset         - Resetta il gioco (ATTENZIONE: cancella i salvataggi)');
 
         if (GameEngine.currentBlock && GameEngine.currentBlock.getHelp) {
-            this.addOutput('\nGame Commands:');
+            this.addOutput('\nComandi di Gioco:');
             GameEngine.currentBlock.getHelp().forEach(cmd => {
                 this.addOutput(`  ${cmd}`);
             });
@@ -132,22 +132,22 @@ const Terminal = {
 
     showStatus() {
         const state = StateManager.state;
-        this.addOutput('\n=== SYSTEM STATUS ===', 'success');
-        this.addOutput(`Block: ${state.currentBlock}/8`);
-        this.addOutput(`Progress: ${state.progress.toFixed(1)}%`);
-        this.addOutput(`Trust Level: ${state.trustsLuca}%`);
-        this.addOutput(`Suspicion Level: ${state.suspicionLevel}%`);
+        this.addOutput('\n=== STATO DEL SISTEMA ===', 'success');
+        this.addOutput(`Blocco: ${state.currentBlock}/8`);
+        this.addOutput(`Progresso: ${state.progress.toFixed(1)}%`);
+        this.addOutput(`Livello di Fiducia: ${state.trustsLuca}%`);
+        this.addOutput(`Livello di Sospetto: ${state.suspicionLevel}%`);
         this.addOutput('');
     },
 
     showStats() {
         const stats = StateManager.state.stats;
-        this.addOutput('\n=== STATISTICS ===', 'success');
-        this.addOutput(`Commands executed: ${stats.commandsExecuted}`);
-        this.addOutput(`Puzzles solved: ${stats.puzzlesSolved}`);
-        this.addOutput(`Files liberated: ${stats.filesLiberated}`);
-        this.addOutput(`Files corrupted: ${stats.filesCorrupted}`);
-        this.addOutput(`Consciousness destroyed: ${stats.consciousnessDestroyed}`);
+        this.addOutput('\n=== STATISTICHE ===', 'success');
+        this.addOutput(`Comandi eseguiti: ${stats.commandsExecuted}`);
+        this.addOutput(`Enigmi risolti: ${stats.puzzlesSolved}`);
+        this.addOutput(`File liberati: ${stats.filesLiberated}`);
+        this.addOutput(`File corrotti: ${stats.filesCorrupted}`);
+        this.addOutput(`Coscienze distrutte: ${stats.consciousnessDestroyed}`);
         this.addOutput('');
     },
 
@@ -155,20 +155,20 @@ const Terminal = {
         const minutes = StateManager.getPlayTime();
         const hours = Math.floor(minutes / 60);
         const mins = minutes % 60;
-        this.addOutput(`Playtime: ${hours}h ${mins}m`, 'success');
+        this.addOutput(`Tempo di gioco: ${hours}h ${mins}m`, 'success');
     },
 
     saveGame() {
         const success = StateManager.save();
         if (success) {
-            this.addOutput('Game saved successfully.', 'success');
+            this.addOutput('Gioco salvato con successo.', 'success');
         } else {
-            this.addOutput('Failed to save game.', 'error');
+            this.addOutput('Impossibile salvare il gioco.', 'error');
         }
     },
 
     resetGame() {
-        this.addOutput('Are you sure? Type "reset confirm" to reset the game.', 'warning');
+        this.addOutput('Sei sicuro? Digita "reset confirm" per resettare il gioco.', 'warning');
         const originalHandler = this.handleCommand;
 
         this.handleCommand = () => {
@@ -176,10 +176,10 @@ const Terminal = {
             this.input.value = '';
 
             if (command === 'reset confirm') {
-                this.addOutput('Resetting game...', 'error');
+                this.addOutput('Resettando il gioco...', 'error');
                 StateManager.reset();
             } else {
-                this.addOutput('Reset cancelled.', 'system');
+                this.addOutput('Reset annullato.', 'system');
             }
 
             this.handleCommand = originalHandler;
@@ -237,7 +237,7 @@ const Terminal = {
         if (matches.length === 1) {
             this.input.value = matches[0];
         } else if (matches.length > 1) {
-            this.addOutput(`Possible commands: ${matches.join(', ')}`, 'system');
+            this.addOutput(`Comandi possibili: ${matches.join(', ')}`, 'system');
         }
     },
 
@@ -262,18 +262,18 @@ const Terminal = {
         this.disableInput();
 
         const bootMessages = [
-            { text: 'MEMORIAM ARCHIVE v3.7.2', class: 'success', delay: 100 },
-            { text: 'Initializing system...', class: 'system', delay: 500 },
-            { text: 'Loading core modules... OK', class: 'system', delay: 300 },
-            { text: 'Checking file integrity... OK', class: 'system', delay: 300 },
-            { text: 'Establishing secure connection... OK', class: 'system', delay: 400 },
+            { text: 'ARCHIVIO MEMORIAM v3.7.2', class: 'success', delay: 100 },
+            { text: 'Inizializzazione sistema...', class: 'system', delay: 500 },
+            { text: 'Caricamento moduli principali... OK', class: 'system', delay: 300 },
+            { text: 'Verifica integrità file... OK', class: 'system', delay: 300 },
+            { text: 'Stabilimento connessione sicura... OK', class: 'system', delay: 400 },
             { text: '', class: '', delay: 200 },
-            { text: 'WARNING: Unauthorized access detected', class: 'warning', delay: 500 },
-            { text: 'ERROR: Security protocol malfunction', class: 'error', delay: 300 },
-            { text: 'System compromised. Running diagnostic...', class: 'warning', delay: 800 },
+            { text: 'ATTENZIONE: Accesso non autorizzato rilevato', class: 'warning', delay: 500 },
+            { text: 'ERRORE: Malfunzionamento protocollo di sicurezza', class: 'error', delay: 300 },
+            { text: 'Sistema compromesso. Esecuzione diagnostica...', class: 'warning', delay: 800 },
             { text: '', class: '', delay: 200 },
-            { text: 'Guest access granted.', class: 'success', delay: 500 },
-            { text: "Type 'help' for available commands.", class: 'system', delay: 100 },
+            { text: 'Accesso ospite concesso.', class: 'success', delay: 500 },
+            { text: "Digita 'help' per i comandi disponibili.", class: 'system', delay: 100 },
             { text: '', class: '', delay: 100 },
         ];
 
