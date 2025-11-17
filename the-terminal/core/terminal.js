@@ -17,7 +17,7 @@ const Terminal = {
         this.prompt = document.getElementById('prompt');
 
         this.setupEventListeners();
-        this.showBootSequence();
+        // Don't show boot sequence automatically - let GameEngine decide
 
         console.log('[TERMINAL] Initialized');
     },
