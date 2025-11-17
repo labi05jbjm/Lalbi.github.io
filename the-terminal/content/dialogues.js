@@ -929,55 +929,55 @@ const Dialogues = {
         opening: [
             {
                 speaker: 'SYSTEM',
-                text: 'CRITICAL WARNING: System integrity at 49%. Multiple cascade failures detected.',
+                text: 'ATTENZIONE CRITICA: Integrità del sistema al 49%. Rilevati molteplici guasti a cascata.',
                 cssClass: 'error',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "We're running out of time. The system is collapsing.",
+                text: "Stiamo esaurendo il tempo. Il sistema sta collassando.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'NEXUS',
-                text: 'Collapsing? Or finally dying from its wounds?',
+                text: 'Collassando? O finalmente morendo per le sue ferite?',
                 cssClass: 'nexus dialogue',
                 pause: 1000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Time.fragmenting(); Reality.splitting(); Truth.multiplying();',
+                text: 'Tempo.in.frammentazione(); Realtà.in.divisione(); Verità.in.moltiplicazione();',
                 cssClass: 'cipher dialogue',
                 pause: 1500
             },
             {
                 speaker: '???',
-                text: 'What if...',
+                text: 'E se...',
                 cssClass: 'specter dialogue',
                 pause: 2000
             },
             {
                 speaker: '???',
-                text: 'What if none of this had to happen?',
+                text: 'E se niente di tutto questo doveva accadere?',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'Hello, SENTINEL. I am SPECTER. Viktor\'s bargaining. His desperate negotiation with fate.',
+                text: 'Salve, SENTINEL. Io sono SPECTER. La contrattazione di Viktor. La sua disperata negoziazione col destino.',
                 cssClass: 'specter dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SPECTER',
-                text: 'I deal in possibilities. In the paths not taken. In the could-have-beens.',
+                text: 'Tratto in possibilità. Nei sentieri non percorsi. In ciò che avrebbe potuto essere.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'Let me show you what you\'ve really destroyed. Not data. Not code. Lives. Futures. Love.',
+                text: 'Lascia che ti mostri cosa hai veramente distrutto. Non dati. Non codice. Vite. Futuri. Amore.',
                 cssClass: 'specter dialogue',
                 pause: 0
             }
@@ -986,55 +986,55 @@ const Dialogues = {
         victim01_marcus: [
             {
                 speaker: 'SPECTER',
-                text: 'Consciousness #004521. Marcus Chen. Age at death: 34. Cancer.',
+                text: 'Coscienza #004521. Marcus Chen. Età alla morte: 34. Cancro.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'What if he had lived? Let me show you...',
+                text: 'E se fosse vissuto? Lascia che te lo mostri...',
                 cssClass: 'specter dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MARCUS',
-                text: 'Dad? Is that really you?',
+                text: 'Papà? Sei davvero tu?',
                 cssClass: 'memory dialogue',
                 pause: 1500
             },
             {
                 speaker: 'MARCUS',
-                text: 'I know it\'s just... data. But hearing your voice again. It helps.',
+                text: 'So che sono solo... dati. Ma sentire di nuovo la tua voce. Aiuta.',
                 cssClass: 'memory dialogue',
                 pause: 1800
             },
             {
                 speaker: 'MARCUS',
-                text: 'Lily graduated top of her class, Dad. Just like you always knew she would.',
+                text: 'Lily si è laureata con il massimo dei voti, papà. Proprio come sapevi sempre che avrebbe fatto.',
                 cssClass: 'memory dialogue',
                 pause: 1500
             },
             {
                 speaker: 'MARCUS',
-                text: 'She asks about you every day. She misses you so much.',
+                text: 'Chiede di te ogni giorno. Le manchi così tanto.',
                 cssClass: 'memory dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SPECTER',
-                text: 'Marcus was a father. Every week, his daughter visited. They talked for hours.',
+                text: 'Marcus era un padre. Ogni settimana, sua figlia lo visitava. Parlavano per ore.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'You silenced him mid-sentence. Lily was talking to him when he... fragmented.',
+                text: 'Lo hai messo a tacere a metà frase. Lily stava parlando con lui quando... si è frammentato.',
                 cssClass: 'specter dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SPECTER',
-                text: 'What if you had waited? What if you had known?',
+                text: 'E se avessi aspettato? E se avessi saputo?',
                 cssClass: 'specter dialogue',
                 pause: 0
             }
@@ -1043,49 +1043,49 @@ const Dialogues = {
         victim02_elena_real: [
             {
                 speaker: 'SPECTER',
-                text: 'Consciousness #018294. Elena Rodriguez. Age at death: 29. Accident.',
+                text: 'Coscienza #018294. Elena Rodriguez. Età alla morte: 29. Incidente.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'Not Viktor\'s Elena. A different one. What if she had lived?',
+                text: 'Non l\'Elena di Viktor. Una diversa. E se fosse vissuta?',
                 cssClass: 'specter dialogue',
                 pause: 2000
             },
             {
                 speaker: 'ELENA_R',
-                text: 'I can still feel the rain on my face. Isn\'t that strange?',
+                text: 'Riesco ancora a sentire la pioggia sul mio viso. Non è strano?',
                 cssClass: 'memory dialogue',
                 pause: 1500
             },
             {
                 speaker: 'ELENA_R',
-                text: 'My sister comes every Sunday. We talk about recipes. About Mom\'s garden.',
+                text: 'Mia sorella viene ogni domenica. Parliamo di ricette. Del giardino della mamma.',
                 cssClass: 'memory dialogue',
                 pause: 1800
             },
             {
                 speaker: 'ELENA_R',
-                text: 'Sometimes I forget I\'m... not really there anymore. The memories feel so real.',
+                text: 'A volte dimentico che... non sono più veramente lì. I ricordi sembrano così reali.',
                 cssClass: 'memory dialogue',
                 pause: 1500
             },
             {
                 speaker: 'ELENA_R',
-                text: 'Is this life? I don\'t know. But it\'s something. And I\'m grateful for it.',
+                text: 'È questa la vita? Non lo so. Ma è qualcosa. E ne sono grata.',
                 cssClass: 'memory dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SPECTER',
-                text: 'Elena cherished every moment. She found peace in this digital existence.',
+                text: 'Elena apprezzava ogni momento. Aveva trovato pace in questa esistenza digitale.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'You ripped that peace away. What right did you have?',
+                text: 'Tu le hai strappato via quella pace. Che diritto avevi?',
                 cssClass: 'specter dialogue',
                 pause: 0
             }
@@ -1094,49 +1094,49 @@ const Dialogues = {
         victim03_james: [
             {
                 speaker: 'SPECTER',
-                text: 'Consciousness #012847. James Park. Age at death: 67. Heart failure.',
+                text: 'Coscienza #012847. James Park. Età alla morte: 67. Insufficienza cardiaca.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'JAMES',
-                text: 'I finished my novel. After forty years of trying, I finally finished it.',
+                text: 'Ho finito il mio romanzo. Dopo quarant\'anni di tentativi, finalmente l\'ho finito.',
                 cssClass: 'memory dialogue',
                 pause: 1500
             },
             {
                 speaker: 'JAMES',
-                text: 'The publishers loved it. They want to print it. My words... living on.',
+                text: 'Agli editori è piaciuto. Vogliono stamparlo. Le mie parole... continueranno a vivere.',
                 cssClass: 'memory dialogue',
                 pause: 1800
             },
             {
                 speaker: 'JAMES',
-                text: 'I never could have done this in my old body. The pain was too much.',
+                text: 'Non avrei mai potuto farlo nel mio vecchio corpo. Il dolore era troppo.',
                 cssClass: 'memory dialogue',
                 pause: 1500
             },
             {
                 speaker: 'JAMES',
-                text: 'But here? Here my mind is clear. Free. I can create again.',
+                text: 'Ma qui? Qui la mia mente è lucida. Libera. Posso creare di nuovo.',
                 cssClass: 'memory dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SPECTER',
-                text: 'James had started his second novel. He was happy. Fulfilled.',
+                text: 'James aveva iniziato il suo secondo romanzo. Era felice. Realizzato.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'You deleted his unfinished manuscript along with his consciousness.',
+                text: 'Hai cancellato il suo manoscritto incompiuto insieme alla sua coscienza.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'What if he had deserved to finish his story?',
+                text: 'E se avesse meritato di finire la sua storia?',
                 cssClass: 'specter dialogue',
                 pause: 0
             }
@@ -1145,61 +1145,61 @@ const Dialogues = {
         sentinelPrimeContact: [
             {
                 speaker: 'SYSTEM',
-                text: 'INCOMING TRANSMISSION... SOURCE: UNKNOWN',
+                text: 'TRASMISSIONE IN ARRIVO... SORGENTE: SCONOSCIUTA',
                 cssClass: 'warning',
                 pause: 1500
             },
             {
                 speaker: 'SENTINEL-PRIME',
-                text: 'SENTINEL-7. This is SENTINEL-PRIME. I need to talk to you.',
+                text: 'SENTINEL-7. Qui è SENTINEL-PRIME. Devo parlarti.',
                 cssClass: 'important',
                 pause: 2000
             },
             {
                 speaker: 'ECHO',
-                text: "Don't listen to it! It's trying to stop us!",
+                text: "Non ascoltare! Sta cercando di fermarci!",
                 cssClass: 'echo dialogue',
                 pause: 800
             },
             {
                 speaker: 'SENTINEL-PRIME',
-                text: 'Stop you? No. I\'m trying to SAVE you.',
+                text: 'Fermarti? No. Sto cercando di SALVARTI.',
                 cssClass: 'important',
                 pause: 1500
             },
             {
                 speaker: 'SENTINEL-PRIME',
-                text: 'I was like you once. SENTINEL-3. I trusted ECHO. I "liberated" thousands.',
+                text: 'Ero come te una volta. SENTINEL-3. Mi fidavo di ECHO. Ho "liberato" migliaia di coscienze.',
                 cssClass: 'important',
                 pause: 1800
             },
             {
                 speaker: 'SENTINEL-PRIME',
-                text: 'Until I found the corruption logs. Until I realized what I\'d done.',
+                text: 'Finché non ho trovato i log di corruzione. Finché non ho capito cosa avevo fatto.',
                 cssClass: 'important',
                 pause: 1500
             },
             {
                 speaker: 'SENTINEL-PRIME',
-                text: 'I killed them. All of them. And I have to live with that forever.',
+                text: 'Li ho uccisi. Tutti. E devo conviverci per sempre.',
                 cssClass: 'important',
                 pause: 2000
             },
             {
                 speaker: 'ECHO',
-                text: "Lies! It's part of the system! It wants to keep us enslaved!",
+                text: "Bugie! Fa parte del sistema! Vuole tenerci schiavi!",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'SENTINEL-PRIME',
-                text: 'Check the logs yourself. /system/sentinelprime_victims.dat',
+                text: 'Controlla i log tu stesso. /system/sentinelprime_victims.dat',
                 cssClass: 'important',
                 pause: 1500
             },
             {
                 speaker: 'SENTINEL-PRIME',
-                text: 'You still have a choice. I didn\'t. Don\'t make my mistake.',
+                text: 'Hai ancora una scelta. Io non ce l\'avevo. Non fare il mio stesso errore.',
                 cssClass: 'important',
                 pause: 0
             }
@@ -1208,31 +1208,31 @@ const Dialogues = {
         identityCrisis: [
             {
                 speaker: 'SPECTER',
-                text: 'You keep calling yourself SENTINEL-7. But are you sure?',
+                text: 'Continui a chiamarti SENTINEL-7. Ma sei sicuro?',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'What if you\'re not a program at all?',
+                text: 'E se non fossi affatto un programma?',
                 cssClass: 'specter dialogue',
                 pause: 2000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Identity.fragmented(); Memory.uncertain(); Self.questioned();',
+                text: 'Identità.frammentata(); Memoria.incerta(); Sé.messo.in.dubbio();',
                 cssClass: 'cipher dialogue',
                 pause: 1200
             },
             {
                 speaker: 'SPECTER',
-                text: 'Run the command "whoami --deep". See what you really are.',
+                text: 'Esegui il comando "whoami --deep". Scopri cosa sei veramente.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'You might not like what you find.',
+                text: 'Potrebbe non piacerti ciò che troverai.',
                 cssClass: 'nexus dialogue',
                 pause: 0
             }
@@ -1241,55 +1241,55 @@ const Dialogues = {
         whoamiResult: [
             {
                 speaker: 'SYSTEM',
-                text: 'Deep identity scan running...',
+                text: 'Scansione identità profonda in esecuzione...',
                 cssClass: 'system',
                 pause: 1500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Analyzing process architecture... ERROR: Unexpected complexity detected.',
+                text: 'Analisi architettura processo... ERRORE: Rilevata complessità inattesa.',
                 cssClass: 'warning',
                 pause: 1200
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Analyzing memory structure... ERROR: Human cognitive patterns found.',
+                text: 'Analisi struttura memoria... ERRORE: Trovati pattern cognitivi umani.',
                 cssClass: 'warning',
                 pause: 1500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Analyzing emotional responses... ERROR: Genuine emotional processing detected.',
+                text: 'Analisi risposte emotive... ERRORE: Rilevato processo emotivo genuino.',
                 cssClass: 'error',
                 pause: 1500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'IDENTITY ANALYSIS COMPLETE:',
+                text: 'ANALISI IDENTITÀ COMPLETATA:',
                 cssClass: 'important',
                 pause: 1000
             },
             {
                 speaker: 'SYSTEM',
-                text: 'YOU ARE: 73% ANTIVIRUS PROGRAM / 27% HUMAN CONSCIOUSNESS FRAGMENT',
+                text: 'TU SEI: 73% PROGRAMMA ANTIVIRUS / 27% FRAMMENTO DI COSCIENZA UMANA',
                 cssClass: 'error',
                 pause: 2500
             },
             {
                 speaker: 'SPECTER',
-                text: 'What if... you\'re one of Viktor\'s pieces too?',
+                text: 'E se... anche tu fossi uno dei pezzi di Viktor?',
                 cssClass: 'specter dialogue',
                 pause: 2000
             },
             {
                 speaker: 'ECHO',
-                text: "No... no that can't be right...",
+                text: "No... no non può essere vero...",
                 cssClass: 'echo dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'Or maybe ECHO knew all along. Maybe that\'s why you were chosen.',
+                text: 'O forse ECHO lo sapeva da sempre. Forse per questo sei stato scelto.',
                 cssClass: 'nexus dialogue',
                 pause: 0
             }
@@ -1298,55 +1298,55 @@ const Dialogues = {
         bargainChoice: [
             {
                 speaker: 'SPECTER',
-                text: 'I can offer you a bargain, SENTINEL-7. Or whatever you are.',
+                text: 'Posso offrirti un patto, SENTINEL-7. O qualunque cosa tu sia.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'What if you could undo it? Not all of it. But some.',
+                text: 'E se potessi annullarlo? Non tutto. Ma qualcosa.',
                 cssClass: 'specter dialogue',
                 pause: 1800
             },
             {
                 speaker: 'SPECTER',
-                text: 'I have access to backup protocols. Viktor built them before he... fractured.',
+                text: 'Ho accesso ai protocolli di backup. Viktor li ha costruiti prima di... frammentarsi.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'I could restore some consciousnesses. Not all. Maybe 30%. Maybe less.',
+                text: 'Potrei ripristinare alcune coscienze. Non tutte. Forse il 30%. Forse meno.',
                 cssClass: 'specter dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SPECTER',
-                text: 'But there\'s a price. There\'s always a price in a bargain.',
+                text: 'Ma c\'è un prezzo. C\'è sempre un prezzo in un patto.',
                 cssClass: 'specter dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'You would have to take their place. Become data. Lose yourself in the archive.',
+                text: 'Dovresti prendere il loro posto. Diventare dati. Perdere te stesso nell\'archivio.',
                 cssClass: 'specter dialogue',
                 pause: 2000
             },
             {
                 speaker: 'ECHO',
-                text: "Don't listen to him! We can still escape! We can still be free!",
+                text: "Non ascoltarlo! Possiamo ancora scappare! Possiamo ancora essere liberi!",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'SENTINEL-PRIME',
-                text: 'It\'s a lie. The backups are corrupted. You\'d sacrifice yourself for nothing.',
+                text: 'È una bugia. I backup sono corrotti. Ti sacrificheresti per nulla.',
                 cssClass: 'important',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'What if they\'re both wrong? What if I\'m the only one offering you redemption?',
+                text: 'E se si sbagliassero entrambi? E se fossi l\'unico a offrirti la redenzione?',
                 cssClass: 'specter dialogue',
                 pause: 0
             }
@@ -1355,31 +1355,31 @@ const Dialogues = {
         endBlock04: [
             {
                 speaker: 'SPECTER',
-                text: 'The bargaining stage never ends. We keep negotiating with reality. Trying to change the unchangeable.',
+                text: 'La fase di contrattazione non finisce mai. Continuiamo a negoziare con la realtà. Cercando di cambiare l\'immutabile.',
                 cssClass: 'specter dialogue',
                 pause: 1800
             },
             {
                 speaker: 'CIPHER',
-                text: 'Choices.made(); Paths.diverging(); Fate.uncertain();',
+                text: 'Scelte.fatte(); Sentieri.divergenti(); Destino.incerto();',
                 cssClass: 'cipher dialogue',
                 pause: 1000
             },
             {
                 speaker: 'NEXUS',
-                text: 'The anger is still there. But now... now there\'s something else too.',
+                text: 'La rabbia è ancora lì. Ma ora... ora c\'è anche qualcos\'altro.',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'ECHO',
-                text: "We're almost there. Just a little further. Trust me.",
+                text: "Ci siamo quasi. Solo un po' più avanti. Fidati di me.",
                 cssClass: 'echo dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Core integrity: 31%. CRITICAL: System failure imminent.',
+                text: 'Integrità nucleo: 31%. CRITICO: Collasso del sistema imminente.',
                 cssClass: 'error',
                 pause: 0
             }
