@@ -76,8 +76,8 @@ const GameEngine = {
             this.currentBlock.init();
         } else {
             console.error(`[ENGINE] Block ${blockNumber} not found!`);
-            Terminal.addOutput(`ERROR: Block ${blockNumber} not implemented yet.`, 'error');
-            Terminal.addOutput('This is the end of the current content.', 'warning');
+            Terminal.addOutput(`ERRORE: Blocco ${blockNumber} non ancora implementato.`, 'error');
+            Terminal.addOutput('Questa è la fine del contenuto attuale.', 'warning');
         }
     },
 
@@ -102,10 +102,10 @@ const GameEngine = {
             // Inizializza nuovo blocco
             this.currentBlock.init();
         } else {
-            Terminal.addOutput('\n=== END OF CURRENT CONTENT ===', 'important');
-            Terminal.addOutput('Thank you for playing!', 'success');
-            Terminal.addOutput(`You played for ${StateManager.getPlayTime()} minutes.`, 'system');
-            Terminal.addOutput('\nMore content coming soon...', 'warning');
+            Terminal.addOutput('\n=== FINE DEL CONTENUTO ATTUALE ===', 'important');
+            Terminal.addOutput('Grazie per aver giocato!', 'success');
+            Terminal.addOutput(`Hai giocato per ${StateManager.getPlayTime()} minuti.`, 'system');
+            Terminal.addOutput('\nPiù contenuti in arrivo...', 'warning');
         }
     },
 
@@ -113,7 +113,7 @@ const GameEngine = {
         Terminal.disableInput();
 
         Terminal.addOutput('\n\n');
-        await NarrativeEngine.showProgress(`Loading Block ${blockNumber}...`, 2000);
+        await NarrativeEngine.showProgress(`Caricamento Blocco ${blockNumber}...`, 2000);
         Terminal.addOutput('\n');
 
         Terminal.enableInput();
@@ -129,7 +129,7 @@ const GameEngine = {
 
     // Utility per i blocchi
     async endBlock(nextBlockNumber) {
-        Terminal.addOutput('\n--- Block Complete ---\n', 'success');
+        Terminal.addOutput('\n--- Blocco Completato ---\n', 'success');
         await NarrativeEngine.wait(1000);
         await this.changeBlock(nextBlockNumber);
     },
