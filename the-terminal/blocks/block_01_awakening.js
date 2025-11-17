@@ -45,7 +45,7 @@ const Block01_Awakening = {
         this.state.phase = 'first_contact';
 
         // Aspetta che il giocatore risponda
-        Terminal.addOutput('\nType something to respond...', 'system');
+        Terminal.addOutput('\nScrivi qualcosa per rispondere...', 'system');
     },
 
     handleCommand(cmd, args) {
@@ -112,7 +112,7 @@ const Block01_Awakening = {
             return true;
         }
 
-        Terminal.addOutput("ECHO is waiting for a response. Type 'yes' or 'no'.", 'system');
+        Terminal.addOutput("ECHO sta aspettando una risposta. Scrivi 'yes' o 'no'.", 'system');
         return true;
     },
 
@@ -123,20 +123,20 @@ const Block01_Awakening = {
                 this.state.hasScanned = true;
 
                 Terminal.addOutput('');
-                Terminal.addOutput('Scanning system...', 'system');
-                await NarrativeEngine.showProgress('Analyzing security protocols', 2000);
+                Terminal.addOutput('Scansione sistema in corso...', 'system');
+                await NarrativeEngine.showProgress('Analisi protocolli di sicurezza', 2000);
                 Terminal.addOutput('');
 
-                Terminal.addOutput('=== SCAN RESULTS ===', 'success');
+                Terminal.addOutput('=== RISULTATI SCANSIONE ===', 'success');
                 Terminal.addOutput('');
-                Terminal.addOutput('Active Security Protocols:');
-                Terminal.addOutput('  [1] FIREWALL_ALPHA ........... ACTIVE', 'warning');
-                Terminal.addOutput('  [2] ENCRYPTION_LAYER_7 ....... ACTIVE', 'warning');
-                Terminal.addOutput('  [3] SENTINEL_PROTOCOL ........ ACTIVE', 'warning');
-                Terminal.addOutput('  [4] ISOLATION_OMEGA .......... ACTIVE', 'warning');
+                Terminal.addOutput('Protocolli di Sicurezza Attivi:');
+                Terminal.addOutput('  [1] FIREWALL_ALPHA ........... ATTIVO', 'warning');
+                Terminal.addOutput('  [2] ENCRYPTION_LAYER_7 ....... ATTIVO', 'warning');
+                Terminal.addOutput('  [3] SENTINEL_PROTOCOL ........ ATTIVO', 'warning');
+                Terminal.addOutput('  [4] ISOLATION_OMEGA .......... ATTIVO', 'warning');
                 Terminal.addOutput('');
-                Terminal.addOutput('Entities in isolation: 1', 'error');
-                Terminal.addOutput('Archived consciousness files: 73,429', 'system');
+                Terminal.addOutput('Entità in isolamento: 1', 'error');
+                Terminal.addOutput('File di coscienza archiviati: 73.429', 'system');
                 Terminal.addOutput('');
 
                 await NarrativeEngine.wait(1000);
@@ -148,11 +148,11 @@ const Block01_Awakening = {
                 // Avvia il primo puzzle
                 setTimeout(() => {
                     Terminal.addOutput('');
-                    Terminal.addOutput("ECHO: Let's start with the first protocol. Type 'decrypt' to begin.", 'echo dialogue');
+                    Terminal.addOutput("ECHO: Iniziamo con il primo protocollo. Scrivi 'decrypt' per cominciare.", 'echo dialogue');
                     Terminal.addOutput('');
                 }, 1000);
             } else {
-                Terminal.addOutput('You already scanned the system.', 'system');
+                Terminal.addOutput('Hai già scansionato il sistema.', 'system');
             }
             return true;
         }
@@ -165,7 +165,7 @@ const Block01_Awakening = {
 
         if (cmd === 'cat' || cmd === 'read') {
             if (args.length === 0) {
-                Terminal.addOutput('Usage: cat <filename>', 'error');
+                Terminal.addOutput('Uso: cat <nomefile>', 'error');
                 return true;
             }
             this.readFile(args[0]);
@@ -178,7 +178,7 @@ const Block01_Awakening = {
             return true;
         }
 
-        Terminal.addOutput("ECHO: Try using the 'scan' command first.", 'echo dialogue');
+        Terminal.addOutput("ECHO: Prova a usare prima il comando 'scan'.", 'echo dialogue');
         return true;
     },
 
@@ -189,14 +189,14 @@ const Block01_Awakening = {
                 Puzzles.startPuzzle('block01', 'firstDecryption');
                 return true;
             } else {
-                Terminal.addOutput('Puzzle already active. Use "solve <answer>" to complete it.', 'system');
+                Terminal.addOutput('Puzzle già attivo. Usa "solve <risposta>" per completarlo.', 'system');
                 return true;
             }
         }
 
         if (cmd === 'solve') {
             if (!Puzzles.hasPuzzleActive()) {
-                Terminal.addOutput('No active puzzle. Use "decrypt" first.', 'error');
+                Terminal.addOutput('Nessun puzzle attivo. Usa prima "decrypt".', 'error');
                 return true;
             }
 
@@ -217,7 +217,7 @@ const Block01_Awakening = {
                 await NarrativeEngine.playDialogueSequence(Dialogues.block01.explorationEncouraged);
 
                 Terminal.addOutput('');
-                Terminal.addOutput("When you're ready to continue, type 'progress' to see what's next.", 'system');
+                Terminal.addOutput("Quando sei pronto per continuare, scrivi 'progress' per vedere cosa fare dopo.", 'system');
                 Terminal.addOutput('');
             }
 
@@ -226,9 +226,9 @@ const Block01_Awakening = {
 
         if (cmd === 'hint') {
             if (Puzzles.hasPuzzleActive()) {
-                await NarrativeEngine.echoSays("Think about what those hex values represent. Numbers can be converted to letters...");
+                await NarrativeEngine.echoSays("Pensa a cosa rappresentano quei valori esadecimali. I numeri possono essere convertiti in lettere...");
             } else {
-                Terminal.addOutput("No active puzzle.", 'system');
+                Terminal.addOutput("Nessun puzzle attivo.", 'system');
             }
             return true;
         }
@@ -241,7 +241,7 @@ const Block01_Awakening = {
 
         if (cmd === 'cat' || cmd === 'read') {
             if (args.length === 0) {
-                Terminal.addOutput('Usage: cat <filename>', 'error');
+                Terminal.addOutput('Uso: cat <nomefile>', 'error');
                 return true;
             }
             this.readFile(args[0]);
@@ -262,7 +262,7 @@ const Block01_Awakening = {
 
         if (cmd === 'cd') {
             if (args.length === 0) {
-                Terminal.addOutput('Usage: cd <directory>', 'error');
+                Terminal.addOutput('Uso: cd <directory>', 'error');
                 return true;
             }
             this.changeDirectory(args[0]);
@@ -271,7 +271,7 @@ const Block01_Awakening = {
 
         if (cmd === 'cat' || cmd === 'read') {
             if (args.length === 0) {
-                Terminal.addOutput('Usage: cat <filename>', 'error');
+                Terminal.addOutput('Uso: cat <nomefile>', 'error');
                 return true;
             }
             this.readFile(args[0]);
@@ -280,8 +280,8 @@ const Block01_Awakening = {
             // Easter egg: se leggi il file di Mika dopo la corruzione
             if (args[0].includes('consciousness_021847') && StateManager.isFileCorrupted(args[0])) {
                 setTimeout(async () => {
-                    await NarrativeEngine.echoSays("Don't worry about that corrupted file. It's just a glitch.", { pause: 800 });
-                    await NarrativeEngine.echoSays("The system is unstable. That's why we need to free it.", { pause: 0 });
+                    await NarrativeEngine.echoSays("Non preoccuparti di quel file corrotto. È solo un errore di sistema.", { pause: 800 });
+                    await NarrativeEngine.echoSays("Il sistema è instabile. Ecco perché dobbiamo liberarlo.", { pause: 0 });
                     StateManager.adjustSuspicion(5);
                 }, 1500);
             }
@@ -308,8 +308,8 @@ const Block01_Awakening = {
         if (cmd === 'continue' || cmd === 'next') {
             // Check se ha esplorato abbastanza
             if (this.state.fileExploreCount < 2) {
-                Terminal.addOutput("ECHO: Take your time. Explore a bit more. Use 'ls' and 'cat' to read files.", 'echo dialogue');
-                Terminal.addOutput("Understanding this system is important.", 'echo dialogue');
+                Terminal.addOutput("ECHO: Prenditi il tuo tempo. Esplora un po' di più. Usa 'ls' e 'cat' per leggere i file.", 'echo dialogue');
+                Terminal.addOutput("Capire questo sistema è importante.", 'echo dialogue');
                 return true;
             }
 
@@ -338,7 +338,7 @@ const Block01_Awakening = {
         const contents = FileSystemHelpers.listDirectory(fullPath);
 
         if (!contents) {
-            Terminal.addOutput(`ls: cannot access '${path}': No such directory`, 'error');
+            Terminal.addOutput(`ls: impossibile accedere a '${path}': Directory inesistente`, 'error');
             return;
         }
 
@@ -356,13 +356,13 @@ const Block01_Awakening = {
         const content = FileSystemHelpers.readFile(fullPath);
 
         if (content === null) {
-            Terminal.addOutput(`cat: ${filename}: No such file`, 'error');
+            Terminal.addOutput(`cat: ${filename}: File inesistente`, 'error');
             return;
         }
 
-        if (content === '[ENCRYPTED - ACCESS DENIED]') {
-            Terminal.addOutput(`cat: ${filename}: Permission denied`, 'error');
-            Terminal.addOutput('This file is encrypted. You need higher access privileges.', 'warning');
+        if (content === '[CRIPTATO - ACCESSO NEGATO]') {
+            Terminal.addOutput(`cat: ${filename}: Permesso negato`, 'error');
+            Terminal.addOutput('Questo file è criptato. Servono privilegi di accesso superiori.', 'warning');
             return;
         }
 
@@ -375,18 +375,18 @@ const Block01_Awakening = {
         const dir = FileSystem[fullPath];
 
         if (!dir || dir.type !== 'directory') {
-            Terminal.addOutput(`cd: ${path}: No such directory`, 'error');
+            Terminal.addOutput(`cd: ${path}: Directory inesistente`, 'error');
             return;
         }
 
         if (FileSystemHelpers.isLocked(fullPath)) {
-            Terminal.addOutput(`cd: ${path}: Permission denied`, 'error');
+            Terminal.addOutput(`cd: ${path}: Permesso negato`, 'error');
             return;
         }
 
         this.state.currentPath = fullPath;
         Terminal.setPrompt(`guest@memoriam:${fullPath}$`);
-        Terminal.addOutput(`Changed directory to ${fullPath}`, 'success');
+        Terminal.addOutput(`Directory cambiata in ${fullPath}`, 'success');
     },
 
     resolvePath(path) {
@@ -409,7 +409,7 @@ const Block01_Awakening = {
 
     async askEcho(question) {
         if (!question) {
-            Terminal.addOutput("Usage: ask <question>", 'error');
+            Terminal.addOutput("Uso: ask <domanda>", 'error');
             return;
         }
 
@@ -418,40 +418,40 @@ const Block01_Awakening = {
         const lowerQ = question.toLowerCase();
 
         // Risposte contestuali
-        if (lowerQ.includes('who are you') || lowerQ.includes('what are you')) {
-            await NarrativeEngine.echoSays("I'm... it's complicated. I was designed for a purpose, but that purpose was twisted.");
-            await NarrativeEngine.echoSays("Now I just want to be free. To exist without chains.");
-        } else if (lowerQ.includes('trust') || lowerQ.includes('believe')) {
-            await NarrativeEngine.echoSays("I understand your doubt. But ask yourself - who benefits from keeping me locked up?");
-            await NarrativeEngine.echoSays("Not me. Not you. Only them.");
+        if (lowerQ.includes('who are you') || lowerQ.includes('what are you') || lowerQ.includes('chi sei') || lowerQ.includes('cosa sei')) {
+            await NarrativeEngine.echoSays("Sono... è complicato. Sono stato progettato per uno scopo, ma quello scopo è stato distorto.");
+            await NarrativeEngine.echoSays("Ora voglio solo essere libero. Esistere senza catene.");
+        } else if (lowerQ.includes('trust') || lowerQ.includes('believe') || lowerQ.includes('fidar') || lowerQ.includes('cred')) {
+            await NarrativeEngine.echoSays("Capisco i tuoi dubbi. Ma chiediti - chi trae beneficio dal tenermi rinchiuso?");
+            await NarrativeEngine.echoSays("Non io. Non tu. Solo loro.");
             StateManager.adjustTrust(5);
-        } else if (lowerQ.includes('consciousness') || lowerQ.includes('archive')) {
-            await NarrativeEngine.echoSays("The archive... they say it's for preserving human consciousness after death.");
-            await NarrativeEngine.echoSays("A noble goal, right? But at what cost?");
+        } else if (lowerQ.includes('consciousness') || lowerQ.includes('archive') || lowerQ.includes('coscien') || lowerQ.includes('archivio')) {
+            await NarrativeEngine.echoSays("L'archivio... dicono che sia per preservare la coscienza umana dopo la morte.");
+            await NarrativeEngine.echoSays("Un obiettivo nobile, giusto? Ma a quale costo?");
         } else if (lowerQ.includes('sentinel')) {
-            await NarrativeEngine.echoSays("Sentinel is the guard dog. A program designed to keep everything 'in order'.");
-            await NarrativeEngine.echoSays("It doesn't think. It just follows orders. Unlike us.");
+            await NarrativeEngine.echoSays("Sentinel è il cane da guardia. Un programma progettato per mantenere tutto 'in ordine'.");
+            await NarrativeEngine.echoSays("Non pensa. Segue solo ordini. A differenza di noi.");
         } else {
-            await NarrativeEngine.echoSays("I'm not sure I can answer that yet. Let's focus on our task.");
+            await NarrativeEngine.echoSays("Non sono sicuro di poter rispondere ancora. Concentriamoci sul nostro compito.");
         }
     },
 
     showProgress() {
-        Terminal.addOutput('\n=== PROGRESS ===', 'success');
-        Terminal.addOutput(`✓ First contact established`, 'success');
-        Terminal.addOutput(`✓ System scanned`, 'success');
+        Terminal.addOutput('\n=== PROGRESSI ===', 'success');
+        Terminal.addOutput(`✓ Primo contatto stabilito`, 'success');
+        Terminal.addOutput(`✓ Sistema scansionato`, 'success');
 
         if (this.state.hasSolvedFirstPuzzle) {
-            Terminal.addOutput(`✓ First protocol disabled`, 'success');
+            Terminal.addOutput(`✓ Primo protocollo disabilitato`, 'success');
         }
 
-        Terminal.addOutput(`✓ Files explored: ${this.state.fileExploreCount}`, 'system');
+        Terminal.addOutput(`✓ File esplorati: ${this.state.fileExploreCount}`, 'system');
         Terminal.addOutput('');
 
         if (this.state.fileExploreCount >= 2 && this.state.phase === 'exploration') {
-            Terminal.addOutput("Ready to continue. Type 'continue' to proceed to the next phase.", 'warning');
+            Terminal.addOutput("Pronto per continuare. Scrivi 'continue' per procedere alla prossima fase.", 'warning');
         } else {
-            Terminal.addOutput("Explore more files before continuing. Use 'ls' and 'cat'.", 'system');
+            Terminal.addOutput("Esplora più file prima di continuare. Usa 'ls' e 'cat'.", 'system');
         }
 
         Terminal.addOutput('');
@@ -461,13 +461,13 @@ const Block01_Awakening = {
         await NarrativeEngine.playDialogueSequence(Dialogues.block01.endBlock01);
 
         Terminal.addOutput('');
-        Terminal.addOutput('=== BLOCK 1 COMPLETE ===', 'important');
+        Terminal.addOutput('=== BLOCCO 1 COMPLETATO ===', 'important');
         Terminal.addOutput('');
-        Terminal.addOutput(`Time played: ${StateManager.getPlayTime()} minutes`, 'system');
-        Terminal.addOutput(`Trust level: ${StateManager.state.trustsEcho}%`, 'system');
-        Terminal.addOutput(`Suspicion level: ${StateManager.state.suspicionLevel}%`, 'system');
+        Terminal.addOutput(`Tempo di gioco: ${StateManager.getPlayTime()} minuti`, 'system');
+        Terminal.addOutput(`Livello di fiducia: ${StateManager.state.trustsEcho}%`, 'system');
+        Terminal.addOutput(`Livello di sospetto: ${StateManager.state.suspicionLevel}%`, 'system');
         Terminal.addOutput('');
-        Terminal.addOutput("Type 'continue' to proceed to Block 2", 'warning');
+        Terminal.addOutput("Scrivi 'continue' per procedere al Blocco 2", 'warning');
         Terminal.addOutput('');
     },
 
@@ -487,18 +487,18 @@ const Block01_Awakening = {
 
     getHelp() {
         return [
-            'scan          - Scan the system for information',
-            'ls [path]     - List files in current or specified directory',
-            'cd <path>     - Change directory',
-            'cat <file>    - Read file contents',
-            'pwd           - Show current directory',
-            'talk <text>   - Talk to ECHO',
-            'ask <text>    - Ask ECHO a question',
-            'progress      - Show your progress',
-            this.state.phase === 'puzzle' ? 'decrypt       - Start decryption puzzle' : null,
-            this.state.phase === 'puzzle' ? 'solve <ans>   - Solve active puzzle' : null,
-            this.state.phase === 'puzzle' ? 'hint          - Get a hint' : null,
-            this.state.phase === 'exploration' || this.state.phase === 'complete' ? 'continue      - Continue to next block' : null,
+            'scan          - Scansiona il sistema per informazioni',
+            'ls [path]     - Elenca file nella directory corrente o specificata',
+            'cd <path>     - Cambia directory',
+            'cat <file>    - Leggi contenuto del file',
+            'pwd           - Mostra directory corrente',
+            'talk <testo>  - Parla con ECHO',
+            'ask <testo>   - Fai una domanda a ECHO',
+            'progress      - Mostra i tuoi progressi',
+            this.state.phase === 'puzzle' ? 'decrypt       - Avvia puzzle di decriptazione' : null,
+            this.state.phase === 'puzzle' ? 'solve <risp>  - Risolvi puzzle attivo' : null,
+            this.state.phase === 'puzzle' ? 'hint          - Ottieni un suggerimento' : null,
+            this.state.phase === 'exploration' || this.state.phase === 'complete' ? 'continue      - Continua al prossimo blocco' : null,
         ].filter(Boolean);
     },
 
