@@ -1,0 +1,128 @@
+/**
+ * GAME ENGINE
+ * Coordina tutti i sistemi e gestisce il flusso del gioco
+ */
+
+const GameEngine = {
+    currentBlock: null,
+    blocks: {},
+    initialized: false,
+
+    init() {
+        console.log('[ENGINE] Initializing The Terminal...');
+
+        // Inizializza i sottosistemi
+        StateManager.init();
+        Terminal.init();
+        NarrativeEngine.init();
+
+        // Registra i blocchi
+        this.registerBlocks();
+
+        // Carica il blocco corrente
+        this.loadCurrentBlock();
+
+        this.initialized = true;
+        console.log('[ENGINE] Initialization complete');
+    },
+
+    registerBlocks() {
+        // I blocchi verranno registrati dai loro file
+        console.log('[ENGINE] Registering blocks...');
+
+        // Per ora, registriamo solo quelli disponibili
+        if (typeof Block01_Awakening !== 'undefined') {
+            this.blocks[1] = Block01_Awakening;
+        }
+        if (typeof Block02_FirstDoubt !== 'undefined') {
+            this.blocks[2] = Block02_FirstDoubt;
+        }
+        if (typeof Block03_DeepDive !== 'undefined') {
+            this.blocks[3] = Block03_DeepDive;
+        }
+        if (typeof Block04_Fractures !== 'undefined') {
+            this.blocks[4] = Block04_Fractures;
+        }
+        if (typeof Block05_Revelation !== 'undefined') {
+            this.blocks[5] = Block05_Revelation;
+        }
+        if (typeof Block06_Consequences !== 'undefined') {
+            this.blocks[6] = Block06_Consequences;
+        }
+        if (typeof Block07_TheChoice !== 'undefined') {
+            this.blocks[7] = Block07_TheChoice;
+        }
+        if (typeof Block08_Aftermath !== 'undefined') {
+            this.blocks[8] = Block08_Aftermath;
+        }
+
+        console.log(`[ENGINE] ${Object.keys(this.blocks).length} blocks registered`);
+    },
+
+    loadCurrentBlock() {
+        const blockNumber = StateManager.state.currentBlock;
+        console.log(`[ENGINE] Loading block ${blockNumber}...`);
+
+        if (this.blocks[blockNumber]) {
+            this.currentBlock = this.blocks[blockNumber];
+            this.currentBlock.init();
+        } else {
+            console.error(`[ENGINE] Block ${blockNumber} not found!`);
+            Terminal.addOutput(`ERROR: Block ${blockNumber} not implemented yet.`, 'error');
+            Terminal.addOutput('This is the end of the current content.', 'warning');
+        }
+    },
+
+    async changeBlock(blockNumber) {
+        console.log(`[ENGINE] Changing to block ${blockNumber}...`);
+
+        // Cleanup del blocco corrente
+        if (this.currentBlock && this.currentBlock.cleanup) {
+            this.currentBlock.cleanup();
+        }
+
+        // Salva progressione
+        StateManager.setBlock(blockNumber);
+
+        // Carica nuovo blocco
+        if (this.blocks[blockNumber]) {
+            this.currentBlock = this.blocks[blockNumber];
+
+            // Transizione
+            await this.showBlockTransition(blockNumber);
+
+            // Inizializza nuovo blocco
+            this.currentBlock.init();
+        } else {
+            Terminal.addOutput('\n=== END OF CURRENT CONTENT ===', 'important');
+            Terminal.addOutput('Thank you for playing!', 'success');
+            Terminal.addOutput(`You played for ${StateManager.getPlayTime()} minutes.`, 'system');
+            Terminal.addOutput('\nMore content coming soon...', 'warning');
+        }
+    },
+
+    async showBlockTransition(blockNumber) {
+        Terminal.disableInput();
+
+        Terminal.addOutput('\n\n');
+        await NarrativeEngine.showProgress(`Loading Block ${blockNumber}...`, 2000);
+        Terminal.addOutput('\n');
+
+        Terminal.enableInput();
+    },
+
+    handleCommand(cmd, args) {
+        // Passa il comando al blocco corrente
+        if (this.currentBlock && this.currentBlock.handleCommand) {
+            return this.currentBlock.handleCommand(cmd, args);
+        }
+        return false;
+    },
+
+    // Utility per i blocchi
+    async endBlock(nextBlockNumber) {
+        Terminal.addOutput('\n--- Block Complete ---\n', 'success');
+        await NarrativeEngine.wait(1000);
+        await this.changeBlock(nextBlockNumber);
+    },
+};

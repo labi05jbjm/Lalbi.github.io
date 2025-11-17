@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE TERMINAL</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="crt-overlay"></div>
+    <div id="terminal-container">
+        <div id="terminal-header">
+            <span id="system-name">MEMORIAM ARCHIVE v3.7.2</span>
+            <span id="system-status">● ONLINE</span>
+        </div>
+        <div id="terminal-output"></div>
+        <div id="terminal-input-line">
+            <span id="prompt">guest@memoriam:~$</span>
+            <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" autofocus>
+        </div>
+    </div>
+
+    <div id="glitch-overlay"></div>
+
+    <!-- Audio -->
+    <audio id="ambient-sound" loop>
+        <source src="assets/sounds/ambient.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Core Engine -->
+    <script src="core/state.js"></script>
+    <script src="core/narrative.js"></script>
+    <script src="core/terminal.js"></script>
+    <script src="core/engine.js"></script>
+
+    <!-- Content -->
+    <script src="content/dialogues.js"></script>
+    <script src="content/files.js"></script>
+    <script src="content/puzzles.js"></script>
+
+    <!-- Blocks -->
+    <script src="blocks/block_01_awakening.js"></script>
+    <script src="blocks/block_02_first_doubt.js"></script>
+    <script src="blocks/block_03_deep_dive.js"></script>
+    <script src="blocks/block_04_fractures.js"></script>
+    <script src="blocks/block_05_revelation.js"></script>
+    <script src="blocks/block_06_consequences.js"></script>
+    <script src="blocks/block_07_the_choice.js"></script>
+    <script src="blocks/block_08_aftermath.js"></script>
+
+    <!-- Initialize -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            GameEngine.init();
+        });
+    </script>
+</body>
+</html>

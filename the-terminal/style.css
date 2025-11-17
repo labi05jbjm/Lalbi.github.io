@@ -1,0 +1,396 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+:root {
+    --bg-color: #0a0e14;
+    --primary-color: #00ff88;
+    --secondary-color: #00aaff;
+    --error-color: #ff3366;
+    --warning-color: #ffaa00;
+    --text-color: #b0e0e6;
+    --dim-color: #5a7f8f;
+    --glow: 0 0 5px var(--primary-color);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Share Tech Mono', monospace;
+    background: var(--bg-color);
+    color: var(--text-color);
+    overflow: hidden;
+    height: 100vh;
+    position: relative;
+}
+
+/* CRT Effect */
+#crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 1000;
+    animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+    0% { opacity: 0.95; }
+    50% { opacity: 1; }
+    100% { opacity: 0.95; }
+}
+
+/* Glitch Overlay */
+#glitch-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+#glitch-overlay.active {
+    opacity: 1;
+    animation: glitch 0.3s infinite;
+}
+
+@keyframes glitch {
+    0% {
+        background: rgba(255, 0, 0, 0.1);
+        transform: translate(2px, 0);
+    }
+    20% {
+        background: rgba(0, 255, 0, 0.1);
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        background: rgba(0, 0, 255, 0.1);
+        transform: translate(2px, -2px);
+    }
+    60% {
+        background: rgba(255, 0, 0, 0.1);
+        transform: translate(-2px, 0);
+    }
+    80% {
+        background: rgba(0, 255, 0, 0.1);
+        transform: translate(2px, 2px);
+    }
+    100% {
+        background: transparent;
+        transform: translate(0, 0);
+    }
+}
+
+/* Terminal Container */
+#terminal-container {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    height: 90vh;
+    margin: 5vh auto;
+    background: rgba(10, 14, 20, 0.95);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    box-shadow:
+        0 0 20px rgba(0, 255, 136, 0.3),
+        inset 0 0 100px rgba(0, 255, 136, 0.03);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Terminal Header */
+#terminal-header {
+    background: rgba(0, 255, 136, 0.1);
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--primary-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+#system-name {
+    color: var(--primary-color);
+    text-shadow: var(--glow);
+    font-weight: bold;
+}
+
+#system-status {
+    color: var(--primary-color);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Terminal Output */
+#terminal-output {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 14px;
+    line-height: 1.6;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+}
+
+#terminal-output::-webkit-scrollbar {
+    width: 8px;
+}
+
+#terminal-output::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#terminal-output::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+/* Terminal Input Line */
+#terminal-input-line {
+    padding: 15px 20px;
+    border-top: 1px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    background: rgba(0, 255, 136, 0.05);
+}
+
+#prompt {
+    color: var(--primary-color);
+    margin-right: 10px;
+    text-shadow: var(--glow);
+    white-space: nowrap;
+}
+
+#terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    caret-color: var(--primary-color);
+}
+
+/* Output Styles */
+.output-line {
+    margin: 5px 0;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.output-line.system {
+    color: var(--dim-color);
+}
+
+.output-line.error {
+    color: var(--error-color);
+    text-shadow: 0 0 5px var(--error-color);
+}
+
+.output-line.warning {
+    color: var(--warning-color);
+}
+
+.output-line.success {
+    color: var(--primary-color);
+    text-shadow: var(--glow);
+}
+
+.output-line.luca {
+    color: var(--secondary-color);
+    text-shadow: 0 0 5px var(--secondary-color);
+    font-style: italic;
+}
+
+.output-line.dialogue {
+    padding-left: 20px;
+    border-left: 2px solid var(--secondary-color);
+    margin: 10px 0;
+}
+
+.output-line.important {
+    color: var(--warning-color);
+    font-weight: bold;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0.3; }
+}
+
+/* ASCII Art */
+.ascii-art {
+    color: var(--primary-color);
+    text-shadow: var(--glow);
+    white-space: pre;
+    font-size: 12px;
+    line-height: 1.2;
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* Loading Animation */
+.loading {
+    display: inline-block;
+    color: var(--primary-color);
+}
+
+.loading::after {
+    content: '';
+    animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
+}
+
+/* File System Display */
+.file-entry {
+    padding: 5px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.file-entry:hover {
+    color: var(--primary-color);
+    padding-left: 10px;
+    text-shadow: var(--glow);
+}
+
+.file-entry.directory {
+    color: var(--secondary-color);
+}
+
+.file-entry.corrupted {
+    color: var(--error-color);
+    text-decoration: line-through;
+    animation: glitchText 0.5s infinite;
+}
+
+@keyframes glitchText {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-2px); }
+    40% { transform: translateX(2px); }
+    60% { transform: translateX(-1px); }
+    80% { transform: translateX(1px); }
+    100% { transform: translateX(0); }
+}
+
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    border: 1px solid var(--primary-color);
+    margin: 10px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+    transition: width 0.5s;
+}
+
+/* Typing Effect */
+.typing {
+    overflow: hidden;
+    border-right: 2px solid var(--primary-color);
+    white-space: nowrap;
+    animation: typing 2s steps(40) 1s forwards, blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: var(--primary-color); }
+}
+
+/* Choice Buttons */
+.choice-container {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.choice-button {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    transition: all 0.3s;
+    text-align: left;
+}
+
+.choice-button:hover {
+    background: var(--primary-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 20px var(--primary-color);
+    transform: translateX(10px);
+}
+
+.choice-button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #terminal-container {
+        width: 95%;
+        height: 95vh;
+        margin: 2.5vh auto;
+    }
+
+    #terminal-output {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    #terminal-input {
+        font-size: 12px;
+    }
+
+    .ascii-art {
+        font-size: 10px;
+    }
+}
