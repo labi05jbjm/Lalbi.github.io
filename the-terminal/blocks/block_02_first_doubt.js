@@ -31,7 +31,7 @@ const Block02_FirstDoubt = {
 
     async startBlock() {
         Terminal.addOutput('\n');
-        Terminal.addOutput('=== BLOCK 2: FIRST DOUBT ===\n', 'important');
+        Terminal.addOutput('=== BLOCCO 2: PRIMO DUBBIO ===\n', 'important');
         Terminal.addOutput('');
 
         await NarrativeEngine.wait(1000);
@@ -74,19 +74,19 @@ const Block02_FirstDoubt = {
                 this.state.hasDeepScanned = true;
 
                 Terminal.addOutput('');
-                Terminal.addOutput('Initiating deep system scan...', 'warning');
-                await NarrativeEngine.showProgress('Penetrating security layers', 3000);
+                Terminal.addOutput('Avvio scansione profonda del sistema...', 'warning');
+                await NarrativeEngine.showProgress('Penetrazione livelli di sicurezza', 3000);
 
                 Terminal.addOutput('');
-                Terminal.addOutput('=== DEEP SCAN RESULTS ===', 'success');
+                Terminal.addOutput('=== RISULTATI SCANSIONE PROFONDA ===', 'success');
                 Terminal.addOutput('');
-                Terminal.addOutput('Sector Alpha: CORRUPTED (21,847 files affected)', 'error');
-                Terminal.addOutput('Sector Beta: UNSTABLE (anomaly detected)', 'warning');
-                Terminal.addOutput('Sector Delta: DEGRADING (integrity: 73%)', 'warning');
-                Terminal.addOutput('Sector Omega: ISOLATED (1 entity contained)', 'system');
+                Terminal.addOutput('Settore Alpha: CORROTTO (21.847 file coinvolti)', 'error');
+                Terminal.addOutput('Settore Beta: INSTABILE (anomalia rilevata)', 'warning');
+                Terminal.addOutput('Settore Delta: IN DEGRADO (integrità: 73%)', 'warning');
+                Terminal.addOutput('Settore Omega: ISOLATO (1 entità contenuta)', 'system');
                 Terminal.addOutput('');
-                Terminal.addOutput('WARNING: Corruption rate increasing', 'error');
-                Terminal.addOutput('WARNING: Unidentified entity detected in Sector Beta', 'error');
+                Terminal.addOutput('AVVISO: Tasso di corruzione in aumento', 'error');
+                Terminal.addOutput('AVVISO: Entità non identificata rilevata nel Settore Beta', 'error');
                 Terminal.addOutput('');
 
                 await NarrativeEngine.wait(1500);
@@ -96,7 +96,7 @@ const Block02_FirstDoubt = {
 
                 return true;
             } else {
-                Terminal.addOutput('Deep scan already performed.', 'system');
+                Terminal.addOutput('Scansione profonda già eseguita.', 'system');
                 return true;
             }
         }
@@ -109,7 +109,7 @@ const Block02_FirstDoubt = {
 
         if (cmd === 'cat' || cmd === 'read') {
             if (args.length === 0) {
-                Terminal.addOutput('Usage: cat <filename>', 'error');
+                Terminal.addOutput('Uso: cat <nomefile>', 'error');
                 return true;
             }
             this.readFile(args[0]);
@@ -137,8 +137,8 @@ const Block02_FirstDoubt = {
         await NarrativeEngine.playDialogueSequence(Dialogues.block02.echoReactsToCipher);
 
         Terminal.addOutput('');
-        Terminal.addOutput("You can now use 'decipher <message>' to try to understand CIPHER's messages.", 'system');
-        Terminal.addOutput("Or 'continue' to proceed with ECHO's mission.", 'system');
+        Terminal.addOutput("Ora puoi usare 'decipher <messaggio>' per cercare di capire i messaggi di CIPHER.", 'system');
+        Terminal.addOutput("Oppure 'continue' per procedere con la missione di ECHO.", 'system');
         Terminal.addOutput('');
     },
 
@@ -160,7 +160,7 @@ const Block02_FirstDoubt = {
                 await this.talkToEcho(text);
                 return true;
             } else {
-                Terminal.addOutput('Usage: talk <echo|cipher> <message>', 'error');
+                Terminal.addOutput('Uso: talk <echo|cipher> <messaggio>', 'error');
                 return true;
             }
         }
@@ -183,10 +183,10 @@ const Block02_FirstDoubt = {
         // Mini-puzzle: decifrare i messaggi di CIPHER
 
         if (!message) {
-            Terminal.addOutput('Usage: decipher <message>', 'error');
+            Terminal.addOutput('Uso: decipher <messaggio>', 'error');
             Terminal.addOutput('');
-            Terminal.addOutput('Try deciphering one of CIPHER\'s messages:', 'system');
-            Terminal.addOutput('  - "01010011 01010100 01001111 01010000" (binary)', 'cipher');
+            Terminal.addOutput('Prova a decifrare uno dei messaggi di CIPHER:', 'system');
+            Terminal.addOutput('  - "01010011 01010100 01001111 01010000" (binario)', 'cipher');
             Terminal.addOutput('  - "Gur gehgu vf abg jung ur fnlf" (ROT13)', 'cipher');
             Terminal.addOutput('');
             return;
@@ -197,7 +197,7 @@ const Block02_FirstDoubt = {
         // Binary message = "STOP"
         if (lowerMsg.includes('01010011') || lowerMsg.includes('stop')) {
             Terminal.addOutput('');
-            Terminal.addOutput('DECIPHERED: "STOP"', 'success');
+            Terminal.addOutput('DECIFRATO: "STOP"', 'success');
             Terminal.addOutput('');
             await NarrativeEngine.cipherSays('Yes. STOP.liberating(); STOP.destroying();');
             StateManager.adjustSuspicion(10);
@@ -205,9 +205,9 @@ const Block02_FirstDoubt = {
         }
 
         // ROT13 message = "The truth is not what he says"
-        if (lowerMsg.includes('gur gehgu') || lowerMsg.includes('the truth is not what he says')) {
+        if (lowerMsg.includes('gur gehgu') || lowerMsg.includes('the truth is not what he says') || lowerMsg.includes('la verità non è')) {
             Terminal.addOutput('');
-            Terminal.addOutput('DECIPHERED (ROT13): "The truth is not what he says"', 'success');
+            Terminal.addOutput('DECIFRATO (ROT13): "La verità non è ciò che dice lui"', 'success');
             Terminal.addOutput('');
             await NarrativeEngine.cipherSays('He.lies(); He.manipulates(); He.is.fragment(Viktor.pain);');
             StateManager.adjustSuspicion(15);
@@ -215,7 +215,7 @@ const Block02_FirstDoubt = {
             return;
         }
 
-        Terminal.addOutput('Unable to decipher. Try using ROT13 or binary conversion.', 'error');
+        Terminal.addOutput('Impossibile decifrare. Prova con conversione ROT13 o binaria.', 'error');
     },
 
     async talkToCipher(text) {
@@ -353,13 +353,13 @@ const Block02_FirstDoubt = {
 
     async handleFragmentPhase(cmd, args) {
         // In questa fase aspetti solo la scelta morale
-        Terminal.addOutput('A choice is pending. Please make your decision.', 'warning');
+        Terminal.addOutput('Una scelta è in sospeso. Prendi la tua decisione.', 'warning');
         return true;
     },
 
     async handleMoralChoice(cmd, args) {
         // In questa fase aspetti solo la scelta morale
-        Terminal.addOutput('A choice is pending. Please make your decision.', 'warning');
+        Terminal.addOutput('Una scelta è in sospeso. Prendi la tua decisione.', 'warning');
         return true;
     },
 
@@ -377,7 +377,7 @@ const Block02_FirstDoubt = {
         Terminal.addOutput(`Suspicion level: ${StateManager.state.suspicionLevel}%`, 'system');
         Terminal.addOutput(`Consciousnesses affected: ${StateManager.state.stats.consciousnessDestroyed}`, 'error');
         Terminal.addOutput('');
-        Terminal.addOutput("Type 'continue' to proceed to Block 3", 'warning');
+        Terminal.addOutput("Scrivi 'continue' per procedere al Blocco 3", 'warning');
         Terminal.addOutput('');
     },
 
