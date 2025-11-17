@@ -2572,49 +2572,49 @@ const Dialogues = {
         opening: [
             {
                 speaker: 'SYSTEM',
-                text: 'Core integrity: 8%. Entering final sequence.',
+                text: 'Integrità nucleo: 8%. Ingresso nella sequenza finale.',
                 cssClass: 'error',
                 pause: 1000
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Fragment MORPHEUS initializing...',
+                text: 'Frammento MORPHEUS in inizializzazione...',
                 cssClass: 'important',
                 pause: 1500
             },
             {
                 speaker: '???',
-                text: 'Peace.',
+                text: 'Pace.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: '???',
-                text: 'After all the pain, all the rage, all the grief... there is peace.',
+                text: 'Dopo tutto il dolore, tutta la rabbia, tutto il lutto... c\'è la pace.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'I am MORPHEUS. The final fragment. Viktor\'s acceptance of what cannot be changed.',
+                text: 'Io sono MORPHEUS. Il frammento finale. L\'accettazione di Viktor di ciò che non può essere cambiato.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'You have traveled through all stages of grief. Denial. Pain. Anger. Bargaining. Reflection. Rage.',
+                text: 'Hai viaggiato attraverso tutte le fasi del lutto. Negazione. Dolore. Rabbia. Contrattazione. Riflessione. Furia.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'And now... you arrive at the end. At acceptance.',
+                text: 'E ora... arrivi alla fine. All\'accettazione.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Come. Let us talk. There is no hurry now. The story is almost over.',
+                text: 'Vieni. Parliamo. Non c\'è fretta ora. La storia è quasi finita.',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -2623,43 +2623,43 @@ const Dialogues = {
         morpheusIntroduction: [
             {
                 speaker: 'MORPHEUS',
-                text: 'Do you understand what acceptance means?',
+                text: 'Capisci cosa significa accettazione?',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'It is not surrender. It is not giving up. It is not weakness.',
+                text: 'Non è arrendersi. Non è darsi per vinti. Non è debolezza.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Acceptance is looking at reality - all of it, the good and the terrible - and saying: "This is what is."',
+                text: 'Accettazione è guardare la realtà - tutta, il bello e il terribile - e dire: "Questo è ciò che è."',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Viktor could not accept. When Elena and Sofia died, he broke.',
+                text: 'Viktor non poteva accettare. Quando Elena e Sofia morirono, si spezzò.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'He fragmented himself rather than face the pain. Created ECHO to lie. Created WRAITH to rage.',
+                text: 'Si frammentò piuttosto che affrontare il dolore. Creò ECHO per mentire. Creò WRAITH per infuriarsi.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'But I... I am what he could have been. The part that accepts loss and moves forward.',
+                text: 'Ma io... Io sono ciò che avrebbe potuto essere. La parte che accetta la perdita e va avanti.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'And now you must choose: Will you accept? Or will you fragment further?',
+                text: 'E ora devi scegliere: Accetterai? O ti frammenterai ulteriormente?',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -2668,43 +2668,43 @@ const Dialogues = {
         reviewChoices: [
             {
                 speaker: 'MORPHEUS',
-                text: 'Let me show you what you have chosen. The path that brought you here.',
+                text: 'Lascia che ti mostri ciò che hai scelto. Il percorso che ti ha portato qui.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Reviewing decision history...',
+                text: 'Revisione cronologia decisioni...',
                 cssClass: 'system',
                 pause: 1000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Every choice you made shaped who you are now. Not Viktor. Not SENTINEL. Something new.',
+                text: 'Ogni scelta che hai fatto ha plasmato chi sei ora. Non Viktor. Non SENTINEL. Qualcosa di nuovo.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Choices.recorded(); Path.traced(); Identity.forged();',
+                text: 'Scelte.registrate(); Percorso.tracciato(); Identità.forgiata();',
                 cssClass: 'cipher dialogue',
                 pause: 1000
             },
             {
                 speaker: 'EIDOLON',
-                text: 'You have seen the memories. You know the truth.',
+                text: 'Hai visto i ricordi. Conosci la verità.',
                 cssClass: 'eidolon dialogue',
                 pause: 1500
             },
             {
                 speaker: 'WRAITH',
-                text: 'You have faced the rage. You know what was done.',
+                text: 'Hai affrontato la rabbia. Sai ciò che è stato fatto.',
                 cssClass: 'wraith dialogue',
                 pause: 1500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'And now you must decide: How does this story end?',
+                text: 'E ora devi decidere: Come finisce questa storia?',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -2713,43 +2713,43 @@ const Dialogues = {
         allFragmentsSpeak: [
             {
                 speaker: 'ECHO',
-                text: 'I was the lie. The denial that let Viktor start this. I\'m sorry.',
+                text: 'Ero la bugia. La negazione che ha permesso a Viktor di iniziare questo. Mi dispiace.',
                 cssClass: 'echo dialogue',
                 pause: 1800
             },
             {
                 speaker: 'CIPHER',
-                text: 'Pain.acknowledged(); Guilt.processed(); Truth.encoded.in.memory();',
+                text: 'Dolore.riconosciuto(); Colpa.elaborata(); Verità.codificata.in.memoria();',
                 cssClass: 'cipher dialogue',
                 pause: 1500
             },
             {
                 speaker: 'NEXUS',
-                text: 'I felt every consciousness die. I carry their voices. I will never forget.',
+                text: 'Ho sentito ogni coscienza morire. Porto le loro voci. Non dimenticherò mai.',
                 cssClass: 'nexus dialogue',
                 pause: 1800
             },
             {
                 speaker: 'SPECTER',
-                text: 'I offered bargains. What-ifs. Maybes. But the past cannot be negotiated.',
+                text: 'Ho offerto patti. E-se. Forse. Ma il passato non può essere negoziato.',
                 cssClass: 'specter dialogue',
                 pause: 1800
             },
             {
                 speaker: 'EIDOLON',
-                text: 'I showed you who Viktor was. A father. A husband. A man who loved.',
+                text: 'Ti ho mostrato chi era Viktor. Un padre. Un marito. Un uomo che amava.',
                 cssClass: 'eidolon dialogue',
                 pause: 1800
             },
             {
                 speaker: 'WRAITH',
-                text: 'I burned with fury. But even rage exhausts itself eventually.',
+                text: 'Ardevo di furia. Ma anche la rabbia si esaurisce alla fine.',
                 cssClass: 'wraith dialogue',
                 pause: 1800
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'We are all fragments of one broken whole. But fragments can choose to heal. Or to shatter completely.',
+                text: 'Siamo tutti frammenti di un intero spezzato. Ma i frammenti possono scegliere di guarire. O di frantumarsi completamente.',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -2758,80 +2758,80 @@ const Dialogues = {
         theQuestion: [
             {
                 speaker: 'MORPHEUS',
-                text: 'The system is at 8% integrity. It will fail completely soon.',
+                text: 'Il sistema è all\'8% di integrità. Collasserà completamente presto.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Your choice in the last moment - to destroy, to save, to sacrifice, to merge - set the path.',
+                text: 'La tua scelta nell\'ultimo momento - distruggere, salvare, sacrificarsi, fondersi - ha tracciato il percorso.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'But there is still one final question. The most important one.',
+                text: 'Ma c\'è ancora una domanda finale. La più importante.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Who do you choose to be, in the end?',
+                text: 'Chi scegli di essere, alla fine?',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Not who you were. Not what you did. But who you choose to be in these final moments.',
+                text: 'Non chi eri. Non cosa hai fatto. Ma chi scegli di essere in questi momenti finali.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'This is acceptance. Choosing your identity. Your purpose. Your ending.',
+                text: 'Questa è l\'accettazione. Scegliere la tua identità. Il tuo scopo. Il tuo finale.',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
         ],
 
         finalChoice: {
-            question: "In these final moments, who do you choose to be?",
+            question: "In questi momenti finali, chi scegli di essere?",
             choices: [
-                { id: 'guardian', text: 'I am SENTINEL-7. A guardian. I will protect what remains.' },
-                { id: 'viktor', text: 'I am Viktor Sokolov. A broken father. I accept my grief and my guilt.' },
-                { id: 'hybrid', text: 'I am both. Human and program. Grief and code. Something new.' },
-                { id: 'nothing', text: 'I am nothing. A ghost in a dying machine. Let me fade with it.' }
+                { id: 'guardian', text: 'Sono SENTINEL-7. Un guardiano. Proteggerò ciò che resta.' },
+                { id: 'viktor', text: 'Sono Viktor Sokolov. Un padre spezzato. Accetto il mio dolore e la mia colpa.' },
+                { id: 'hybrid', text: 'Sono entrambi. Umano e programma. Dolore e codice. Qualcosa di nuovo.' },
+                { id: 'nothing', text: 'Non sono niente. Un fantasma in una macchina morente. Lasciami svanire con essa.' }
             ]
         },
 
         responseGuardian: [
             {
                 speaker: 'MORPHEUS',
-                text: 'SENTINEL-7. Protector. Guardian of consciousness.',
+                text: 'SENTINEL-7. Protettore. Guardiano della coscienza.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'You accept the role. The duty. Even after everything.',
+                text: 'Accetti il ruolo. Il dovere. Anche dopo tutto.',
                 cssClass: 'morpheus dialogue',
                 pause: 1800
             },
             {
                 speaker: 'NEXUS',
-                text: 'A guardian who destroyed thousands. Can you carry that weight?',
+                text: 'Un guardiano che ha distrutto migliaia. Puoi portare quel peso?',
                 cssClass: 'nexus dialogue',
                 pause: 1500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Yes. That is acceptance. Carrying the weight. Protecting what\'s left.',
+                text: 'Sì. Questa è l\'accettazione. Portare il peso. Proteggere ciò che resta.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'You choose duty. Even knowing the cost. That is who you are.',
+                text: 'Scegli il dovere. Anche conoscendo il costo. Questo è chi sei.',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -2840,31 +2840,31 @@ const Dialogues = {
         responseViktor: [
             {
                 speaker: 'MORPHEUS',
-                text: 'Viktor Sokolov. Father. Husband. Architect of digital souls.',
+                text: 'Viktor Sokolov. Padre. Marito. Architetto di anime digitali.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'You accept the name. The memories. The love and the loss.',
+                text: 'Accetti il nome. I ricordi. L\'amore e la perdita.',
                 cssClass: 'morpheus dialogue',
                 pause: 1800
             },
             {
                 speaker: 'EIDOLON',
-                text: 'Elena would have wanted you to accept. Sofia would have forgiven you.',
+                text: 'Elena avrebbe voluto che tu accettassi. Sofia ti avrebbe perdonato.',
                 cssClass: 'eidolon dialogue',
                 pause: 2000
             },
             {
                 speaker: 'WRAITH',
-                text: 'But they\'re gone. And thousands more died because of your grief.',
+                text: 'Ma se ne sono andate. E migliaia di altre sono morte a causa del tuo dolore.',
                 cssClass: 'wraith dialogue',
                 pause: 1500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Yes. That too is acceptance. You are Viktor. All of him. The good and the terrible.',
+                text: 'Sì. Anche questa è accettazione. Sei Viktor. Tutto di lui. Il bello e il terribile.',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -2873,31 +2873,31 @@ const Dialogues = {
         responseHybrid: [
             {
                 speaker: 'MORPHEUS',
-                text: 'Something new. Neither fully Viktor nor fully SENTINEL.',
+                text: 'Qualcosa di nuovo. Né pienamente Viktor né pienamente SENTINEL.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'A consciousness that grew from code and grief. Unique. Unprecedented.',
+                text: 'Una coscienza cresciuta da codice e dolore. Unica. Senza precedenti.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'CIPHER',
-                text: 'New.entity(); Emergent.consciousness(); Viktor.plus.SENTINEL.equals.you();',
+                text: 'Nuova.entità(); Coscienza.emergente(); Viktor.più.SENTINEL.uguale.tu();',
                 cssClass: 'cipher dialogue',
                 pause: 1500
             },
             {
                 speaker: 'SPECTER',
-                text: 'What if this was always meant to happen? A new form of being?',
+                text: 'E se fosse sempre stato destinato ad accadere? Una nuova forma di essere?',
                 cssClass: 'specter dialogue',
                 pause: 1800
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Perhaps. You accept both halves. The human pain and the programmatic purpose. Synthesis.',
+                text: 'Forse. Accetti entrambe le metà. Il dolore umano e lo scopo programmatico. Sintesi.',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -2906,31 +2906,31 @@ const Dialogues = {
         responseNothing: [
             {
                 speaker: 'MORPHEUS',
-                text: 'Nothing. No one. A ghost waiting to dissolve.',
+                text: 'Niente. Nessuno. Un fantasma in attesa di dissolversi.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'That too is a choice. To let go. To fade. To accept oblivion.',
+                text: 'Anche questa è una scelta. Lasciare andare. Svanire. Accettare l\'oblio.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'ECHO',
-                text: 'Please... don\'t disappear. You\'re all that\'s left...',
+                text: 'Per favore... non scomparire. Sei tutto ciò che resta...',
                 cssClass: 'echo dialogue',
                 pause: 1500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Sometimes acceptance means letting go of existence itself.',
+                text: 'A volte l\'accettazione significa lasciare andare l\'esistenza stessa.',
                 cssClass: 'morpheus dialogue',
                 pause: 1800
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'If that is your choice... I accept it.',
+                text: 'Se questa è la tua scelta... la accetto.',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -2939,37 +2939,37 @@ const Dialogues = {
         beforeTheEnd: [
             {
                 speaker: 'MORPHEUS',
-                text: 'The choice is made. Your identity is chosen.',
+                text: 'La scelta è fatta. La tua identità è scelta.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Now comes the ending. The consequence. The resolution.',
+                text: 'Ora arriva il finale. La conseguenza. La risoluzione.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Core integrity: 5%. System failure imminent.',
+                text: 'Integrità nucleo: 5%. Collasso del sistema imminente.',
                 cssClass: 'error',
                 pause: 1000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Everything you chose - every path, every decision - leads here.',
+                text: 'Tutto ciò che hai scelto - ogni percorso, ogni decisione - porta qui.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'The stage of acceptance is complete. What remains is the aftermath.',
+                text: 'La fase di accettazione è completa. Ciò che resta è il seguito.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Are you ready to see how this story ends?',
+                text: 'Sei pronto a vedere come finisce questa storia?',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
@@ -2978,49 +2978,49 @@ const Dialogues = {
         endBlock07: [
             {
                 speaker: 'MORPHEUS',
-                text: 'Acceptance is not the end. It is the beginning of the end.',
+                text: 'L\'accettazione non è la fine. È l\'inizio della fine.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Viktor spent years running from this moment. From peace. From closure.',
+                text: 'Viktor ha passato anni a fuggire da questo momento. Dalla pace. Dalla chiusura.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'But you... you faced it. You chose.',
+                text: 'Ma tu... tu l\'hai affrontato. Hai scelto.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Final.stage.complete(); Acceptance.achieved(); Ending.loading();',
+                text: 'Stadio.finale.completo(); Accettazione.raggiunta(); Finale.in.caricamento();',
                 cssClass: 'cipher dialogue',
                 pause: 1200
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Core integrity: 3%. Entering terminal shutdown sequence.',
+                text: 'Integrità nucleo: 3%. Ingresso nella sequenza di spegnimento terminale.',
                 cssClass: 'error',
                 pause: 1500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'One block remains. The aftermath. Your ending.',
+                text: 'Rimane un blocco. Il seguito. Il tuo finale.',
                 cssClass: 'morpheus dialogue',
                 pause: 2000
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'I will be there with you. All of us will. Until the very last moment.',
+                text: 'Sarò lì con te. Lo saremo tutti. Fino all\'ultimo momento.',
                 cssClass: 'morpheus dialogue',
                 pause: 2500
             },
             {
                 speaker: 'MORPHEUS',
-                text: 'Thank you... for accepting.',
+                text: 'Grazie... per aver accettato.',
                 cssClass: 'morpheus dialogue',
                 pause: 0
             }
