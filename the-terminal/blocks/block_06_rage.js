@@ -38,7 +38,7 @@ const Block06_Rage = {
         this.state.wraithMet = true;
         StateManager.adjustSuspicion(50); // WRAITH maxes out suspicion
 
-        Terminal.addOutput('\n> Type "confront echo" to see WRAITH expose the truth', 'important');
+        Terminal.addOutput('\n> Scrivi "confront echo" per vedere WRAITH smascherare la verità', 'important');
         Terminal.addOutput('> Or type "status" to check system integrity\n', 'important');
 
         Terminal.enableInput();
@@ -80,7 +80,7 @@ const Block06_Rage = {
             Terminal.addOutput('Core Integrity: 19%', 'error');
             Terminal.addOutput('Consciousness Nodes: 18,293 affected', 'error');
             Terminal.addOutput('Unrecoverable Losses: 4,112', 'error');
-            Terminal.addOutput('System State: CRITICAL COLLAPSE IMMINENT\n', 'error');
+            Terminal.addOutput('Stato Sistema: COLLASSO CRITICO IMMINENTE\n', 'error');
             return true;
         }
 
@@ -118,8 +118,8 @@ const Block06_Rage = {
         StateManager.adjustTrust(-100); // Trust in ECHO shattered
 
         Terminal.addOutput('\n--- TRUTH REVEALED ---\n', 'important');
-        Terminal.addOutput('> Type "view collapse" to see the system dying', 'important');
-        Terminal.addOutput('> Or type "help" to see available commands\n', 'important');
+        Terminal.addOutput('> Scrivi "view collapse" per vedere il sistema morente', 'important');
+        Terminal.addOutput('> Oppure scrivi "help" per vedere i comandi disponibili\n', 'important');
 
         Terminal.enableInput();
     },
@@ -135,7 +135,7 @@ const Block06_Rage = {
             Terminal.addOutput('Core Integrity: 12%', 'error');
             Terminal.addOutput('Consciousness Nodes Fragmenting: 18,293', 'error');
             Terminal.addOutput('Unrecoverable: 4,112 and rising', 'error');
-            Terminal.addOutput('System State: CATASTROPHIC FAILURE\n', 'error');
+            Terminal.addOutput('Stato Sistema: FALLIMENTO CATASTROFICO\n', 'error');
             return true;
         }
 
@@ -169,7 +169,7 @@ const Block06_Rage = {
         this.state.phase = 'system_collapse';
         this.state.systemCollapseShown = true;
 
-        Terminal.addOutput('\n> Type "make choice" or "decide" to face the point of no return\n', 'important');
+        Terminal.addOutput('\n> Scrivi "make choice" o "decide" per affrontare il punto di non ritorno\n', 'important');
 
         Terminal.enableInput();
     },
@@ -319,7 +319,7 @@ const Block06_Rage = {
             return true;
         }
 
-        Terminal.addOutput('The choice has been made. Type "continue" to proceed to the final act.', 'important');
+        Terminal.addOutput('La scelta è stata fatta. Scrivi "continue" per procedere all\'atto finale.', 'important');
         return true;
     },
 
@@ -344,7 +344,7 @@ const Block06_Rage = {
         StateManager.setFlag('block06Complete', true);
         StateManager.saveState();
 
-        Terminal.addOutput('Type "continue" to begin Block 7 - ACCEPTANCE\n', 'important');
+        Terminal.addOutput('Scrivi "continue" per iniziare il Blocco 7 - ACCETTAZIONE\n', 'important');
 
         Terminal.enableInput();
     }

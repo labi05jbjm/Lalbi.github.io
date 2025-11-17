@@ -130,7 +130,7 @@ const Block04_Fractures = {
             const victimId = args[1];
 
             if (!victimId) {
-                Terminal.addOutput('Available victims: marcus, elena, james', 'system');
+                Terminal.addOutput('Vittime disponibili: marcus, elena, james', 'system');
                 Terminal.addOutput('Usage: witness victim <id>', 'system');
                 return true;
             }
@@ -161,7 +161,7 @@ const Block04_Fractures = {
         const dialogueKey = victims[victimId.toLowerCase()];
 
         if (!dialogueKey) {
-            Terminal.addOutput('Unknown victim. Available: marcus, elena, james', 'error');
+            Terminal.addOutput('Vittima sconosciuta. Disponibili: marcus, elena, james', 'error');
             return;
         }
 
@@ -425,7 +425,7 @@ const Block04_Fractures = {
 
         this.state.phase = 'complete';
 
-        Terminal.addOutput("Type 'continue' to proceed to next block.", 'success');
+        Terminal.addOutput("Scrivi 'continue' per procedere al prossimo blocco.", 'success');
     },
 
     async endBlock() {

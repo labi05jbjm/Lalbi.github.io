@@ -131,7 +131,7 @@ const Block03_DeepDive = {
 
             if (!memoryId) {
                 Terminal.addOutput('Usage: view memory <id>', 'error');
-                Terminal.addOutput('Available: 021847 (Mika Yoshida)', 'system');
+                Terminal.addOutput('Disponibile: 021847 (Mika Yoshida)', 'system');
                 return true;
             }
 
@@ -337,7 +337,7 @@ const Block03_DeepDive = {
         } else if (target === 'nexus') {
             await this.talkToNexus(message);
         } else {
-            Terminal.addOutput('Unknown entity. Use: echo, cipher, or nexus', 'error');
+            Terminal.addOutput('Entità sconosciuta. Usa: echo, cipher, o nexus', 'error');
         }
 
         return true;
@@ -530,7 +530,7 @@ const Block03_DeepDive = {
         Terminal.addOutput(`Consciousnesses destroyed: ${StateManager.state.stats.consciousnessDestroyed}`, 'error');
         Terminal.addOutput(`Memories witnessed: ${this.state.memoriesWitnessed}`, 'warning');
         Terminal.addOutput('');
-        Terminal.addOutput("Type 'continue' to proceed to Block 4", 'warning');
+        Terminal.addOutput("Scrivi 'continue' per procedere al Blocco 4", 'warning');
         Terminal.addOutput('');
     },
 

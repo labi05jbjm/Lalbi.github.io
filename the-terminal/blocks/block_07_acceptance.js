@@ -39,7 +39,7 @@ const Block07_Acceptance = {
         this.state.phase = 'introduction';
         this.state.morpheusMet = true;
 
-        Terminal.addOutput('\n> Type "learn acceptance" to understand what acceptance means', 'important');
+        Terminal.addOutput('\n> Scrivi "learn acceptance" per capire cosa significa l\'accettazione', 'important');
         Terminal.addOutput('> Or type "talk morpheus" to speak with the final fragment\n', 'important');
 
         Terminal.enableInput();
@@ -106,7 +106,7 @@ const Block07_Acceptance = {
 
         this.state.phase = 'review';
 
-        Terminal.addOutput('\n> Type "review choices" to see the path you have taken\n', 'important');
+        Terminal.addOutput('\n> Scrivi "review choices" per vedere il percorso che hai intrapreso\n', 'important');
 
         Terminal.enableInput();
     },
@@ -183,7 +183,7 @@ const Block07_Acceptance = {
         this.state.reviewComplete = true;
         this.state.phase = 'all_fragments';
 
-        Terminal.addOutput('> Type "hear all" to listen to all fragments speak\n', 'important');
+        Terminal.addOutput('> Scrivi "hear all" per ascoltare tutti i frammenti parlare\n', 'important');
 
         Terminal.enableInput();
     },
@@ -304,7 +304,7 @@ const Block07_Acceptance = {
             return true;
         }
 
-        Terminal.addOutput('The choice has been made. Type "continue" to proceed to the final block.', 'important');
+        Terminal.addOutput('La scelta è stata fatta. Scrivi "continue" per procedere al blocco finale.', 'important');
         return true;
     },
 
@@ -362,7 +362,7 @@ const Block07_Acceptance = {
         StateManager.setFlag('block07Complete', true);
         StateManager.saveState();
 
-        Terminal.addOutput('Type "continue" to begin Block 8 - AFTERMATH\n', 'important');
+        Terminal.addOutput('Scrivi "continue" per iniziare il Blocco 8 - AFTERMATH\n', 'important');
 
         Terminal.enableInput();
     }

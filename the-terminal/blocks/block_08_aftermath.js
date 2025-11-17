@@ -243,7 +243,7 @@ const Block08_Aftermath = {
             return true;
         }
 
-        Terminal.addOutput('Game complete. Type "restart" to play again or "stats" to see final statistics.', 'system');
+        Terminal.addOutput('Gioco completato. Scrivi "restart" per rigiocare o "stats" per vedere le statistiche finali.', 'system');
         return true;
     }
 };

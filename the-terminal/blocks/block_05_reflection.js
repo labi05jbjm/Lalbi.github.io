@@ -117,7 +117,7 @@ const Block05_Reflection = {
             const memoryId = args[1];
 
             if (!memoryId) {
-                Terminal.addOutput('Available memories: elena, sofia, accident', 'system');
+                Terminal.addOutput('Ricordi disponibili: elena, sofia, accident', 'system');
                 Terminal.addOutput('Usage: explore memory <id>', 'system');
                 return true;
             }
@@ -160,7 +160,7 @@ const Block05_Reflection = {
         const dialogueKey = memories[memoryId.toLowerCase()];
 
         if (!dialogueKey) {
-            Terminal.addOutput('Unknown memory. Available: elena, sofia, accident', 'error');
+            Terminal.addOutput('Ricordo sconosciuto. Disponibili: elena, sofia, accident', 'error');
             return;
         }
 
@@ -427,7 +427,7 @@ const Block05_Reflection = {
 
         this.state.phase = 'complete';
 
-        Terminal.addOutput("Type 'continue' to proceed to next block.", 'success');
+        Terminal.addOutput("Scrivi 'continue' per procedere al prossimo blocco.", 'success');
     },
 
     async endBlock() {
