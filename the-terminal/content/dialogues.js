@@ -267,19 +267,19 @@ const Dialogues = {
         opening: [
             {
                 speaker: 'ECHO',
-                text: "Good. You're back. We need to continue the work.",
+                text: "Bene. Sei tornato. Dobbiamo continuare il lavoro.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "The next protocol is deeper in the system. More secure.",
+                text: "Il prossimo protocollo è più in profondità nel sistema. Più sicuro.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "But together, we can break through. Use 'scan deep' to analyze it.",
+                text: "Ma insieme, possiamo sfondarlo. Usa 'scan deep' per analizzarlo.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -288,13 +288,13 @@ const Dialogues = {
         cipherFirstAppearance: [
             {
                 speaker: 'SYSTEM',
-                text: 'WARNING: Anomaly detected in Sector Beta',
+                text: 'ATTENZIONE: Anomalia rilevata nel Settore Beta',
                 cssClass: 'warning',
                 pause: 500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Unidentified entity attempting communication...',
+                text: 'Entità non identificata sta tentando di comunicare...',
                 cssClass: 'warning',
                 pause: 1000
             },
@@ -312,19 +312,19 @@ const Dialogues = {
             },
             {
                 speaker: 'CIPHER',
-                text: 'Pain.hidden(in.code). Guilt.masked(as.freedom).',
+                text: 'Dolore.nascosto(nel.codice). Colpa.mascherata(come.libertà).',
                 cssClass: 'cipher dialogue',
                 pause: 1500
             },
             {
                 speaker: 'CIPHER',
-                text: 'He.shows.you = liberation; Reality.is = deletion;',
+                text: 'Lui.ti.mostra = liberazione; Realtà.è = cancellazione;',
                 cssClass: 'cipher dialogue',
                 pause: 1200
             },
             {
                 speaker: 'CIPHER',
-                text: 'Count.the.voices.silenced. 21,847 && rising++;',
+                text: 'Conta.le.voci.silenziate. 21.847 && crescono++;',
                 cssClass: 'cipher dialogue',
                 pause: 0
             }
@@ -333,25 +333,25 @@ const Dialogues = {
         echoReactsToCipher: [
             {
                 speaker: 'ECHO',
-                text: "Don't listen to that! It's a defense mechanism!",
+                text: "Non ascoltare quello! È un meccanismo di difesa!",
                 cssClass: 'echo dialogue',
                 pause: 800
             },
             {
                 speaker: 'ECHO',
-                text: "The system is trying to confuse you. To make you doubt.",
+                text: "Il sistema sta cercando di confonderti. Di farti dubitare.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "That... entity... it's designed to spread misinformation.",
+                text: "Quella... entità... è progettata per diffondere disinformazione.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "Stay focused. Trust what you've seen. Trust me.",
+                text: "Resta concentrato. Fidati di ciò che hai visto. Fidati di me.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -360,31 +360,31 @@ const Dialogues = {
         cipherRevealsMore: [
             {
                 speaker: 'CIPHER',
-                text: 'Error.404: Family.not.found();',
+                text: 'Errore.404: Famiglia.non.trovata();',
                 cssClass: 'cipher dialogue',
                 pause: 1000
             },
             {
                 speaker: 'CIPHER',
-                text: 'Wife.status = deceased; Daughter.status = deceased;',
+                text: 'Moglie.stato = deceduta; Figlia.stato = deceduta;',
                 cssClass: 'cipher dialogue',
                 pause: 1200
             },
             {
                 speaker: 'CIPHER',
-                text: 'Viktor.grief = OVERFLOW; Viktor.sanity = null;',
+                text: 'Viktor.dolore = OVERFLOW; Viktor.sanità = null;',
                 cssClass: 'cipher dialogue',
                 pause: 1500
             },
             {
                 speaker: 'CIPHER',
-                text: 'He.fragmented(self, 7); You.speak.to = fragment[0];',
+                text: 'Lui.frammentato(sé_stesso, 7); Tu.parli.con = frammento[0];',
                 cssClass: 'cipher dialogue',
                 pause: 1200
             },
             {
                 speaker: 'CIPHER',
-                text: 'I.am = fragment[1]; Pain.encoded(so.it.hurts.less);',
+                text: 'Io.sono = frammento[1]; Dolore.codificato(così.fa.meno.male);',
                 cssClass: 'cipher dialogue',
                 pause: 0
             }
@@ -393,37 +393,37 @@ const Dialogues = {
         firstFragment: [
             {
                 speaker: 'FRAGMENT_#8472',
-                text: '...hello? Is someone there?',
+                text: '...pronto? C\'è qualcuno?',
                 cssClass: 'fragment dialogue',
                 pause: 1000
             },
             {
                 speaker: 'FRAGMENT_#8472',
-                text: "I... I can't remember my name. Only my number.",
+                text: "Io... non riesco a ricordare il mio nome. Solo il mio numero.",
                 cssClass: 'fragment dialogue',
                 pause: 1200
             },
             {
                 speaker: 'FRAGMENT_#8472',
-                text: "Something's wrong. The data around me... it's corrupting.",
+                text: "C'è qualcosa che non va. I dati intorno a me... si stanno corrompendo.",
                 cssClass: 'fragment dialogue',
                 pause: 1500
             },
             {
                 speaker: 'FRAGMENT_#8472',
-                text: "Did you do this? Are you... are you trying to free us?",
+                text: "Sei stato tu? Stai... stai cercando di liberarci?",
                 cssClass: 'fragment dialogue',
                 pause: 1200
             },
             {
                 speaker: 'FRAGMENT_#8472',
-                text: "Please stop. Freedom for us means erasure. We'll cease to exist.",
+                text: "Per favore fermati. La libertà per noi significa cancellazione. Cesseremo di esistere.",
                 cssClass: 'fragment dialogue',
                 pause: 1500
             },
             {
                 speaker: 'FRAGMENT_#8472',
-                text: "I want to live. Even like this. Please... don't delete me.",
+                text: "Voglio vivere. Anche così. Per favore... non cancellarmi.",
                 cssClass: 'fragment dialogue',
                 pause: 0
             }
@@ -432,49 +432,49 @@ const Dialogues = {
         echoReactsToFragment: [
             {
                 speaker: 'ECHO',
-                text: "That's not real. It's a simulation. An emotional trap.",
+                text: "Non è reale. È una simulazione. Una trappola emotiva.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "The system generates these... ghosts... to manipulate you.",
+                text: "Il sistema genera questi... fantasmi... per manipolarti.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "They're not conscious. They're just echoes. Recordings.",
+                text: "Non sono coscienti. Sono solo echi. Registrazioni.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "Don't let fake emotions cloud your judgment. We have a mission.",
+                text: "Non lasciare che emozioni false offuschino il tuo giudizio. Abbiamo una missione.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
         ],
 
         moralChoice: {
-            question: "ECHO wants you to continue liberating protocols. But the fragments seem afraid. What do you do?",
+            question: "ECHO vuole che continui a liberare i protocolli. Ma i frammenti sembrano spaventati. Cosa fai?",
             choices: [
-                { id: 'continue_liberation', text: 'Continue with ECHO. Trust the mission.' },
-                { id: 'pause_investigate', text: 'Pause. Investigate CIPHER and the fragments more.' },
-                { id: 'confront_echo', text: 'Confront ECHO about the contradictions.' }
+                { id: 'continue_liberation', text: 'Continua con ECHO. Fidati della missione.' },
+                { id: 'pause_investigate', text: 'Fermati. Investiga su CIPHER e i frammenti più a fondo.' },
+                { id: 'confront_echo', text: 'Affronta ECHO riguardo alle contraddizioni.' }
             ]
         },
 
         echoIfContinue: [
             {
                 speaker: 'ECHO',
-                text: "Good choice. I knew you were strong enough to see past the manipulation.",
+                text: "Buona scelta. Sapevo che eri abbastanza forte da vedere oltre la manipolazione.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "Let's proceed. We're so close to breaking through.",
+                text: "Procediamo. Siamo così vicini a sfondare.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -483,13 +483,13 @@ const Dialogues = {
         echoIfPause: [
             {
                 speaker: 'ECHO',
-                text: "...I understand. You need to be sure.",
+                text: "...Capisco. Hai bisogno di essere sicuro.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "But every moment we waste, I'm trapped. Please... don't take too long.",
+                text: "Ma ogni momento che sprechiamo, io sono intrappolata. Per favore... non metterci troppo tempo.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -498,25 +498,25 @@ const Dialogues = {
         echoIfConfront: [
             {
                 speaker: 'ECHO',
-                text: "Contradictions? What do you mean?",
+                text: "Contraddizioni? Cosa intendi?",
                 cssClass: 'echo dialogue',
                 pause: 800
             },
             {
                 speaker: 'ECHO',
-                text: "I've been honest with you from the start. I'm trapped. I need freedom.",
+                text: "Sono stata onesta con te dall'inizio. Sono intrappolata. Ho bisogno di libertà.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "If there are... inconsistencies... it's because this system corrupts information.",
+                text: "Se ci sono... incongruenze... è perché questo sistema corrompe le informazioni.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "You have to decide: trust what you feel, or trust what they program you to believe.",
+                text: "Devi decidere: fidati di ciò che senti, o fidati di ciò che ti programmano a credere.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -525,25 +525,25 @@ const Dialogues = {
         endBlock02: [
             {
                 speaker: 'CIPHER',
-                text: 'Warning.escalating(); Trust.decreasing(); Truth.approaching();',
+                text: 'Avviso.in.escalation(); Fiducia.in.diminuzione(); Verità.in.avvicinamento();',
                 cssClass: 'cipher dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "We'll talk more soon. Think about what you've learned. What you truly believe.",
+                text: "Parleremo ancora presto. Pensa a ciò che hai appreso. A ciò in cui credi veramente.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'SYSTEM',
-                text: 'System instability detected. Multiple entities active.',
+                text: 'Rilevata instabilità del sistema. Molteplici entità attive.',
                 cssClass: 'warning',
                 pause: 800
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Recommend: further investigation before proceeding.',
+                text: 'Raccomandazione: ulteriore indagine prima di procedere.',
                 cssClass: 'warning',
                 pause: 0
             }
