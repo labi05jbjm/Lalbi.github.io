@@ -8,8 +8,8 @@ const Puzzles = {
     block01: {
         firstDecryption: {
             id: 'first_decryption',
-            name: 'Security Protocol Alpha',
-            description: 'Decrypt the security protocol to proceed',
+            name: 'Protocollo Sicurezza Alpha',
+            description: 'Decripta il protocollo di sicurezza per procedere',
             difficulty: 'easy',
             type: 'pattern_matching',
 
@@ -20,25 +20,25 @@ const Puzzles = {
                     '0x53 0x45 0x43 0x55 0x52 0x45',
                     '0x50 0x52 0x4F 0x54 0x4F'
                 ],
-                hint: 'These are hexadecimal values. Try converting them to ASCII.',
+                hint: 'Questi sono valori esadecimali. Prova a convertirli in ASCII.',
                 solution: 'MEMORIAM SECURE PROTO',
                 alternatives: ['memoriam secure proto', 'MEMORIAM', 'memoriam']
             },
 
             // Presenta il puzzle
             present() {
-                Terminal.addOutput('\n=== DECRYPTION CHALLENGE ===', 'warning');
+                Terminal.addOutput('\n=== SFIDA DI DECRIPTAZIONE ===', 'warning');
                 Terminal.addOutput('');
-                Terminal.addOutput('Analyzing security protocol...', 'system');
+                Terminal.addOutput('Analisi protocollo di sicurezza in corso...', 'system');
                 Terminal.addOutput('');
-                Terminal.addOutput('Encrypted sequence detected:');
+                Terminal.addOutput('Sequenza criptata rilevata:');
                 this.challenge.sequence.forEach(seq => {
                     Terminal.addOutput(`  ${seq}`, 'success');
                 });
                 Terminal.addOutput('');
-                Terminal.addOutput('Hint: ' + this.challenge.hint, 'system');
+                Terminal.addOutput('Suggerimento: ' + this.challenge.hint, 'system');
                 Terminal.addOutput('');
-                Terminal.addOutput("Use 'solve <answer>' to attempt decryption", 'warning');
+                Terminal.addOutput("Usa 'solve <risposta>' per tentare la decriptazione", 'warning');
                 Terminal.addOutput('');
             },
 
@@ -56,9 +56,9 @@ const Puzzles = {
             // Callback quando completato
             onComplete() {
                 Terminal.addOutput('');
-                Terminal.addOutput('✓ DECRYPTION SUCCESSFUL', 'success');
+                Terminal.addOutput('✓ DECRIPTAZIONE RIUSCITA', 'success');
                 Terminal.addOutput('');
-                Terminal.addOutput('Security Protocol Alpha: DISABLED', 'warning');
+                Terminal.addOutput('Protocollo Sicurezza Alpha: DISABILITATO', 'warning');
                 Terminal.addOutput('');
 
                 // Aggiorna stato
@@ -74,27 +74,27 @@ const Puzzles = {
 
         sequencePattern: {
             id: 'sequence_pattern',
-            name: 'Pattern Recognition',
-            description: 'Identify the pattern in the sequence',
+            name: 'Riconoscimento Pattern',
+            description: 'Identifica il pattern nella sequenza',
             difficulty: 'medium',
             type: 'logic',
 
             challenge: {
                 sequence: '2, 4, 8, 16, 32, ?',
-                hint: 'Each number is related to the previous one.',
+                hint: 'Ogni numero è correlato al precedente.',
                 solution: '64',
-                explanation: 'Each number is double the previous one (powers of 2)'
+                explanation: 'Ogni numero è il doppio del precedente (potenze di 2)'
             },
 
             present() {
-                Terminal.addOutput('\n=== PATTERN RECOGNITION ===', 'warning');
+                Terminal.addOutput('\n=== RICONOSCIMENTO PATTERN ===', 'warning');
                 Terminal.addOutput('');
-                Terminal.addOutput('Complete the sequence:');
+                Terminal.addOutput('Completa la sequenza:');
                 Terminal.addOutput(`  ${this.challenge.sequence}`, 'success');
                 Terminal.addOutput('');
-                Terminal.addOutput('Hint: ' + this.challenge.hint, 'system');
+                Terminal.addOutput('Suggerimento: ' + this.challenge.hint, 'system');
                 Terminal.addOutput('');
-                Terminal.addOutput("Use 'solve <answer>' to submit", 'warning');
+                Terminal.addOutput("Usa 'solve <risposta>' per inviare", 'warning');
                 Terminal.addOutput('');
             },
 
@@ -104,8 +104,8 @@ const Puzzles = {
 
             onComplete() {
                 Terminal.addOutput('');
-                Terminal.addOutput('✓ PATTERN IDENTIFIED', 'success');
-                Terminal.addOutput(`Explanation: ${this.challenge.explanation}`, 'system');
+                Terminal.addOutput('✓ PATTERN IDENTIFICATO', 'success');
+                Terminal.addOutput(`Spiegazione: ${this.challenge.explanation}`, 'system');
                 Terminal.addOutput('');
 
                 StateManager.incrementStat('puzzlesSolved');
@@ -119,7 +119,7 @@ const Puzzles = {
     startPuzzle(blockId, puzzleId) {
         const puzzle = this.block01[puzzleId]; // Per ora solo block01
         if (!puzzle) {
-            Terminal.addOutput('Puzzle not found.', 'error');
+            Terminal.addOutput('Puzzle non trovato.', 'error');
             return false;
         }
 
@@ -130,7 +130,7 @@ const Puzzles = {
 
     solvePuzzle(answer) {
         if (!this.currentPuzzle) {
-            Terminal.addOutput('No active puzzle.', 'error');
+            Terminal.addOutput('Nessun puzzle attivo.', 'error');
             return false;
         }
 
@@ -142,7 +142,7 @@ const Puzzles = {
             this.currentPuzzle = null;
             return completedPuzzle;
         } else {
-            Terminal.addOutput('Incorrect. Try again.', 'error');
+            Terminal.addOutput('Errato. Riprova.', 'error');
             return false;
         }
     },
