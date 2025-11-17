@@ -20,8 +20,14 @@ const GameEngine = {
         // Registra i blocchi
         this.registerBlocks();
 
-        // Mostra il menu principale
-        await MainMenu.show();
+        // Check if language needs to be selected
+        if (!LanguageSelector.isLanguageSelected()) {
+            console.log('[ENGINE] First time - showing language selection');
+            await LanguageSelector.show();
+        } else {
+            console.log('[ENGINE] Language already selected - showing main menu');
+            await MainMenu.show();
+        }
 
         this.initialized = true;
         console.log('[ENGINE] Initialization complete');
