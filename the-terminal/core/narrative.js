@@ -220,6 +220,23 @@ const NarrativeEngine = {
         await this.wait(pause);
     },
 
+    // Sistema di narrazione NEXUS
+    async nexusSays(text, options = {}) {
+        const {
+            typeEffect = true,
+            pause = 800,
+            glitch = false
+        } = options;
+
+        if (glitch) {
+            this.triggerGlitch(250);
+            await this.wait(250);
+        }
+
+        await this.showDialogue('NEXUS', text, 'nexus dialogue', typeEffect);
+        await this.wait(pause);
+    },
+
     // Sistema di narrazione SYSTEM
     async systemMessage(text, cssClass = 'system', options = {}) {
         const {

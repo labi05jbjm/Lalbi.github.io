@@ -407,3 +407,16 @@ body {
     text-shadow: 0 0 3px #ffaa00;
     opacity: 0.9;
 }
+
+.output-line.nexus {
+    color: #ff6600;
+    text-shadow: 0 0 8px #ff6600;
+    font-weight: bold;
+}
+
+.output-line.memory {
+    color: #ffcc99;
+    text-shadow: 0 0 3px #ffcc99;
+    opacity: 0.85;
+    font-style: italic;
+}
