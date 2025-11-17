@@ -78,7 +78,18 @@ The game is divided into 8 blocks, each ~30 minutes:
 - Final identity choice (guardian/viktor/hybrid/nothing)
 - Setup for multiple endings
 
-**🚧 BLOCK 8 - IN DEVELOPMENT**
+**✅ BLOCK 8 (AFTERMATH) - COMPLETE**
+- 5 unique endings based on player choices
+- Ending selection system using Block 6 and Block 7 choices
+- DESTRUCTION: Complete system purge
+- SALVATION: System restoration
+- SACRIFICE: Become the archive core
+- ASCENSION: Viktor reborn whole
+- OBLIVION: Fade into peace
+- Epilogue and credits
+- Final statistics and game completion
+
+**🎉 GAME COMPLETE - ALL 8 BLOCKS FINISHED! 🎉**
 
 ## How to Play
 
