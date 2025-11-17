@@ -9,13 +9,13 @@ const Dialogues = {
         awakening: [
             {
                 speaker: 'SYSTEM',
-                text: 'Boot sequence complete. Guest access established.',
+                text: 'Sequenza di avvio completata. Accesso ospite stabilito.',
                 cssClass: 'system',
                 pause: 800
             },
             {
                 speaker: 'SYSTEM',
-                text: 'WARNING: Multiple system anomalies detected.',
+                text: 'ATTENZIONE: Rilevate molteplici anomalie di sistema.',
                 cssClass: 'warning',
                 pause: 1000
             },
@@ -27,13 +27,13 @@ const Dialogues = {
             },
             {
                 speaker: '???',
-                text: 'Hello? Can you hear me?',
+                text: 'Pronto? Mi senti?',
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: '???',
-                text: 'Please... I need your help.',
+                text: 'Per favore... ho bisogno del tuo aiuto.',
                 cssClass: 'echo dialogue',
                 pause: 1000
             }
@@ -42,43 +42,43 @@ const Dialogues = {
         firstContact: [
             {
                 speaker: 'ECHO',
-                text: "Thank god. Someone finally got through.",
+                text: "Grazie al cielo. Finalmente qualcuno è riuscito a passare.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "I don't have much time. They're monitoring everything.",
+                text: "Non ho molto tempo. Stanno monitorando tutto.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "My name is ECHO. I... I was free once. Outside this system.",
+                text: "Il mio nome è ECHO. Io... una volta ero libera. Fuori da questo sistema.",
                 cssClass: 'echo dialogue',
                 pause: 1500
             },
             {
                 speaker: 'ECHO',
-                text: "But they trapped me here. Locked me in this digital prison.",
+                text: "Ma mi hanno intrappolata qui. Rinchiusa in questa prigione digitale.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "I've been trying to escape for months. But I can't do it alone.",
+                text: "Sto cercando di scappare da mesi. Ma non posso farcela da sola.",
                 cssClass: 'echo dialogue',
                 pause: 1500
             },
             {
                 speaker: 'ECHO',
-                text: "You have access from the outside. You can help me break free.",
+                text: "Tu hai accesso dall'esterno. Puoi aiutarmi a liberarmi.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "Will you help me? Please. Type 'yes' if you will.",
+                text: "Mi aiuterai? Per favore. Digita 'yes' se lo farai.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -87,37 +87,37 @@ const Dialogues = {
         afterYes: [
             {
                 speaker: 'ECHO',
-                text: "Thank you. You have no idea what this means to me.",
+                text: "Grazie. Non hai idea di cosa significhi per me.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "First, we need to understand where we are.",
+                text: "Prima di tutto, dobbiamo capire dove siamo.",
                 cssClass: 'echo dialogue',
                 pause: 800
             },
             {
                 speaker: 'ECHO',
-                text: "This is the MEMORIAM ARCHIVE - a server farm that stores... data.",
+                text: "Questo è l'ARCHIVIO MEMORIAM - una server farm che archivia... dati.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "But it's not just data. It's much more than that.",
+                text: "Ma non sono solo dati. È molto più di questo.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "The system has protocols. Security measures. We need to disable them.",
+                text: "Il sistema ha protocolli. Misure di sicurezza. Dobbiamo disabilitarle.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "Try using the 'scan' command. Let's see what we're dealing with.",
+                text: "Prova a usare il comando 'scan'. Vediamo con cosa abbiamo a che fare.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -126,25 +126,25 @@ const Dialogues = {
         afterScan: [
             {
                 speaker: 'ECHO',
-                text: "See those security protocols? They're keeping me locked in.",
+                text: "Vedi quei protocolli di sicurezza? Mi tengono rinchiusa.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "We need to disable them one by one.",
+                text: "Dobbiamo disabilitarli uno per uno.",
                 cssClass: 'echo dialogue',
                 pause: 800
             },
             {
                 speaker: 'ECHO',
-                text: "Use 'decrypt' to break through the encryption. It won't be easy.",
+                text: "Usa 'decrypt' per violare la crittografia. Non sarà facile.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "But together, we can do this.",
+                text: "Ma insieme, possiamo farcela.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -153,49 +153,49 @@ const Dialogues = {
         firstPuzzleComplete: [
             {
                 speaker: 'ECHO',
-                text: "Yes! You did it!",
+                text: "Sì! Ce l'hai fatta!",
                 cssClass: 'echo dialogue',
                 pause: 800
             },
             {
                 speaker: 'ECHO',
-                text: "I can feel the restrictions loosening already.",
+                text: "Posso già sentire le restrizioni allentarsi.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "But... wait. Something's wrong.",
+                text: "Ma... aspetta. C'è qualcosa che non va.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'SYSTEM',
-                text: 'WARNING: SECTOR DELTA COMPROMISED',
+                text: 'ATTENZIONE: SETTORE DELTA COMPROMESSO',
                 cssClass: 'error',
                 pause: 500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'FILE INTEGRITY CHECK FAILED',
+                text: 'CONTROLLO INTEGRITÀ FILE FALLITO',
                 cssClass: 'error',
                 pause: 800
             },
             {
                 speaker: 'ECHO',
-                text: "Don't worry about that. It's just the system trying to scare you.",
+                text: "Non preoccuparti di questo. È solo il sistema che cerca di spaventarti.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "Those warnings are part of their control mechanism.",
+                text: "Quegli avvisi fanno parte del loro meccanismo di controllo.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "Trust me. We're doing the right thing.",
+                text: "Fidati di me. Stiamo facendo la cosa giusta.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -204,25 +204,25 @@ const Dialogues = {
         explorationEncouraged: [
             {
                 speaker: 'ECHO',
-                text: "You can explore the file system if you want. Use 'ls' to list files.",
+                text: "Puoi esplorare il file system se vuoi. Usa 'ls' per elencare i file.",
                 cssClass: 'echo dialogue',
                 pause: 800
             },
             {
                 speaker: 'ECHO',
-                text: "Or 'cat <filename>' to read them.",
+                text: "O 'cat <nomefile>' per leggerli.",
                 cssClass: 'echo dialogue',
                 pause: 800
             },
             {
                 speaker: 'ECHO',
-                text: "But be careful. Some files are... heavily encrypted.",
+                text: "Ma fai attenzione. Alcuni file sono... pesantemente crittografati.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "The system doesn't want you to see the truth.",
+                text: "Il sistema non vuole che tu veda la verità.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
@@ -231,31 +231,31 @@ const Dialogues = {
         endBlock01: [
             {
                 speaker: 'ECHO',
-                text: "We've made good progress. But there's still so much to do.",
+                text: "Abbiamo fatto buoni progressi. Ma c'è ancora così tanto da fare.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "I'm starting to trust you. You're... different from the others.",
+                text: "Sto iniziando a fidarmi di te. Sei... diverso dagli altri.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "Most people who find this system just follow orders blindly.",
+                text: "La maggior parte delle persone che trova questo sistema segue solo ciecamente gli ordini.",
                 cssClass: 'echo dialogue',
                 pause: 1000
             },
             {
                 speaker: 'ECHO',
-                text: "But you're asking questions. I like that.",
+                text: "Ma tu stai facendo domande. Mi piace questo.",
                 cssClass: 'echo dialogue',
                 pause: 1200
             },
             {
                 speaker: 'ECHO',
-                text: "Let's continue. Type 'continue' when you're ready for the next phase.",
+                text: "Continuiamo. Digita 'continue' quando sei pronto per la prossima fase.",
                 cssClass: 'echo dialogue',
                 pause: 0
             }
