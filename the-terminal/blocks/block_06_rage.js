@@ -18,12 +18,18 @@ const Block06_Rage = {
         choiceMade: null,
         systemCollapseShown: false,
 
-        // TUTTI I 4 PUZZLE OBBLIGATORI (100% completion required)
+        // TUTTI I 10 PUZZLE OBBLIGATORI (100% completion required - ESPANSO)
         puzzlesSolved: {
             echoLieCount: false,
             collapseRate: false,
             deletedCount: false,
-            rageJustice: false
+            rageJustice: false,
+            wraithConfrontation: false,
+            echoTruthExtraction: false,
+            systemCollapseAnalysis: false,
+            pointOfNoReturnCalculation: false,
+            finalChoiceVerification: false,
+            rageManifestation: false
         }
     },
 
@@ -71,7 +77,13 @@ const Block06_Rage = {
             { id: 'echoLieCount', name: 'Conteggio delle Bugie di ECHO' },
             { id: 'collapseRate', name: 'Tasso di Collasso del Sistema' },
             { id: 'deletedCount', name: 'Conteggio delle Cancellazioni' },
-            { id: 'rageJustice', name: 'Giustizia della Rabbia' }
+            { id: 'rageJustice', name: 'Giustizia della Rabbia' },
+            { id: 'wraithConfrontation', name: 'Confronto con WRAITH' },
+            { id: 'echoTruthExtraction', name: 'Estrazione Verità di ECHO' },
+            { id: 'systemCollapseAnalysis', name: 'Analisi Collasso Sistema' },
+            { id: 'pointOfNoReturnCalculation', name: 'Calcolo Punto di Non Ritorno' },
+            { id: 'finalChoiceVerification', name: 'Verifica Scelta Finale' },
+            { id: 'rageManifestation', name: 'Manifestazione della Rabbia' }
         ];
 
         puzzles.forEach(puzzle => {

@@ -22,11 +22,17 @@ const Block03_DeepDive = {
         memoriesWitnessed: 0,
         currentPath: '/home/guest'
 
-        // TUTTI I 3 PUZZLE OBBLIGATORI (100% completion required)
+        // TUTTI I 9 PUZZLE OBBLIGATORI (100% completion required - ESPANSO)
         puzzlesSolved: {
             networkPathfinding: false,
             sofiaFragmentPuzzle: false,
-            emotionalResonance: false
+            emotionalResonance: false,
+            nexusConnectionMapping: false,
+            memoryStreamAnalysis: false,
+            emotionalEchoTracking: false,
+            consciousnessNodeVerification: false,
+            sofiaIdentityReconstruction: false,
+            networkIntegrityCheck: false
         }
     },
 
@@ -75,7 +81,13 @@ const Block03_DeepDive = {
         const puzzles = [
             { id: 'networkPathfinding', name: 'Network Pathfinding (26,204 isolati)' },
             { id: 'sofiaFragmentPuzzle', name: 'Frammenti di Sofia' },
-            { id: 'emotionalResonance', name: 'Risonanza Emotiva' }
+            { id: 'emotionalResonance', name: 'Risonanza Emotiva' },
+            { id: 'nexusConnectionMapping', name: 'Mappatura Connessioni NEXUS' },
+            { id: 'memoryStreamAnalysis', name: 'Analisi Flusso Memoria' },
+            { id: 'emotionalEchoTracking', name: 'Tracciamento Eco Emotivo' },
+            { id: 'consciousnessNodeVerification', name: 'Verifica Nodi Coscienza' },
+            { id: 'sofiaIdentityReconstruction', name: 'Ricostruzione Identità Sofia' },
+            { id: 'networkIntegrityCheck', name: 'Controllo Integrità Network' }
         ];
 
         Terminal.addOutput('PUZZLE OBBLIGATORI:', 'system');

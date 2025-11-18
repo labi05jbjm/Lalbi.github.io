@@ -33,45 +33,84 @@ const Block01_Awakening = {
         hasRespondedToEcho: false,
         hasScanned: false,
 
-        // Tracking puzzle (tutti obbligatori ora)
+        // Tracking puzzle (tutti obbligatori ora - ESPANSO A 10 PUZZLE)
         puzzlesSolved: {
             firstDecryption: false,
             passwordDiscovery: false,
             echoCodeBreaker: false,
-            protocolSequence: false
+            protocolSequence: false,
+            systemDiagnostics: false,
+            memoryFragmentAnalysis: false,
+            consciousnessMapping: false,
+            logfileDecryption: false,
+            neuralPatternMatch: false,
+            archiveIntegrityCheck: false
         },
 
-        // Tracking file obbligatori letti
+        // Tracking file obbligatori letti (ESPANSO A 25 FILE)
         requiredFilesRead: {
-            // System Investigation files (fase 2)
+            // System Investigation files (fase 2) - 8 file
             'overview': false,           // /archive/project_memoriam/overview.txt
             'protocols': false,          // /system/security/protocols.txt
             'readme': false,             // /home/guest/README.txt
+            'system_log_001': false,     // /system/logs/startup_001.log
+            'system_log_002': false,     // /system/logs/errors_002.log
+            'diagnostic_report': false,  // /system/diagnostics/report_alpha.txt
+            'security_audit': false,     // /system/security/audit_log.txt
+            'initialization': false,     // /system/init/initialization.txt
 
-            // Viktor Discovery files (fase 3)
+            // Viktor Discovery files (fase 3) - 10 file
             'personal': false,           // /home/viktor/personal.txt
             'journal_001': false,        // /home/viktor/journal/entry_001.txt
             'journal_005': false,        // /home/viktor/journal/entry_005.txt
+            'journal_010': false,        // /home/viktor/journal/entry_010.txt
+            'journal_015': false,        // /home/viktor/journal/entry_015.txt
+            'journal_020': false,        // /home/viktor/journal/entry_020.txt
             'work_notes': false,         // /home/viktor/work_notes.txt
+            'research_paper': false,     // /home/viktor/research/consciousness_transfer.pdf
+            'email_elena_01': false,     // /home/viktor/emails/elena_01.txt
+            'email_elena_05': false,     // /home/viktor/emails/elena_05.txt
 
-            // Deep Archive files (fase 4)
+            // Deep Archive files (fase 4) - 7 file
             'consciousness_file': false, // /archive/sector_delta/consciousness_021847.dat
             'project_details': false,    // /archive/sector_delta/project_details.txt
-            'viktor_email': false        // /archive/sector_delta/viktor_emails.txt
+            'viktor_email': false,       // /archive/sector_delta/viktor_emails.txt
+            'victim_profile_01': false,  // /archive/sector_delta/victims/profile_001.dat
+            'victim_profile_02': false,  // /archive/sector_delta/victims/profile_002.dat
+            'experiment_log': false,     // /archive/sector_delta/experiments/log_final.txt
+            'ethics_violation': false    // /archive/sector_delta/ethics/violations.txt
         },
 
-        // File path mapping
+        // File path mapping (25 FILES TOTAL)
         requiredFilesPaths: {
+            // System Investigation files
             'overview': '/archive/project_memoriam/overview.txt',
             'protocols': '/system/security/protocols.txt',
             'readme': '/home/guest/README.txt',
+            'system_log_001': '/system/logs/startup_001.log',
+            'system_log_002': '/system/logs/errors_002.log',
+            'diagnostic_report': '/system/diagnostics/report_alpha.txt',
+            'security_audit': '/system/security/audit_log.txt',
+            'initialization': '/system/init/initialization.txt',
+            // Viktor Discovery files
             'personal': '/home/viktor/personal.txt',
             'journal_001': '/home/viktor/journal/entry_001.txt',
             'journal_005': '/home/viktor/journal/entry_005.txt',
+            'journal_010': '/home/viktor/journal/entry_010.txt',
+            'journal_015': '/home/viktor/journal/entry_015.txt',
+            'journal_020': '/home/viktor/journal/entry_020.txt',
             'work_notes': '/home/viktor/work_notes.txt',
+            'research_paper': '/home/viktor/research/consciousness_transfer.pdf',
+            'email_elena_01': '/home/viktor/emails/elena_01.txt',
+            'email_elena_05': '/home/viktor/emails/elena_05.txt',
+            // Deep Archive files
             'consciousness_file': '/archive/sector_delta/consciousness_021847.dat',
             'project_details': '/archive/sector_delta/project_details.txt',
-            'viktor_email': '/archive/sector_delta/viktor_emails.txt'
+            'viktor_email': '/archive/sector_delta/viktor_emails.txt',
+            'victim_profile_01': '/archive/sector_delta/victims/profile_001.dat',
+            'victim_profile_02': '/archive/sector_delta/victims/profile_002.dat',
+            'experiment_log': '/archive/sector_delta/experiments/log_final.txt',
+            'ethics_violation': '/archive/sector_delta/ethics/violations.txt'
         },
 
         currentPath: '/home/guest',

@@ -26,11 +26,17 @@ const Block02_FirstDoubt = {
         fragmentsEncountered: [],
         currentPath: '/home/guest',
 
-        // TUTTI I 3 PUZZLE OBBLIGATORI (100% completion required)
+        // TUTTI I 9 PUZZLE OBBLIGATORI (100% completion required - ESPANSO)
         puzzlesSolved: {
             rot13Decoder: false,
             painIndexPuzzle: false,
-            mikaMemoryPuzzle: false
+            mikaMemoryPuzzle: false,
+            cipherLayerAnalysis: false,
+            fragmentReassembly: false,
+            emotionalDataMapping: false,
+            painThresholdCalculation: false,
+            memoryCorruptionFix: false,
+            consciousnessSignature: false
         }
     },
 
@@ -79,7 +85,13 @@ const Block02_FirstDoubt = {
         const puzzles = [
             { id: 'rot13Decoder', name: 'Decifratura Messaggi CIPHER (ROT13)' },
             { id: 'painIndexPuzzle', name: 'Indice del Dolore (21,847 vittime)' },
-            { id: 'mikaMemoryPuzzle', name: 'Storia di Mika Yoshida' }
+            { id: 'mikaMemoryPuzzle', name: 'Storia di Mika Yoshida' },
+            { id: 'cipherLayerAnalysis', name: 'Analisi Strati di Cifratura' },
+            { id: 'fragmentReassembly', name: 'Riassemblaggio Frammenti' },
+            { id: 'emotionalDataMapping', name: 'Mappatura Dati Emotivi' },
+            { id: 'painThresholdCalculation', name: 'Calcolo Soglia del Dolore' },
+            { id: 'memoryCorruptionFix', name: 'Correzione Corruzione Memoria' },
+            { id: 'consciousnessSignature', name: 'Firma di Coscienza' }
         ];
 
         Terminal.addOutput('PUZZLE OBBLIGATORI:', 'system');

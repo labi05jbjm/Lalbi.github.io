@@ -22,12 +22,18 @@ const Block05_Reflection = {
         eidolonInteractions: 0,
         currentPath: '/home/guest'
 
-        // TUTTI I 4 PUZZLE OBBLIGATORI (100% completion required)
+        // TUTTI I 10 PUZZLE OBBLIGATORI (100% completion required - ESPANSO)
         puzzlesSolved: {
             memoryReconstruction: false,
             fragmentCount: false,
             ghostIdentification: false,
-            mirrorReflection: false
+            mirrorReflection: false,
+            eidolonMemoryAnalysis: false,
+            elenaGhostReconstruction: false,
+            sofiaGhostVerification: false,
+            fragmentationPatternMapping: false,
+            viktorMemoryRetrival: false,
+            reflectionChoiceAnalysis: false
         }
     },
 
@@ -73,7 +79,13 @@ const Block05_Reflection = {
             { id: 'memoryReconstruction', name: 'Ricostruzione della Memoria' },
             { id: 'fragmentCount', name: 'Conteggio dei Frammenti' },
             { id: 'ghostIdentification', name: 'Identificazione dei Fantasmi' },
-            { id: 'mirrorReflection', name: 'Riflessione allo Specchio' }
+            { id: 'mirrorReflection', name: 'Riflessione allo Specchio' },
+            { id: 'eidolonMemoryAnalysis', name: 'Analisi Memorie di EIDOLON' },
+            { id: 'elenaGhostReconstruction', name: 'Ricostruzione Fantasma Elena' },
+            { id: 'sofiaGhostVerification', name: 'Verifica Fantasma Sofia' },
+            { id: 'fragmentationPatternMapping', name: 'Mappatura Pattern Frammentazione' },
+            { id: 'viktorMemoryRetrival', name: 'Recupero Memorie Viktor' },
+            { id: 'reflectionChoiceAnalysis', name: 'Analisi Scelta Riflessiva' }
         ];
 
         puzzles.forEach(puzzle => {

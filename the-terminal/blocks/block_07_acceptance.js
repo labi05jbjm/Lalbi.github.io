@@ -17,12 +17,18 @@ const Block07_Acceptance = {
         finalIdentityChosen: null,
         block06Choice: null,
 
-        // TUTTI I 4 PUZZLE OBBLIGATORI (100% completion required)
+        // TUTTI I 10 PUZZLE OBBLIGATORI (100% completion required - ESPANSO)
         puzzlesSolved: {
             choicePattern: false,
             fragmentCount: false,
             identityAnswer: false,
-            acceptanceTest: false
+            acceptanceTest: false,
+            morpheusWisdomExtraction: false,
+            allFragmentsUnification: false,
+            finalQuestionResolution: false,
+            acceptanceJourneyMapping: false,
+            identityFinalVerification: false,
+            transcendencePreparation: false
         }
     },
 
@@ -73,7 +79,13 @@ const Block07_Acceptance = {
             { id: 'choicePattern', name: 'Pattern delle Scelte' },
             { id: 'fragmentCount', name: 'Conteggio dei Frammenti' },
             { id: 'identityAnswer', name: 'Risposta dell\'Identità' },
-            { id: 'acceptanceTest', name: 'Test dell\'Accettazione' }
+            { id: 'acceptanceTest', name: 'Test dell\'Accettazione' },
+            { id: 'morpheusWisdomExtraction', name: 'Estrazione Saggezza MORPHEUS' },
+            { id: 'allFragmentsUnification', name: 'Unificazione Tutti Frammenti' },
+            { id: 'finalQuestionResolution', name: 'Risoluzione Domanda Finale' },
+            { id: 'acceptanceJourneyMapping', name: 'Mappatura Viaggio Accettazione' },
+            { id: 'identityFinalVerification', name: 'Verifica Finale Identità' },
+            { id: 'transcendencePreparation', name: 'Preparazione alla Trascendenza' }
         ];
 
         puzzles.forEach(puzzle => {

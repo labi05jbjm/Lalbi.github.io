@@ -22,12 +22,18 @@ const Block04_Fractures = {
         specterInteractions: 0,
         currentPath: '/home/guest'
 
-        // TUTTI I 4 PUZZLE OBBLIGATORI (100% completion required)
+        // TUTTI I 10 PUZZLE OBBLIGATORI (100% completion required - ESPANSO)
         puzzlesSolved: {
             victimVerification: false,
             identityCalculation: false,
             paradoxResolution: false,
-            victimEmpathy: false
+            victimEmpathy: false,
+            specterBargainAnalysis: false,
+            fractureMappingPuzzle: false,
+            victimTimelineReconstruction: false,
+            sentinelPrimeDecryption: false,
+            identityCrisisResolution: false,
+            paradoxLayerBreaking: false
         }
     },
 
@@ -73,7 +79,13 @@ const Block04_Fractures = {
             { id: 'victimVerification', name: 'Verifica delle Vittime' },
             { id: 'identityCalculation', name: 'Calcolo dell\'Identità' },
             { id: 'paradoxResolution', name: 'Risoluzione del Paradosso' },
-            { id: 'victimEmpathy', name: 'Empatia con le Vittime' }
+            { id: 'victimEmpathy', name: 'Empatia con le Vittime' },
+            { id: 'specterBargainAnalysis', name: 'Analisi Bargain di SPECTER' },
+            { id: 'fractureMappingPuzzle', name: 'Mappatura delle Fratture' },
+            { id: 'victimTimelineReconstruction', name: 'Ricostruzione Timeline Vittime' },
+            { id: 'sentinelPrimeDecryption', name: 'Decifrazione SENTINEL-PRIME' },
+            { id: 'identityCrisisResolution', name: 'Risoluzione Crisi Identità' },
+            { id: 'paradoxLayerBreaking', name: 'Rottura Strati Paradosso' }
         ];
 
         puzzles.forEach(puzzle => {
