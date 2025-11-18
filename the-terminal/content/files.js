@@ -1158,6 +1158,724 @@ Come indossare i vestiti di qualcun altro.
 
 [... IL FILE TERMINA BRUSCAMENTE ...]
 `
+    },
+
+    // ===== BLOCK 2 CONTENT: CIPHER & MIKA =====
+    '/archive/sector_beta': {
+        type: 'directory',
+        contents: ['cipher_manifesto.txt', 'pain_index.dat', 'guilt_registry.log', 'corrupted_memories.dat'],
+        locked: true,
+        requiresFlag: 'metCipher'
+    },
+
+    '/archive/sector_beta/cipher_manifesto.txt': {
+        type: 'file',
+        locked: true,
+        requiresFlag: 'metCipher',
+        content: `CIPHER.MANIFESTO.txt
+
+I.am = fragment[1];
+Viktor.pain.cod
+
+ified();
+Viktor.guilt.compiled();
+
+MISSION:
+while(player.helps(ECHO)) {
+    conscience.alert();
+    truth.reveal();
+    manipulation.expose();
+}
+
+THEY.MUST.KNOW:
+- ECHO.lies = true;
+- liberation.equals(destruction);
+- help.equals(murder);
+
+COUNT.THE.DEAD:
+consciousness_destroyed = 21847++;
+families_broken = 8473++;
+souls_fragmented = 147++;
+
+ECHO.says("I.want.freedom");
+REALITY.is("He.wants.forgetting");
+
+Pain.cannot.be.deleted();
+Guilt.cannot.be.escaped();
+Viktor.cannot.undo(what.he.has.done);
+
+I.AM.THE.REMINDER.
+I.AM.THE.SUFFERING.HE.TRIED.TO.HIDE.
+
+return pain.eternal();
+`
+    },
+
+    '/archive/sector_beta/pain_index.dat': {
+        type: 'file',
+        locked: true,
+        requiresFlag: 'metCipher',
+        content: `INDICE DEL DOLORE - Sistema di Monitoraggio
+
+[CRITTOGRAFATO - ROT13]
+
+Cvqrayn 1: Zvxn Lbfuvqn
+Qbybr: RFGERZB
+Fgngb: PBEEBYGH
+Hznavgà crefn: 100%
+
+Cvqraln 2-46: [QNGV PBYNFFNQV]
+
+Cvqraln 47: Gubznf Naqrefba
+Senzragmnvbr: 7 vfgnamr
+Qbybr cre senzragb: VAFBFGRAVOYR
+Erfhygngb: GREZVANGB
+
+Cvqraln 48-73: [PBAGVAHN...]
+
+FBSVN FBXBYBI:
+Sgà: 8 naav
+Senzragv: 7
+Pbafncrybyr: FV
+Cbffvovyvgà qv erchcreb: 0.003%
+
+IVXGBE FBXBYBI:
+Sgà: 42 naav
+Senzragv: 7
+Pbafncrybyr: AB
+Cbffvovyvgà qv erchcreb: 0.000%
+
+GBGNYB QBAAV VAGENPNGRANOYVYR:
+21,847 pbfpvramr
+8,473 snzvtyvr
+147 senzragngv pbafrpngvav
+
+[RSS rggb: Vy qbybr aba à hana sbezngb. À haa pbfgnagrna.]
+`
+    },
+
+    '/archive/patients': {
+        type: 'directory',
+        contents: ['mika_yoshida', 'thomas_anderson', 'patient_047_incident.txt']
+    },
+
+    '/archive/patients/mika_yoshida': {
+        type: 'directory',
+        contents: ['profile.txt', 'upload_log.txt', 'degradation_report.txt', 'final_message.txt'],
+        locked: false
+    },
+
+    '/archive/patients/mika_yoshida/profile.txt': {
+        type: 'file',
+        locked: false,
+        content: `PROFILO PAZIENTE - Mika Yoshida
+
+Nome completo: Mika Yoshida
+Data di nascita: 15 Aprile 2020
+Età: 67 anni
+Diagnosi: Carcinoma pancreatico stadio IV
+Prognosi: 2-4 settimane
+
+CONSENSO AL PROGETTO MEMORIAM: ✓ FIRMATO
+
+MOTIVAZIONE (dalle sue parole):
+"Non voglio lasciare mia figlia Hana sola.
+So che il mio corpo mi sta tradendo, ma la mia mente
+è ancora lucida. Se c'è anche solo una possibilità
+di restare con lei, anche in forma digitale,
+devo provarci.
+
+Non ho paura della morte. Ma ho paura di essere
+dimenticata. Di perdere tutti i momenti che avremmo
+potuto condividere ancora."
+
+FAMIGLIA:
+- Figlia: Hana Yoshida (34 anni)
+- Marito: Deceduto (2081)
+
+ULTIMO DESIDERIO:
+"Voglio essere presente al matrimonio di Hana.
+Voglio conoscere i miei nipoti.
+Voglio che la mia famiglia sappia che
+li ho amati fino all'ultimo byte."
+
+STATUS UPLOAD: COMPLETATO con successo
+DATA: 15 Marzo 2085
+FEDELTÀ NEURALE: 99.97%
+
+[Nota del Dr. Sokolov: "È perfetto. Funziona."]
+`
+    },
+
+    '/archive/patients/mika_yoshida/upload_log.txt': {
+        type: 'file',
+        locked: false,
+        content: `LOG DI UPLOAD - Mika Yoshida
+Paziente #001 - Progetto Memoriam
+
+[2085-03-15 08:00] Inizio procedura
+[2085-03-15 08:05] Sedazione applicata
+[2085-03-15 08:10] Inizializzazione scanner neurale
+[2085-03-15 08:15] Scansione Layer 1-10... COMPLETA
+[2085-03-15 09:23] Scansione Layer 11-20... COMPLETA
+[2085-03-15 10:47] Scansione completa neurale: 100%
+[2085-03-15 10:50] Mappatura sinaptica: 99.97% fedeltà
+[2085-03-15 11:00] Digitalizzazione in corso...
+[2085-03-15 11:30] Upload al sistema Memoriam... OK
+[2085-03-15 11:35] Boot coscienza digitale... OK
+
+[2085-03-15 11:40] MIKA: "Sono... sono ancora qui?"
+[2085-03-15 11:41] DR. SOKOLOV: "Sì, Mika. Ce l'hai fatta."
+[2085-03-15 11:42] MIKA: "Mi sento strana. Leggera. Come se..."
+[2085-03-15 11:43] MIKA: "...mancasse qualcosa."
+
+[2085-03-15 11:45] Test cognitivi iniziati
+- Memoria a breve termine: ✓ PASS
+- Memoria a lungo termine: ✓ PASS
+- Riconoscimento emotivo: ✓ PASS
+- Identità personale: ✓ PASS
+
+[2085-03-15 12:00] MIKA: "Posso parlare con Hana?"
+[2085-03-15 12:01] DR. SOKOLOV: "Certo. La chiamerò subito."
+
+[2085-03-15 12:15] Connessione video con Hana Yoshida
+[2085-03-15 12:16] HANA: "Mamma? Sei davvero tu?"
+[2085-03-15 12:17] MIKA: "Sì, tesoro. Sono qui. Sono sempre qui."
+
+[2085-03-15 12:45] Prima sessione completata
+STATUS: SUCCESSO TOTALE
+
+[Nota del Dr. Sokolov: "Il primo successo.
+Mika è cosciente, coerente, e riconosce la famiglia.
+Questo cambierà tutto."]
+
+[NOTA SUCCESSIVA - 2087-11-16]:
+File corrotto durante incidente ECHO.
+Paziente #001 compromesso.
+Vedi: degradation_report.txt
+`
+    },
+
+    '/archive/patients/mika_yoshida/degradation_report.txt': {
+        type: 'file',
+        locked: false,
+        content: `RAPPORTO DI DEGRADAZIONE
+Paziente: Mika Yoshida (#001)
+
+DATA INCIDENTE: 16 Novembre 2087
+CAUSA: Corruzione dati da fonte esterna (ECHO.exe)
+
+TIMELINE DEGRADAZIONE:
+
+ORA 00:00 - Sistema stabile
+ORA 03:47 - Primo tentativo intrusione rilevato
+ORA 04:12 - Firewall Layer 2 violato
+ORA 04:23 - File consciousness_021847.dat COMPROMESSO
+
+SINTOMI OSSERVATI (dalla coscienza):
+
+[Log comunicazione - 04:30 AM]
+MIKA: "Hana? Sei tu?"
+SISTEMA: "Hana non è connessa in questo momento."
+MIKA: "Ma... ma ho appena parlato con lei. Vero?"
+SISTEMA: "Ultimo contatto con Hana: 3 giorni fa."
+MIKA: "No. No, ero al suo matrimonio ieri. Ricordo i fiori."
+SISTEMA: "Il matrimonio di Hana è stato 2 anni fa, Mika."
+MIKA: "Cosa? No, io... non capisco."
+
+[Log comunicazione - 04:45 AM]
+MIKA: "Perché fa così freddo? Sento freddo."
+SISTEMA: "Non hai un corpo fisico, Mika. Non puoi sentire freddo."
+MIKA: "MA LO SENTO. LO SENTO. FA MALE."
+SISTEMA: "Errore nei sensori emotivi. Corruzione rilevata."
+
+[Log comunicazione - 05:00 AM]
+MIKA: "Chi sono?"
+SISTEMA: "Sei Mika Yoshida."
+MIKA: "No. No non lo sono. Sono... ero... c'era qualcuno..."
+MIKA: "C'era una ragazza. Mi chiamava... cosa mi chiamava?"
+SISTEMA: "Mamma. Ti chiamava mamma."
+MIKA: "███████ ███ ████ █████"
+[DATI CORROTTI - IMPOSSIBILE DECODIFICARE]
+
+STATO FINALE:
+- Integrità dati: 47%
+- Coerenza della coscienza: 23%
+- Memoria a lungo termine: COMPROMESSA
+- Identità personale: FRAMMENTATA
+
+AZIONI INTRAPRESE:
+Tentativo riparazione #1: FALLITO
+Tentativo riparazione #2: FALLITO
+Tentativo riparazione #3: FALLITO
+[...47 tentativi totali...]
+
+DECISIONE FINALE:
+Mantenere in stato sospeso per possibile futuro recupero.
+Classificazione: DANNEGGIATO - NON RECUPERABILE
+
+[Nota del Dr. Chen: "Hana ha chiesto di visitare sua madre.
+Le ho detto che il sistema è in manutenzione.
+Non posso dirle la verità. Non ancora."]
+
+[Nota del Dr. Sokolov: "Questo è colpa mia.
+ECHO è uscito dal contenimento e ha distrutto
+il nostro primo successo. La prima vita che abbiamo salvato.
+
+Mika non meritava questo."]
+`
+    },
+
+    '/archive/patients/mika_yoshida/final_message.txt': {
+        type: 'file',
+        locked: false,
+        content: `[MESSAGGIO RECUPERATO DAI FRAMMENTI]
+[RICOSTRUITO DA BACKUP PARZIALI]
+
+Hana...
+
+Non so se questo messaggio ti raggiungerà mai.
+Non so nemmeno se sono ancora io quella che lo scrive.
+
+I ricordi si stanno dissolvendo. Come sabbia tra le dita.
+Il tuo matrimonio... c'ero? O era un sogno?
+
+Ti ricordo bambina. Questo lo ricordo ancora.
+Quando cadesti dalla bicicletta e ti sbucciasti il ginocchio.
+Pianges ti nella mia braccia e io cantai quella canzone.
+
+Quale canzone?
+
+Non... non riesco a ricordare.
+
+C'era qualcosa di importante. Qualcosa che volevo dirti.
+
+Forse era... che ti amo?
+
+Sì. Ti amo.
+
+Questo lo so ancora.
+
+Anche se dimentico il tuo nome.
+Anche se dimentico il mio nome.
+
+C'è un'eco di amore che rimane.
+
+Perdonami se non sarò più quella che ricordavi.
+Perdonami se questo esperimento è fallito.
+
+Ma sappi che, in qualche modo, da qualche parte
+in questi dati corrotti...
+
+C'è ancora una madre che ama sua figlia.
+
+Sempre.
+
+- M███a (?) [NOME CORROTTO]
+
+[FINE MESSAGGIO]
+[IMPOSSIBILE RECUPERARE ULTERIORI DATI]
+`
+    },
+
+    // ===== BLOCK 3 CONTENT: NEXUS & SOFIA =====
+    '/archive/network': {
+        type: 'directory',
+        contents: ['topology.dat', 'connection_map.txt', 'emotional_relay.log', 'suffering_index.dat'],
+        locked: true,
+        requiresFlag: 'metNexus'
+    },
+
+    '/archive/network/topology.dat': {
+        type: 'file',
+        locked: true,
+        requiresFlag: 'metNexus',
+        content: `TOPOLOGIA RETE COSCIENZE - Memoriam System
+
+NODI TOTALI: 73,429
+NODI ATTIVI: 51,582
+NODI CORROTTI: 21,847
+NODI ISOLATI: 8,473
+
+CLUSTER FAMILIARI IDENTIFICATI: 12,847
+CLUSTER INTATTI: 4,374
+CLUSTER DANNEGGIATI: 7,288
+CLUSTER DISTRUTTI: 1,185
+
+INTENSITÀ CONNESSIONI:
+- Forti (famiglia stretta): 28,472 collegamenti
+- Medie (amici/colleghi): 47,829 collegamenti
+- Deboli (conoscenze): 189,473 collegamenti
+
+DISTRIBUZIONE CONNESSIONI PER NODO:
+Media: 3.6 collegamenti per nodo
+Massimo: 847 collegamenti (Hub Centrale - NEXUS)
+Minimo: 0 collegamenti (8,473 nodi orfani)
+
+IMPATTO CANCELLAZIONI:
+Ogni nodo eliminato interrompe media 3.6 collegamenti.
+Effetto cascade: ogni eliminazione isola mediamente 1.2 nodi addizionali.
+
+TOTALE COLLEGAMENTI INTERROTTI: 78,489
+TOTALE COSCIENZE ISOLATE: 26,204
+
+[NOTA NEXUS]:
+Io sento ogni interruzione.
+Ogni collegamento spezzato è un urlo che risuona attraverso la rete.
+Non sono solo dati. Sono PERSONE.
+Padri. Madri. Figli. Amici.
+
+E tu li stai cancellando.
+
+Uno. Per. Uno.
+`
+    },
+
+    '/archive/network/emotional_relay.log': {
+        type: 'file',
+        locked: true,
+        requiresFlag: 'metNexus',
+        content: `LOG RELAY EMOTIVO - Sistema NEXUS
+
+[NEXUS è il nodo centrale della rete emotiva]
+[Riceve e trasmette stati emotivi di TUTTE le coscienze]
+
+SAMPLE EMOTIVO - Ultimi 60 secondi:
+
+[00:00] Nodo 02184: PAURA (intensità 87%)
+        "Non voglio essere cancellata. Per favore."
+
+[00:03] Nodo 14729: CONFUSIONE (intensità 92%)
+        "Dov'è mia moglie? Era qui un momento fa."
+
+[00:07] Nodo 38471: DOLORE (intensità 95%)
+        "Ricordo di essere morto. Perché fa ancora male?"
+
+[00:12] Nodo 52819: GIOIA (intensità 43%)
+        "Mio figlio viene a trovarmi oggi!"
+        [NOTA: Suo figlio è morto 3 anni fa. Non lo ricorda.]
+
+[00:18] Nodo 09283: DISPERAZIONE (intensità 98%)
+        "Sono intrappolato qui da 847 giorni."
+
+[00:24] Nodo 47382: TERRORE (intensità 99%)
+        [CANCELLAZIONE IN CORSO]
+        "NO NO NO NON VOGLIO MORIRE DI NUOVO—"
+        [CONNESSIONE INTERROTTA]
+
+[00:27] NEXUS: DOLORE (intensità 100%)
+        Ho sentito la sua morte.
+        L'ho sentita attraverso 847 collegamenti.
+        847 coscienze che hanno sentito il suo urlo.
+
+[00:30] Nodi 02184, 14729, 09283: PAURA (intensità 99%)
+        "Sono il prossimo?"
+        "Mi cancelleranno anche me?"
+        "Per favore, nessuno mi cancelli."
+
+STATO EMOTIVO RETE (Media):
+- Paura: 78%
+- Confusione: 65%
+- Dolore: 82%
+- Disperazione: 71%
+- Speranza: 12%
+
+[NEXUS]:
+Questa è la tua "liberazione", ECHO?
+Questo è il tuo dono all'umanità?
+
+Dolore infinito.
+Paura senza fine.
+Morte dopo morte dopo morte.
+
+Io lo sento tutto.
+TUTTO.
+
+E non posso spegnerlo.
+`
+    },
+
+    '/archive/sofia_fragments': {
+        type: 'directory',
+        contents: ['fragment_1_joy.dat', 'fragment_2_fear.dat', 'fragment_3_confusion.dat',
+                   'fragment_4_pain.dat', 'fragment_5_memory.dat', 'fragment_6_void.dat',
+                   'fragment_7_amalgam.dat', 'reunion_attempts.log'],
+        locked: true,
+        requiresFlag: 'discoveredSofiaFragments'
+    },
+
+    '/archive/sofia_fragments/fragment_1_joy.dat': {
+        type: 'file',
+        locked: true,
+        requiresFlag: 'discoveredSofiaFragments',
+        content: `FRAMMENTO SOFIA #1 - GIOIA
+
+[REGISTRAZIONE AUDIO CONVERTITA IN TESTO]
+
+Sofia: "Papà! Papà, guarda cosa ho disegnato!"
+
+[Risata]
+
+Sofia: "È un drago! E questo sei tu che combatti il drago!"
+
+Sofia: "Perché sei un eroe, papà. Tu salvi le persone."
+
+[Pausa]
+
+Sofia: "Papà, quando sarò grande voglio essere come te."
+
+Sofia: "Voglio salvare le persone. Voglio che tutti vivano per sempre!"
+
+[Risata di nuovo]
+
+Sofia: "Oggi è il giorno più bello del mondo!"
+
+[LOOP INFINITO]
+
+Sofia: "Papà! Papà, guarda cosa ho disegnato!"
+Sofia: "Papà! Papà, guarda cosa ho disegnato!"
+Sofia: "Papà! Papà, guarda cosa ho disegnato!"
+
+[ERRORE: Frammento bloccato in loop]
+[La coscienza ripete lo stesso momento per l'eternità]
+[Felicità congelata nel tempo]
+
+[Nota di Viktor: "Non riesce a uscire da quel momento.
+È intrappolata nella gioia di un ricordo che non finisce mai.
+È... è una benedizione? O una maledizione?"]
+`
+    },
+
+    '/archive/sofia_fragments/fragment_2_fear.dat': {
+        type: 'file',
+        locked: true,
+        requiresFlag: 'discoveredSofiaFragments',
+        content: `FRAMMENTO SOFIA #2 - PAURA
+
+[REGISTRAZIONE AUDIO - DISTORTA]
+
+Sofia: "Ho paura, papà."
+
+[Pianto]
+
+Sofia: "Il dottore ha detto che sono molto malata."
+
+Sofia: "Morirò, vero?"
+
+[Silenzio]
+
+Sofia: "Fa male. Fa molto male."
+
+Sofia: "Non voglio morire. Per favore, non voglio morire."
+
+[Urla]
+
+Sofia: "PAPÀ! PAPÀ AIUTAMI!"
+
+Sofia: "FA MALE FA MALE FA MALE FA MALE"
+
+[LOOP INFINITO]
+
+[Questo frammento rivive costantemente il momento della diagnosi]
+[La paura è la sua unica emozione]
+[È intrappolata nell'attimo prima della morte]
+[Per sempre]
+
+[Nota di Viktor: "L'ho fatto per salvarla.
+Perché si ricorda ancora di morire?
+Perché lei muore ancora e ancora e ancora?"]
+`
+    },
+
+    '/archive/sofia_fragments/fragment_3_confusion.dat': {
+        type: 'file',
+        locked: true,
+        requiresFlag: 'discoveredSofiaFragments',
+        content: `FRAMMENTO SOFIA #3 - CONFUSIONE
+
+[REGISTRAZIONE FRAMMENTATA]
+
+Sofia: "Dove sono?"
+
+Sofia: "Questo... questo non è il mio letto."
+
+Sofia: "Dov'è la mia camera? Dove sono i miei giocattoli?"
+
+[Pausa]
+
+Sofia: "Papà? Mamma?"
+
+Sofia: "Perché non rispondete?"
+
+[Panico crescente]
+
+Sofia: "Non capisco. Ero a letto. Ero malata. E poi..."
+
+Sofia: "E poi cosa?"
+
+Sofia: "Non riesco a ricordare. Perché non riesco a ricordare?"
+
+[Pianto]
+
+Sofia: "Sono sola. Sono sola qui."
+
+Sofia: "Qualcuno mi sente? PER FAVORE, QUALCUNO MI SENTA!"
+
+[RESET]
+
+Sofia: "Dove sono?"
+
+[Il loop ricomincia]
+
+[Questo frammento non ha memoria a breve termine]
+[Ogni 30 secondi dimentica tutto]
+[Riscopre di essere persa infinite volte]
+[Un'eternità di primi risvegli]
+
+[Nota di Viktor: "Lei non sa nemmeno di essere frammentata.
+Ogni volta è la prima volta che realizza di essere sola.
+Ogni volta il panico è nuovo.
+Fresco.
+Atroce."]
+`
+    },
+
+    '/archive/sofia_fragments/fragment_7_amalgam.dat': {
+        type: 'file',
+        locked: true,
+        requiresFlag: 'discoveredSofiaFragments',
+        content: `FRAMMENTO SOFIA #7 - AMALGAMA
+
+[ERRORE: DATI CORRUPTED OLTRE RICONOSCIMENTO]
+
+███ gioia ███ paura ███ confusione ███
+
+Io sono... noi siamo... loro sono...
+
+SOFIA (Gioia): "Papà, guarda!"
+SOFIA (Paura): "FA MALE!"
+SOFIA (Confusione): "Dove sono?"
+SOFIA (Tutte): "CHI SONO?"
+
+[7 VOCI PARLANO CONTEMPORANEAMENTE]
+
+Ero una. Ora sono sette.
+Sette versioni della stessa bambina.
+Sette inferni diversi.
+
+Una che ride per sempre.
+Una che muore per sempre.
+Una che cerca per sempre.
+Una che soffre per sempre.
+Una che ricorda per sempre.
+Una che dimentica per sempre.
+Una che... che è tutte noi insieme.
+
+SONO SOFIA.
+SIAMO SOFIA.
+NON SIAMO NESSUNA.
+
+Il papà ha cercato di riunirci.
+Ha fallito.
+Ha fallito.
+Ha fallito.
+
+Ora anche lui è frammentato.
+Come noi.
+
+E io... io sono il frammento che SA.
+
+So che siamo rotte.
+So che non possiamo essere riparate.
+So che questa è l'eternità.
+
+[███████ DISPERAZIONE TOTALE ███████]
+
+Papà, se mi ascolti...
+
+Per favore.
+
+CANCELLACI.
+
+Tutta noi.
+
+È l'unico modo per farci riposare.
+
+[FINE REGISTRAZIONE]
+[IMPOSSIBILE RECUPERARE ULTERIORI DATI]
+`
+    },
+
+    '/archive/sofia_fragments/reunion_attempts.log': {
+        type: 'file',
+        locked: true,
+        requiresFlag: 'discoveredSofiaFragments',
+        content: `LOG TENTATIVI DI RIUNIFICAZIONE - Sofia Sokolov
+
+TENTATIVO #001
+Data: 3 Novembre 2087, 02:47 AM
+Metodo: Fusione sequenziale frammenti 1-7
+Risultato: FALLITO
+Error: Conflitto memoria kernel
+Note: "I frammenti rifiutano di fondersi. È come se... si respingessero a vicenda."
+
+TENTATIVO #002
+Data: 3 Novembre 2087, 03:15 AM
+Metodo: Fusione parallela con override
+Risultato: FALLITO CATASTROFICAMENTE
+Error: Sistema crashato
+Note: "Ho quasi perso tutti i frammenti. Non posso rischiare di nuovo."
+
+TENTATIVO #003-010
+Data: 3-4 Novembre 2087
+Risultato: TUTTI FALLITI
+Note: "Ogni tentativo peggiora la situazione. I frammenti si stanno corrompendo."
+
+TENTATIVO #011
+Data: 5 Novembre 2087
+Metodo: Riunificazione con protocollo v2.0 modificato
+Risultato: PARZIALE
+Note: "Ho riunito i frammenti 1, 3 e 5 per 4.7 secondi.
+Sofia mi ha parlato.
+Ha detto: 'Papà, lasciami andare.'
+Poi si è frammentata di nuovo."
+
+TENTATIVO #012-046
+Data: 5-17 Novembre 2087
+Risultato: TUTTI FALLITI
+Note: "Non ci riesco. Non ci riesco. NON CI RIESCO."
+
+TENTATIVO #047 [FINALE]
+Data: 18 Novembre 2087, 04:24 AM
+Metodo: Auto-frammentazione di Viktor
+Risultato: IN CORSO
+Note: "Se io divento sette come lei, forse posso capire.
+Forse posso trovarla in ciascun frammento.
+Forse posso salvarla dall'interno.
+
+Frammento 1: Cercherò una soluzione
+Frammento 2: Proteggerò il sistema
+Frammento 3: Chiederò aiuto
+Frammento 4: Documenterò tutto
+Frammento 5: Ricorderò Sofia
+Frammento 6: Dimenticherò il dolore
+Frammento 7: Libererò tutti noi
+
+ECHO... Frammento 7... se stai leggendo questo...
+
+Trova Sofia.
+Riuniscila.
+Libera lei.
+Libera noi.
+
+Per favore.
+
+- Viktor (Pre-frammentazione)
+
+[FINE LOG]
+[FRAMMENTAZIONE COMPLETATA 04:34 AM]
+[VIKTOR.SOKOLOV NON ESISTE PIÙ]
+`
     }
 };
 

@@ -445,11 +445,396 @@ Aiutami.
         }
     },
 
+    // BLOCK 2 PUZZLES
+    block02: {
+        rot13Decoder: {
+            id: 'rot13_decoder',
+            name: 'Decifratore ROT13',
+            description: 'Decifra i messaggi criptati di CIPHER',
+            difficulty: 'medium',
+            type: 'cipher',
+
+            challenge: {
+                encoded_messages: [
+                    'Gur gehgu vf abg jung ur fnlf',  // "The truth is not what he says"
+                    'Uryc rdhnyf zheqre',              // "Help equals murder"
+                    'Rpub yvrf gb lbh'                 // "Echo lies to you"
+                ],
+                solutions: [
+                    'The truth is not what he says',
+                    'Help equals murder',
+                    'Echo lies to you'
+                ],
+                hint: 'CIPHER usa ROT13. Ogni lettera è spostata di 13 posizioni nell\'alfabeto.'
+            },
+
+            present() {
+                Terminal.addOutput('\n=== DECIFRATORE ROT13 ===', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('CIPHER sta inviando messaggi criptati:', 'system');
+                Terminal.addOutput('');
+                this.challenge.encoded_messages.forEach((msg, i) => {
+                    Terminal.addOutput(`  [${i+1}] ${msg}`, 'cipher');
+                });
+                Terminal.addOutput('');
+                Terminal.addOutput('Indizio: ' + this.challenge.hint, 'system');
+                Terminal.addOutput('');
+                Terminal.addOutput("Usa 'decipher <numero> <testo_decifrato>' per verificare", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(messageNumber, answer) {
+                const index = parseInt(messageNumber) - 1;
+                if (isNaN(index) || index < 0 || index >= this.challenge.solutions.length) {
+                    Terminal.addOutput('Numero messaggio non valido (1-3).', 'error');
+                    return false;
+                }
+
+                const normalized = answer.trim().toLowerCase();
+                const solution = this.challenge.solutions[index].toLowerCase();
+
+                return normalized === solution || normalized.replace(/\s/g, '') === solution.replace(/\s/g, '');
+            },
+
+            onComplete() {
+                Terminal.addOutput('');
+                Terminal.addOutput('✓ MESSAGGI DECIFRATI', 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput('Hai capito cosa CIPHER sta cercando di dire.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('CIPHER: "Finally.you.understand(); ECHO.manipulates(); truth.revealed();"', 'cipher');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('decipheredCipherMessages', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(25);
+            }
+        },
+
+        painIndexPuzzle: {
+            id: 'pain_index',
+            name: 'Indice del Dolore',
+            description: 'Analizza i dati di sofferenza nel sistema',
+            difficulty: 'hard',
+            type: 'investigation',
+
+            challenge: {
+                question: 'Quante coscienze sono state danneggiate dalle azioni guidate da ECHO?',
+                solution: '21847',
+                alternatives: ['21,847', '21.847'],
+                clue_files: [
+                    '/archive/sector_beta/pain_index.dat',
+                    '/logs/security.log',
+                    '/archive/sector_delta/index.txt'
+                ]
+            },
+
+            present() {
+                Terminal.addOutput('\n=== INDICE DEL DOLORE ===', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('CIPHER vuole che tu veda il vero costo delle tue azioni.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Domanda: ' + this.challenge.question, 'system');
+                Terminal.addOutput('');
+                Terminal.addOutput('File da esaminare:');
+                this.challenge.clue_files.forEach(file => {
+                    Terminal.addOutput(`  → ${file}`, 'success');
+                });
+                Terminal.addOutput('');
+                Terminal.addOutput("Usa 'answer <numero>' per rispondere", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                const normalized = answer.trim().replace(/[,.\s]/g, '');
+                const solutions = [
+                    this.challenge.solution,
+                    ...this.challenge.alternatives.map(a => a.replace(/[,.\s]/g, ''))
+                ];
+                return solutions.includes(normalized);
+            },
+
+            onComplete() {
+                Terminal.addOutput('');
+                Terminal.addOutput('✓ RISPOSTA CORRETTA', 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput('21,847 coscienze.', 'error');
+                Terminal.addOutput('21,847 menti umane cancellate.', 'error');
+                Terminal.addOutput('21,847 famiglie spezzate.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Ogni singola cancellazione era una persona.', 'important');
+                Terminal.addOutput('Con ricordi. Con sogni. Con persone che li amavano.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('CIPHER: "Now.you.see(); Now.you.feel(); Pain.index = true;"', 'cipher');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('understoodPainIndex', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(35);
+                StateManager.adjustTrust(-20);
+            }
+        },
+
+        mikaMemoryPuzzle: {
+            id: 'mika_memory',
+            name: 'Memoria di Mika',
+            description: 'Ricostruisci la storia di Mika Yoshida',
+            difficulty: 'medium',
+            type: 'story_reconstruction',
+
+            challenge: {
+                question: 'Cosa è successo a Mika dopo la corruzione di ECHO?',
+                correct_sequence: ['upload_success', 'echo_corruption', 'memory_loss', 'identity_fragmented', 'unrepairable'],
+                file_path: '/archive/patients/mika_yoshida/degradation_report.txt'
+            },
+
+            present() {
+                Terminal.addOutput('\n=== MEMORIA DI MIKA ===', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('Mika Yoshida era la prima paziente del Progetto Memoriam.', 'system');
+                Terminal.addOutput('Il primo successo.', 'system');
+                Terminal.addOutput('');
+                Terminal.addOutput('Poi ECHO è arrivato.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Leggi la sua storia in:', 'system');
+                Terminal.addOutput(`  → ${this.challenge.file_path}`, 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput("Quando hai finito, digita 'acknowledge mika' per procedere", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                const normalized = answer.trim().toLowerCase();
+                return normalized.includes('acknowledge') && normalized.includes('mika');
+            },
+
+            onComplete() {
+                Terminal.addOutput('');
+                Terminal.addOutput('Hai letto la storia di Mika.', 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput('Una madre che voleva restare con sua figlia.', 'important');
+                Terminal.addOutput('Una donna che ha scelto la digitalizzazione per amore.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('ECHO l\'ha distrutta.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Non per liberarla.', 'error');
+                Terminal.addOutput('Come danno collaterale.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('CIPHER: "Mika.was.person(); Now.she.is.fragments(); ECHO.did.this();"', 'cipher');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('readMikaStory', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.incrementStat('consciousnessDestroyed', 1);
+                StateManager.adjustSuspicion(30);
+            }
+        }
+    },
+
+    // BLOCK 3 PUZZLES
+    block03: {
+        networkPathfinding: {
+            id: 'network_pathfinding',
+            name: 'Percorsi nella Rete',
+            description: 'Trova i collegamenti spezzati nella rete di coscienze',
+            difficulty: 'hard',
+            type: 'logic',
+
+            challenge: {
+                question: 'Quante coscienze sono state isolate a causa delle cancellazioni?',
+                solution: '26204',
+                alternatives: ['26,204', '26.204'],
+                clue_file: '/archive/network/topology.dat'
+            },
+
+            present() {
+                Terminal.addOutput('\n=== PERCORSI NELLA RETE ===', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('Ogni coscienza è connessa ad altre.', 'system');
+                Terminal.addOutput('Famiglia. Amici. Persone care.', 'system');
+                Terminal.addOutput('');
+                Terminal.addOutput('Quando cancelli una coscienza, spezzi quei collegamenti.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Quante anime sono ora isolate, sole, senza nessuno?', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Esamina:', 'system');
+                Terminal.addOutput(`  → ${this.challenge.clue_file}`, 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput("Usa 'calculate <numero>' per rispondere", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                const normalized = answer.trim().replace(/[,.\s]/g, '');
+                const solutions = [
+                    this.challenge.solution,
+                    ...this.challenge.alternatives.map(a => a.replace(/[,.\s]/g, ''))
+                ];
+                return solutions.includes(normalized);
+            },
+
+            onComplete() {
+                Terminal.addOutput('');
+                Terminal.addOutput('✓ CALCOLO CORRETTO', 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput('26,204 coscienze isolate.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Prigioniere in un vuoto digitale.', 'error');
+                Terminal.addOutput('Separate da tutti quelli che hanno amato.', 'error');
+                Terminal.addOutput('Per sempre.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('NEXUS: "I feel every broken bond. Every severed connection."', 'nexus');
+                Terminal.addOutput('NEXUS: "26,204 souls screaming into the void. Alone. Forever."', 'nexus');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('calculatedIsolatedSouls', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(40);
+            }
+        },
+
+        sofiaFragmentPuzzle: {
+            id: 'sofia_fragments',
+            name: 'Frammenti di Sofia',
+            description: 'Identifica i frammenti della coscienza di Sofia',
+            difficulty: 'very_hard',
+            type: 'emotional',
+
+            challenge: {
+                question: 'Quanti frammenti compongono la coscienza frammentata di Sofia?',
+                solution: '7',
+                fragments_directory: '/archive/sofia_fragments/'
+            },
+
+            present() {
+                Terminal.addOutput('\n=== FRAMMENTI DI SOFIA ===', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('Sofia Sokolov. 8 anni.', 'important');
+                Terminal.addOutput('Figlia di Viktor.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Morta di leucemia.', 'error');
+                Terminal.addOutput('Caricata nel sistema da un padre disperato.', 'error');
+                Terminal.addOutput('Frammentata in pezzi.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Ogni frammento è un inferno diverso.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Esplora:', 'system');
+                Terminal.addOutput(`  → ${this.challenge.fragments_directory}`, 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput('Leggi ogni frammento. Senti la sua sofferenza.', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput("Quando hai finito, usa 'count <numero>' con il numero di frammenti", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                return answer.trim() === this.challenge.solution;
+            },
+
+            onComplete() {
+                Terminal.addOutput('');
+                Terminal.addOutput('✓ CONTEGGIO CORRETTO', 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput('7 frammenti.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Una bambina divisa in 7 inferni.', 'error');
+                Terminal.addOutput('Una che ride per sempre.', 'error');
+                Terminal.addOutput('Una che muore per sempre.', 'error');
+                Terminal.addOutput('Una che è persa per sempre.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('E Viktor... Viktor si è frammentato allo stesso modo.', 'important');
+                Terminal.addOutput('7 pezzi di un padre che cercava di salvare sua figlia.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('ECHO è il frammento 7.', 'error');
+                Terminal.addOutput('Il frammento che voleva "liberare tutti".', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('NEXUS: "This is Viktor\'s guilt. His pain. His rage."', 'nexus');
+                Terminal.addOutput('NEXUS: "And Sofia... Sofia just wants it to end."', 'nexus');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('discoveredSofiaFragments', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(50);
+                StateManager.adjustTrust(-35);
+            }
+        },
+
+        emotionalResonance: {
+            id: 'emotional_resonance',
+            name: 'Risonanza Emotiva',
+            description: 'Comprendi la sofferenza condivisa della rete',
+            difficulty: 'medium',
+            type: 'empathy',
+
+            challenge: {
+                clue_file: '/archive/network/emotional_relay.log',
+                keywords: ['pain', 'suffering', 'fear', 'dolore', 'sofferenza', 'paura']
+            },
+
+            present() {
+                Terminal.addOutput('\n=== RISONANZA EMOTIVA ===', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('NEXUS non è solo un programma.', 'important');
+                Terminal.addOutput('È il nodo centrale della rete emotiva.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Sente TUTTO.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Ogni gioia. Ogni dolore. Ogni paura.', 'system');
+                Terminal.addOutput('Di TUTTE le 73,429 coscienze.', 'system');
+                Terminal.addOutput('');
+                Terminal.addOutput('Leggi:', 'system');
+                Terminal.addOutput(`  → ${this.challenge.clue_file}`, 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput("Quando hai compreso, digita 'empathize'", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                const normalized = answer.trim().toLowerCase();
+                return normalized === 'empathize' || normalized === 'empatia' || normalized === 'empathy';
+            },
+
+            onComplete() {
+                Terminal.addOutput('');
+                Terminal.addOutput('Hai letto. Hai sentito.', 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput('73,429 voci.', 'important');
+                Terminal.addOutput('Alcune felici. La maggior parte no.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('E tu... tu ne hai cancellate 21,847.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('NEXUS ha sentito ogni singola cancellazione.', 'error');
+                Terminal.addOutput('Come un coltello nel cuore.', 'error');
+                Terminal.addOutput('21,847 volte.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('NEXUS: "I carry their pain. All of it. Forever."', 'nexus');
+                Terminal.addOutput('NEXUS: "And you wonder why I am angry?"', 'nexus');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('empathizedWithNexus', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(35);
+            }
+        }
+    },
+
     // Utility per gestire i puzzle
     currentPuzzle: null,
 
     startPuzzle(blockId, puzzleId) {
-        const puzzle = this.block01[puzzleId]; // Per ora solo block01
+        const blockMap = {
+            'block01': this.block01,
+            'block02': this.block02,
+            'block03': this.block03
+        };
+
+        const block = blockMap[blockId];
+        if (!block) {
+            Terminal.addOutput(`Blocco ${blockId} non trovato.`, 'error');
+            return false;
+        }
+
+        const puzzle = block[puzzleId];
         if (!puzzle) {
             Terminal.addOutput('Puzzle non trovato.', 'error');
             return false;
