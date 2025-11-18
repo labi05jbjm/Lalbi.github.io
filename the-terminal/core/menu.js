@@ -414,6 +414,19 @@ const MainMenu = {
         // Reset game state
         StateManager.resetGame();
 
+        // Initialize desktop environment
+        if (typeof DesktopManager !== 'undefined') {
+            DesktopManager.init();
+            // Create terminal window
+            DesktopManager.createWindow('terminal', {
+                title: 'MEMORIAM Terminal',
+                width: 900,
+                height: 650,
+                x: 50,
+                y: 50
+            });
+        }
+
         // Clear terminal and start game
         Terminal.clear();
         Terminal.enableInput();
@@ -427,6 +440,19 @@ const MainMenu = {
     continueGame() {
         console.log('[MENU] Continuing game');
         this.menuActive = false;
+
+        // Initialize desktop environment if not already initialized
+        if (typeof DesktopManager !== 'undefined' && !DesktopManager.windows.length) {
+            DesktopManager.init();
+            // Create terminal window
+            DesktopManager.createWindow('terminal', {
+                title: 'MEMORIAM Terminal',
+                width: 900,
+                height: 650,
+                x: 50,
+                y: 50
+            });
+        }
 
         // Clear terminal and resume game
         Terminal.clear();

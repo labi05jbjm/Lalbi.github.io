@@ -1,0 +1,976 @@
+/**
+ * DESKTOP ENVIRONMENT STYLES
+ * Comprehensive styling for desktop GUI system
+ */
+
+/* ===== DESKTOP CONTAINER ===== */
+#desktop-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    z-index: 100;
+    overflow: hidden;
+}
+
+/* ===== DESKTOP WINDOWS ===== */
+.desktop-window {
+    position: absolute;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease;
+}
+
+.desktop-window.active {
+    border-color: #00ff41;
+    box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3),
+                0 0 20px rgba(0, 255, 65, 0.2);
+}
+
+.desktop-window.minimized {
+    display: none;
+}
+
+.desktop-window.maximized {
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: calc(100% - 40px) !important;
+}
+
+.desktop-window.dragging {
+    opacity: 0.8;
+    cursor: move;
+}
+
+/* Window Header */
+.window-header {
+    background: linear-gradient(to bottom, #2d2d2d 0%, #1e1e1e 100%);
+    border-bottom: 1px solid #333;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    cursor: move;
+}
+
+.desktop-window.active .window-header {
+    background: linear-gradient(to bottom, #1a3a1a 0%, #1e1e1e 100%);
+    border-bottom-color: #00ff41;
+}
+
+.window-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #aaa;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.desktop-window.active .window-title {
+    color: #00ff41;
+}
+
+.window-icon {
+    font-size: 16px;
+}
+
+.window-title-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Window Controls */
+.window-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.window-btn {
+    width: 32px;
+    height: 24px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: #aaa;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.window-btn:hover {
+    background: #333;
+    border-color: #555;
+}
+
+.window-btn.minimize-btn:hover {
+    background: #3a3a00;
+    border-color: #ffff00;
+    color: #ffff00;
+}
+
+.window-btn.maximize-btn:hover {
+    background: #003a00;
+    border-color: #00ff00;
+    color: #00ff00;
+}
+
+.window-btn.close-btn:hover {
+    background: #3a0000;
+    border-color: #ff0000;
+    color: #ff0000;
+}
+
+/* Window Content */
+.window-content {
+    flex: 1;
+    overflow: hidden;
+    background: #0d0d0d;
+    position: relative;
+}
+
+/* Window Resizer */
+.window-resizer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, transparent 50%, #00ff41 50%);
+    cursor: nwse-resize;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.window-resizer:hover {
+    opacity: 1;
+}
+
+/* ===== FILE EXPLORER ===== */
+.file-explorer-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #0d0d0d;
+    color: #00ff41;
+}
+
+/* Explorer Toolbar */
+.explorer-toolbar {
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.toolbar-btn {
+    padding: 4px 8px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: #aaa;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toolbar-btn:hover:not(:disabled) {
+    background: #333;
+    border-color: #00ff41;
+    color: #00ff41;
+}
+
+.toolbar-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.toolbar-btn.active {
+    background: #1a3a1a;
+    border-color: #00ff41;
+    color: #00ff41;
+}
+
+.toolbar-spacer {
+    flex: 1;
+}
+
+/* Address Bar */
+.explorer-address-bar {
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+    padding: 8px;
+}
+
+.address-input {
+    width: 100%;
+    padding: 6px 10px;
+    background: #0d0d0d;
+    border: 1px solid #444;
+    color: #00ff41;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.address-input:focus {
+    outline: none;
+    border-color: #00ff41;
+    box-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+}
+
+/* Explorer Content */
+.explorer-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.explorer-error,
+.explorer-empty {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 14px;
+}
+
+/* File Items */
+.explorer-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.explorer-item:hover {
+    background: #252525;
+    border-color: #00ff41;
+}
+
+.explorer-item.directory {
+    font-weight: 500;
+}
+
+.item-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.item-name {
+    flex: 1;
+    color: #00ff41;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+}
+
+/* Context Menu */
+.explorer-context-menu {
+    position: fixed;
+    background: #1e1e1e;
+    border: 1px solid #00ff41;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    min-width: 150px;
+    z-index: 10000;
+}
+
+.context-menu-item {
+    padding: 8px 16px;
+    color: #00ff41;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.context-menu-item:hover {
+    background: #2a2a2a;
+}
+
+/* Explorer Status Bar */
+.explorer-status-bar {
+    background: #1a1a1a;
+    border-top: 1px solid #333;
+    padding: 6px 12px;
+    font-size: 11px;
+    color: #666;
+}
+
+/* ===== EMAIL CLIENT ===== */
+.email-client-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #0d0d0d;
+}
+
+.email-layout {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Email Sidebar */
+.email-sidebar {
+    width: 200px;
+    background: #1a1a1a;
+    border-right: 1px solid #333;
+    overflow-y: auto;
+}
+
+.email-folder {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.email-folder:hover {
+    background: #252525;
+    color: #00ff41;
+}
+
+.email-folder.active {
+    background: #1a3a1a;
+    color: #00ff41;
+    border-left-color: #00ff41;
+}
+
+.folder-icon {
+    font-size: 16px;
+}
+
+.folder-name {
+    flex: 1;
+    font-size: 13px;
+}
+
+.folder-count {
+    background: #00ff41;
+    color: #000;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* Email List */
+.email-list-container {
+    width: 350px;
+    background: #0d0d0d;
+    border-right: 1px solid #333;
+    overflow-y: auto;
+}
+
+.email-list-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.email-list-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #2a2a2a;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.email-list-item:hover {
+    background: #1a1a1a;
+}
+
+.email-list-item.selected {
+    background: #1a3a1a;
+    border-left: 3px solid #00ff41;
+}
+
+.email-list-item.unread {
+    background: #1a1a1a;
+    font-weight: bold;
+}
+
+.email-from {
+    color: #00ff41;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.email-subject {
+    color: #aaa;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.email-preview {
+    color: #666;
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.email-date {
+    color: #555;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+/* Email View */
+.email-view-container {
+    flex: 1;
+    background: #0d0d0d;
+    overflow-y: auto;
+}
+
+.email-view-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #666;
+    font-size: 14px;
+}
+
+.email-header {
+    background: #1a1a1a;
+    padding: 20px;
+    border-bottom: 1px solid #333;
+}
+
+.email-subject-large {
+    color: #00ff41;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.email-meta {
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.email-from-large,
+.email-date-large {
+    margin: 4px 0;
+}
+
+.email-body {
+    padding: 20px;
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.8;
+    font-family: 'Courier New', monospace;
+}
+
+.email-attachments {
+    margin: 20px;
+    padding: 16px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+}
+
+.attachments-header {
+    color: #00ff41;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: #0d0d0d;
+    border: 1px solid #2a2a2a;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.attachment-item:hover {
+    border-color: #00ff41;
+    background: #1a1a1a;
+}
+
+.attachment-icon {
+    font-size: 18px;
+}
+
+.attachment-name {
+    color: #aaa;
+    font-size: 12px;
+}
+
+/* ===== NOTES APP ===== */
+.notes-app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #0d0d0d;
+}
+
+.notes-toolbar {
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notes-file-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.notes-filename {
+    color: #00ff41;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.notes-filepath {
+    color: #666;
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+}
+
+.notes-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.notes-btn {
+    padding: 6px 12px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: #aaa;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.notes-btn:hover:not(:disabled) {
+    background: #333;
+    border-color: #00ff41;
+    color: #00ff41;
+}
+
+.notes-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.notes-content-area {
+    flex: 1;
+    overflow: hidden;
+}
+
+.notes-content-display {
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    background: #0d0d0d;
+    color: #aaa;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+}
+
+.notes-content-editor {
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    background: #0d0d0d;
+    border: none;
+    color: #00ff41;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    resize: none;
+}
+
+.notes-content-editor:focus {
+    outline: none;
+}
+
+.notes-status-bar {
+    background: #1a1a1a;
+    border-top: 1px solid #333;
+    padding: 6px 12px;
+    font-size: 11px;
+    color: #666;
+}
+
+/* ===== TASKBAR ===== */
+.desktop-taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(to bottom, #2a2a2a 0%, #1a1a1a 100%);
+    border-top: 1px solid #333;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    z-index: 9999;
+}
+
+.taskbar-start-btn {
+    padding: 8px 16px;
+    background: #1a3a1a;
+    border: 1px solid #00ff41;
+    color: #00ff41;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: all 0.2s ease;
+}
+
+.taskbar-start-btn:hover {
+    background: #00ff41;
+    color: #000;
+}
+
+.taskbar-window-list {
+    flex: 1;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.taskbar-window-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: #aaa;
+    font-size: 12px;
+    cursor: pointer;
+    max-width: 200px;
+    transition: all 0.2s ease;
+}
+
+.taskbar-window-btn:hover {
+    background: #333;
+    border-color: #00ff41;
+}
+
+.taskbar-window-btn.active {
+    background: #1a3a1a;
+    border-color: #00ff41;
+    color: #00ff41;
+}
+
+.taskbar-window-btn.minimized {
+    opacity: 0.6;
+}
+
+.taskbar-window-icon {
+    font-size: 16px;
+}
+
+.taskbar-window-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.taskbar-systray {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: 8px;
+}
+
+.taskbar-clock {
+    padding: 6px 12px;
+    background: #0d0d0d;
+    border: 1px solid #333;
+    color: #00ff41;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+}
+
+/* ===== START MENU ===== */
+.start-menu {
+    position: fixed;
+    bottom: 44px;
+    left: 8px;
+    width: 300px;
+    max-height: 500px;
+    background: #1e1e1e;
+    border: 1px solid #00ff41;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+    z-index: 10000;
+}
+
+.start-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.start-menu-item:hover {
+    background: #2a2a2a;
+    color: #00ff41;
+}
+
+.start-menu-icon {
+    font-size: 20px;
+}
+
+.start-menu-name {
+    font-size: 14px;
+}
+
+.start-menu-separator {
+    height: 1px;
+    background: #333;
+    margin: 4px 0;
+}
+
+/* ===== PAUSE MENU ===== */
+.pause-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    backdrop-filter: blur(5px);
+}
+
+.pause-menu {
+    background: #1e1e1e;
+    border: 2px solid #00ff41;
+    padding: 40px;
+    min-width: 400px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+}
+
+.pause-title {
+    color: #00ff41;
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.pause-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pause-btn {
+    padding: 12px 24px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: #aaa;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pause-btn:hover {
+    background: #1a3a1a;
+    border-color: #00ff41;
+    color: #00ff41;
+}
+
+.pause-btn.resume-btn {
+    background: #1a3a1a;
+    border-color: #00ff41;
+    color: #00ff41;
+}
+
+.pause-btn.resume-btn:hover {
+    background: #00ff41;
+    color: #000;
+}
+
+/* ===== GLITCH EFFECTS ===== */
+.glitch-effect {
+    animation: glitch-anim 0.3s infinite;
+}
+
+@keyframes glitch-anim {
+    0% {
+        filter: hue-rotate(0deg);
+        transform: translate(0);
+    }
+    20% {
+        filter: hue-rotate(90deg);
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        filter: hue-rotate(180deg);
+        transform: translate(2px, -2px);
+    }
+    60% {
+        filter: hue-rotate(270deg);
+        transform: translate(-2px, -2px);
+    }
+    80% {
+        filter: hue-rotate(360deg);
+        transform: translate(2px, 2px);
+    }
+    100% {
+        filter: hue-rotate(0deg);
+        transform: translate(0);
+    }
+}
+
+@keyframes window-force-close {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.1) rotate(5deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0) rotate(45deg);
+    }
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+.explorer-content::-webkit-scrollbar,
+.email-sidebar::-webkit-scrollbar,
+.email-list-container::-webkit-scrollbar,
+.email-view-container::-webkit-scrollbar,
+.start-menu::-webkit-scrollbar,
+.taskbar-window-list::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.explorer-content::-webkit-scrollbar-track,
+.email-sidebar::-webkit-scrollbar-track,
+.email-list-container::-webkit-scrollbar-track,
+.email-view-container::-webkit-scrollbar-track,
+.start-menu::-webkit-scrollbar-track,
+.taskbar-window-list::-webkit-scrollbar-track {
+    background: #0d0d0d;
+}
+
+.explorer-content::-webkit-scrollbar-thumb,
+.email-sidebar::-webkit-scrollbar-thumb,
+.email-list-container::-webkit-scrollbar-thumb,
+.email-view-container::-webkit-scrollbar-thumb,
+.start-menu::-webkit-scrollbar-thumb,
+.taskbar-window-list::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+    border: 1px solid #333;
+}
+
+.explorer-content::-webkit-scrollbar-thumb:hover,
+.email-sidebar::-webkit-scrollbar-thumb:hover,
+.email-list-container::-webkit-scrollbar-thumb:hover,
+.email-view-container::-webkit-scrollbar-thumb:hover,
+.start-menu::-webkit-scrollbar-thumb:hover,
+.taskbar-window-list::-webkit-scrollbar-thumb:hover {
+    background: #00ff41;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .desktop-window {
+        width: 100% !important;
+        height: calc(100% - 40px) !important;
+        left: 0 !important;
+        top: 0 !important;
+    }
+
+    .email-layout {
+        flex-direction: column;
+    }
+
+    .email-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #333;
+    }
+
+    .email-list-container {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #333;
+    }
+
+    .taskbar-window-btn {
+        max-width: 120px;
+    }
+
+    .start-menu {
+        width: calc(100% - 16px);
+    }
+
+    .pause-menu {
+        min-width: 300px;
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .window-title-text {
+        display: none;
+    }
+
+    .taskbar-start-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .folder-name {
+        font-size: 11px;
+    }
+
+    .pause-menu {
+        min-width: 250px;
+        padding: 20px 15px;
+    }
+
+    .pause-title {
+        font-size: 24px;
+    }
+}
