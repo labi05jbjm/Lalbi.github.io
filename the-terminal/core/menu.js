@@ -51,6 +51,7 @@ const MainMenu = {
 
         // Interface
         customCursor: true,
+        cursorTrail: true, // Enable/disable cursor trail animation
         interfaceOpacity: 95, // 50-100
         highContrast: false,
         colorTheme: 'green', // green, amber, blue, red, purple, cyan
@@ -352,9 +353,7 @@ const MainMenu = {
                 { value: 'en', label: 'English 🇬🇧' }
             ],
             (value) => {
-                localStorage.setItem('gameLingua', value);
-                // Show reload message
-                Terminal.addOutput('⚠ Riavvia il gioco per applicare le modifiche - Restart the game to apply changes', 'warning');
+                this.showLanguageChangeConfirmation(value);
             }
         ));
 
@@ -473,6 +472,17 @@ const MainMenu = {
                     document.body.style.cursor = 'none';
                 } else {
                     document.body.style.cursor = 'default';
+                }
+            }
+        ));
+
+        optionsContainer.appendChild(this.createOptionToggle(
+            'Scia Cursore',
+            'cursorTrail',
+            'Attiva/disattiva l\'animazione della scia cibernetica del cursore',
+            (value) => {
+                if (CursorManager) {
+                    CursorManager.trailEnabled = value;
                 }
             }
         ));
@@ -788,13 +798,46 @@ const MainMenu = {
     },
 
     showDeleteSlotConfirmation(slotId) {
+        // Check if slot exists
+        const slots = StateManager.getAllSaveSlots();
+        const slot = slots.find(s => s.slotId === slotId);
+
         const dialogDiv = document.createElement('div');
         dialogDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10, 14, 20, 0.95); border: 2px solid #ff3366; padding: 30px; border-radius: 8px; z-index: 10000; box-shadow: 0 0 30px rgba(255, 51, 102, 0.5);';
+
+        if (!slot || !slot.exists) {
+            // Empty slot - philosophical message
+            dialogDiv.innerHTML = `
+                <div style="color: #00ff88; font-size: 16px; margin-bottom: 20px; text-align: center; line-height: 1.6;">
+                    💭<br><br>
+                    <span style="font-size: 14px; color: #00ff66; font-style: italic;">
+                    Non puoi cancellare<br>ciò che non hai vissuto.
+                    </span>
+                </div>
+            `;
+
+            const btnContainer = document.createElement('div');
+            btnContainer.style.cssText = 'display: flex; justify-content: center;';
+
+            const btnOk = this.createMenuButton('COMPRENDO', () => {
+                dialogDiv.remove();
+            });
+            btnOk.style.minWidth = '150px';
+
+            btnContainer.appendChild(btnOk);
+            dialogDiv.appendChild(btnContainer);
+            document.body.appendChild(dialogDiv);
+            return;
+        }
+
+        // Existing slot - philosophical message
         dialogDiv.innerHTML = `
-            <div style="color: #ff3366; font-size: 16px; margin-bottom: 20px; text-align: center;">
-                🗑️ ELIMINA SLOT ${slotId}?<br><br>
-                <span style="font-size: 13px; color: #ccc;">
-                Questa azione è irreversibile.
+            <div style="color: #ff3366; font-size: 16px; margin-bottom: 20px; text-align: center; line-height: 1.6;">
+                🗑️<br><br>
+                <span style="font-size: 14px; color: #ff6666; font-style: italic;">
+                Puoi tentare di cancellare un ricordo,<br>
+                ma esso vivrà sempre<br>
+                ancorato nei tuoi abissi.
                 </span>
             </div>
         `;
@@ -802,12 +845,12 @@ const MainMenu = {
         const btnContainer = document.createElement('div');
         btnContainer.style.cssText = 'display: flex; justify-content: center; gap: 15px;';
 
-        const btnNo = this.createMenuButton('ANNULLA', () => {
+        const btnNo = this.createMenuButton('PRESERVA', () => {
             dialogDiv.remove();
         });
         btnNo.style.minWidth = '120px';
 
-        const btnYes = this.createMenuButton('ELIMINA', () => {
+        const btnYes = this.createMenuButton('CANCELLA', () => {
             dialogDiv.remove();
             StateManager.deleteSaveSlot(slotId);
             // Refresh current screen
@@ -825,6 +868,59 @@ const MainMenu = {
         btnYes.style.background = 'rgba(255, 51, 102, 0.2)';
         btnYes.style.borderColor = '#ff3366';
         btnYes.style.color = '#ff3366';
+
+        btnContainer.appendChild(btnNo);
+        btnContainer.appendChild(btnYes);
+        dialogDiv.appendChild(btnContainer);
+        document.body.appendChild(dialogDiv);
+    },
+
+    showLanguageChangeConfirmation(newLanguage) {
+        const languageNames = {
+            'it': 'Italiano',
+            'en': 'English'
+        };
+
+        const dialogDiv = document.createElement('div');
+        dialogDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10, 14, 20, 0.95); border: 2px solid #00ff88; padding: 30px; border-radius: 8px; z-index: 10000; box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);';
+        dialogDiv.innerHTML = `
+            <div style="color: #00ff88; font-size: 16px; margin-bottom: 20px; text-align: center;">
+                🌐 ${newLanguage === 'it' ? 'CAMBIA LINGUA' : 'CHANGE LANGUAGE'}<br><br>
+                <span style="font-size: 13px; color: #ccc;">
+                ${newLanguage === 'it' ? 'Vuoi cambiare la lingua in' : 'Change language to'} ${languageNames[newLanguage]}?<br>
+                ${newLanguage === 'it' ? 'Il menu verrà ricaricato.' : 'The menu will reload.'}
+                </span>
+            </div>
+        `;
+
+        const btnContainer = document.createElement('div');
+        btnContainer.style.cssText = 'display: flex; justify-content: center; gap: 15px;';
+
+        const btnNo = this.createMenuButton(newLanguage === 'it' ? 'ANNULLA' : 'CANCEL', () => {
+            // Restore previous language in select
+            const select = document.querySelector('select[data-option="language"]');
+            if (select) {
+                select.value = this.options.language;
+            }
+            dialogDiv.remove();
+        });
+        btnNo.style.minWidth = '120px';
+
+        const btnYes = this.createMenuButton(newLanguage === 'it' ? 'CONFERMA' : 'CONFIRM', () => {
+            dialogDiv.remove();
+            // Apply language change
+            this.options.language = newLanguage;
+            localStorage.setItem('gameLingua', newLanguage);
+            this.saveOptions();
+
+            // Reload options menu
+            const optionsScreen = document.getElementById('options-screen');
+            if (optionsScreen) {
+                optionsScreen.remove();
+                this.showOptions();
+            }
+        });
+        btnYes.style.minWidth = '120px';
 
         btnContainer.appendChild(btnNo);
         btnContainer.appendChild(btnYes);
@@ -1349,6 +1445,11 @@ const MainMenu = {
             document.body.style.cursor = 'none';
         } else {
             document.body.style.cursor = 'default';
+        }
+
+        // Cursor Trail
+        if (CursorManager) {
+            CursorManager.trailEnabled = this.options.cursorTrail;
         }
 
         // Skip Animations

@@ -8,6 +8,7 @@ const CursorManager = {
     lastX: 0,
     lastY: 0,
     trailDelay: 0,
+    trailEnabled: true, // Can be toggled via options
 
     init() {
         // Create custom cursor element
@@ -51,6 +52,9 @@ const CursorManager = {
     },
 
     createTrail(x, y) {
+        // Check if trail is enabled
+        if (!this.trailEnabled) return;
+
         // Throttle trail creation
         this.trailDelay++;
         if (this.trailDelay < 2) return; // Create trail every 2 frames for more density
