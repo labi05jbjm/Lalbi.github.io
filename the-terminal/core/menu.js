@@ -114,18 +114,14 @@ const MainMenu = {
 
         // New Game button
         const btnNewGame = this.createMenuButton('NUOVA PARTITA', () => {
-            if (hasSavedGame) {
-                this.showConfirmDialog();
-            } else {
-                this.startNewGame();
-            }
+            this.showNewGameSlotSelection();
         });
         menuContainer.appendChild(btnNewGame);
 
-        // Continue button (only if there's a saved game)
+        // Load Game button (only if there's at least one saved game)
         if (hasSavedGame) {
-            const btnContinue = this.createMenuButton('CONTINUA', () => {
-                this.continueGame();
+            const btnContinue = this.createMenuButton('CARICA PARTITA', () => {
+                this.showLoadGame();
             });
             menuContainer.appendChild(btnContinue);
         }
@@ -524,6 +520,298 @@ const MainMenu = {
 
         output.appendChild(optionsDiv);
         Terminal.scrollToBottom();
+    },
+
+    showLoadGame() {
+        const output = document.getElementById('terminal-output');
+
+        // Remove menu and title
+        const menu = document.getElementById('main-menu-container');
+        if (menu) menu.remove();
+        const titleDiv = document.querySelector('.menu-title-animated');
+        if (titleDiv) titleDiv.remove();
+
+        // Load game screen
+        const loadDiv = document.createElement('div');
+        loadDiv.id = 'load-game-screen';
+        loadDiv.style.cssText = 'text-align: center; margin-top: 20px;';
+
+        // Title
+        const title = document.createElement('div');
+        title.style.cssText = 'color: #00ff88; font-size: 18px; font-weight: bold; margin-bottom: 20px; letter-spacing: 2px;';
+        title.textContent = '💾 CARICA PARTITA';
+        loadDiv.appendChild(title);
+
+        // Slots container
+        const slotsContainer = document.createElement('div');
+        slotsContainer.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 20px;';
+
+        // Get all save slots
+        const slots = StateManager.getAllSaveSlots();
+
+        slots.forEach(slot => {
+            const slotDiv = this.createSaveSlotButton(slot, (slotId) => {
+                // Load this slot
+                loadDiv.remove();
+                StateManager.currentSlot = slotId;
+                this.continueGame();
+            });
+            slotsContainer.appendChild(slotDiv);
+        });
+
+        loadDiv.appendChild(slotsContainer);
+
+        // Back button
+        const btnBack = this.createMenuButton('TORNA AL MENU', () => {
+            loadDiv.remove();
+            this.show();
+        });
+        btnBack.style.marginTop = '10px';
+        loadDiv.appendChild(btnBack);
+
+        output.appendChild(loadDiv);
+        Terminal.scrollToBottom();
+    },
+
+    showNewGameSlotSelection() {
+        const output = document.getElementById('terminal-output');
+
+        // Remove menu and title
+        const menu = document.getElementById('main-menu-container');
+        if (menu) menu.remove();
+        const titleDiv = document.querySelector('.menu-title-animated');
+        if (titleDiv) titleDiv.remove();
+
+        // New game slot selection screen
+        const newGameDiv = document.createElement('div');
+        newGameDiv.id = 'new-game-screen';
+        newGameDiv.style.cssText = 'text-align: center; margin-top: 20px;';
+
+        // Title
+        const title = document.createElement('div');
+        title.style.cssText = 'color: #00ff88; font-size: 18px; font-weight: bold; margin-bottom: 15px; letter-spacing: 2px;';
+        title.textContent = '🎮 SELEZIONA SLOT';
+        newGameDiv.appendChild(title);
+
+        // Subtitle
+        const subtitle = document.createElement('div');
+        subtitle.style.cssText = 'color: #888; font-size: 12px; margin-bottom: 20px;';
+        subtitle.textContent = 'Scegli uno slot vuoto o sovrascrivi una partita esistente';
+        newGameDiv.appendChild(subtitle);
+
+        // Slots container
+        const slotsContainer = document.createElement('div');
+        slotsContainer.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 20px;';
+
+        // Get all save slots
+        const slots = StateManager.getAllSaveSlots();
+
+        slots.forEach(slot => {
+            const slotDiv = this.createSaveSlotButton(slot, (slotId) => {
+                // Confirm if slot is not empty
+                if (slot.exists) {
+                    this.showOverwriteConfirmation(slotId, () => {
+                        newGameDiv.remove();
+                        StateManager.currentSlot = slotId;
+                        this.startNewGame();
+                    });
+                } else {
+                    newGameDiv.remove();
+                    StateManager.currentSlot = slotId;
+                    this.startNewGame();
+                }
+            }, !slot.exists);
+            slotsContainer.appendChild(slotDiv);
+        });
+
+        newGameDiv.appendChild(slotsContainer);
+
+        // Back button
+        const btnBack = this.createMenuButton('TORNA AL MENU', () => {
+            newGameDiv.remove();
+            this.show();
+        });
+        btnBack.style.marginTop = '10px';
+        newGameDiv.appendChild(btnBack);
+
+        output.appendChild(newGameDiv);
+        Terminal.scrollToBottom();
+    },
+
+    createSaveSlotButton(slot, onClick, isEmpty = false) {
+        const container = document.createElement('div');
+        container.className = 'save-slot-button';
+        container.style.cssText = `
+            width: 450px;
+            max-width: 90%;
+            background: ${slot.exists ? 'rgba(0, 255, 136, 0.08)' : 'rgba(100, 100, 100, 0.05)'};
+            border: 2px solid ${slot.exists ? 'rgba(0, 255, 136, 0.4)' : 'rgba(100, 100, 100, 0.3)'};
+            padding: 12px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        `;
+
+        if (slot.exists) {
+            // Existing save slot
+            const saveDate = new Date(slot.saveTime);
+            const hours = Math.floor(slot.timePlayedMinutes / 60);
+            const minutes = slot.timePlayedMinutes % 60;
+
+            container.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="text-align: left;">
+                        <div style="color: #00ff88; font-size: 16px; font-weight: bold; margin-bottom: 5px;">
+                            💾 SLOT ${slot.slotId}
+                        </div>
+                        <div style="color: #00ff66; font-size: 13px; margin-bottom: 3px;">
+                            Blocco ${slot.currentBlock}/8 · ${slot.progress}% completato
+                        </div>
+                        <div style="color: #888; font-size: 11px;">
+                            ${saveDate.toLocaleDateString('it-IT')} ${saveDate.toLocaleTimeString('it-IT')}
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="color: #00aaff; font-size: 12px; font-family: monospace;">
+                            ⏱ ${hours}h ${minutes}m
+                        </div>
+                        <button class="delete-slot-btn" style="
+                            margin-top: 8px;
+                            padding: 4px 10px;
+                            font-size: 10px;
+                            background: rgba(255, 0, 0, 0.2);
+                            border: 1px solid #ff3366;
+                            color: #ff3366;
+                            border-radius: 3px;
+                            cursor: pointer;
+                        ">🗑 ELIMINA</button>
+                    </div>
+                </div>
+            `;
+
+            // Delete button handler
+            const deleteBtn = container.querySelector('.delete-slot-btn');
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                this.showDeleteSlotConfirmation(slot.slotId);
+            };
+        } else {
+            // Empty slot
+            container.innerHTML = `
+                <div style="text-align: center; color: #666; padding: 10px;">
+                    <div style="font-size: 14px; margin-bottom: 5px;">
+                        📂 SLOT ${slot.slotId}
+                    </div>
+                    <div style="font-size: 12px; font-style: italic;">
+                        ${isEmpty ? '[ VUOTO - Clicca per iniziare ]' : '[ VUOTO ]'}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Hover effects
+        container.onmouseenter = () => {
+            container.style.background = slot.exists ? 'rgba(0, 255, 136, 0.15)' : 'rgba(100, 100, 100, 0.1)';
+            container.style.borderColor = slot.exists ? '#00ff88' : '#666';
+            container.style.boxShadow = `0 0 15px ${slot.exists ? 'rgba(0, 255, 136, 0.3)' : 'rgba(100, 100, 100, 0.2)'}`;
+            if (SoundManager) SoundManager.menuHover();
+        };
+
+        container.onmouseleave = () => {
+            container.style.background = slot.exists ? 'rgba(0, 255, 136, 0.08)' : 'rgba(100, 100, 100, 0.05)';
+            container.style.borderColor = slot.exists ? 'rgba(0, 255, 136, 0.4)' : 'rgba(100, 100, 100, 0.3)';
+            container.style.boxShadow = 'none';
+        };
+
+        container.onclick = () => {
+            if (SoundManager) SoundManager.menuClick();
+            onClick(slot.slotId);
+        };
+
+        return container;
+    },
+
+    showOverwriteConfirmation(slotId, onConfirm) {
+        const output = document.getElementById('terminal-output');
+
+        const dialogDiv = document.createElement('div');
+        dialogDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10, 14, 20, 0.95); border: 2px solid #ff6b6b; padding: 30px; border-radius: 8px; z-index: 10000; box-shadow: 0 0 30px rgba(255, 107, 107, 0.5);';
+        dialogDiv.innerHTML = `
+            <div style="color: #ff6b6b; font-size: 16px; margin-bottom: 20px; text-align: center;">
+                ⚠️ SOVRASCRIVI SLOT ${slotId}?<br><br>
+                <span style="font-size: 13px; color: #ccc;">
+                Questa azione cancellerà la partita esistente<br>
+                e non può essere annullata.
+                </span>
+            </div>
+        `;
+
+        const btnContainer = document.createElement('div');
+        btnContainer.style.cssText = 'display: flex; justify-content: center; gap: 15px;';
+
+        const btnNo = this.createMenuButton('ANNULLA', () => {
+            dialogDiv.remove();
+        });
+        btnNo.style.minWidth = '120px';
+
+        const btnYes = this.createMenuButton('SOVRASCRIVI', () => {
+            dialogDiv.remove();
+            onConfirm();
+        });
+        btnYes.style.minWidth = '120px';
+        btnYes.style.background = 'rgba(255, 51, 102, 0.2)';
+        btnYes.style.borderColor = '#ff3366';
+        btnYes.style.color = '#ff3366';
+
+        btnContainer.appendChild(btnNo);
+        btnContainer.appendChild(btnYes);
+        dialogDiv.appendChild(btnContainer);
+        document.body.appendChild(dialogDiv);
+    },
+
+    showDeleteSlotConfirmation(slotId) {
+        const dialogDiv = document.createElement('div');
+        dialogDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10, 14, 20, 0.95); border: 2px solid #ff3366; padding: 30px; border-radius: 8px; z-index: 10000; box-shadow: 0 0 30px rgba(255, 51, 102, 0.5);';
+        dialogDiv.innerHTML = `
+            <div style="color: #ff3366; font-size: 16px; margin-bottom: 20px; text-align: center;">
+                🗑️ ELIMINA SLOT ${slotId}?<br><br>
+                <span style="font-size: 13px; color: #ccc;">
+                Questa azione è irreversibile.
+                </span>
+            </div>
+        `;
+
+        const btnContainer = document.createElement('div');
+        btnContainer.style.cssText = 'display: flex; justify-content: center; gap: 15px;';
+
+        const btnNo = this.createMenuButton('ANNULLA', () => {
+            dialogDiv.remove();
+        });
+        btnNo.style.minWidth = '120px';
+
+        const btnYes = this.createMenuButton('ELIMINA', () => {
+            dialogDiv.remove();
+            StateManager.deleteSaveSlot(slotId);
+            // Refresh current screen
+            const loadScreen = document.getElementById('load-game-screen');
+            const newGameScreen = document.getElementById('new-game-screen');
+            if (loadScreen) {
+                loadScreen.remove();
+                this.showLoadGame();
+            } else if (newGameScreen) {
+                newGameScreen.remove();
+                this.showNewGameSlotSelection();
+            }
+        });
+        btnYes.style.minWidth = '120px';
+        btnYes.style.background = 'rgba(255, 51, 102, 0.2)';
+        btnYes.style.borderColor = '#ff3366';
+        btnYes.style.color = '#ff3366';
+
+        btnContainer.appendChild(btnNo);
+        btnContainer.appendChild(btnYes);
+        dialogDiv.appendChild(btnContainer);
+        document.body.appendChild(dialogDiv);
     },
 
     createOptionToggle(label, optionKey, description, onChange) {

@@ -4,6 +4,9 @@
  */
 
 const StateManager = {
+    currentSlot: 1, // Current active save slot (1-5)
+    maxSlots: 5, // Maximum number of save slots
+
     state: {
         currentBlock: 1,
         progress: 0,
@@ -52,18 +55,49 @@ const StateManager = {
         lastSaveTime: Date.now(),
     },
 
-    init() {
+    init(slotId = null) {
+        // Load from specific slot or last used slot
+        if (slotId) {
+            this.currentSlot = slotId;
+        } else {
+            // Try to load last used slot from localStorage
+            const lastSlot = localStorage.getItem('the_terminal_last_slot');
+            if (lastSlot) {
+                this.currentSlot = parseInt(lastSlot);
+            }
+        }
+
         this.load();
         this.startAutoSave();
         this.trackPlayTime();
     },
 
     save() {
+        return this.saveToSlot(this.currentSlot);
+    },
+
+    load() {
+        return this.loadFromSlot(this.currentSlot);
+    },
+
+    saveToSlot(slotId) {
         try {
-            const saveData = JSON.stringify(this.state);
-            localStorage.setItem('the_terminal_save', saveData);
+            if (slotId < 1 || slotId > this.maxSlots) {
+                console.error('[STATE] Invalid slot ID:', slotId);
+                return false;
+            }
+
             this.state.lastSaveTime = Date.now();
-            console.log('[STATE] Game saved');
+            const saveData = JSON.stringify(this.state);
+            const slotKey = `the_terminal_save_slot_${slotId}`;
+
+            localStorage.setItem(slotKey, saveData);
+            localStorage.setItem('the_terminal_last_slot', slotId.toString());
+
+            // Update metadata
+            this.updateSlotMetadata(slotId);
+
+            console.log(`[STATE] Game saved to slot ${slotId}`);
             return true;
         } catch (e) {
             console.error('[STATE] Save failed:', e);
@@ -71,12 +105,21 @@ const StateManager = {
         }
     },
 
-    load() {
+    loadFromSlot(slotId) {
         try {
-            const saveData = localStorage.getItem('the_terminal_save');
+            if (slotId < 1 || slotId > this.maxSlots) {
+                console.error('[STATE] Invalid slot ID:', slotId);
+                return false;
+            }
+
+            const slotKey = `the_terminal_save_slot_${slotId}`;
+            const saveData = localStorage.getItem(slotKey);
+
             if (saveData) {
                 this.state = JSON.parse(saveData);
-                console.log('[STATE] Game loaded');
+                this.currentSlot = slotId;
+                localStorage.setItem('the_terminal_last_slot', slotId.toString());
+                console.log(`[STATE] Game loaded from slot ${slotId}`);
                 return true;
             }
         } catch (e) {
@@ -85,8 +128,89 @@ const StateManager = {
         return false;
     },
 
+    updateSlotMetadata(slotId) {
+        try {
+            const metadata = this.getAllSaveSlots();
+            metadata[slotId - 1] = {
+                slotId: slotId,
+                exists: true,
+                saveTime: this.state.lastSaveTime,
+                currentBlock: this.state.currentBlock,
+                timePlayedMinutes: this.state.timePlayedMinutes,
+                progress: this.state.progress
+            };
+
+            localStorage.setItem('the_terminal_save_metadata', JSON.stringify(metadata));
+        } catch (e) {
+            console.error('[STATE] Failed to update metadata:', e);
+        }
+    },
+
+    getAllSaveSlots() {
+        try {
+            // Try to load cached metadata first
+            const cachedMetadata = localStorage.getItem('the_terminal_save_metadata');
+            if (cachedMetadata) {
+                return JSON.parse(cachedMetadata);
+            }
+        } catch (e) {
+            console.warn('[STATE] Failed to load cached metadata:', e);
+        }
+
+        // Build metadata from scratch
+        const slots = [];
+        for (let i = 1; i <= this.maxSlots; i++) {
+            const slotKey = `the_terminal_save_slot_${i}`;
+            const saveData = localStorage.getItem(slotKey);
+
+            if (saveData) {
+                try {
+                    const state = JSON.parse(saveData);
+                    slots.push({
+                        slotId: i,
+                        exists: true,
+                        saveTime: state.lastSaveTime || Date.now(),
+                        currentBlock: state.currentBlock || 1,
+                        timePlayedMinutes: state.timePlayedMinutes || 0,
+                        progress: state.progress || 0
+                    });
+                } catch (e) {
+                    slots.push({ slotId: i, exists: false });
+                }
+            } else {
+                slots.push({ slotId: i, exists: false });
+            }
+        }
+
+        return slots;
+    },
+
+    deleteSaveSlot(slotId) {
+        try {
+            if (slotId < 1 || slotId > this.maxSlots) {
+                console.error('[STATE] Invalid slot ID:', slotId);
+                return false;
+            }
+
+            const slotKey = `the_terminal_save_slot_${slotId}`;
+            localStorage.removeItem(slotKey);
+
+            // Update metadata
+            const metadata = this.getAllSaveSlots();
+            metadata[slotId - 1] = { slotId: slotId, exists: false };
+            localStorage.setItem('the_terminal_save_metadata', JSON.stringify(metadata));
+
+            console.log(`[STATE] Slot ${slotId} deleted`);
+            return true;
+        } catch (e) {
+            console.error('[STATE] Failed to delete slot:', e);
+            return false;
+        }
+    },
+
     reset() {
-        localStorage.removeItem('the_terminal_save');
+        // Delete current slot and reload
+        this.deleteSaveSlot(this.currentSlot);
         location.reload();
     },
 
