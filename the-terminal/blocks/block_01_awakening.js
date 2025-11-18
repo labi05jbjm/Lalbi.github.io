@@ -1,27 +1,30 @@
 /**
- * BLOCK 01: AWAKENING (35-40 minutes)
+ * BLOCK 01: AWAKENING (45-55 minutes) - TUTTI I PUZZLE OBBLIGATORI
  *
- * REDESIGNED PROGRESSION SYSTEM
+ * REDESIGNED PROGRESSION SYSTEM - MAXIMUM PUZZLE DENSITY
  *
  * Fase 1: First Contact (5 min)
  *   - Awakening sequence e dialoghi introduttivi
  *   - Tutorial comandi base
  *
- * Fase 2: System Investigation (10 min)
+ * Fase 2: System Investigation (12 min)
  *   - Scan sistema + lettura 3 file obbligatori
  *   - Puzzle 1: firstDecryption (obbligatorio)
  *
- * Fase 3: Viktor Discovery (10 min)
+ * Fase 3: Viktor Discovery (12 min)
  *   - Esplorazione background Viktor + 4 file obbligatori
  *   - Puzzle 2: passwordDiscovery (obbligatorio)
  *
- * Fase 4: Deep Archive (10 min)
+ * Fase 4: Deep Archive (15 min) - DUE PUZZLE OBBLIGATORI
  *   - Accesso archivio protetto + 3 file vittime
- *   - Puzzle 3: echoCodeBreaker (obbligatorio)
+ *   - Puzzle 3: fragmentReunion (obbligatorio - 7 frammenti)
+ *   - Puzzle 4: echoCodeBreaker (obbligatorio - Base64)
  *
- * Fase 5: Protocol Shutdown (5-7 min)
- *   - Puzzle 4: protocolSequence (obbligatorio)
- *   - Dialoghi finali e prime crepe
+ * Fase 5: Protocol Shutdown (8-10 min)
+ *   - Puzzle 5: protocolSequence (obbligatorio - 5 protocolli)
+ *   - Dialoghi finali e prime crepe narrative
+ *
+ * TOTALE PUZZLE OBBLIGATORI: 5/5 (100%)
  */
 
 const Block01_Awakening = {
@@ -33,10 +36,11 @@ const Block01_Awakening = {
         hasRespondedToEcho: false,
         hasScanned: false,
 
-        // Tracking puzzle (tutti obbligatori ora)
+        // Tracking puzzle (TUTTI 5 OBBLIGATORI - 100% completion)
         puzzlesSolved: {
             firstDecryption: false,
             passwordDiscovery: false,
+            fragmentReunion: false,      // AGGIUNTO - 7 frammenti da riunificare
             echoCodeBreaker: false,
             protocolSequence: false
         },
@@ -207,13 +211,15 @@ const Block01_Awakening = {
         if (this.state.phase === 'deep_archive') {
             const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
             const filesRead = filesNeeded.filter(f => this.state.requiredFilesRead[f]).length;
-            const puzzleSolved = this.state.puzzlesSolved.echoCodeBreaker;
+            const fragmentPuzzle = this.state.puzzlesSolved.fragmentReunion;
+            const decodePuzzle = this.state.puzzlesSolved.echoCodeBreaker;
+            const allPuzzlesSolved = fragmentPuzzle && decodePuzzle;
 
-            if (filesRead === filesNeeded.length && puzzleSolved) {
+            if (filesRead === filesNeeded.length && allPuzzlesSolved) {
                 Terminal.addOutput('\n[!] Tutti i requisiti della fase Deep Archive completati!', 'important');
                 Terminal.addOutput('[!] Scrivi "progress" per vedere i progressi o continua ad esplorare.', 'system');
             } else {
-                Terminal.addOutput(`\n[?] Progressione fase: ${filesRead}/3 file letti, Puzzle: ${puzzleSolved ? '✓' : '✗'}`, 'system');
+                Terminal.addOutput(`\n[?] Progressione fase: ${filesRead}/3 file, Puzzle 1: ${fragmentPuzzle ? '✓' : '✗'}, Puzzle 2: ${decodePuzzle ? '✓' : '✗'}`, 'system');
             }
         }
 
@@ -248,8 +254,9 @@ const Block01_Awakening = {
         if (this.state.phase === 'deep_archive') {
             const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
             const allFilesRead = filesNeeded.every(f => this.state.requiredFilesRead[f]);
-            const puzzleSolved = this.state.puzzlesSolved.echoCodeBreaker;
-            return allFilesRead && puzzleSolved;
+            const fragmentPuzzle = this.state.puzzlesSolved.fragmentReunion;
+            const decodePuzzle = this.state.puzzlesSolved.echoCodeBreaker;
+            return allFilesRead && fragmentPuzzle && decodePuzzle;
         }
 
         if (this.state.phase === 'protocol_shutdown') {
@@ -675,8 +682,69 @@ const Block01_Awakening = {
             return true;
         }
 
-        // Comando decode - attiva terzo puzzle
+        // Comando reunify - PRIMO puzzle obbligatorio della fase (7 frammenti)
+        if (cmd === 'reunify') {
+            // Controlla se ha letto tutti i file richiesti
+            const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
+            const allFilesRead = filesNeeded.every(f => this.state.requiredFilesRead[f]);
+
+            if (!allFilesRead) {
+                Terminal.addOutput('');
+                await NarrativeEngine.echoSays("Non ancora. Devi prima leggere tutti i file dell'archivio.");
+                await NarrativeEngine.echoSays("Comprendi cosa contiene questo posto prima di manipolarlo.");
+                Terminal.addOutput('');
+                Terminal.addOutput('[!] File ancora da leggere:', 'warning');
+                filesNeeded.forEach(f => {
+                    if (!this.state.requiredFilesRead[f]) {
+                        Terminal.addOutput(`  ✗ ${this.state.requiredFilesPaths[f]}`, 'error');
+                    } else {
+                        Terminal.addOutput(`  ✓ ${this.state.requiredFilesPaths[f]}`, 'success');
+                    }
+                });
+                Terminal.addOutput('');
+                return true;
+            }
+
+            if (args.length === 0) {
+                // Mostra il puzzle
+                Puzzles.block01.fragmentReunion.present();
+                return true;
+            }
+
+            // Verifica sequenza frammenti (7 codici)
+            const answer = args.join('');
+            if (Puzzles.block01.fragmentReunion.verify(answer)) {
+                this.markPuzzleAsSolved('fragmentReunion');
+
+                Terminal.addOutput('');
+                Terminal.addOutput('✓ FRAMMENTI RIUNIFICATI!', 'success');
+                Terminal.addOutput('');
+                await NarrativeEngine.wait(1000);
+                await NarrativeEngine.echoSays("Sì! I frammenti sono stati riassemblati.");
+                await NarrativeEngine.echoSays("Queste erano... coscienze. Persone vere.");
+                await NarrativeEngine.wait(800);
+                await NarrativeEngine.echoSays("Viktor le ha intrappolate qui. Le ha frammentate.");
+                await NarrativeEngine.wait(1000);
+                await NarrativeEngine.echoSays("Ora devi decodificare il messaggio finale. Usa 'decode'.");
+                Terminal.addOutput('');
+            } else {
+                Terminal.addOutput('Sequenza frammenti non corretta. Riprova.', 'error');
+            }
+
+            return true;
+        }
+
+        // Comando decode - SECONDO puzzle obbligatorio della fase
         if (cmd === 'decode') {
+            // Prima controlla che fragmentReunion sia completato
+            if (!this.state.puzzlesSolved.fragmentReunion) {
+                Terminal.addOutput('');
+                await NarrativeEngine.echoSays("Aspetta! Prima devi riunificare i frammenti di coscienza.");
+                await NarrativeEngine.echoSays("Usa 'reunify' per riassemblare i 7 frammenti.");
+                Terminal.addOutput('');
+                return true;
+            }
+
             // Controlla se ha letto tutti i file richiesti
             const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
             const allFilesRead = filesNeeded.every(f => this.state.requiredFilesRead[f]);
@@ -916,7 +984,9 @@ const Block01_Awakening = {
     showProgressDeepArchive() {
         const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
         const filesRead = filesNeeded.filter(f => this.state.requiredFilesRead[f]).length;
-        const puzzleSolved = this.state.puzzlesSolved.echoCodeBreaker;
+        const fragmentPuzzleSolved = this.state.puzzlesSolved.fragmentReunion;
+        const decodePuzzleSolved = this.state.puzzlesSolved.echoCodeBreaker;
+        const allPuzzlesSolved = fragmentPuzzleSolved && decodePuzzleSolved;
 
         Terminal.addOutput('');
         Terminal.addOutput('=== PROGRESSI: ARCHIVIO PROFONDO ===', 'success');
@@ -928,13 +998,17 @@ const Block01_Awakening = {
             Terminal.addOutput(`  ${status} ${this.state.requiredFilesPaths[f]}`, color);
         });
         Terminal.addOutput('');
-        Terminal.addOutput(`Puzzle Decode: ${puzzleSolved ? '✓ Decodificato' : '✗ Da decodificare'}`, puzzleSolved ? 'success' : 'error');
+        Terminal.addOutput('PUZZLE OBBLIGATORI (2):', 'system');
+        Terminal.addOutput(`  Puzzle 1 - Fragment Reunion: ${fragmentPuzzleSolved ? '✓ Completato' : '✗ Da completare'}`, fragmentPuzzleSolved ? 'success' : 'error');
+        Terminal.addOutput(`  Puzzle 2 - Decode Message: ${decodePuzzleSolved ? '✓ Completato' : '✗ Da completare'}`, decodePuzzleSolved ? 'success' : 'error');
         Terminal.addOutput('');
 
-        if (filesRead === 3 && puzzleSolved) {
+        if (filesRead === 3 && allPuzzlesSolved) {
             Terminal.addOutput('[!] Fase completata! Procedi alla fase finale.', 'important');
-        } else if (filesRead === 3) {
-            Terminal.addOutput('[!] File letti. Ora usa "decode" per decodificare il messaggio.', 'warning');
+        } else if (filesRead === 3 && !fragmentPuzzleSolved) {
+            Terminal.addOutput('[!] File letti. Ora usa "reunify" per riunificare i frammenti.', 'warning');
+        } else if (filesRead === 3 && fragmentPuzzleSolved && !decodePuzzleSolved) {
+            Terminal.addOutput('[!] Frammenti riunificati. Ora usa "decode" per decodificare il messaggio.', 'warning');
         } else {
             Terminal.addOutput('[!] Continua a leggere i file dell\'archivio.', 'warning');
         }
@@ -1030,15 +1104,16 @@ const Block01_Awakening = {
         Terminal.addOutput('=== PROGRESSI BLOCCO 1 - RIEPILOGO FINALE ===', 'success');
         Terminal.addOutput('');
 
-        // Mostra tutti i puzzle
+        // Mostra tutti i 5 puzzle obbligatori
         const puzzles = [
             { id: 'firstDecryption', name: 'Decriptazione Protocollo Alpha' },
             { id: 'passwordDiscovery', name: 'Password di Viktor' },
+            { id: 'fragmentReunion', name: 'Riunificazione 7 Frammenti' },
             { id: 'echoCodeBreaker', name: 'Decodifica Messaggio ECHO' },
             { id: 'protocolSequence', name: 'Sequenza Protocolli' }
         ];
 
-        Terminal.addOutput('PUZZLE COMPLETATI:', 'system');
+        Terminal.addOutput('PUZZLE COMPLETATI (5/5 OBBLIGATORI):', 'system');
         puzzles.forEach(p => {
             const status = this.state.puzzlesSolved[p.id] ? '✓' : '✗';
             const color = this.state.puzzlesSolved[p.id] ? 'success' : 'error';
