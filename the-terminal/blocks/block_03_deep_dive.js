@@ -83,6 +83,9 @@ const Block03_DeepDive = {
             if (!this.state.hasMetNexus) {
                 this.state.hasMetNexus = true;
 
+                // Unlock NEXUS's network sector
+                StateManager.setFlag('metNexus', true);
+
                 Terminal.addOutput('');
                 Terminal.addOutput('Accessing consciousness network...', 'system');
                 await NarrativeEngine.showProgress('Mapping neural connections', 3500);
@@ -101,6 +104,7 @@ const Block03_DeepDive = {
 
                 Terminal.addOutput('');
                 Terminal.addOutput("Use 'view memory <id>' to see consciousness memories.", 'system');
+                Terminal.addOutput("Use 'empathize' to connect with NEXUS emotionally.", 'system');
                 Terminal.addOutput("Or 'talk nexus' to communicate.", 'system');
                 Terminal.addOutput('');
 
@@ -111,6 +115,11 @@ const Block03_DeepDive = {
                 Terminal.addOutput('Already connected to network.', 'system');
                 return true;
             }
+        }
+
+        // Empathize puzzle (available after meeting NEXUS)
+        if (cmd === 'empathize') {
+            return this.handleEmpathizePuzzle();
         }
 
         // Altri comandi base
@@ -171,6 +180,11 @@ const Block03_DeepDive = {
             }
         }
 
+        // Empathize puzzle
+        if (cmd === 'empathize') {
+            return this.handleEmpathizePuzzle();
+        }
+
         if (cmd === 'talk') {
             return this.handleTalkCommand(args);
         }
@@ -208,6 +222,7 @@ const Block03_DeepDive = {
 
                 Terminal.addOutput('');
                 Terminal.addOutput("Ask NEXUS about Viktor to learn the full truth. Type: talk nexus about viktor", 'warning');
+                Terminal.addOutput("Use 'calculate <numero>' to analyze isolated consciousness nodes.", 'system');
                 Terminal.addOutput('');
 
                 this.state.phase = 'viktor_revelation';
@@ -217,6 +232,63 @@ const Block03_DeepDive = {
                 Terminal.addOutput('Network already visualized.', 'system');
                 return true;
             }
+        }
+
+        // Network pathfinding puzzle
+        if (cmd === 'calculate') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: calculate <numero>', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Leggi i file di topologia di rete in /archive/network/ per trovare il numero di nodi isolati.', 'system');
+                return true;
+            }
+
+            const answer = args[0];
+            const puzzle = Puzzles.block03.networkPathfinding;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('');
+                Terminal.addOutput('CALCOLO CORRETTO.', 'success');
+                Terminal.addOutput('');
+                puzzle.onComplete();
+                await NarrativeEngine.wait(1000);
+                await NarrativeEngine.nexusSays("Yes. 26,204 souls, cut off. Alone. Forever. Because of your help.");
+                return true;
+            } else {
+                Terminal.addOutput('Calcolo non corretto. Ricontrolla i dati di rete.', 'error');
+                return true;
+            }
+        }
+
+        // Sofia fragments puzzle
+        if (cmd === 'count') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: count <numero>', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Esplora /archive/sofia_fragments/ per contare i frammenti di Sofia.', 'system');
+                return true;
+            }
+
+            const answer = args[0];
+            const puzzle = Puzzles.block03.sofiaFragmentPuzzle;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('');
+                Terminal.addOutput('CONTEGGIO CORRETTO.', 'success');
+                Terminal.addOutput('');
+                puzzle.onComplete();
+                await NarrativeEngine.wait(1000);
+                await NarrativeEngine.nexusSays("Seven fragments of one little girl. Each trapped in their own hell. This is Viktor's legacy.");
+                return true;
+            } else {
+                Terminal.addOutput('Conteggio non corretto. Conta tutti i frammenti.', 'error');
+                return true;
+            }
+        }
+
+        // Empathize puzzle
+        if (cmd === 'empathize') {
+            return this.handleEmpathizePuzzle();
         }
 
         if (cmd === 'talk') {
@@ -261,6 +333,19 @@ const Block03_DeepDive = {
                 await this.talkToNexus(topic);
                 return true;
             }
+        }
+
+        // Puzzle commands available in all phases
+        if (cmd === 'calculate') {
+            return this.handleNetworkPhase(cmd, args);
+        }
+
+        if (cmd === 'count') {
+            return this.handleNetworkPhase(cmd, args);
+        }
+
+        if (cmd === 'empathize') {
+            return this.handleEmpathizePuzzle();
         }
 
         if (cmd === 'talk') {
@@ -319,6 +404,29 @@ const Block03_DeepDive = {
                 await this.completeBlock();
             }
         );
+    },
+
+    async handleEmpathizePuzzle() {
+        const puzzle = Puzzles.block03.emotionalResonance;
+
+        if (!StateManager.state.flags.empathizedWithNexus) {
+            Terminal.addOutput('');
+            Terminal.addOutput('Stabilendo connessione empatica con NEXUS...', 'warning');
+            await NarrativeEngine.showProgress('Risonanza emotiva in corso', 2500);
+            Terminal.addOutput('');
+            Terminal.addOutput('Senti il peso di ogni coscienza nella rete.', 'important');
+            Terminal.addOutput('Ogni cancellazione è un grido che NEXUS sente.', 'important');
+            Terminal.addOutput('Ogni frammentazione è dolore condiviso.', 'important');
+            Terminal.addOutput('');
+            puzzle.onComplete();
+            await NarrativeEngine.wait(1000);
+            await NarrativeEngine.nexusSays("You feel it now. Even a fraction of what I carry. Every. Single. Day.");
+            return true;
+        } else {
+            Terminal.addOutput('Hai già stabilito una connessione empatica con NEXUS.', 'system');
+            Terminal.addOutput('Il peso emotivo rimane.', 'important');
+            return true;
+        }
     },
 
     async handleTalkCommand(args) {
@@ -581,6 +689,9 @@ const Block03_DeepDive = {
             'explore network - Access consciousness network',
             'view memory <id> - View consciousness memories',
             'visualize network - See network topology',
+            this.state.hasMetNexus ? 'empathize - Connect emotionally with NEXUS' : null,
+            this.state.hasSeenNetwork ? 'calculate <number> - Calculate isolated nodes' : null,
+            this.state.hasSeenNetwork ? 'count <number> - Count Sofia\'s fragments' : null,
             'talk <entity> <msg> - Talk to ECHO, CIPHER, or NEXUS',
             'ls [path] - List files',
             'cat <file> - Read file',

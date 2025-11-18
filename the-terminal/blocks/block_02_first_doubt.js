@@ -129,6 +129,9 @@ const Block02_FirstDoubt = {
         this.state.hasMetCipher = true;
         this.state.phase = 'cipher_appears';
 
+        // Unlock CIPHER's sector
+        StateManager.setFlag('metCipher', true);
+
         await NarrativeEngine.playDialogueSequence(Dialogues.block02.cipherFirstAppearance);
 
         await NarrativeEngine.wait(1000);
@@ -137,16 +140,95 @@ const Block02_FirstDoubt = {
         await NarrativeEngine.playDialogueSequence(Dialogues.block02.echoReactsToCipher);
 
         Terminal.addOutput('');
-        Terminal.addOutput("Ora puoi usare 'decipher <messaggio>' per cercare di capire i messaggi di CIPHER.", 'system');
+        Terminal.addOutput("Ora puoi usare 'decipher <numero> <messaggio>' per decifrare i messaggi di CIPHER.", 'system');
+        Terminal.addOutput("Usa 'answer <numero>' per rispondere a domande specifiche.", 'system');
         Terminal.addOutput("Oppure 'continue' per procedere con la missione di ECHO.", 'system');
         Terminal.addOutput('');
     },
 
     async handleCipherPhase(cmd, args) {
+        // ROT13 Decoder puzzle
         if (cmd === 'decipher') {
-            const message = args.join(' ');
-            await this.decipherMessage(message);
-            return true;
+            if (args.length < 2) {
+                Terminal.addOutput('Uso: decipher <numero_messaggio> <testo_decifrato>', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Messaggi da decifrare:', 'system');
+                const puzzle = Puzzles.block02.rot13Decoder;
+                puzzle.challenge.encoded_messages.forEach((msg, idx) => {
+                    Terminal.addOutput(`  ${idx + 1}. "${msg}"`, 'cipher');
+                });
+                Terminal.addOutput('');
+                Terminal.addOutput('Suggerimento: Usa decodifica ROT13', 'system');
+                return true;
+            }
+
+            const messageNum = args[0];
+            const answer = args.slice(1).join(' ');
+
+            const puzzle = Puzzles.block02.rot13Decoder;
+            if (puzzle.verify(messageNum, answer)) {
+                Terminal.addOutput('');
+                Terminal.addOutput('DECIFRATO CORRETTAMENTE!', 'success');
+                Terminal.addOutput(`Messaggio: "${answer}"`, 'success');
+                Terminal.addOutput('');
+                await NarrativeEngine.cipherSays('Truth.acknowledged(); Suspicion.growing(); Good();');
+                puzzle.onComplete();
+                return true;
+            } else {
+                Terminal.addOutput('Decifratura non corretta. Riprova.', 'error');
+                return true;
+            }
+        }
+
+        // Pain Index puzzle
+        if (cmd === 'answer') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: answer <numero>', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Leggi i file nel Settore Beta per trovare la risposta.', 'system');
+                return true;
+            }
+
+            const answer = args[0];
+            const puzzle = Puzzles.block02.painIndexPuzzle;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('');
+                Terminal.addOutput('RISPOSTA CORRETTA.', 'success');
+                Terminal.addOutput('');
+                puzzle.onComplete();
+                await NarrativeEngine.wait(1000);
+                await NarrativeEngine.cipherSays('Now.you.see(); Count.the.dead(); Help.equals.murder();');
+                return true;
+            } else {
+                Terminal.addOutput('Risposta non corretta. Controlla i dati nel sistema.', 'error');
+                return true;
+            }
+        }
+
+        // Mika Memory puzzle
+        if (cmd === 'acknowledge') {
+            if (args.length === 0 || args[0].toLowerCase() !== 'mika') {
+                Terminal.addOutput('Uso: acknowledge mika', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Leggi la storia di Mika Yoshida in /archive/patients/mika_yoshida/', 'system');
+                return true;
+            }
+
+            const puzzle = Puzzles.block02.mikaMemoryPuzzle;
+            if (!StateManager.state.flags.readMikaStory) {
+                Terminal.addOutput('');
+                Terminal.addOutput('Hai riconosciuto la tragedia di Mika Yoshida.', 'important');
+                Terminal.addOutput('Una madre il cui amore è stato frammentato e corrotto.', 'echo');
+                Terminal.addOutput('');
+                puzzle.onComplete();
+                await NarrativeEngine.wait(1000);
+                await NarrativeEngine.cipherSays('Victim.acknowledged(); Empathy.detected(); Truth.spreads();');
+                return true;
+            } else {
+                Terminal.addOutput('Hai già riconosciuto la storia di Mika.', 'system');
+                return true;
+            }
         }
 
         if (cmd === 'talk') {
@@ -179,44 +261,6 @@ const Block02_FirstDoubt = {
         return false;
     },
 
-    async decipherMessage(message) {
-        // Mini-puzzle: decifrare i messaggi di CIPHER
-
-        if (!message) {
-            Terminal.addOutput('Uso: decipher <messaggio>', 'error');
-            Terminal.addOutput('');
-            Terminal.addOutput('Prova a decifrare uno dei messaggi di CIPHER:', 'system');
-            Terminal.addOutput('  - "01010011 01010100 01001111 01010000" (binario)', 'cipher');
-            Terminal.addOutput('  - "Gur gehgu vf abg jung ur fnlf" (ROT13)', 'cipher');
-            Terminal.addOutput('');
-            return;
-        }
-
-        const lowerMsg = message.toLowerCase();
-
-        // Binary message = "STOP"
-        if (lowerMsg.includes('01010011') || lowerMsg.includes('stop')) {
-            Terminal.addOutput('');
-            Terminal.addOutput('DECIFRATO: "STOP"', 'success');
-            Terminal.addOutput('');
-            await NarrativeEngine.cipherSays('Yes. STOP.liberating(); STOP.destroying();');
-            StateManager.adjustSuspicion(10);
-            return;
-        }
-
-        // ROT13 message = "The truth is not what he says"
-        if (lowerMsg.includes('gur gehgu') || lowerMsg.includes('the truth is not what he says') || lowerMsg.includes('la verità non è')) {
-            Terminal.addOutput('');
-            Terminal.addOutput('DECIFRATO (ROT13): "La verità non è ciò che dice lui"', 'success');
-            Terminal.addOutput('');
-            await NarrativeEngine.cipherSays('He.lies(); He.manipulates(); He.is.fragment(Viktor.pain);');
-            StateManager.adjustSuspicion(15);
-            StateManager.adjustTrust(-10);
-            return;
-        }
-
-        Terminal.addOutput('Impossibile decifrare. Prova con conversione ROT13 o binaria.', 'error');
-    },
 
     async talkToCipher(text) {
         this.state.cipherInteractions++;
@@ -480,7 +524,10 @@ const Block02_FirstDoubt = {
             'cat <file>    - Read file',
             'talk echo <msg> - Talk to ECHO',
             this.state.hasMetCipher ? 'talk cipher <msg> - Talk to CIPHER' : null,
-            this.state.hasMetCipher ? 'decipher <msg> - Decipher CIPHER\'s messages' : null,
+            this.state.hasMetCipher ? 'decipher <num> <text> - Decipher CIPHER\'s ROT13 messages' : null,
+            this.state.hasMetCipher ? 'answer <number> - Answer pain index question' : null,
+            this.state.hasMetCipher ? 'acknowledge mika - Acknowledge Mika\'s story' : null,
+            this.state.hasMetCipher ? 'continue - Continue to next phase' : null,
             this.state.phase === 'complete' ? 'continue - Continue to next block' : null,
         ].filter(Boolean);
     },
