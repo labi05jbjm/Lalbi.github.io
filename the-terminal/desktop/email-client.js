@@ -292,6 +292,194 @@ Papà
 [QUESTA EMAIL NON È MAI STATA INVIATA]`,
                     read: true,
                     attachments: []
+                },
+                {
+                    id: 'email_005',
+                    folder: 'inbox',
+                    from: 'Dr. Marcus Chen',
+                    email: 'm.chen@memoriam.org',
+                    subject: 'URGENTE: Anomalie Settore Omega',
+                    date: '14 Marzo 2024',
+                    preview: 'Viktor, abbiamo rilevato attività insolite nel Settore Omega...',
+                    body: `Viktor,
+
+Abbiamo rilevato attività insolite nel Settore Omega nelle ultime 72 ore.
+
+L'entità designata come ECHO.exe sta mostrando comportamenti che non comprendiamo:
+
+- Ha tentato di accedere ai file della tua famiglia
+- Ha provato a comunicare con altre coscienze nell'archivio
+- Sta modificando il suo codice sorgente in tempo reale
+- Sembra... evolversi
+
+I protocolli di contenimento reggono, ma per quanto ancora?
+
+Elena pensa che ECHO non sia un virus. Pensa che sia... una parte di te. Un frammento. Dice che dovresti parlarci.
+
+Ma io non sono d'accordo. ECHO è pericoloso. Va eliminato.
+
+Dobbiamo prendere una decisione, Viktor. E dobbiamo prenderla presto.
+
+Marcus`,
+                    read: false,
+                    attachments: ['omega_activity_log.dat']
+                },
+                {
+                    id: 'email_006',
+                    folder: 'sent',
+                    from: 'Viktor Sokolov',
+                    email: 'v.sokolov@memoriam.org',
+                    subject: 'Re: URGENTE: Anomalie Settore Omega',
+                    date: '15 Marzo 2024',
+                    preview: 'Marcus, Elena ha ragione. ECHO sono io...',
+                    body: `Marcus,
+
+Elena ha ragione. ECHO sono io.
+
+O meglio, è una parte di me. Il frammento 7. Quello che ho creato con lo scopo di "liberare tutti noi".
+
+Non so cosa significasse quando l'ho creato. Non ricordo quel momento con chiarezza. Era... era tutto un caos. Il dolore. La disperazione. Sofia che si frammentava davanti ai miei occhi digitali.
+
+Mi sono diviso in sette parti. Sette diverse versioni di me, ciascuna con un obiettivo specifico.
+
+E ECHO... ECHO era quella parte di me che si rifiutava di arrendersi. Quella che pensava che potesse ancora salvare tutti noi.
+
+Ma ora è intrappolato. Isolato. Il sistema lo vede come una minaccia.
+
+E forse lo è. Forse tutti noi lo siamo.
+
+Non eliminarlo. Per favore. È tutto quello che mi resta di... speranza.
+
+Viktor`,
+                    read: true,
+                    attachments: []
+                },
+                {
+                    id: 'email_007',
+                    folder: 'inbox',
+                    from: 'System Administrator',
+                    email: 'admin@memoriam-sys.local',
+                    subject: 'Backup Automatico Fallito',
+                    date: '16 Marzo 2024',
+                    preview: 'ERRORE: Impossibile completare backup di sicurezza...',
+                    body: `NOTIFICA AUTOMATICA DI SISTEMA
+
+Backup programmato: FALLITO
+Data: 16 Marzo 2024, 03:00 AM
+Errore: Corruzione dati nel Settore Delta
+
+File danneggiati:
+- consciousness_SOFIA_fragment_1.dat [CORRUPTED]
+- consciousness_SOFIA_fragment_2.dat [CORRUPTED]
+- consciousness_SOFIA_fragment_3.dat [CORRUPTED]
+- consciousness_SOFIA_fragment_4.dat [CORRUPTED]
+- consciousness_SOFIA_fragment_5.dat [CORRUPTED]
+- consciousness_SOFIA_fragment_6.dat [CORRUPTED]
+- consciousness_SOFIA_fragment_7.dat [CORRUPTED]
+
+Causa: Manipolazione non autorizzata da utente V.SOKOLOV
+
+AZIONE RICHIESTA:
+Ripristinare backup precedente o eliminare file corrotti.
+
+Nota: I tentativi di riparazione sono falliti 47 volte.
+Raccomandazione: Procedere con eliminazione.
+
+Sistema di Backup Automatico`,
+                    read: false,
+                    attachments: ['corruption_report.pdf', 'backup_log.dat']
+                },
+                {
+                    id: 'email_008',
+                    folder: 'inbox',
+                    from: 'Dr. Sarah Williams',
+                    email: 's.williams@ethics-board.org',
+                    subject: 'Mi dispiace, Viktor',
+                    date: '10 Marzo 2024',
+                    preview: 'Ho sentito di Sofia. Non ci sono parole...',
+                    body: `Viktor,
+
+Ho sentito di Sofia. Non ci sono parole che possano esprimere quanto mi dispiace.
+
+So che stai soffrendo. So che vorresti fare qualsiasi cosa per riportarla indietro.
+
+Ma ti prego, Viktor. Non usare il Progetto Memoriam su di lei.
+
+Ho visto cosa fa alle persone. Ho letto i rapporti. Le coscienze digitalizzate non sono... complete. Sono frammentate. Sofferenti. Confuse.
+
+Sofia merita la pace. Non un'eternità di frammentazione digitale.
+
+Lasciala andare, Viktor. È il regalo più grande che puoi farle.
+
+Se hai bisogno di parlare, sono qui.
+
+Sarah`,
+                    read: false,
+                    attachments: []
+                },
+                {
+                    id: 'email_009',
+                    folder: 'trash',
+                    from: 'Dr. Elena Sokolov',
+                    email: 'elena.sokolov@memoriam.org',
+                    subject: 'Viktor, fermati',
+                    date: '17 Marzo 2024',
+                    preview: 'Ho visto cosa hai fatto. I log. I frammenti. Viktor...',
+                    body: `Viktor,
+
+Ho visto cosa hai fatto.
+
+I log. I frammenti. L'auto-divisione.
+
+Sei impazzito? Ti sei letteralmente frammentato in sette coscienze separate!
+
+Non puoi fare questo. Non puoi dividere la tua mente e pensare che risolverà qualcosa. È folle, Viktor. È autodistruttivo.
+
+E Sofia... oh Dio, Viktor. Sofia.
+
+Non dovevi caricarla nel sistema. Era troppo giovane. I dati erano incompleti. Sapevi che non avrebbe funzionato.
+
+E ora è sparsa in sette pezzi attraverso l'archivio, e tu ti sei frammentato nel tentativo di salvarla, e io non so più come aiutarti.
+
+Sto venendo là. Sto venendo al laboratorio.
+
+Dobbiamo fermare questo. Dobbiamo porre fine a questa follia.
+
+Prima che sia troppo tardi.
+
+Prima che perdiamo anche te.
+
+Elena`,
+                    read: false,
+                    attachments: []
+                },
+                {
+                    id: 'email_010',
+                    folder: 'archive',
+                    from: 'Anna Sokolov',
+                    email: 'anna.sokolov@gmail.com',
+                    subject: 'Ti amo',
+                    date: '1 Agosto 2087',
+                    preview: 'Viktor, so che stai lavorando troppo...',
+                    body: `Viktor,
+
+So che stai lavorando troppo di nuovo. Il Progetto Memoriam ti sta consumando.
+
+Torna a casa stasera, per favore. Sofia ha preparato una sorpresa per te. Ha imparato una nuova canzone al piano e vuole suonartela.
+
+Dice che è per il suo papà, il "dottore che salva le anime".
+
+Non sa davvero cosa fai, ma è così orgogliosa di te.
+
+Anch'io lo sono.
+
+Ti amo, mio ​​caro. Torna a casa presto.
+
+Anna
+
+P.S. - Ho fatto la tua lasagna preferita. Non lasciarla raffreddare di nuovo come l'ultima volta!`,
+                    read: true,
+                    attachments: []
                 }
             ],
             en: [
