@@ -299,5 +299,95 @@ const Block08_Aftermath = {
 
         Terminal.addOutput('Gioco completato. Scrivi "restart" per rigiocare, "stats" per statistiche, o "goodbye" per l\'addio finale.', 'system');
         return true;
+    },
+
+    getCommands() {
+        return ['help', 'restart', 'stats', 'status', 'total_lives', 'final_choice', 'what_remains', 'goodbye', 'addio', 'farewell'];
+    },
+
+    getHelp() {
+        return [
+            'restart / new game  - Start a new playthrough',
+            'stats / status      - View final statistics',
+            'total_lives <num>   - Puzzle: count total lives destroyed',
+            'final_choice <answer> - Puzzle: reflect on your final choice weight',
+            'what_remains <answer> - Puzzle: answer what remains after everything',
+            'goodbye <message>   - Say your final goodbyes (to echo, viktor, fragments, or yourself)',
+            'addio / farewell    - Alternative farewell commands'
+        ];
+    },
+
+    // File system navigation methods
+    listFiles(path) {
+        const fullPath = this.resolvePath(path || this.state.currentPath);
+        const contents = FileSystemHelpers.listDirectory(fullPath);
+
+        if (!contents) {
+            Terminal.addOutput(`ls: impossibile accedere a '${path}': Directory inesistente`, 'error');
+            return;
+        }
+
+        NarrativeEngine.showFileList(
+            contents.map(name => ({
+                name,
+                type: FileSystem[`${fullPath}/${name}`]?.type || 'file'
+            })),
+            fullPath
+        );
+    },
+
+    readFile(filename) {
+        const fullPath = this.resolvePath(filename);
+        const content = FileSystemHelpers.readFile(fullPath);
+
+        if (content === null) {
+            Terminal.addOutput(`cat: ${filename}: File inesistente`, 'error');
+            return;
+        }
+
+        if (content === '[CRIPTATO - ACCESSO NEGATO]') {
+            Terminal.addOutput(`cat: ${filename}: Permesso negato`, 'error');
+            Terminal.addOutput('Questo file è criptato. Servono privilegi di accesso superiori.', 'warning');
+            return;
+        }
+
+        const isCorrupted = StateManager.isFileCorrupted(fullPath);
+        NarrativeEngine.showFileContent(filename, content, isCorrupted);
+    },
+
+    changeDirectory(path) {
+        const fullPath = this.resolvePath(path);
+        const dir = FileSystem[fullPath];
+
+        if (!dir || dir.type !== 'directory') {
+            Terminal.addOutput(`cd: ${path}: Directory inesistente`, 'error');
+            return;
+        }
+
+        if (FileSystemHelpers.isLocked(fullPath)) {
+            Terminal.addOutput(`cd: ${path}: Permesso negato`, 'error');
+            return;
+        }
+
+        this.state.currentPath = fullPath;
+        Terminal.setPrompt(`guest@memoriam:${fullPath}$`);
+    },
+
+    resolvePath(path) {
+        if (path.startsWith('/')) {
+            return path;
+        }
+
+        if (path === '..') {
+            const parts = this.state.currentPath.split('/').filter(p => p);
+            parts.pop();
+            return '/' + parts.join('/');
+        }
+
+        if (path === '.') {
+            return this.state.currentPath;
+        }
+
+        return `${this.state.currentPath}/${path}`.replace('//', '/');
     }
 };

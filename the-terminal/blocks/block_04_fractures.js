@@ -526,13 +526,13 @@ const Block04_Fractures = {
         Terminal.addOutput(`Bargain choice: ${this.state.bargainChoiceMade || 'None'}`, 'system');
         Terminal.addOutput('');
 
-        StateManager.setBlockComplete(4);
+        StateManager.setFlag('block04Complete', true);
         StateManager.save();
 
-        Terminal.addOutput('Progress saved. Block 5 coming soon...', 'success');
-        Terminal.addOutput('');
+        await NarrativeEngine.wait(2000);
 
-        Terminal.enableInput();
+        // Advance to Block 5
+        await GameEngine.endBlock(5);
     },
 
     // Comandi di supporto
@@ -665,5 +665,101 @@ const Block04_Fractures = {
         Terminal.addOutput(`Current trust in ECHO: ${StateManager.state.trustsEcho}`, 'warning');
         Terminal.addOutput(`Current suspicion: ${StateManager.state.suspicionLevel}`, 'warning');
         Terminal.addOutput('');
+    },
+
+    getCommands() {
+        return ['help', 'ls', 'cd', 'cat', 'talk', 'progress', 'witness', 'list', 'whoami', 'verify', 'identity_answer', 'paradox_resolve', 'remember_victims', 'continue'];
+    },
+
+    getHelp() {
+        return [
+            'ls [path]           - List files',
+            'cd <path>           - Change directory',
+            'cat <file>          - Read file',
+            'list victims        - Show available victim memories',
+            'witness victim <id> - Witness a victim\'s memory (marcus/elena/james)',
+            'whoami --deep       - Deep identity analysis',
+            'verify <number>     - Verify victim statistics',
+            'identity_answer <A/B/C/D> - Answer the identity question',
+            'paradox_resolve <text> - Resolve the paradox with your reasoning',
+            'remember_victims    - Honor the victims',
+            'talk <entity>       - Talk to SPECTER, ECHO, CIPHER, or NEXUS',
+            'progress            - Check progress',
+            'continue            - Advance to next block (when ready)'
+        ];
+    },
+
+    // File system navigation methods
+    listFiles(path) {
+        const fullPath = this.resolvePath(path || this.state.currentPath);
+        const contents = FileSystemHelpers.listDirectory(fullPath);
+
+        if (!contents) {
+            Terminal.addOutput(`ls: impossibile accedere a '${path}': Directory inesistente`, 'error');
+            return;
+        }
+
+        NarrativeEngine.showFileList(
+            contents.map(name => ({
+                name,
+                type: FileSystem[`${fullPath}/${name}`]?.type || 'file'
+            })),
+            fullPath
+        );
+    },
+
+    readFile(filename) {
+        const fullPath = this.resolvePath(filename);
+        const content = FileSystemHelpers.readFile(fullPath);
+
+        if (content === null) {
+            Terminal.addOutput(`cat: ${filename}: File inesistente`, 'error');
+            return;
+        }
+
+        if (content === '[CRIPTATO - ACCESSO NEGATO]') {
+            Terminal.addOutput(`cat: ${filename}: Permesso negato`, 'error');
+            Terminal.addOutput('Questo file è criptato. Servono privilegi di accesso superiori.', 'warning');
+            return;
+        }
+
+        const isCorrupted = StateManager.isFileCorrupted(fullPath);
+        NarrativeEngine.showFileContent(filename, content, isCorrupted);
+    },
+
+    changeDirectory(path) {
+        const fullPath = this.resolvePath(path);
+        const dir = FileSystem[fullPath];
+
+        if (!dir || dir.type !== 'directory') {
+            Terminal.addOutput(`cd: ${path}: Directory inesistente`, 'error');
+            return;
+        }
+
+        if (FileSystemHelpers.isLocked(fullPath)) {
+            Terminal.addOutput(`cd: ${path}: Permesso negato`, 'error');
+            return;
+        }
+
+        this.state.currentPath = fullPath;
+        Terminal.setPrompt(`guest@memoriam:${fullPath}$`);
+    },
+
+    resolvePath(path) {
+        if (path.startsWith('/')) {
+            return path;
+        }
+
+        if (path === '..') {
+            const parts = this.state.currentPath.split('/').filter(p => p);
+            parts.pop();
+            return '/' + parts.join('/');
+        }
+
+        if (path === '.') {
+            return this.state.currentPath;
+        }
+
+        return `${this.state.currentPath}/${path}`.replace('//', '/');
     }
 };

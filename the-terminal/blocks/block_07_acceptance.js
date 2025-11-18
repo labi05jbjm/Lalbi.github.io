@@ -421,10 +421,104 @@ const Block07_Acceptance = {
         Terminal.addOutput('Entering final sequence...\n', 'important');
 
         StateManager.setFlag('block07Complete', true);
-        StateManager.saveState();
+        StateManager.save();
 
-        Terminal.addOutput('Scrivi "continue" per iniziare il Blocco 8 - AFTERMATH\n', 'important');
+        await NarrativeEngine.wait(2000);
 
-        Terminal.enableInput();
+        // Advance to Block 8
+        await GameEngine.endBlock(8);
+    },
+
+    getCommands() {
+        return ['help', 'acceptance', 'talk', 'status', 'review', 'choice_pattern', 'hear', 'listen', 'fragment_count', 'identity_answer', 'acceptance_test', 'continue'];
+    },
+
+    getHelp() {
+        return [
+            'acceptance          - Learn about acceptance from MORPHEUS',
+            'talk <entity>       - Talk to fragments (echo, cipher, nexus, specter, eidolon, wraith, morpheus)',
+            'status              - Check system integrity status',
+            'review choices      - Review all choices made throughout the game',
+            'choice_pattern <answer> - Puzzle: identify the pattern in your choices',
+            'hear all / listen   - Hear all fragments speak together',
+            'fragment_count <num> - Puzzle: count Viktor\'s fragments',
+            'identity_answer <answer> - Puzzle: answer the identity question',
+            'acceptance_test <answer> - Puzzle: final acceptance test',
+            'continue            - Proceed to Block 8 (final)'
+        ];
+    },
+
+    // File system navigation methods
+    listFiles(path) {
+        const fullPath = this.resolvePath(path || this.state.currentPath);
+        const contents = FileSystemHelpers.listDirectory(fullPath);
+
+        if (!contents) {
+            Terminal.addOutput(`ls: impossibile accedere a '${path}': Directory inesistente`, 'error');
+            return;
+        }
+
+        NarrativeEngine.showFileList(
+            contents.map(name => ({
+                name,
+                type: FileSystem[`${fullPath}/${name}`]?.type || 'file'
+            })),
+            fullPath
+        );
+    },
+
+    readFile(filename) {
+        const fullPath = this.resolvePath(filename);
+        const content = FileSystemHelpers.readFile(fullPath);
+
+        if (content === null) {
+            Terminal.addOutput(`cat: ${filename}: File inesistente`, 'error');
+            return;
+        }
+
+        if (content === '[CRIPTATO - ACCESSO NEGATO]') {
+            Terminal.addOutput(`cat: ${filename}: Permesso negato`, 'error');
+            Terminal.addOutput('Questo file è criptato. Servono privilegi di accesso superiori.', 'warning');
+            return;
+        }
+
+        const isCorrupted = StateManager.isFileCorrupted(fullPath);
+        NarrativeEngine.showFileContent(filename, content, isCorrupted);
+    },
+
+    changeDirectory(path) {
+        const fullPath = this.resolvePath(path);
+        const dir = FileSystem[fullPath];
+
+        if (!dir || dir.type !== 'directory') {
+            Terminal.addOutput(`cd: ${path}: Directory inesistente`, 'error');
+            return;
+        }
+
+        if (FileSystemHelpers.isLocked(fullPath)) {
+            Terminal.addOutput(`cd: ${path}: Permesso negato`, 'error');
+            return;
+        }
+
+        this.state.currentPath = fullPath;
+        Terminal.setPrompt(`guest@memoriam:${fullPath}$`);
+    },
+
+    resolvePath(path) {
+        if (path.startsWith('/')) {
+            return path;
+        }
+
+        if (path === '..') {
+            const parts = this.state.currentPath.split('/').filter(p => p);
+            parts.pop();
+            return '/' + parts.join('/');
+        }
+
+        if (path === '.') {
+            return this.state.currentPath;
+        }
+
+        return `${this.state.currentPath}/${path}`.replace('//', '/');
     }
 };

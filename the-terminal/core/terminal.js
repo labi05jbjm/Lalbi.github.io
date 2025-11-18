@@ -135,7 +135,7 @@ const Terminal = {
         this.addOutput('\n=== STATO DEL SISTEMA ===', 'success');
         this.addOutput(`Blocco: ${state.currentBlock}/8`);
         this.addOutput(`Progresso: ${state.progress.toFixed(1)}%`);
-        this.addOutput(`Livello di Fiducia: ${state.trustsLuca}%`);
+        this.addOutput(`Livello di Fiducia in ECHO: ${state.trustsEcho}%`);
         this.addOutput(`Livello di Sospetto: ${state.suspicionLevel}%`);
         this.addOutput('');
     },

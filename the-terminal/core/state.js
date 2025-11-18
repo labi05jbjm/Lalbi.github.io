@@ -11,8 +11,8 @@ const StateManager = {
 
         // Player knowledge
         knowsAboutSentinel: false,
-        knowsAboutLuca: false,
-        trustsLuca: 100, // 0-100
+        knowsAboutEcho: false,
+        trustsEcho: 100, // 0-100
         suspicionLevel: 0, // 0-100
 
         // Flags di progressione
@@ -21,7 +21,7 @@ const StateManager = {
             firstPuzzleComplete: false,
             sawCorruptedFile: false,
             readMissionBriefing: false,
-            lucaRevealed: false,
+            echoRevealed: false,
         },
 
         // Statistiche azioni
@@ -99,8 +99,8 @@ const StateManager = {
 
             // Player knowledge
             knowsAboutSentinel: false,
-            knowsAboutLuca: false,
-            trustsLuca: 100,
+            knowsAboutEcho: false,
+            trustsEcho: 100,
             suspicionLevel: 0,
 
             // Flags di progressione
@@ -109,7 +109,7 @@ const StateManager = {
                 firstPuzzleComplete: false,
                 sawCorruptedFile: false,
                 readMissionBriefing: false,
-                lucaRevealed: false,
+                echoRevealed: false,
             },
 
             // Statistiche azioni
