@@ -168,7 +168,22 @@ const Terminal = {
     },
 
     resetGame() {
-        this.addOutput('Sei sicuro? Digita "reset confirm" per resettare il gioco.', 'warning');
+        const playTime = StateManager.getPlayTime();
+        const hours = Math.floor(playTime / 60);
+        const mins = playTime % 60;
+
+        this.addOutput('\n⚠️  ATTENZIONE: RESET TOTALE DEL GIOCO ⚠️', 'error');
+        this.addOutput('', '');
+        this.addOutput('Questa azione cancellerà:', 'warning');
+        this.addOutput(`  • Tutti i salvataggi (tempo di gioco: ${hours}h ${mins}m)`, 'warning');
+        this.addOutput(`  • Progresso attuale: Blocco ${StateManager.state.currentBlock}/8`, 'warning');
+        this.addOutput(`  • ${StateManager.state.stats.puzzlesSolved} puzzle risolti`, 'warning');
+        this.addOutput(`  • Tutte le scelte e statistiche`, 'warning');
+        this.addOutput('', '');
+        this.addOutput('Sei SICURO di voler perdere tutto?', 'error');
+        this.addOutput('Digita "reset confirm" per procedere (o qualsiasi altro comando per annullare)', 'system');
+        this.addOutput('', '');
+
         const originalHandler = this.handleCommand;
 
         this.handleCommand = () => {
@@ -179,7 +194,7 @@ const Terminal = {
                 this.addOutput('Resettando il gioco...', 'error');
                 StateManager.reset();
             } else {
-                this.addOutput('Reset annullato.', 'system');
+                this.addOutput('Reset annullato. I tuoi dati sono al sicuro.', 'success');
             }
 
             this.handleCommand = originalHandler;

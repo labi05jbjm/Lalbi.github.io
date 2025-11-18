@@ -737,7 +737,21 @@ const Block04_Fractures = {
         }
 
         if (FileSystemHelpers.isLocked(fullPath)) {
-            Terminal.addOutput(`cd: ${path}: Permesso negato`, 'error');
+            Terminal.addOutput(`cd: ${path}: Accesso negato`, 'error');
+
+            // Provide helpful context about why it's locked
+            if (dir.requiresFlag) {
+                const flagMessages = {
+                    'metSpecter': '  Suggerimento: Avanza nella storia del Block 4 per incontrare SPECTER',
+                    'metEidolon': '  Suggerimento: Progredisci nel Block 5 per incontrare EIDOLON',
+                    'metWraith': '  Suggerimento: Raggiungi il Block 6 per incontrare WRAITH',
+                    'metMorpheus': '  Suggerimento: Continua fino al Block 7 per incontrare MORPHEUS'
+                };
+                const hint = flagMessages[dir.requiresFlag] || '  Suggerimento: Questa area si sbloccherà più avanti nella storia';
+                Terminal.addOutput(hint, 'warning');
+            } else {
+                Terminal.addOutput('  Suggerimento: Questa directory potrebbe sbloccarsi più avanti', 'warning');
+            }
             return;
         }
 

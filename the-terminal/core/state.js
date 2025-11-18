@@ -240,6 +240,13 @@ const StateManager = {
     setBlock(blockNumber) {
         this.state.currentBlock = blockNumber;
         this.state.progress = ((blockNumber - 1) / 8) * 100;
+
+        // Update progress indicator in header
+        const progressIndicator = document.getElementById('progress-indicator');
+        if (progressIndicator) {
+            progressIndicator.textContent = `BLOCK ${blockNumber}/8 — ${this.state.progress.toFixed(0)}%`;
+        }
+
         this.save();
     },
 
