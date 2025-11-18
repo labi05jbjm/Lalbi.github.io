@@ -262,292 +262,422 @@ const MainMenu = {
     },
 
     showOptions() {
-        const output = document.getElementById('terminal-output');
+        // Create full-screen diegetic options overlay
+        const optionsOverlay = document.createElement('div');
+        optionsOverlay.id = 'options-overlay';
+        optionsOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 14, 20, 0.98);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+        `;
 
-        // Remove menu and title
-        const menu = document.getElementById('main-menu-container');
-        if (menu) menu.remove();
-        const titleDiv = document.querySelector('.menu-title-animated');
-        if (titleDiv) titleDiv.remove();
+        // Header with title and back button
+        const header = document.createElement('div');
+        header.style.cssText = `
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        `;
 
-        // Options screen (compact layout, no title)
-        const optionsDiv = document.createElement('div');
-        optionsDiv.id = 'options-screen';
-        optionsDiv.style.cssText = 'text-align: center; margin-top: 20px;';
+        const title = document.createElement('div');
+        title.style.cssText = `
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--primary-color);
+        `;
+        title.textContent = '⚙ CONFIGURAZIONE SISTEMA';
 
-        // Options container (reduced gaps)
-        const optionsContainer = document.createElement('div');
-        optionsContainer.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 15px;';
-
-        // === SEZIONE: AUDIO ===
-        this.createSectionHeader(optionsContainer, '🔊 AUDIO');
-
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Effetti Sonori',
-            'soundEffects',
-            'Attiva tutti gli effetti sonori e feedback audio del gioco',
-            (value) => {
-                if (SoundManager) {
-                    SoundManager.setEnabled(value);
-                    if (value) {
-                        setTimeout(() => SoundManager.commandSuccess(), 100);
-                    }
-                }
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionSlider(
-            'Volume Audio',
-            'soundVolume',
-            'Regola il volume degli effetti sonori',
-            0, 100, 5, '%',
-            (value) => {
-                if (SoundManager) {
-                    SoundManager.setVolume(value / 100);
-                }
-            }
-        ));
-
-        // === SEZIONE: GAMEPLAY ===
-        this.createSectionHeader(optionsContainer, '🎮 GAMEPLAY');
-
-        optionsContainer.appendChild(this.createOptionSelect(
-            'Velocità Testo',
-            'textSpeed',
-            'Controlla la velocità con cui il testo appare sullo schermo',
-            [
-                { value: 10, label: 'Istantaneo' },
-                { value: 15, label: 'Molto Veloce' },
-                { value: 30, label: 'Normale' },
-                { value: 50, label: 'Lento' },
-                { value: 100, label: 'Molto Lento' }
-            ],
-            (value) => {
-                if (NarrativeEngine) {
-                    NarrativeEngine.typingSpeed = value;
-                }
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionSelect(
-            'Dimensione Testo',
-            'textSize',
-            'Regola la dimensione del testo per una migliore leggibilità',
-            [
-                { value: 80, label: 'Piccolo (80%)' },
-                { value: 100, label: 'Normale (100%)' },
-                { value: 120, label: 'Grande (120%)' },
-                { value: 150, label: 'Molto Grande (150%)' }
-            ],
-            (value) => {
-                document.documentElement.style.fontSize = value + '%';
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionSelect(
-            'Lingua / Language',
-            'language',
-            'Cambia la lingua del gioco - Change game language',
-            [
-                { value: 'it', label: 'Italiano 🇮🇹' },
-                { value: 'en', label: 'English 🇬🇧' }
-            ],
-            (value) => {
-                this.showLanguageChangeConfirmation(value);
-            }
-        ));
-
-        // === SEZIONE: EFFETTI VISIVI ===
-        this.createSectionHeader(optionsContainer, '👁 EFFETTI VISIVI');
-
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Effetti CRT',
-            'crtEffects',
-            'Attiva curvatura dello schermo ed effetti di bagliore fosforico',
-            (value) => {
-                const crtOverlay = document.getElementById('crt-overlay');
-                if (crtOverlay) {
-                    crtOverlay.style.display = value ? 'block' : 'none';
-                }
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Schermo CRT Curvo',
-            'crtCurved',
-            'Schermo curvo come i vecchi monitor a tubo catodico',
-            (value) => {
-                const terminal = document.getElementById('terminal-container');
-                if (terminal) {
-                    if (value) {
-                        terminal.classList.add('crt-curved');
-                    } else {
-                        terminal.classList.remove('crt-curved');
-                    }
-                }
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionSlider(
-            'Intensità CRT',
-            'crtIntensity',
-            'Regola l\'intensità degli effetti CRT (bagliore, distorsione)',
-            0, 100, 10, '%',
-            (value) => {
-                const crtOverlay = document.getElementById('crt-overlay');
-                if (crtOverlay) {
-                    crtOverlay.style.opacity = (value / 100) * 0.15;
-                }
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Linee di Scansione',
-            'scanlines',
-            'Mostra linee di scansione orizzontali per effetto terminale retro',
-            (value) => {
-                const crtOverlay = document.getElementById('crt-overlay');
-                if (crtOverlay) {
-                    crtOverlay.style.opacity = value ? '1' : '0';
-                }
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Effetti Glitch',
-            'glitchEffects',
-            'Glitch visivi casuali durante il gioco'
-        ));
-
-        optionsContainer.appendChild(this.createOptionSlider(
-            'Intensità Glitch',
-            'glitchIntensity',
-            'Regola la frequenza e intensità degli effetti glitch',
-            0, 100, 10, '%',
-            (value) => {
-                // Will be used by glitch system
-                window.gameGlitchIntensity = value / 100;
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Modalità Bianco e Nero',
-            'blackAndWhiteMode',
-            'Tutto il gioco in scala di grigi con hover rossi',
-            (value) => {
-                if (value) {
-                    document.body.classList.add('bw-mode');
-                } else {
-                    document.body.classList.remove('bw-mode');
-                }
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Alto Contrasto',
-            'highContrast',
-            'Modalità ad alto contrasto per migliorare la leggibilità',
-            (value) => {
-                if (value) {
-                    document.body.classList.add('high-contrast');
-                } else {
-                    document.body.classList.remove('high-contrast');
-                }
-            }
-        ));
-
-        // === SEZIONE: INTERFACCIA ===
-        this.createSectionHeader(optionsContainer, '⚙ INTERFACCIA');
-
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Cursore Personalizzato',
-            'customCursor',
-            'Usa il cursore sci-fi personalizzato con scia di glitch',
-            (value) => {
-                const cursor = document.querySelector('.custom-cursor');
-                if (cursor) {
-                    cursor.style.display = value ? 'block' : 'none';
-                }
-                if (value) {
-                    document.body.style.cursor = 'none';
-                } else {
-                    document.body.style.cursor = 'default';
-                }
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Scia Cursore',
-            'cursorTrail',
-            'Attiva/disattiva l\'animazione della scia cibernetica del cursore',
-            (value) => {
-                if (CursorManager) {
-                    CursorManager.trailEnabled = value;
-                }
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionSlider(
-            'Opacità Interfaccia',
-            'interfaceOpacity',
-            'Regola la trasparenza del terminale e delle finestre desktop',
-            50, 100, 5, '%',
-            (value) => {
-                const terminal = document.getElementById('terminal-container');
-                if (terminal) {
-                    terminal.style.opacity = value / 100;
-                }
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Effetto Macchina da Scrivere',
-            'typewriterEffect',
-            'Il testo appare carattere per carattere'
-        ));
-
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Salta Animazioni',
-            'skipAnimations',
-            'Disabilita animazioni per un\'esperienza più veloce',
-            (value) => {
-                if (value) {
-                    document.body.classList.add('skip-animations');
-                } else {
-                    document.body.classList.remove('skip-animations');
-                }
-            }
-        ));
-
-        optionsContainer.appendChild(this.createOptionSelect(
-            'Tema Colore',
-            'colorTheme',
-            'Cambia la palette colori dell\'interfaccia',
-            [
-                { value: 'green', label: '🟢 Verde (Default)' },
-                { value: 'amber', label: '🟡 Ambra' },
-                { value: 'blue', label: '🔵 Blu' },
-                { value: 'red', label: '🔴 Rosso' },
-                { value: 'purple', label: '🟣 Viola' },
-                { value: 'cyan', label: '🔷 Ciano' }
-            ],
-            (value) => {
-                this.applyColorTheme(value);
-            }
-        ));
-
-        optionsDiv.appendChild(optionsContainer);
-
-        // Back button (compact)
-        const btnBack = this.createMenuButton('TORNA AL MENU', () => {
-            optionsDiv.remove();
+        const btnBack = this.createMenuButton('[ ESC ]', () => {
+            optionsOverlay.remove();
             this.show();
         });
-        btnBack.style.marginTop = '10px';
-        optionsDiv.appendChild(btnBack);
+        btnBack.style.minWidth = '100px';
+        btnBack.style.padding = '8px 15px';
+        btnBack.style.fontSize = '12px';
 
-        output.appendChild(optionsDiv);
-        Terminal.scrollToBottom();
+        header.appendChild(title);
+        header.appendChild(btnBack);
+
+        // Grid container for 4 panels (2x2)
+        const gridContainer = document.createElement('div');
+        gridContainer.style.cssText = `
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 15px;
+            flex: 1;
+            max-height: calc(100vh - 100px);
+        `;
+
+        // Panel 1: AUDIO & GAMEPLAY
+        const panel1 = this.createOptionPanel('🔊 AUDIO & GAMEPLAY', [
+            this.createCompactToggle('SFX', 'soundEffects', (value) => {
+                if (SoundManager) {
+                    SoundManager.setEnabled(value);
+                    if (value) setTimeout(() => SoundManager.commandSuccess(), 100);
+                }
+            }),
+            this.createCompactSlider('Vol', 'soundVolume', 0, 100, 5, '%', (value) => {
+                if (SoundManager) SoundManager.setVolume(value / 100);
+            }),
+            this.createCompactSelect('Velocità', 'textSpeed', [
+                { value: 10, label: 'Instant' },
+                { value: 30, label: 'Normal' },
+                { value: 50, label: 'Slow' }
+            ], (value) => {
+                if (NarrativeEngine) NarrativeEngine.typingSpeed = value;
+            }),
+            this.createCompactSelect('Testo', 'textSize', [
+                { value: 80, label: '80%' },
+                { value: 100, label: '100%' },
+                { value: 120, label: '120%' },
+                { value: 150, label: '150%' }
+            ], (value) => {
+                document.documentElement.style.fontSize = value + '%';
+            }),
+            this.createCompactSelect('Lang', 'language', [
+                { value: 'it', label: 'IT' },
+                { value: 'en', label: 'EN' }
+            ], (value) => {
+                this.showLanguageChangeConfirmation(value);
+            })
+        ]);
+
+        // Panel 2: EFFETTI VISIVI
+        const panel2 = this.createOptionPanel('👁 EFFETTI VISIVI', [
+            this.createCompactToggle('CRT', 'crtEffects', (value) => {
+                const crtOverlay = document.getElementById('crt-overlay');
+                if (crtOverlay) crtOverlay.style.display = value ? 'block' : 'none';
+            }),
+            this.createCompactToggle('Curvo', 'crtCurved', (value) => {
+                const terminal = document.getElementById('terminal-container');
+                if (terminal) {
+                    terminal.classList.toggle('crt-curved', value);
+                }
+            }),
+            this.createCompactSlider('CRT Int', 'crtIntensity', 0, 100, 10, '%', (value) => {
+                const crtOverlay = document.getElementById('crt-overlay');
+                if (crtOverlay) crtOverlay.style.opacity = (value / 100) * 0.15;
+            }),
+            this.createCompactToggle('Scanlines', 'scanlines', (value) => {
+                const crtOverlay = document.getElementById('crt-overlay');
+                if (crtOverlay) crtOverlay.style.opacity = value ? '1' : '0';
+            }),
+            this.createCompactToggle('Glitch', 'glitchEffects'),
+            this.createCompactSlider('Glitch Int', 'glitchIntensity', 0, 100, 10, '%', (value) => {
+                window.gameGlitchIntensity = value / 100;
+            }),
+            this.createCompactToggle('B&W', 'blackAndWhiteMode', (value) => {
+                document.body.classList.toggle('bw-mode', value);
+            }),
+            this.createCompactToggle('Hi-Contrast', 'highContrast', (value) => {
+                document.body.classList.toggle('high-contrast', value);
+            })
+        ]);
+
+        // Panel 3: INTERFACCIA
+        const panel3 = this.createOptionPanel('⚙ INTERFACCIA', [
+            this.createCompactToggle('Cursor', 'customCursor', (value) => {
+                const cursor = document.querySelector('.custom-cursor');
+                if (cursor) cursor.style.display = value ? 'block' : 'none';
+                document.body.style.cursor = value ? 'none' : 'default';
+            }),
+            this.createCompactToggle('Trail', 'cursorTrail', (value) => {
+                if (CursorManager) CursorManager.trailEnabled = value;
+            }),
+            this.createCompactSlider('Opacity', 'interfaceOpacity', 50, 100, 5, '%', (value) => {
+                const terminal = document.getElementById('terminal-container');
+                if (terminal) terminal.style.opacity = value / 100;
+            }),
+            this.createCompactToggle('Typewriter', 'typewriterEffect'),
+            this.createCompactToggle('Skip Anim', 'skipAnimations', (value) => {
+                document.body.classList.toggle('skip-animations', value);
+            }),
+            this.createCompactSelect('Theme', 'colorTheme', [
+                { value: 'green', label: '🟢 Green' },
+                { value: 'amber', label: '🟡 Amber' },
+                { value: 'blue', label: '🔵 Blue' },
+                { value: 'red', label: '🔴 Red' },
+                { value: 'purple', label: '🟣 Purple' },
+                { value: 'cyan', label: '🔷 Cyan' }
+            ], (value) => {
+                this.applyColorTheme(value);
+            })
+        ]);
+
+        // Panel 4: SYSTEM INFO
+        const panel4 = this.createSystemInfoPanel();
+
+        gridContainer.appendChild(panel1);
+        gridContainer.appendChild(panel2);
+        gridContainer.appendChild(panel3);
+        gridContainer.appendChild(panel4);
+
+        optionsOverlay.appendChild(header);
+        optionsOverlay.appendChild(gridContainer);
+        document.body.appendChild(optionsOverlay);
+
+        // ESC key to close
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                optionsOverlay.remove();
+                this.show();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+    },
+
+    createOptionPanel(title, options) {
+        const panel = document.createElement('div');
+        panel.style.cssText = `
+            background: rgba(0, 255, 136, 0.03);
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+            overflow-y: auto;
+        `;
+
+        const panelTitle = document.createElement('div');
+        panelTitle.style.cssText = `
+            color: var(--primary-color);
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--primary-color);
+            text-shadow: 0 0 5px var(--primary-color);
+        `;
+        panelTitle.textContent = title;
+
+        const optionsContainer = document.createElement('div');
+        optionsContainer.style.cssText = `
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        `;
+
+        options.forEach(opt => optionsContainer.appendChild(opt));
+
+        panel.appendChild(panelTitle);
+        panel.appendChild(optionsContainer);
+        return panel;
+    },
+
+    createSystemInfoPanel() {
+        const panel = document.createElement('div');
+        panel.style.cssText = `
+            background: rgba(0, 255, 136, 0.03);
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+        `;
+
+        const title = document.createElement('div');
+        title.style.cssText = `
+            color: var(--primary-color);
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--primary-color);
+            text-shadow: 0 0 5px var(--primary-color);
+        `;
+        title.textContent = '📊 SYSTEM STATUS';
+
+        const info = document.createElement('div');
+        info.style.cssText = `
+            color: #888;
+            font-size: 11px;
+            line-height: 1.8;
+            font-family: monospace;
+        `;
+
+        const optionsCount = Object.keys(this.options).length;
+        const enabledCount = Object.values(this.options).filter(v => v === true).length;
+
+        info.innerHTML = `
+            <div style="margin-bottom: 10px; color: var(--primary-color);">
+                ▸ TERMINAL v2.0.1<br>
+                ▸ OPZIONI: ${optionsCount}<br>
+                ▸ ATTIVE: ${enabledCount}<br>
+            </div>
+            <div style="margin-top: 15px; padding: 10px; background: rgba(0, 0, 0, 0.3); border-left: 2px solid var(--primary-color);">
+                <div style="color: var(--primary-color); margin-bottom: 5px;">LEGENDA CONTROLLI:</div>
+                <div>• Toggle = ON/OFF</div>
+                <div>• Slider = Drag value</div>
+                <div>• Select = Choose option</div>
+                <div>• [ESC] = Exit options</div>
+            </div>
+            <div style="margin-top: 15px; padding: 10px; background: rgba(0, 255, 136, 0.05); border: 1px solid var(--primary-color); border-radius: 4px;">
+                <div style="color: var(--primary-color); font-size: 10px; text-align: center;">
+                    Tutte le impostazioni vengono<br>salvate automaticamente
+                </div>
+            </div>
+        `;
+
+        panel.appendChild(title);
+        panel.appendChild(info);
+        return panel;
+    },
+
+    createCompactToggle(label, optionKey, onChange) {
+        const container = document.createElement('div');
+        container.style.cssText = `
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 4px;
+            font-size: 11px;
+        `;
+
+        const labelDiv = document.createElement('div');
+        labelDiv.style.cssText = 'color: #aaa; font-weight: bold; text-transform: uppercase;';
+        labelDiv.textContent = label;
+
+        const toggle = document.createElement('button');
+        toggle.style.cssText = `
+            padding: 3px 10px;
+            font-size: 10px;
+            background: ${this.options[optionKey] ? 'var(--primary-color)' : 'rgba(100, 100, 100, 0.3)'};
+            border: 1px solid ${this.options[optionKey] ? 'var(--primary-color)' : '#666'};
+            color: ${this.options[optionKey] ? '#000' : '#888'};
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        `;
+        toggle.textContent = this.options[optionKey] ? 'ON' : 'OFF';
+
+        toggle.onclick = () => {
+            this.options[optionKey] = !this.options[optionKey];
+            this.saveOptions();
+            toggle.style.background = this.options[optionKey] ? 'var(--primary-color)' : 'rgba(100, 100, 100, 0.3)';
+            toggle.style.borderColor = this.options[optionKey] ? 'var(--primary-color)' : '#666';
+            toggle.style.color = this.options[optionKey] ? '#000' : '#888';
+            toggle.textContent = this.options[optionKey] ? 'ON' : 'OFF';
+            if (onChange) onChange(this.options[optionKey]);
+        };
+
+        container.appendChild(labelDiv);
+        container.appendChild(toggle);
+        return container;
+    },
+
+    createCompactSlider(label, optionKey, min, max, step, suffix, onChange) {
+        const container = document.createElement('div');
+        container.style.cssText = `
+            padding: 6px 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 4px;
+        `;
+
+        const labelRow = document.createElement('div');
+        labelRow.style.cssText = 'display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 11px;';
+
+        const labelDiv = document.createElement('div');
+        labelDiv.style.cssText = 'color: #aaa; font-weight: bold; text-transform: uppercase;';
+        labelDiv.textContent = label;
+
+        const valueDisplay = document.createElement('div');
+        valueDisplay.style.cssText = 'color: var(--primary-color); font-family: monospace; font-size: 10px;';
+        valueDisplay.textContent = this.options[optionKey] + suffix;
+
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.min = min;
+        slider.max = max;
+        slider.step = step;
+        slider.value = this.options[optionKey];
+        slider.style.cssText = 'width: 100%; height: 4px;';
+
+        slider.oninput = () => {
+            const value = parseInt(slider.value);
+            this.options[optionKey] = value;
+            valueDisplay.textContent = value + suffix;
+            this.saveOptions();
+            if (onChange) onChange(value);
+        };
+
+        labelRow.appendChild(labelDiv);
+        labelRow.appendChild(valueDisplay);
+        container.appendChild(labelRow);
+        container.appendChild(slider);
+        return container;
+    },
+
+    createCompactSelect(label, optionKey, optionsArray, onChange) {
+        const container = document.createElement('div');
+        container.style.cssText = `
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 4px;
+            font-size: 11px;
+        `;
+
+        const labelDiv = document.createElement('div');
+        labelDiv.style.cssText = 'color: #aaa; font-weight: bold; text-transform: uppercase;';
+        labelDiv.textContent = label;
+
+        const select = document.createElement('select');
+        select.style.cssText = `
+            padding: 3px 6px;
+            font-size: 10px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 3px;
+            cursor: pointer;
+        `;
+
+        optionsArray.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt.value;
+            option.textContent = opt.label;
+            if (this.options[optionKey] == opt.value) option.selected = true;
+            select.appendChild(option);
+        });
+
+        select.onchange = () => {
+            const value = isNaN(select.value) ? select.value : parseInt(select.value);
+            this.options[optionKey] = value;
+            this.saveOptions();
+            if (onChange) onChange(value);
+        };
+
+        container.appendChild(labelDiv);
+        container.appendChild(select);
+        return container;
     },
 
     showLoadGame() {
