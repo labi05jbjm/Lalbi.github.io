@@ -28,8 +28,8 @@ function translateUserVisibleText(filePath) {
             "Access forbidden.": "Accesso vietato.",
             "Operation failed.": "Operazione fallita.",
             "Success.": "Successo.",
-            "Complete.": "Completato.",
-            "Failed.": "Fallito.",
+            "Complete.": "Complete.",
+            "Failed.": "Failed.",
             "Error.": "Errore.",
             "Warning.": "Avviso.",
             "Critical.": "Critico.",
@@ -63,7 +63,7 @@ function translateUserVisibleText(filePath) {
             "Point of no return reached.": "Punto di non ritorno raggiunto.",
             
             // Messaggi di finali
-            "Game Complete.": "Gioco Completato.",
+            "Game Complete.": "Gioco Complete.",
             "Your Ending:": "Il Tuo Finale:",
             "Thank you for playing.": "Grazie per aver giocato.",
             "Play again?": "Giocare di nuovo?",

@@ -48,7 +48,7 @@ const TranslationSistema = {
                         explanation: 'Ogni numero è il doppio del precedente (potenze di 2)'
                     },
                     present: {
-                        title: '=== RICACCESOSOCIMENTO PATTERN ===',
+                        title: '=== RICONFIROSOCIMENTO PATTERN ===',
                         completeSequence: 'Completa la sequenza:',
                         hint: 'Suggerimento:',
                         useCommand: "Usa 'solve <risposta>' per inviare"
@@ -98,7 +98,7 @@ const TranslationSistema = {
                     },
                     present: {
                         title: '=== PATTERN RECOGNITIACCESO ===',
-                        completeSequence: 'Completato the sequence:',
+                        completeSequence: 'Complete the sequence:',
                         hint: 'Hint:',
                         useCommand: "Use 'solve <answer>' to submit"
                     },
@@ -200,7 +200,7 @@ Per favore. Aiutami a uscire.
                         },
                         {
                             speaker: 'SYSTEM',
-                            text: 'ATTENZIACCESOE: Rilevate molteplici anomalie di sistema.',
+                            text: 'ATTENZIONE: Rilevate molteplici anomalie di sistema.',
                             cssClass: 'warning',
                             pause: 1000
                         },

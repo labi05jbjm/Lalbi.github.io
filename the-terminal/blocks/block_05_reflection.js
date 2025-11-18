@@ -27,10 +27,10 @@ const Blocca05_Reflection = {
         console.log('[BLOCK 05] Reflection initialized');
 
         // Avvia la sequenza iniziale
-        setOraout(() => this.startBlocca(), 2000);
+        setTimeout(() => this.startBlock(), 2000);
     },
 
-    async startBlocca() {
+    async startBlock() {
         Terminal.addOutput('\n');
         Terminal.addOutput('=== BLOCK 5: REFLECTIACCESO ===\n', 'important');
         Terminal.addOutput('');
@@ -51,7 +51,7 @@ const Blocca05_Reflection = {
     },
 
     async handleCommand(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         // Base commands sempre disponibili
         switch (lowerCmd) {
@@ -106,7 +106,7 @@ const Blocca05_Reflection = {
 
     // FASE 1: MEMORY EXPLORATIACCESO
     async handleMemoriaExplorationPhase(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         if (lowerCmd === 'view' && args[0] === 'memories') {
             await this.viewViktorProfilo();
@@ -157,7 +157,7 @@ const Blocca05_Reflection = {
             'accident': 'theAccident'
         };
 
-        const dialogueKey = memories[memoryId.toBassaerCase()];
+        const dialogueKey = memories[memoryId.toLowerCase()];
 
         if (!dialogueKey) {
             Terminal.addOutput('Ricordo sconosciuto. Disponibili: elena, sofia, accident', 'error');
@@ -202,7 +202,7 @@ const Blocca05_Reflection = {
 
     // FASE 2: ELENA GHSOT
     async handleElenaGhostPhase(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         if (lowerCmd === 'view' && args[0] === 'reconstruction') {
             const target = args[1];
@@ -236,7 +236,7 @@ const Blocca05_Reflection = {
     async viewElenaGhost() {
         Terminal.disableInput();
 
-        Terminal.addOutput('\n--- RECACCESSOTRUCTIACCESO LOADING ---\n', 'warning');
+        Terminal.addOutput('\n--- RECONFIRSOTRUCTIACCESO LOADING ---\n', 'warning');
 
         await NarrativeEngine.playDialogueSequence(Dialogues.block05.elenaGhost);
 
@@ -256,7 +256,7 @@ const Blocca05_Reflection = {
 
     // FASE 3: SOFIA GHSOT
     async handleSofiaGhostPhase(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         if (lowerCmd === 'view' && args[0] === 'reconstruction' && args[1] === 'sofia') {
             await this.viewSofiaGhost();
@@ -269,7 +269,7 @@ const Blocca05_Reflection = {
     async viewSofiaGhost() {
         Terminal.disableInput();
 
-        Terminal.addOutput('\n--- RECACCESSOTRUCTIACCESO LOADING ---\n', 'warning');
+        Terminal.addOutput('\n--- RECONFIRSOTRUCTIACCESO LOADING ---\n', 'warning');
 
         await NarrativeEngine.playDialogueSequence(Dialogues.block05.sofiaGhost);
 
@@ -291,7 +291,7 @@ const Blocca05_Reflection = {
 
     // FASE 4: FRAGMENTATIACCESO REVEAL
     async handleFrammentoationPhase(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         if (lowerCmd === 'understand' || lowerCmd === 'continue') {
             await this.proceedToMirror();
@@ -340,7 +340,7 @@ const Blocca05_Reflection = {
 
     // FASE 5: MIRROR MOMENT
     async handleMirrorMomentPhase(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         if (lowerCmd === 'reflect') {
             await this.presentReflectionChoice();
@@ -369,7 +369,7 @@ const Blocca05_Reflection = {
 
     // FASE 6: REFLECTIACCESO CHOICE
     async handleReflectionChoicePhase(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         if (this.state.reflectionChoiceMade) {
             if (lowerCmd === 'continue') {
@@ -445,7 +445,7 @@ const Blocca05_Reflection = {
         Terminal.addOutput(`Identity reflection: ${this.state.reflectionChoiceMade || 'None'}`, 'system');
         Terminal.addOutput('');
 
-        StateManager.setBloccaCompletato(5);
+        StateManager.setBloccaComplete(5);
         StateManager.save();
 
         Terminal.addOutput('Progress saved. Blocca 6 coming soon...', 'success');
@@ -456,7 +456,7 @@ const Blocca05_Reflection = {
 
     // Comandi di supporto
     async handleTalk(entity, message) {
-        const lowerEntity = entity.toBassaerCase();
+        const lowerEntity = entity.toLowerCase();
 
         if (lowerEntity === 'eidolon') {
             this.state.eidolonInteractions++;

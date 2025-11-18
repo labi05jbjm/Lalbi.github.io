@@ -57,7 +57,7 @@ const Puzzles = {
             },
 
             // Callback quando completato
-            onCompletato() {
+            onComplete() {
                 const langData = TranslationSistema.t('puzzles', 'firstDecryption', 'success');
                 
                 Terminal.addOutput('');
@@ -67,7 +67,7 @@ const Puzzles = {
                 Terminal.addOutput('');
 
                 // Aggiorna stato
-                StateManager.setFlag('firstPuzzleCompletato', true);
+                StateManager.setFlag('firstPuzzleComplete', true);
                 StateManager.incrementStat('puzzlesSolved');
                 StateManager.incrementStat('fileLiberated');
 
@@ -92,7 +92,7 @@ const Puzzles = {
             },
 
             present() {
-                Terminal.addOutput('\n=== RICACCESOSOCIMENTO PATTERN ===', 'warning');
+                Terminal.addOutput('\n=== RICONFIROSOCIMENTO PATTERN ===', 'warning');
                 Terminal.addOutput('');
                 Terminal.addOutput('Completa la sequenza:');
                 Terminal.addOutput(`  ${this.challenge.sequence}`, 'success');
@@ -107,7 +107,7 @@ const Puzzles = {
                 return answer.trim() === this.challenge.solution;
             },
 
-            onCompletato() {
+            onComplete() {
                 Terminal.addOutput('');
                 Terminal.addOutput('✓ PATTERN IDENTIFICATO', 'success');
                 Terminal.addOutput(`Spiegazione: ${this.challenge.explanation}`, 'system');
@@ -142,7 +142,7 @@ const Puzzles = {
         const correct = this.currentPuzzle.verify(answer);
 
         if (correct) {
-            this.currentPuzzle.onCompletato();
+            this.currentPuzzle.onComplete();
             const completedPuzzle = this.currentPuzzle;
             this.currentPuzzle = null;
             return completedPuzzle;

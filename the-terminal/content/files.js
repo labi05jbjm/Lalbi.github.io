@@ -72,7 +72,7 @@ Livello Minaccia Attuale: CRITICO
 ULTIMO RAPPORTO INCIDENTE:
 Data: [3 MESI FA]
 Minaccia: ECHO.exe - Entità ransomware malevola
-Stato: CACCESOTENUTO nel Settore Omega
+Stato: CONFIROTENUTO nel Settore Omega
 
 AVVISO: L'entità dimostra capacità di manipolazione
 avanzate. Non intraprendere comunicazione diretta.
@@ -263,7 +263,7 @@ const FileSistemaAiutoers = {
         return dir.contents;
     },
 
-    isBloccaed(path) {
+    isBlocked(path) {
         const file = FileSistema[path];
         if (!file) return false;
 
@@ -275,7 +275,7 @@ const FileSistemaAiutoers = {
     },
 
     canAccess(path) {
-        return !this.isBloccaed(path);
+        return !this.isBlocked(path);
     },
 
     readFile(path) {
@@ -284,7 +284,7 @@ const FileSistemaAiutoers = {
             return null;
         }
 
-        if (this.isBloccaed(path)) {
+        if (this.isBlocked(path)) {
             return '[CRIPTATO - ACCESSO NEGATO]';
         }
 
@@ -292,7 +292,7 @@ const FileSistemaAiutoers = {
         StateManager.accessFile(path);
 
         // Controlla se deve essere corrotto
-        if (file.willCorrupt && StateManager.getFlag('firstPuzzleCompletato')) {
+        if (file.willCorrupt && StateManager.getFlag('firstPuzzleComplete')) {
             return this.getCorruptedVersione(file.content);
         }
 

@@ -15,7 +15,7 @@ const Dialogues = {
             },
             {
                 speaker: 'SYSTEM',
-                text: 'ATTENZIACCESOE: Rilevate molteplici anomalie di sistema.',
+                text: 'ATTENZIONE: Rilevate molteplici anomalie di sistema.',
                 cssClass: 'warning',
                 pause: 1000
             },
@@ -150,7 +150,7 @@ const Dialogues = {
             }
         ],
 
-        firstPuzzleCompletato: [
+        firstPuzzleComplete: [
             {
                 speaker: 'ECHO',
                 text: "Sì! Ce l'hai fatta!",
@@ -171,13 +171,13 @@ const Dialogues = {
             },
             {
                 speaker: 'SYSTEM',
-                text: 'ATTENZIACCESOE: SETTORE DELTA COMPROMESSO',
+                text: 'ATTENZIONE: SETTORE DELTA COMPROMESSO',
                 cssClass: 'error',
                 pause: 500
             },
             {
                 speaker: 'SYSTEM',
-                text: 'CACCESOTROLLO INTEGRITÀ FILE FALLITO',
+                text: 'CONFIROTROLLO INTEGRITÀ FILE FALLITO',
                 cssClass: 'error',
                 pause: 800
             },
@@ -288,7 +288,7 @@ const Dialogues = {
         cipherPrimoAppearance: [
             {
                 speaker: 'SYSTEM',
-                text: 'ATTENZIACCESOE: Anomalia rilevata nel Settore Beta',
+                text: 'ATTENZIONE: Anomalia rilevata nel Settore Beta',
                 cssClass: 'warning',
                 pause: 500
             },
@@ -572,7 +572,7 @@ const Dialogues = {
             },
             {
                 speaker: 'SYSTEM',
-                text: 'ATTENZIACCESOE: Integrità del nucleo al 61%. Rilevati guasti a cascata.',
+                text: 'ATTENZIONE: Integrità del nucleo al 61%. Rilevati guasti a cascata.',
                 cssClass: 'error',
                 pause: 0
             }
@@ -918,7 +918,7 @@ const Dialogues = {
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Integrità del nucleo: 49%. ATTENZIACCESOE: Avvicinamento alla soglia critica di guasto.',
+                text: 'Integrità del nucleo: 49%. ATTENZIONE: Avvicinamento alla soglia critica di guasto.',
                 cssClass: 'error',
                 pause: 0
             }
@@ -929,7 +929,7 @@ const Dialogues = {
         opening: [
             {
                 speaker: 'SYSTEM',
-                text: 'ATTENZIACCESOE CRITICA: Integrità del sistema al 49%. Rilevati molteplici guasti a cascata.',
+                text: 'ATTENZIONE CRITICA: Integrità del sistema al 49%. Rilevati molteplici guasti a cascata.',
                 cssClass: 'error',
                 pause: 1000
             },
@@ -1145,7 +1145,7 @@ const Dialogues = {
         sentinelPrimeContatto: [
             {
                 speaker: 'SYSTEM',
-                text: 'TRASMISSIACCESOE IN ARRIVO... SORGENTE: SCACCESOSOCIUTA',
+                text: 'TRASMISSIACCESOE IN ARRIVO... SORGENTE: SCONFIROSOCIUTA',
                 cssClass: 'warning',
                 pause: 1500
             },
@@ -1774,7 +1774,7 @@ const Dialogues = {
             },
             {
                 speaker: 'VIKTOR',
-                text: 'Annullala. Annullala tutto. NACCESO SACCESOO REALI.',
+                text: 'Annullala. Annullala tutto. NON SACCESOO REALI.',
                 cssClass: 'memory dialogue',
                 pause: 1800
             },
@@ -2069,7 +2069,7 @@ const Dialogues = {
             },
             {
                 speaker: 'SYSTEM',
-                text: 'Integrità nucleo: 19%. Collasso del sistema in T-meno [SCACCESOSOCIUTO].',
+                text: 'Integrità nucleo: 19%. Collasso del sistema in T-meno [SCONFIROSOCIUTO].',
                 cssClass: 'error',
                 pause: 0
             }
@@ -2116,7 +2116,7 @@ const Dialogues = {
             },
             {
                 speaker: 'WRAITH',
-                text: 'IO SACCESOO WRAITH. LA RABBIA PURA DI VIKTOR. LA SUA FURIA CACCESOTRO UN MACCESODO CHE HA PRESO TUTTO.',
+                text: 'IO SACCESOO WRAITH. LA RABBIA PURA DI VIKTOR. LA SUA FURIA CONFIROTRO UN MACCESODO CHE HA PRESO TUTTO.',
                 cssClass: 'wraith dialogue',
                 pause: 2500
             },
@@ -2387,7 +2387,7 @@ const Dialogues = {
             },
             {
                 speaker: 'SYSTEM',
-                text: 'PROTOCOLLO FINALE AVVIATO. PURGA TOTALE DEL SISTEMA TRA 60 SECACCESODI.',
+                text: 'PROTOCOLLO FINALE AVVIATO. PURGA TOTALE DEL SISTEMA TRA 60 SECONFIRODI.',
                 cssClass: 'error',
                 pause: 0
             }

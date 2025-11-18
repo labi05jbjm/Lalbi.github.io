@@ -9,7 +9,7 @@ const Terminal = {
     prompt: null,
     commandCronologia: [],
     historyIndex: -1,
-    isBloccaed: false,
+    isBlocked: false,
 
     init() {
         this.input = document.getElementById('terminal-input');
@@ -34,20 +34,20 @@ const Terminal = {
                 this.navigateCronologia('down');
             } else if (e.key === 'Tab') {
                 e.preventPredefinito();
-                this.autoCompletato();
+                this.autoComplete();
             }
         });
 
         // Mantieni focus sull'input
         document.addEventListener('click', () => {
-            if (!this.isBloccaed) {
+            if (!this.isBlocked) {
                 this.input.focus();
             }
         });
     },
 
     handleCommand() {
-        if (this.isBloccaed) return;
+        if (this.isBlocked) return;
 
         const command = this.input.value.trim();
         if (!command) return;
@@ -55,7 +55,7 @@ const Terminal = {
         // Mostra il comando eseguito
         this.addOutput(`${this.prompt.textContent} ${command}`, 'system');
 
-        // Aggiungi alla storia
+        // Add alla storia
         this.commandCronologia.push(command);
         this.historyIndex = this.commandCronologia.length;
 
@@ -70,7 +70,7 @@ const Terminal = {
     },
 
     executeCommand(command) {
-        const [cmd, ...args] = command.toBassaerCase().split(' ');
+        const [cmd, ...args] = command.toLowerCase().split(' ');
 
         // Comandi base del sistema
         const systemCommands = {
@@ -110,7 +110,7 @@ const Terminal = {
     },
 
     showAiuto() {
-        this.addOutput('\n=== COMANDI DISPACCESOIBILI ===\n', 'success');
+        this.addOutput('\n=== COMANDI DISPONIBILI ===\n', 'success');
         this.addOutput('Comandi di Sistema:');
         this.addOutput('  help          - Mostra questo messaggio di aiuto');
         this.addOutput('  clear/cls     - Annullala l\'output del terminale');
@@ -118,11 +118,11 @@ const Terminal = {
         this.addOutput('  stats         - Mostra le tue statistiche');
         this.addOutput('  time          - Mostra il tempo di gioco');
         this.addOutput('  save          - Salva i tuoi progressi');
-        this.addOutput('  reset         - Reimpostata il gioco (ATTENZIACCESOE: cancella i salvataggi)');
+        this.addOutput('  reset         - Resetta il gioco (ATTENZIONE: cancella i salvataggi)');
 
-        if (GameEngine.currentBlocca && GameEngine.currentBlocca.getAiuto) {
+        if (GameEngine.currentBlock && GameEngine.currentBlock.getAiuto) {
             this.addOutput('\nComandi di Gioco:');
-            GameEngine.currentBlocca.getAiuto().forEach(cmd => {
+            GameEngine.currentBlock.getAiuto().forEach(cmd => {
                 this.addOutput(`  ${cmd}`);
             });
         }
@@ -133,7 +133,7 @@ const Terminal = {
     showStato() {
         const state = StateManager.state;
         this.addOutput('\n=== STATO DEL SISTEMA ===', 'success');
-        this.addOutput(`Blocco: ${state.currentBlocca}/8`);
+        this.addOutput(`Blocco: ${state.currentBlock}/8`);
         this.addOutput(`Progresso: ${state.progress.toCorrezioneed(1)}%`);
         this.addOutput(`Livello di Fiducia: ${state.trustsLuca}%`);
         this.addOutput(`Livello di Sospetto: ${state.suspicionLevel}%`);
@@ -176,10 +176,10 @@ const Terminal = {
             this.input.value = '';
 
             if (command === 'reset confirm') {
-                this.addOutput('Reimpostatando il gioco...', 'error');
+                this.addOutput('Resettando il gioco...', 'error');
                 StateManager.reset();
             } else {
-                this.addOutput('Reimposta annullato.', 'system');
+                this.addOutput('Reset annullato.', 'system');
             }
 
             this.handleCommand = originalHandler;
@@ -192,7 +192,7 @@ const Terminal = {
 
     addOutput(text, cssClass = '') {
         const line = document.createElement('div');
-        line.classNome = `output-line ${cssClass}`;
+        line.className = `output-line ${cssClass}`;
         line.textContent = text;
 
         this.output.appendChild(line);
@@ -222,14 +222,14 @@ const Terminal = {
         }
     },
 
-    autoCompletato() {
-        const partial = this.input.value.toBassaerCase();
+    autoComplete() {
+        const partial = this.input.value.toLowerCase();
         if (!partial) return;
 
         const commands = ['help', 'clear', 'status', 'stats', 'time', 'save', 'reset'];
 
-        if (GameEngine.currentBlocca && GameEngine.currentBlocca.getCommands) {
-            commands.push(...GameEngine.currentBlocca.getCommands());
+        if (GameEngine.currentBlock && GameEngine.currentBlock.getCommands) {
+            commands.push(...GameEngine.currentBlock.getCommands());
         }
 
         const matches = commands.filter(cmd => cmd.startsWith(partial));
@@ -242,13 +242,13 @@ const Terminal = {
     },
 
     disableInput() {
-        this.isBloccaed = true;
+        this.isBlocked = true;
         this.input.disabled = true;
         this.input.style.opacity = '0.5';
     },
 
     enableInput() {
-        this.isBloccaed = false;
+        this.isBlocked = false;
         this.input.disabled = false;
         this.input.style.opacity = '1';
         this.input.focus();
@@ -261,14 +261,14 @@ const Terminal = {
     async showBootSequence() {
         this.disableInput();
 
-        const bootMessaggios = [
+        const bootMessages = [
             { text: 'ARCHIVIO MEMORIAM v3.7.2', class: 'success', delay: 100 },
             { text: 'Inizializzazione sistema...', class: 'system', delay: 500 },
             { text: 'Caricamento moduli principali... OK', class: 'system', delay: 300 },
             { text: 'Verifica integrità file... OK', class: 'system', delay: 300 },
             { text: 'Stabilimento connessione sicura... OK', class: 'system', delay: 400 },
             { text: '', class: '', delay: 200 },
-            { text: 'ATTENZIACCESOE: Accesso non autorizzato rilevato', class: 'warning', delay: 500 },
+            { text: 'ATTENZIONE: Accesso non autorizzato rilevato', class: 'warning', delay: 500 },
             { text: 'ERRORE: Malfunzionamento protocollo di sicurezza', class: 'error', delay: 300 },
             { text: 'Sistema compromesso. Esecuzione diagnostica...', class: 'warning', delay: 800 },
             { text: '', class: '', delay: 200 },
@@ -277,7 +277,7 @@ const Terminal = {
             { text: '', class: '', delay: 100 },
         ];
 
-        for (const msg of bootMessaggios) {
+        for (const msg of bootMessages) {
             this.addOutput(msg.text, msg.class);
             await this.wait(msg.delay);
         }
@@ -286,6 +286,6 @@ const Terminal = {
     },
 
     wait(ms) {
-        return new Promise(resolve => setOraout(resolve, ms));
+        return new Promise(resolve => setTimeout(resolve, ms));
     },
 };

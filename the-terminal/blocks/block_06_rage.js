@@ -23,12 +23,12 @@ const Blocca06_Rage = {
         console.log('[BLOCCO 06] RAGE - Inizializzazione...');
         StateManager.setBlocca(6);
 
-        setOraout(() => {
-            this.startBlocca();
+        setTimeout(() => {
+            this.startBlock();
         }, 2000);
     },
 
-    async startBlocca() {
+    async startBlock() {
         Terminal.disableInput();
 
         // Apriing: WRAITH appears
@@ -45,7 +45,7 @@ const Blocca06_Rage = {
     },
 
     async handleCommand(cmd, args) {
-        const fullCmd = cmd.toBassaerCase();
+        const fullCmd = cmd.toLowerCase();
 
         // Handle commands based on phase
         switch (this.state.phase) {
@@ -86,9 +86,9 @@ const Blocca06_Rage = {
 
         if (cmd === 'talk' && args.length > 0) {
             const text = args.join(' ');
-            if (text.toBassaerCase().includes('echo')) {
+            if (text.toLowerCase().includes('echo')) {
                 await NarrativeEngine.echoSays("I... I don't know what to say anymore...");
-            } else if (text.toBassaerCase().includes('wraith')) {
+            } else if (text.toLowerCase().includes('wraith')) {
                 await NarrativeEngine.wraithSays('No more talk. Only truth. Confront ECHO.');
             } else {
                 Terminal.addOutput('WRAITH è troppo furioso per ascoltare. Affronta ECHO per continuare.', 'warning');
@@ -102,7 +102,7 @@ const Blocca06_Rage = {
     async confrontEco() {
         Terminal.disableInput();
 
-        Terminal.addOutput('\n--- CACCESOFRACCESOTATIACCESO INITIATED ---\n', 'error');
+        Terminal.addOutput('\n--- CONFIROFRACCESOTATIACCESO INITIATED ---\n', 'error');
         await NarrativeEngine.wait(1000);
 
         // WRAITH exposes ECHO
@@ -141,9 +141,9 @@ const Blocca06_Rage = {
 
         if (cmd === 'talk' && args.length > 0) {
             const text = args.join(' ');
-            if (text.toBassaerCase().includes('echo')) {
+            if (text.toLowerCase().includes('echo')) {
                 await NarrativeEngine.echoSays("Mi dispiace... non volevo... non sapevo di essere... solo una bugia...", { pause: 1500 });
-            } else if (text.toBassaerCase().includes('wraith')) {
+            } else if (text.toLowerCase().includes('wraith')) {
                 await NarrativeEngine.wraithSays('Guarda il collasso. Vedi cosa abbiamo fatto.');
             } else {
                 Terminal.addOutput('I frammenti sono troppo concentrati sul collasso del sistema.', 'warning');
@@ -190,7 +190,7 @@ const Blocca06_Rage = {
 
         if (cmd === 'talk' && args.length > 0) {
             const fragments = ['cipher', 'nexus', 'specter', 'eidolon', 'wraith', 'echo'];
-            const text = args.join(' ').toBassaerCase();
+            const text = args.join(' ').toLowerCase();
 
             for (const frag of fragments) {
                 if (text.includes(frag)) {
@@ -341,7 +341,7 @@ const Blocca06_Rage = {
         Terminal.addOutput(`Choice made: ${this.state.choiceMade}`, 'success');
         Terminal.addOutput('Frammento MORPHEUS awakening...\n', 'important');
 
-        StateManager.setFlag('block06Completato', true);
+        StateManager.setFlag('block06Complete', true);
         StateManager.saveState();
 
         Terminal.addOutput('Scrivi "continue" per iniziare il Blocco 7 - ACCETTAZIACCESOE\n', 'important');

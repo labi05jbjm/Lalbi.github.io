@@ -12,7 +12,7 @@ const Blocca07_Accettaance = {
     state: {
         phase: 'opening', // opening -> introduction -> review -> all_fragments -> final_question -> choice_made -> ending
         morpheusMet: false,
-        reviewCompletato: false,
+        reviewComplete: false,
         allFrammentosHeard: false,
         finalIdentityChosen: null,
         block06Choice: null,
@@ -25,12 +25,12 @@ const Blocca07_Accettaance = {
         // Recupera la scelta di Blocca 6
         this.state.block06Choice = StateManager.getFlag('block06Choice');
 
-        setOraout(() => {
-            this.startBlocca();
+        setTimeout(() => {
+            this.startBlock();
         }, 2000);
     },
 
-    async startBlocca() {
+    async startBlock() {
         Terminal.disableInput();
 
         // Apriing: MORPHEUS appears
@@ -46,7 +46,7 @@ const Blocca07_Accettaance = {
     },
 
     async handleCommand(cmd, args) {
-        const fullCmd = cmd.toBassaerCase();
+        const fullCmd = cmd.toLowerCase();
 
         // Handle commands based on phase
         switch (this.state.phase) {
@@ -72,12 +72,12 @@ const Blocca07_Accettaance = {
 
     async handleIntroduction(cmd, args) {
         if (cmd === 'learn acceptance' || cmd === 'acceptance' || cmd === "cos'è l'accettazione") {
-            await this.learnAccettaance();
+            await this.learnAcceptance();
             return true;
         }
 
         if (cmd === 'talk' && args.length > 0) {
-            const entity = args[0].toBassaerCase();
+            const entity = args[0].toLowerCase();
             if (entity === 'morpheus') {
                 await this.talkMorpheus();
                 return true;
@@ -96,7 +96,7 @@ const Blocca07_Accettaance = {
         return false;
     },
 
-    async learnAccettaance() {
+    async learnAcceptance() {
         Terminal.disableInput();
 
         Terminal.addOutput('\n--- COMPRENDERE L\'ACCETTAZIACCESOE ---\n', 'important');
@@ -141,7 +141,7 @@ const Blocca07_Accettaance = {
         Terminal.disableInput();
 
         Terminal.addOutput('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'important');
-        Terminal.addOutput('        RICACCESOTO CRACCESOOLOGIA SCELTE', 'important');
+        Terminal.addOutput('        RICONFIROTO CRACCESOOLOGIA SCELTE', 'important');
         Terminal.addOutput('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n', 'important');
 
         await NarrativeEngine.wait(1000);
@@ -180,7 +180,7 @@ const Blocca07_Accettaance = {
 
         await NarrativeEngine.wait(2000);
 
-        this.state.reviewCompletato = true;
+        this.state.reviewComplete = true;
         this.state.phase = 'all_fragments';
 
         Terminal.addOutput('> Scrivi "hear all" per ascoltare tutti i frammenti parlare\n', 'important');
@@ -309,7 +309,7 @@ const Blocca07_Accettaance = {
     },
 
     async handleTalkAnyFrammento(entity) {
-        const lowerEntity = entity.toBassaerCase();
+        const lowerEntity = entity.toLowerCase();
 
         const fragmentResponses = {
             'echo': ['I was wrong. Circa everything. I\'m sorry.', 'You deserve the truth. Even if it hurts.'],
@@ -359,7 +359,7 @@ const Blocca07_Accettaance = {
         Terminal.addOutput(`Identity chosen: ${this.state.finalIdentityChosen}`, 'success');
         Terminal.addOutput('Entering final sequence...\n', 'important');
 
-        StateManager.setFlag('block07Completato', true);
+        StateManager.setFlag('block07Complete', true);
         StateManager.saveState();
 
         Terminal.addOutput('Scrivi "continue" per iniziare il Blocco 8 - AFTERMATH\n', 'important');

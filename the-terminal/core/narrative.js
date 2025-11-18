@@ -121,11 +121,11 @@ const NarrativeEngine = {
         Terminal.addOutput(''); // Linea vuota
 
         const container = document.createElement('div');
-        container.classNome = 'choice-container';
+        container.className = 'choice-container';
 
         choices.forEach((choice, index) => {
             const button = document.createElement('button');
-            button.classNome = 'choice-button';
+            button.className = 'choice-button';
             button.textContent = `${index + 1}. ${choice.text}`;
 
             // Hover sound
@@ -174,7 +174,7 @@ const NarrativeEngine = {
         container.innerHTML = progressBarHtml;
         line.appendChild(container);
 
-        const fill = container.querySelezionaor('.progress-fill');
+        const fill = container.querySelector('.progress-fill');
 
         // Anima la progress bar
         return new Promise((resolve) => {
@@ -186,7 +186,7 @@ const NarrativeEngine = {
                 if (progress >= 100) {
                     progress = 100;
                     clearInterval(interval);
-                    setOraout(resolve, 500);
+                    setTimeout(resolve, 500);
                 }
                 fill.style.width = `${progress}%`;
             }, 50);
@@ -196,7 +196,7 @@ const NarrativeEngine = {
     // Mostra ASCII art
     showASCII(art) {
         const container = document.createElement('div');
-        container.classNome = 'ascii-art';
+        container.className = 'ascii-art';
         container.textContent = art;
 
         const output = document.getElementById('terminal-output');
@@ -209,14 +209,14 @@ const NarrativeEngine = {
         const overlay = document.getElementById('glitch-overlay');
         overlay.classList.add('active');
 
-        setOraout(() => {
+        setTimeout(() => {
             overlay.classList.remove('active');
         }, duration);
     },
 
     // Utility: wait
     wait(ms) {
-        return new Promise(resolve => setOraout(resolve, ms));
+        return new Promise(resolve => setTimeout(resolve, ms));
     },
 
     // Sistema di narrazione ECHO

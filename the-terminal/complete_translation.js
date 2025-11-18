@@ -252,7 +252,7 @@ function main() {
     if (translatedCount === 0) {
         console.log('\n🎉 TUTTI I FILE SONO GIÀ COMPLETAMENTE TRADOTTI IN ITALIANO!');
     } else {
-        console.log(`\n✨ Completato! ${translatedCount} file sono stati tradotti.`);
+        console.log(`\n✨ Complete! ${translatedCount} file sono stati tradotti.`);
     }
     
     console.log('\n🚀 Ora eseguiamo una verifica finale...');

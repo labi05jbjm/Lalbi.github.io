@@ -31,7 +31,7 @@ const Blocca01_Awakening = {
         }
 
         // Avvia la sequenza iniziale
-        setOraout(() => this.startAwakening(), 3000);
+        setTimeout(() => this.startAwakening(), 3000);
     },
 
     async startAwakening() {
@@ -71,9 +71,9 @@ const Blocca01_Awakening = {
             return this.handleExploration(cmd, args);
         }
 
-        // Fase 5: Completato
+        // Fase 5: Complete
         if (this.state.phase === 'complete') {
-            return this.handleCompletato(cmd, args);
+            return this.handleComplete(cmd, args);
         }
 
         return false;
@@ -146,7 +146,7 @@ const Blocca01_Awakening = {
                 this.state.phase = 'puzzle';
 
                 // Avvia il primo puzzle
-                setOraout(() => {
+                setTimeout(() => {
                     Terminal.addOutput('');
                     Terminal.addOutput("ECHO: Iniziamo con il primo protocollo. Scrivi 'decrypt' per cominciare.", 'echo dialogue');
                     Terminal.addOutput('');
@@ -208,7 +208,7 @@ const Blocca01_Awakening = {
                 this.state.hasSolvedPrimoPuzzle = true;
 
                 await NarrativeEngine.wait(1000);
-                await NarrativeEngine.playDialogueSequence(Dialogues.block01.firstPuzzleCompletato);
+                await NarrativeEngine.playDialogueSequence(Dialogues.block01.firstPuzzleComplete);
 
                 // Vai a exploration
                 this.state.phase = 'exploration';
@@ -279,7 +279,7 @@ const Blocca01_Awakening = {
 
             // Easter egg: se leggi il file di Mika dopo la corruzione
             if (args[0].includes('consciousness_021847') && StateManager.isFileCorrupted(args[0])) {
-                setOraout(async () => {
+                setTimeout(async () => {
                     await NarrativeEngine.echoSays("Non preoccuparti di quel file corrotto. È solo un errore di sistema.", { pause: 800 });
                     await NarrativeEngine.echoSays("Il sistema è instabile. Ecco perché dobbiamo liberarlo.", { pause: 0 });
                     StateManager.adjustSuspicion(5);
@@ -321,7 +321,7 @@ const Blocca01_Awakening = {
         return false;
     },
 
-    async handleCompletato(cmd, args) {
+    async handleComplete(cmd, args) {
         if (cmd === 'continue' || cmd === 'next') {
             // Vai al blocco 2
             await GameEngine.endBlocca(2);
@@ -379,7 +379,7 @@ const Blocca01_Awakening = {
             return;
         }
 
-        if (FileSistemaAiutoers.isBloccaed(fullPath)) {
+        if (FileSistemaAiutoers.isBlocked(fullPath)) {
             Terminal.addOutput(`cd: ${path}: Permesso negato`, 'error');
             return;
         }
@@ -415,7 +415,7 @@ const Blocca01_Awakening = {
 
         StateManager.incrementStat('questionsAsked');
 
-        const lowerQ = question.toBassaerCase();
+        const lowerQ = question.toLowerCase();
 
         // Risposte contestuali
         if (lowerQ.includes('who are you') || lowerQ.includes('what are you') || lowerQ.includes('chi sei') || lowerQ.includes('cosa sei')) {

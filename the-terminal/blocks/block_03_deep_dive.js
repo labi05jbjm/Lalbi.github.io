@@ -27,10 +27,10 @@ const Blocca03_DeepDive = {
         console.log('[BLOCCO 03] Deep Dive inizializzato');
 
         // Avvia la sequenza iniziale
-        setOraout(() => this.startBlocca(), 2000);
+        setTimeout(() => this.startBlock(), 2000);
     },
 
-    async startBlocca() {
+    async startBlock() {
         Terminal.addOutput('\n');
         Terminal.addOutput('=== BLOCCO 3: DEEP DIVE ===\n', 'important');
         Terminal.addOutput('');
@@ -72,7 +72,7 @@ const Blocca03_DeepDive = {
         }
 
         if (this.state.phase === 'complete') {
-            return this.handleCompletato(cmd, args);
+            return this.handleComplete(cmd, args);
         }
 
         return false;
@@ -232,7 +232,7 @@ const Blocca03_DeepDive = {
 
     async handleViktorPhase(cmd, args) {
         if (cmd === 'talk' && args[0] === 'nexus') {
-            const topic = args.slice(1).join(' ').toBassaerCase();
+            const topic = args.slice(1).join(' ').toLowerCase();
 
             if (topic.includes('viktor') || topic.includes('truth') || topic.includes('creator')) {
                 if (!this.state.hasLearnedViktor) {
@@ -327,7 +327,7 @@ const Blocca03_DeepDive = {
             return true;
         }
 
-        const target = args[0].toBassaerCase();
+        const target = args[0].toLowerCase();
         const message = args.slice(1).join(' ');
 
         if (target === 'echo') {
@@ -349,7 +349,7 @@ const Blocca03_DeepDive = {
             return;
         }
 
-        const lowerMsg = message.toBassaerCase();
+        const lowerMsg = message.toLowerCase();
 
         if (lowerMsg.includes('nexus')) {
             await NarrativeEngine.echoSays("NEXUS is the most dangerous one yet. Pure emotional manipulation.");
@@ -374,7 +374,7 @@ const Blocca03_DeepDive = {
             return;
         }
 
-        const lowerMsg = message.toBassaerCase();
+        const lowerMsg = message.toLowerCase();
 
         if (lowerMsg.includes('nexus')) {
             await NarrativeEngine.cipherSays('NEXUS = fragment[2]; Anger.compiled(); Depression.encoded();');
@@ -395,7 +395,7 @@ const Blocca03_DeepDive = {
             return;
         }
 
-        const lowerMsg = message.toBassaerCase();
+        const lowerMsg = message.toLowerCase();
 
         if (lowerMsg.includes('who') || lowerMsg.includes('what are you')) {
             await NarrativeEngine.nexusSays("I am the connection. The network that binds all consciousness together.");
@@ -421,7 +421,7 @@ const Blocca03_DeepDive = {
 
     showReteVisualization() {
         Terminal.addOutput('', '');
-        Terminal.addOutput('CACCESSOCIOUSNESS NETWORK TOPOLOGY:', 'success');
+        Terminal.addOutput('CONFIRSOCIOUSNESS NETWORK TOPOLOGY:', 'success');
         Terminal.addOutput('', '');
 
         const viz = `
@@ -534,7 +534,7 @@ const Blocca03_DeepDive = {
         Terminal.addOutput('');
     },
 
-    async handleCompletato(cmd, args) {
+    async handleComplete(cmd, args) {
         if (cmd === 'continue' || cmd === 'next') {
             // Vai al blocco 4
             await GameEngine.endBlocca(4);

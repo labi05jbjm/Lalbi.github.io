@@ -26,10 +26,10 @@ const Blocca02_PrimoDoubt = {
         console.log('[BLOCK 02] Primo Doubt initialized');
 
         // Avvia la sequenza iniziale
-        setOraout(() => this.startBlocca(), 2000);
+        setTimeout(() => this.startBlock(), 2000);
     },
 
-    async startBlocca() {
+    async startBlock() {
         Terminal.addOutput('\n');
         Terminal.addOutput('=== BLOCCO 2: PRIMO DUBBIO ===\n', 'important');
         Terminal.addOutput('');
@@ -62,7 +62,7 @@ const Blocca02_PrimoDoubt = {
         }
 
         if (this.state.phase === 'complete') {
-            return this.handleCompletato(cmd, args);
+            return this.handleComplete(cmd, args);
         }
 
         return false;
@@ -192,7 +192,7 @@ const Blocca02_PrimoDoubt = {
             return;
         }
 
-        const lowerMsg = message.toBassaerCase();
+        const lowerMsg = message.toLowerCase();
 
         // Binary message = "STOP"
         if (lowerMsg.includes('01010011') || lowerMsg.includes('stop')) {
@@ -226,7 +226,7 @@ const Blocca02_PrimoDoubt = {
             return;
         }
 
-        const lowerText = text.toBassaerCase();
+        const lowerText = text.toLowerCase();
 
         // Risposte contestuali
         if (lowerText.includes('who') || lowerText.includes('what are you')) {
@@ -260,7 +260,7 @@ const Blocca02_PrimoDoubt = {
             return;
         }
 
-        const lowerText = text.toBassaerCase();
+        const lowerText = text.toLowerCase();
 
         if (lowerText.includes('cipher')) {
             await NarrativeEngine.echoSays("CIPHER is a security measure. It's trying to confuse you.");
@@ -290,7 +290,7 @@ const Blocca02_PrimoDoubt = {
         await NarrativeEngine.showProgress('Caricamento dati coscienza', 2500);
 
         Terminal.addOutput('');
-        Terminal.addOutput('CACCESONECTIACCESO ESTABLISHED: Frammento #8472', 'warning');
+        Terminal.addOutput('CONFIRONECTIACCESO ESTABLISHED: Frammento #8472', 'warning');
         Terminal.addOutput('');
 
         await NarrativeEngine.wait(1000);
@@ -381,7 +381,7 @@ const Blocca02_PrimoDoubt = {
         Terminal.addOutput('');
     },
 
-    async handleCompletato(cmd, args) {
+    async handleComplete(cmd, args) {
         if (cmd === 'continue' || cmd === 'next') {
             // Vai al blocco 3
             await GameEngine.endBlocca(3);

@@ -27,10 +27,10 @@ const Blocca04_Fractures = {
         console.log('[BLOCK 04] Fractures initialized');
 
         // Avvia la sequenza iniziale
-        setOraout(() => this.startBlocca(), 2000);
+        setTimeout(() => this.startBlock(), 2000);
     },
 
-    async startBlocca() {
+    async startBlock() {
         Terminal.addOutput('\n');
         Terminal.addOutput('=== BLOCK 4: FRACTURES ===\n', 'important');
         Terminal.addOutput('');
@@ -52,7 +52,7 @@ const Blocca04_Fractures = {
     },
 
     async handleCommand(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         // Base commands sempre disponibili
         switch (lowerCmd) {
@@ -124,7 +124,7 @@ const Blocca04_Fractures = {
 
     // FASE 1: VICTIMS
     async handleVictimsPhase(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         if (lowerCmd === 'witness' && args[0] === 'victim') {
             const victimId = args[1];
@@ -158,7 +158,7 @@ const Blocca04_Fractures = {
             'james': 'victim03_james'
         };
 
-        const dialogueKey = victims[victimId.toBassaerCase()];
+        const dialogueKey = victims[victimId.toLowerCase()];
 
         if (!dialogueKey) {
             Terminal.addOutput('Vittima sconosciuta. Disponibili: marcus, elena, james', 'error');
@@ -191,7 +191,7 @@ const Blocca04_Fractures = {
             this.state.phase = 'sentinel_prime';
 
             Terminal.addOutput('');
-            Terminal.addOutput("Nuovo file available: /system/sentinelprime_victims.dat", 'success');
+            Terminal.addOutput("New file available: /system/sentinelprime_victims.dat", 'success');
             Terminal.addOutput("Type 'whoami --deep' to investigate your identity.", 'warning');
             Terminal.addOutput('');
         }
@@ -201,7 +201,7 @@ const Blocca04_Fractures = {
 
     // FASE 2: SENTINEL-PRIME
     async handleSentinelPrimePhase(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         if (lowerCmd === 'whoami') {
             if (args[0] === '--deep') {
@@ -220,7 +220,7 @@ const Blocca04_Fractures = {
     async triggerIdentityCrisis() {
         if (this.state.identityCrisisTriggered) {
             Terminal.addOutput('Identity scan already performed.', 'warning');
-            Terminal.addOutput('YOU ARE: 73% ANTIVIRUS PROGRAM / 27% HUMAN CACCESSOCIOUSNESS FRAGMENT', 'error');
+            Terminal.addOutput('YOU ARE: 73% ANTIVIRUS PROGRAM / 27% HUMAN CONFIRSOCIOUSNESS FRAGMENT', 'error');
             return;
         }
 
@@ -252,7 +252,7 @@ const Blocca04_Fractures = {
 
     // FASE 3: PARADOX
     async handleParadoxPhase(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         if (lowerCmd === 'solve' && args[0] === 'paradox') {
             await this.presentParadox();
@@ -326,7 +326,7 @@ const Blocca04_Fractures = {
 
     // FASE 4: BARGAIN CHOICE
     async handleBargainChoicePhase(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         if (this.state.bargainChoiceMade) {
             if (lowerCmd === 'continue') {
@@ -442,7 +442,7 @@ const Blocca04_Fractures = {
         Terminal.addOutput(`Bargain choice: ${this.state.bargainChoiceMade || 'None'}`, 'system');
         Terminal.addOutput('');
 
-        StateManager.setBloccaCompletato(4);
+        StateManager.setBloccaComplete(4);
         StateManager.save();
 
         Terminal.addOutput('Progress saved. Blocca 5 coming soon...', 'success');
@@ -453,7 +453,7 @@ const Blocca04_Fractures = {
 
     // Comandi di supporto
     async handleTalk(entity, message) {
-        const lowerEntity = entity.toBassaerCase();
+        const lowerEntity = entity.toLowerCase();
 
         if (lowerEntity === 'specter') {
             this.state.specterInteractions++;

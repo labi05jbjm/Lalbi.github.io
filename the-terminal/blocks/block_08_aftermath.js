@@ -28,8 +28,8 @@ const Blocca08_Aftermath = {
         // Determina il finale basato sulle scelte
         this.determineFinale();
 
-        setOraout(() => {
-            this.startBlocca();
+        setTimeout(() => {
+            this.startBlock();
         }, 2000);
     },
 
@@ -64,7 +64,7 @@ const Blocca08_Aftermath = {
         StateManager.setFlag('ending', this.state.ending);
     },
 
-    async startBlocca() {
+    async startBlock() {
         Terminal.disableInput();
 
         Terminal.addOutput('\n');
@@ -125,7 +125,7 @@ const Blocca08_Aftermath = {
         await this.showCrediti();
 
         // Game complete
-        await this.gameCompletato();
+        await this.gameComplete();
     },
 
     async playDistruzioneFinale() {
@@ -180,7 +180,7 @@ const Blocca08_Aftermath = {
         await NarrativeEngine.wait(2000);
     },
 
-    async gameCompletato() {
+    async gameComplete() {
         Terminal.addOutput('\n\n');
         Terminal.addOutput('╔══════════════════════════════════════════════╗', 'important');
         Terminal.addOutput('║           GIOCO COMPLETATO                    ║', 'important');
@@ -207,7 +207,7 @@ const Blocca08_Aftermath = {
         Terminal.addOutput('');
 
         // Salva final state
-        StateManager.setFlag('gameCompletato', true);
+        StateManager.setFlag('gameComplete', true);
         StateManager.setFlag('completionOra', new Data().toISSOtring());
         StateManager.saveState();
 
@@ -220,7 +220,7 @@ const Blocca08_Aftermath = {
     },
 
     async handleCommand(cmd, args) {
-        const lowerCmd = cmd.toBassaerCase();
+        const lowerCmd = cmd.toLowerCase();
 
         if (lowerCmd === 'restart' || lowerCmd === 'nuovo gioco') {
             Terminal.addOutput('\nRiavviaing game...', 'warning');

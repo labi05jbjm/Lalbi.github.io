@@ -129,7 +129,7 @@ const GameEngine = {
 
     // Utility per i blocchi
     async endBlock(nextBlockNumber) {
-        Terminal.addOutput('\n--- Blocco Completato ---\n', 'success');
+        Terminal.addOutput('\n--- Blocco Complete ---\n', 'success');
         await NarrativeEngine.wait(1000);
         await this.changeBlock(nextBlockNumber);
     },

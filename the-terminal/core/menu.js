@@ -30,7 +30,7 @@ const CREDITS_TRANSLATIONS = {
 const MainMenu = {
     menuAttivo: false,
 
-    // Game options (stored in localArchiviazione)
+    // Game options (stored in localStorage)
     options: {
         crtEffetti: true,
         crtCurved: true,
@@ -43,7 +43,7 @@ const MainMenu = {
     async show() {
         console.log('[MENU] Visualizzazione menu principale');
         this.menuAttivo = true;
-        this.loadOpzioni();
+        this.loadOptions();
 
         Terminal.clear();
         Terminal.disableInput();
@@ -52,7 +52,7 @@ const MainMenu = {
 
         // ASCII Art Title - Libero and animated
         const titleDiv = document.createElement('div');
-        titleDiv.classNome = 'menu-title-animated';
+        titleDiv.className = 'menu-title-animated';
         titleDiv.style.cssText = 'text-align: center; margin: 40px 0 20px 0;';
         titleDiv.innerHTML = `
 <pre class="title-logo" style="
@@ -91,31 +91,31 @@ const MainMenu = {
         // Menu container
         const menuContainer = document.createElement('div');
         menuContainer.id = 'main-menu-container';
-        menuContainer.style.cssText = 'display: flex; flex-direction: column; align-elementi: center; gap: 12px; margin-top: 30px;';
+        menuContainer.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 30px;';
 
         // Check if there's a saved game
-        const hasSalvadGame = StateManager.state.currentBlocca > 1 || StateManager.state.playOra > 0;
+        const hasSavedGame = StateManager.state.currentBlock > 1 || StateManager.state.playOra > 0;
 
-        // Nuovo Game button
-        const btnNuovoGame = this.createMenuButton('NUOVA PARTITA', () => {
-            if (hasSalvadGame) {
-                this.showConfermaDialog();
+        // New Game button
+        const btnNewGame = this.createMenuButton('NUOVA PARTITA', () => {
+            if (hasSavedGame) {
+                this.showConfirmDialog();
             } else {
-                this.startNuovoGame();
+                this.startNewGame();
             }
         });
-        menuContainer.appendChild(btnNuovoGame);
+        menuContainer.appendChild(btnNewGame);
 
         // Continua button (only if there's a saved game)
-        if (hasSalvadGame) {
-            const btnContinua = this.createMenuButton('CACCESOTINUA', () => {
+        if (hasSavedGame) {
+            const btnContinua = this.createMenuButton('CONFIROTINUA', () => {
                 this.continueGame();
             });
             menuContainer.appendChild(btnContinua);
         }
 
         // Opzioni button
-        const btnOpzioni = this.createMenuButton('OPZIACCESOI', () => {
+        const btnOpzioni = this.createMenuButton('OPZIONI', () => {
             this.showOpzioni();
         });
         menuContainer.appendChild(btnOpzioni);
@@ -126,11 +126,11 @@ const MainMenu = {
         });
         menuContainer.appendChild(btnCredits);
 
-        // Esci button
-        const btnEsci = this.createMenuButton('ESCI DAL GIOCO', () => {
-            this.showEsciConfermaation();
+        // Exit button
+        const btnExit = this.createMenuButton('ESCI DAL GIOCO', () => {
+            this.showExitConfirmation();
         });
-        menuContainer.appendChild(btnEsci);
+        menuContainer.appendChild(btnExit);
 
         output.appendChild(menuContainer);
         Terminal.scrollToFine();
@@ -138,16 +138,16 @@ const MainMenu = {
 
     createMenuButton(text, onClick) {
         const btn = document.createElement('button');
-        btn.classNome = 'menu-button';
+        btn.className = 'menu-button';
         btn.textContent = text;
         btn.style.cssText = 'font-size: 16px; padding: 10px 25px; min-width: 250px;';
 
-        // Aggiungi hover sound
+        // Add hover sound
         btn.onmouseenter = () => {
             if (SuonoManager) SuonoManager.menuHover();
         };
 
-        // Aggiungi click sound
+        // Add click sound
         btn.onclick = () => {
             if (SuonoManager) SuonoManager.menuClick();
             onClick();
@@ -156,20 +156,20 @@ const MainMenu = {
         return btn;
     },
 
-    showConfermaDialog() {
+    showConfirmDialog() {
         const output = document.getElementById('terminal-output');
 
         // Rimuovi menu
         const menu = document.getElementById('main-menu-container');
         if (menu) menu.remove();
 
-        // Confermaation dialog
+        // Confirmation dialog
         const dialogDiv = document.createElement('div');
         dialogDiv.id = 'confirm-dialog';
         dialogDiv.style.cssText = 'text-align: center; margin-top: 60px;';
         dialogDiv.innerHTML = `
             <div style="color: #ff6b6b; font-size: 16px; margin-bottom: 30px;">
-                ⚠️ ATTENZIACCESOE ⚠️<br><br>
+                ⚠️ ATTENZIONE ⚠️<br><br>
                 Iniziare una nuova partita cancellerà i tuoi progressi attuali.<br>
                 Questa azione non può essere annullata.<br><br>
                 Continuare?
@@ -184,25 +184,25 @@ const MainMenu = {
             this.show();
         });
 
-        const btnSì = this.createMenuButton('SÌ', () => {
-            this.startNuovoGame();
+        const btnYes = this.createMenuButton('SÌ', () => {
+            this.startNewGame();
         });
 
         btnContainer.appendChild(btnNo);
-        btnContainer.appendChild(btnSì);
+        btnContainer.appendChild(btnYes);
         dialogDiv.appendChild(btnContainer);
         output.appendChild(dialogDiv);
         Terminal.scrollToFine();
     },
 
-    showEsciConfermaation() {
+    showExitConfirmation() {
         const output = document.getElementById('terminal-output');
 
         // Rimuovi menu
         const menu = document.getElementById('main-menu-container');
         if (menu) menu.remove();
 
-        // Esci confirmation
+        // Exit confirmation
         const dialogDiv = document.createElement('div');
         dialogDiv.id = 'quit-dialog';
         dialogDiv.style.cssText = 'text-align: center; margin-top: 60px;';
@@ -221,10 +221,10 @@ const MainMenu = {
             this.show();
         });
 
-        const btnSì = this.createMenuButton('SÌ', () => {
+        const btnYes = this.createMenuButton('SÌ', () => {
             window.close();
             // If window.close() doesn't work (not opened by script), show message
-            setOraout(() => {
+            setTimeout(() => {
                 dialogDiv.innerHTML = `
                     <div style="color: #00ff41; font-size: 16px;">
                         Puoi ora chiudere questa finestra/scheda.<br><br>
@@ -235,13 +235,13 @@ const MainMenu = {
                     dialogDiv.remove();
                     this.show();
                 });
-                btnIndietro.style.marginInizio = '30px';
+                btnIndietro.style.marginTop = '30px';
                 dialogDiv.appendChild(btnIndietro);
             }, 100);
         });
 
         btnContainer.appendChild(btnNo);
-        btnContainer.appendChild(btnSì);
+        btnContainer.appendChild(btnYes);
         dialogDiv.appendChild(btnContainer);
         output.appendChild(dialogDiv);
         Terminal.scrollToFine();
@@ -261,12 +261,12 @@ const MainMenu = {
 
         const title = document.createElement('div');
         title.style.cssText = 'font-size: 22px; margin-bottom: 30px; color: #00ff41;';
-        title.textContent = 'OPZIACCESOI';
+        title.textContent = 'OPZIONI';
         optionsDiv.appendChild(title);
 
         // Opzioni container
         const optionsContainer = document.createElement('div');
-        optionsContainer.style.cssText = 'display: flex; flex-direction: column; align-elementi: center; gap: 15px; margin-bottom: 30px;';
+        optionsContainer.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px;';
 
         // Effetti CRT
         optionsContainer.appendChild(this.createOptionToggle(
@@ -335,7 +335,7 @@ const MainMenu = {
                     SuonoManager.setAbilitato(value);
                     // Play test sound when enabled
                     if (value) {
-                        setOraout(() => SuonoManager.commandSuccesso(), 100);
+                        setTimeout(() => SuonoManager.commandSuccesso(), 100);
                     }
                 }
             }
@@ -348,26 +348,26 @@ const MainMenu = {
             optionsDiv.remove();
             this.show();
         });
-        btnIndietro.style.marginInizio = '20px';
+        btnIndietro.style.marginTop = '20px';
         optionsDiv.appendChild(btnIndietro);
 
         output.appendChild(optionsDiv);
         Terminal.scrollToFine();
     },
 
-    createOptionToggle(label, optionKey, description, onCambia) {
+    createOptionToggle(label, optionKey, description, onChange) {
         const container = document.createElement('div');
         container.style.cssText = 'width: 400px; max-width: 90%; background: rgba(0, 255, 65, 0.05); border: 1px solid rgba(0, 255, 65, 0.3); padding: 15px; border-radius: 3px;';
 
         const labelDiv = document.createElement('div');
-        labelDiv.style.cssText = 'display: flex; justify-content: space-between; align-elementi: center; margin-bottom: 8px;';
+        labelDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;';
 
         const labelText = document.createElement('span');
         labelText.style.cssText = 'color: #00ff41; font-size: 14px; font-weight: bold;';
         labelText.textContent = label;
 
         const toggle = document.createElement('button');
-        toggle.classNome = 'option-toggle';
+        toggle.className = 'option-toggle';
         toggle.style.cssText = `
             padding: 5px 15px;
             font-size: 12px;
@@ -380,17 +380,17 @@ const MainMenu = {
 
         toggle.onclick = () => {
             this.options[optionKey] = !this.options[optionKey];
-            this.saveOpzioni();
+            this.saveOptions();
 
             // Aggiorna button appearance
             toggle.style.background = this.options[optionKey] ? 'rgba(0, 255, 65, 0.3)' : 'rgba(255, 0, 0, 0.2)';
-            toggle.style.borderColore = this.options[optionKey] ? '#00ff41' : '#ff3366';
+            toggle.style.borderColor = this.options[optionKey] ? '#00ff41' : '#ff3366';
             toggle.style.color = this.options[optionKey] ? '#00ff41' : '#ff3366';
             toggle.textContent = this.options[optionKey] ? 'ATTIVO' : 'DISATTIVO';
 
-            // Call onCambia callback if provided
-            if (onCambia) {
-                onCambia(this.options[optionKey]);
+            // Call onChange callback if provided
+            if (onChange) {
+                onChange(this.options[optionKey]);
             }
         };
 
@@ -407,11 +407,11 @@ const MainMenu = {
         return container;
     },
 
-    startNuovoGame() {
-        console.log('[MENU] Avviaing nuovo gioco');
+    startNewGame() {
+        console.log('[MENU] Starting nuovo gioco');
         this.menuAttivo = false;
 
-        // Reimposta game state
+        // Reset game state
         StateManager.resetGame();
 
         // Cancella terminal and start game
@@ -419,8 +419,8 @@ const MainMenu = {
         Terminal.enableInput();
 
         // Carico first block
-        if (typeof GameEngine !== 'undefined' && GameEngine.loadCurrentBlocca) {
-            GameEngine.loadCurrentBlocca();
+        if (typeof GameEngine !== 'undefined' && GameEngine.loadCurrentBlock) {
+            GameEngine.loadCurrentBlock();
         }
     },
 
@@ -433,8 +433,8 @@ const MainMenu = {
         Terminal.enableInput();
 
         // Carico current block
-        if (typeof GameEngine !== 'undefined' && GameEngine.loadCurrentBlocca) {
-            GameEngine.loadCurrentBlocca();
+        if (typeof GameEngine !== 'undefined' && GameEngine.loadCurrentBlock) {
+            GameEngine.loadCurrentBlock();
         }
     },
 
@@ -623,28 +623,28 @@ const MainMenu = {
     },
 
     // Opzioni management
-    loadOpzioni() {
+    loadOptions() {
         try {
-            const saved = localArchiviazione.getItem('terminal_options');
+            const saved = localStorage.getItem('terminal_options');
             if (saved) {
-                this.options = { ...this.options, ...JSACCESO.parse(saved) };
+                this.options = { ...this.options, ...JSON.parse(saved) };
             }
         } catch (e) {
-            console.error('[MENU] Fallito to load options:', e);
+            console.error('[MENU] Failed to load options:', e);
         }
-        this.applyOpzioni();
+        this.applyOptions();
     },
 
-    saveOpzioni() {
+    saveOptions() {
         try {
-            localArchiviazione.setItem('terminal_options', JSACCESO.stringify(this.options));
-            this.applyOpzioni();
+            localStorage.setItem('terminal_options', JSON.stringify(this.options));
+            this.applyOptions();
         } catch (e) {
-            console.error('[MENU] Fallito to save options:', e);
+            console.error('[MENU] Failed to save options:', e);
         }
     },
 
-    applyOpzioni() {
+    applyOptions() {
         // Applica CRT effects
         const crtOverlay = document.getElementById('crt-overlay');
         if (crtOverlay) {
