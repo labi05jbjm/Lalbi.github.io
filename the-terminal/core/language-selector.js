@@ -3,7 +3,7 @@
  * Immersive language selection with B&W terminal and Matrix animation
  */
 
-const LinguaSelezionaor = {
+const LanguageSelector = {
     selectedLingua: null,
     isConfermaed: false,
 
@@ -259,8 +259,8 @@ const LinguaSelezionaor = {
         console.log(`[LANG-SELECT] Lingua confirmed: ${this.selectedLingua}`);
 
         // Salva language choice
-        localArchiviazione.setItem('gameLingua', this.selectedLingua);
-        localArchiviazione.setItem('languageSelezionaed', 'true');
+        localStorage.setItem('gameLingua', this.selectedLingua);
+        localStorage.setItem('languageSelected', 'true');
 
         // Rimuovi confirmation buttons
         const container = document.querySelezionaor('.language-confirmation-container');
@@ -452,11 +452,11 @@ const LinguaSelezionaor = {
     },
 
     // Check if language was already selected
-    isLinguaSelezionaed() {
-        return localArchiviazione.getItem('languageSelezionaed') === 'true';
+    isLanguageSelected() {
+        return localStorage.getItem('languageSelected') === 'true';
     },
 
-    getSelezionaedLingua() {
-        return localArchiviazione.getItem('gameLingua') || null;
+    getSelectedLanguage() {
+        return localStorage.getItem('gameLingua') || null;
     }
 };

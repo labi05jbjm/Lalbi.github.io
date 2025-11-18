@@ -71,7 +71,7 @@ const Blocca07_Accettaance = {
     },
 
     async handleIntroduction(cmd, args) {
-        if (cmd === 'learn acceptance' || cmd === 'acceptance' || cmd === 'cos'è l'accettazione') {
+        if (cmd === 'learn acceptance' || cmd === 'acceptance' || cmd === "cos'è l'accettazione") {
             await this.learnAccettaance();
             return true;
         }
