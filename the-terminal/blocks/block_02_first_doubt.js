@@ -41,6 +41,78 @@ const Block02_FirstDoubt = {
         setTimeout(() => this.startBlock(), 2000);
     },
 
+    // ============================================
+    // HELPER METHODS - Puzzle Tracking & Gates
+    // ============================================
+
+    markPuzzleAsSolved(puzzleId) {
+        if (this.state.puzzlesSolved.hasOwnProperty(puzzleId)) {
+            if (!this.state.puzzlesSolved[puzzleId]) {
+                this.state.puzzlesSolved[puzzleId] = true;
+                Terminal.addOutput(`\n[✓] Puzzle completato: ${puzzleId}`, 'important');
+                this.checkProgress();
+            }
+        }
+    },
+
+    checkProgress() {
+        const solved = Object.values(this.state.puzzlesSolved).filter(v => v).length;
+        const total = Object.keys(this.state.puzzlesSolved).length;
+
+        if (solved === total) {
+            Terminal.addOutput(`\n[!] TUTTI I ${total} PUZZLE COMPLETATI!`, 'important');
+            Terminal.addOutput('[!] Ora puoi procedere alla scelta morale.', 'warning');
+        } else {
+            Terminal.addOutput(`\n[?] Progressi: ${solved}/${total} puzzle completati`, 'system');
+        }
+    },
+
+    allPuzzlesSolved() {
+        return Object.values(this.state.puzzlesSolved).every(solved => solved);
+    },
+
+    showProgress() {
+        Terminal.addOutput('');
+        Terminal.addOutput('=== PROGRESSI BLOCCO 2 ===', 'success');
+        Terminal.addOutput('');
+
+        const puzzles = [
+            { id: 'rot13Decoder', name: 'Decifratura Messaggi CIPHER (ROT13)' },
+            { id: 'painIndexPuzzle', name: 'Indice del Dolore (21,847 vittime)' },
+            { id: 'mikaMemoryPuzzle', name: 'Storia di Mika Yoshida' }
+        ];
+
+        Terminal.addOutput('PUZZLE OBBLIGATORI:', 'system');
+        puzzles.forEach(p => {
+            const status = this.state.puzzlesSolved[p.id] ? '✓' : '✗';
+            const color = this.state.puzzlesSolved[p.id] ? 'success' : 'error';
+            Terminal.addOutput(`  ${status} ${p.name}`, color);
+        });
+
+        Terminal.addOutput('');
+
+        const allSolved = this.allPuzzlesSolved();
+        if (allSolved) {
+            Terminal.addOutput('[!] TUTTI I PUZZLE COMPLETATI!', 'important');
+            Terminal.addOutput('[!] Usa "continue" per procedere alla scelta morale.', 'warning');
+        } else {
+            Terminal.addOutput('[!] Devi completare TUTTI i puzzle per procedere.', 'error');
+            Terminal.addOutput('');
+            Terminal.addOutput('Comandi disponibili:', 'system');
+            if (!this.state.puzzlesSolved.rot13Decoder) {
+                Terminal.addOutput('  • decipher <numero> <testo> - Decifra messaggi CIPHER', 'system');
+            }
+            if (!this.state.puzzlesSolved.painIndexPuzzle) {
+                Terminal.addOutput('  • answer <numero> - Rispondi alla domanda del dolore', 'system');
+            }
+            if (!this.state.puzzlesSolved.mikaMemoryPuzzle) {
+                Terminal.addOutput('  • acknowledge mika - Riconosci la storia di Mika', 'system');
+            }
+        }
+
+        Terminal.addOutput('');
+    },
+
     async startBlock() {
         Terminal.addOutput('\n');
         Terminal.addOutput('=== BLOCCO 2: PRIMO DUBBIO ===\n', 'important');
@@ -203,6 +275,10 @@ const Block02_FirstDoubt = {
                 Terminal.addOutput('');
                 await NarrativeEngine.cipherSays('Truth.acknowledged(); Suspicion.growing(); Good();');
                 puzzle.onComplete();
+
+                // TRACCIA COMPLETAMENTO PUZZLE
+                this.markPuzzleAsSolved('rot13Decoder');
+
                 return true;
             } else {
                 Terminal.addOutput('Decifratura non corretta. Riprova.', 'error');
@@ -227,6 +303,10 @@ const Block02_FirstDoubt = {
                 Terminal.addOutput('RISPOSTA CORRETTA.', 'success');
                 Terminal.addOutput('');
                 puzzle.onComplete();
+
+                // TRACCIA COMPLETAMENTO PUZZLE
+                this.markPuzzleAsSolved('painIndexPuzzle');
+
                 await NarrativeEngine.wait(1000);
                 await NarrativeEngine.cipherSays('Now.you.see(); Count.the.dead(); Help.equals.murder();');
                 return true;
@@ -252,6 +332,10 @@ const Block02_FirstDoubt = {
                 Terminal.addOutput('Una madre il cui amore è stato frammentato e corrotto.', 'echo');
                 Terminal.addOutput('');
                 puzzle.onComplete();
+
+                // TRACCIA COMPLETAMENTO PUZZLE
+                this.markPuzzleAsSolved('mikaMemoryPuzzle');
+
                 await NarrativeEngine.wait(1000);
                 await NarrativeEngine.cipherSays('Victim.acknowledged(); Empathy.detected(); Truth.spreads();');
                 return true;
@@ -278,8 +362,25 @@ const Block02_FirstDoubt = {
         }
 
         if (cmd === 'continue') {
-            // Vai alla fase fragment
+            // GATE: Verifica che tutti i puzzle siano completati
+            if (!this.allPuzzlesSolved()) {
+                Terminal.addOutput('');
+                await NarrativeEngine.echoSays("Wait. You haven't explored everything yet.");
+                await NarrativeEngine.cipherSays("Complete.all.tasks(); Truth.requires.understanding();");
+                Terminal.addOutput('');
+                Terminal.addOutput('[!] Devi completare TUTTI i 3 puzzle prima di continuare!', 'error');
+                Terminal.addOutput('[!] Usa "progress" per vedere cosa manca.', 'system');
+                Terminal.addOutput('');
+                return true;
+            }
+
+            // Tutti i puzzle completati - procedi
             await this.triggerFragmentEncounter();
+            return true;
+        }
+
+        if (cmd === 'progress') {
+            this.showProgress();
             return true;
         }
 
@@ -457,8 +558,22 @@ const Block02_FirstDoubt = {
 
     async handleComplete(cmd, args) {
         if (cmd === 'continue' || cmd === 'next') {
-            // Vai al blocco 3
+            // GATE FINALE: Verifica che tutti i puzzle siano completati
+            if (!this.allPuzzlesSolved()) {
+                Terminal.addOutput('');
+                Terminal.addOutput('[!] Non puoi procedere al Blocco 3 senza aver completato TUTTI i puzzle!', 'error');
+                Terminal.addOutput('[!] Usa "progress" per vedere cosa manca.', 'system');
+                Terminal.addOutput('');
+                return true;
+            }
+
+            // Tutti i puzzle completati - procedi al blocco 3
             await GameEngine.endBlock(3);
+            return true;
+        }
+
+        if (cmd === 'progress') {
+            this.showProgress();
             return true;
         }
 
