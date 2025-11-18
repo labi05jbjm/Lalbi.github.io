@@ -556,14 +556,14 @@ const MainMenu = {
                     if (textElement) {
                         this.typewriterEffect(textElement, textElement.textContent);
                     } else if (brushElement) {
-                        // Brush stroke effect for final message
+                        // Hand-drawn effect for final message
                         setTimeout(() => {
                             brushElement.classList.add('active');
                         }, 500);
                     }
 
-                    // Duration for each message
-                    const duration = currentIndex === screens.length - 1 ? 5000 : 6500;
+                    // Duration for each message (longer to appreciate the text)
+                    const duration = currentIndex === screens.length - 1 ? 9000 : 10000;
                     setTimeout(() => {
                         currentIndex++;
                         showNextMessage();
@@ -589,7 +589,7 @@ const MainMenu = {
             if (charIndex < text.length) {
                 element.textContent += text.charAt(charIndex);
                 charIndex++;
-                setTimeout(typeChar, 25); // 25ms per character
+                setTimeout(typeChar, 40); // 40ms per character for better readability
             }
         };
 
