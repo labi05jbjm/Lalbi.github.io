@@ -414,17 +414,9 @@ const MainMenu = {
         // Reset game state
         StateManager.resetGame();
 
-        // Initialize desktop environment
+        // Initialize desktop environment (but don't create any windows yet)
         if (typeof DesktopManager !== 'undefined') {
             DesktopManager.init();
-            // Create terminal window
-            DesktopManager.createWindow('terminal', {
-                title: 'MEMORIAM Terminal',
-                width: 900,
-                height: 650,
-                x: 50,
-                y: 50
-            });
         }
 
         // Clear terminal and start game
@@ -442,16 +434,8 @@ const MainMenu = {
         this.menuActive = false;
 
         // Initialize desktop environment if not already initialized
-        if (typeof DesktopManager !== 'undefined' && !DesktopManager.windows.length) {
+        if (typeof DesktopManager !== 'undefined' && !DesktopManager.windows) {
             DesktopManager.init();
-            // Create terminal window
-            DesktopManager.createWindow('terminal', {
-                title: 'MEMORIAM Terminal',
-                width: 900,
-                height: 650,
-                x: 50,
-                y: 50
-            });
         }
 
         // Clear terminal and resume game

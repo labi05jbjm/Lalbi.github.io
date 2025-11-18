@@ -184,6 +184,10 @@ const StateManager = {
         this.save();
     },
 
+    getChoiceCount() {
+        return this.state.choices.length;
+    },
+
     addDialogue(speaker, text) {
         this.state.dialogueHistory.push({
             speaker,
