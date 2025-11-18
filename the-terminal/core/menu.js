@@ -38,6 +38,7 @@ const MainMenu = {
         glitchEffects: true,
         typewriterEffect: true,
         soundEffects: true,
+        blackAndWhiteMode: false,
     },
 
     async show() {
@@ -246,23 +247,20 @@ const MainMenu = {
     showOptions() {
         const output = document.getElementById('terminal-output');
 
-        // Remove menu
+        // Remove menu and title
         const menu = document.getElementById('main-menu-container');
         if (menu) menu.remove();
+        const titleDiv = document.querySelector('.menu-title-animated');
+        if (titleDiv) titleDiv.remove();
 
-        // Options screen
+        // Options screen (compact layout, no title)
         const optionsDiv = document.createElement('div');
         optionsDiv.id = 'options-screen';
-        optionsDiv.style.cssText = 'text-align: center; margin-top: 40px;';
+        optionsDiv.style.cssText = 'text-align: center; margin-top: 20px;';
 
-        const title = document.createElement('div');
-        title.style.cssText = 'font-size: 22px; margin-bottom: 30px; color: #00ff41;';
-        title.textContent = 'OPZIONI';
-        optionsDiv.appendChild(title);
-
-        // Options container
+        // Options container (reduced gaps)
         const optionsContainer = document.createElement('div');
-        optionsContainer.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px;';
+        optionsContainer.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 15px;';
 
         // CRT Effects
         optionsContainer.appendChild(this.createOptionToggle(
@@ -337,14 +335,28 @@ const MainMenu = {
             }
         ));
 
+        // Black & White Mode
+        optionsContainer.appendChild(this.createOptionToggle(
+            'Modalità Bianco e Nero',
+            'blackAndWhiteMode',
+            'Tutto il gioco in scala di grigi con hover rossi',
+            (value) => {
+                if (value) {
+                    document.body.classList.add('bw-mode');
+                } else {
+                    document.body.classList.remove('bw-mode');
+                }
+            }
+        ));
+
         optionsDiv.appendChild(optionsContainer);
 
-        // Back button
+        // Back button (compact)
         const btnBack = this.createMenuButton('TORNA AL MENU', () => {
             optionsDiv.remove();
             this.show();
         });
-        btnBack.style.marginTop = '20px';
+        btnBack.style.marginTop = '10px';
         optionsDiv.appendChild(btnBack);
 
         output.appendChild(optionsDiv);
@@ -353,7 +365,7 @@ const MainMenu = {
 
     createOptionToggle(label, optionKey, description, onChange) {
         const container = document.createElement('div');
-        container.style.cssText = 'width: 400px; max-width: 90%; background: rgba(0, 255, 65, 0.05); border: 1px solid rgba(0, 255, 65, 0.3); padding: 15px; border-radius: 3px;';
+        container.style.cssText = 'width: 400px; max-width: 90%; background: rgba(0, 255, 65, 0.05); border: 1px solid rgba(0, 255, 65, 0.3); padding: 10px 12px; border-radius: 3px;';
 
         const labelDiv = document.createElement('div');
         labelDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;';
@@ -671,6 +683,13 @@ const MainMenu = {
         // Apply sound effects setting
         if (SoundManager) {
             SoundManager.setEnabled(this.options.soundEffects);
+        }
+
+        // Apply black and white mode
+        if (this.options.blackAndWhiteMode) {
+            document.body.classList.add('bw-mode');
+        } else {
+            document.body.classList.remove('bw-mode');
         }
 
         // Store options globally for other systems to access

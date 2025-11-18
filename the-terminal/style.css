@@ -11,6 +11,56 @@
     --glow: 0 0 5px var(--primary-color);
 }
 
+/* ===== BLACK & WHITE MODE ===== */
+body.bw-mode {
+    --bg-color: #000000;
+    --primary-color: #ffffff;
+    --secondary-color: #cccccc;
+    --error-color: #ffffff;
+    --warning-color: #ffffff;
+    --text-color: #ffffff;
+    --dim-color: #888888;
+    --glow: 0 0 5px #ffffff;
+}
+
+body.bw-mode * {
+    filter: grayscale(100%) contrast(1.2);
+}
+
+body.bw-mode .custom-cursor {
+    border-color: #ffffff;
+    box-shadow: 0 0 10px #ffffff, inset 0 0 5px #ffffff;
+}
+
+body.bw-mode .custom-cursor::before {
+    background: #ffffff;
+    box-shadow: 0 0 5px #ffffff;
+}
+
+body.bw-mode .custom-cursor::after {
+    border-color: #ffffff;
+}
+
+body.bw-mode .cursor-trail {
+    background: #ffffff;
+    box-shadow: 0 0 8px #ffffff;
+}
+
+/* Red hover effects in B&W mode */
+body.bw-mode button:hover,
+body.bw-mode .menu-button:hover,
+body.bw-mode .option-toggle:hover,
+body.bw-mode .explorer-item:hover,
+body.bw-mode .email-folder:hover,
+body.bw-mode .taskbar-window-btn:hover {
+    filter: grayscale(0%) !important;
+    background: rgba(255, 0, 0, 0.2) !important;
+    border-color: #ff0000 !important;
+    color: #ff0000 !important;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5) !important;
+    text-shadow: 0 0 5px #ff0000 !important;
+}
+
 * {
     margin: 0;
     padding: 0;
