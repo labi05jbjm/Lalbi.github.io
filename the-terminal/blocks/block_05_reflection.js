@@ -21,6 +21,14 @@ const Block05_Reflection = {
         reflectionChoiceMade: null,
         eidolonInteractions: 0,
         currentPath: '/home/guest'
+
+        // TUTTI I 4 PUZZLE OBBLIGATORI (100% completion required)
+        puzzlesSolved: {
+            memoryReconstruction: false,
+            fragmentCount: false,
+            ghostIdentification: false,
+            mirrorReflection: false
+        }
     },
 
     init() {

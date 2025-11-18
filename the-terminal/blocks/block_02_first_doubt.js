@@ -1,13 +1,18 @@
 /**
- * BLOCK 02: FIRST DOUBT (30-60 minutes)
+ * BLOCK 02: FIRST DOUBT (50-60 minutes) - TUTTI I 3 PUZZLE OBBLIGATORI
  *
  * Obiettivi:
  * - Introdurre CIPHER (Pain/Guilt)
  * - Primi incontri con frammenti di coscienza
  * - Il giocatore inizia a dubitare di ECHO
  * - Prima scelta morale importante
- * - Puzzle più complessi
+ * - TUTTI I 3 PUZZLE OBBLIGATORI prima della scelta morale
  * - Aumentare il conflitto emotivo
+ *
+ * PUZZLE OBBLIGATORI (3/3 - 100%):
+ * 1. rot13Decoder - Decifrare i messaggi di CIPHER
+ * 2. painIndexPuzzle - Analizzare l'indice del dolore
+ * 3. mikaMemoryPuzzle - Ricostruire la storia di Mika
  */
 
 const Block02_FirstDoubt = {
@@ -19,7 +24,14 @@ const Block02_FirstDoubt = {
         moralChoiceMade: null,
         cipherInteractions: 0,
         fragmentsEncountered: [],
-        currentPath: '/home/guest'
+        currentPath: '/home/guest',
+
+        // TUTTI I 3 PUZZLE OBBLIGATORI (100% completion required)
+        puzzlesSolved: {
+            rot13Decoder: false,
+            painIndexPuzzle: false,
+            mikaMemoryPuzzle: false
+        }
     },
 
     init() {

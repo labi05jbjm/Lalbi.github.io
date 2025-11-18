@@ -1,5 +1,5 @@
 /**
- * BLOCK 03: DEEP DIVE (60-90 minutes)
+ * BLOCK 03: DEEP DIVE (70-90 min) - TUTTI I 3 PUZZLE OBBLIGATORI
  *
  * Obiettivi:
  * - Introdurre NEXUS (Anger/Depression)
@@ -21,6 +21,13 @@ const Block03_DeepDive = {
         nexusInteractions: 0,
         memoriesWitnessed: 0,
         currentPath: '/home/guest'
+
+        // TUTTI I 3 PUZZLE OBBLIGATORI (100% completion required)
+        puzzlesSolved: {
+            networkPathfinding: false,
+            sofiaFragmentPuzzle: false,
+            emotionalResonance: false
+        }
     },
 
     init() {

@@ -1,5 +1,5 @@
 /**
- * BLOCK 04: FRACTURES (90-120 minutes)
+ * BLOCK 04: FRACTURES (100-120 min) - TUTTI I 4 PUZZLE OBBLIGATORI
  *
  * Obiettivi:
  * - Introdurre SPECTER (Bargaining)
@@ -21,6 +21,14 @@ const Block04_Fractures = {
         bargainChoiceMade: null,
         specterInteractions: 0,
         currentPath: '/home/guest'
+
+        // TUTTI I 4 PUZZLE OBBLIGATORI (100% completion required)
+        puzzlesSolved: {
+            victimVerification: false,
+            identityCalculation: false,
+            paradoxResolution: false,
+            victimEmpathy: false
+        }
     },
 
     init() {
