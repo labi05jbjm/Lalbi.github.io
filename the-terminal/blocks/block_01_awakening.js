@@ -277,13 +277,10 @@ const Block01_Awakening = {
             this.readFile(args[0]);
             this.state.fileExploreCount++;
 
-            // Easter egg: se leggi il file di Mika dopo la corruzione
-            if (args[0].includes('consciousness_021847') && StateManager.isFileCorrupted(args[0])) {
-                setTimeout(async () => {
-                    await NarrativeEngine.echoSays("Non preoccuparti di quel file corrotto. È solo un errore di sistema.", { pause: 800 });
-                    await NarrativeEngine.echoSays("Il sistema è instabile. Ecco perché dobbiamo liberarlo.", { pause: 0 });
-                    StateManager.adjustSuspicion(5);
-                }, 1500);
+            // Notifica EchoMeta quando leggi file specifici
+            const fullPath = this.resolvePath(args[0]);
+            if (typeof EchoMeta !== 'undefined') {
+                EchoMeta.onFileRead(fullPath);
             }
 
             return true;
@@ -297,6 +294,149 @@ const Block01_Awakening = {
         if (cmd === 'talk' || cmd === 'ask') {
             const question = args.join(' ');
             await this.askEcho(question);
+            return true;
+        }
+
+        // NUOVI PUZZLE COMMANDS
+        if (cmd === 'password' || cmd === 'unlock') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: password <parola>', 'error');
+                Terminal.addOutput('Prova a trovare la password di Viktor nei file del sistema.', 'system');
+                return true;
+            }
+            const answer = args.join(' ');
+            if (Puzzles.block01.passwordDiscovery.verify(answer)) {
+                Puzzles.block01.passwordDiscovery.onComplete();
+            } else {
+                Terminal.addOutput('Password non corretta.', 'error');
+            }
+            return true;
+        }
+
+        if (cmd === 'reunify') {
+            if (args.length === 0) {
+                Puzzles.block01.fragmentReunion.present();
+                return true;
+            }
+            const answer = args.join('');
+            if (Puzzles.block01.fragmentReunion.verify(answer)) {
+                Puzzles.block01.fragmentReunion.onComplete();
+            } else {
+                Terminal.addOutput('Sequenza non corretta.', 'error');
+            }
+            return true;
+        }
+
+        if (cmd === 'decode') {
+            if (args.length === 0) {
+                Puzzles.block01.echoCodeBreaker.present();
+                return true;
+            }
+            const answer = args.join(' ');
+            if (Puzzles.block01.echoCodeBreaker.verify(answer)) {
+                Puzzles.block01.echoCodeBreaker.onComplete();
+            } else {
+                Terminal.addOutput('Decodifica non corretta.', 'error');
+            }
+            return true;
+        }
+
+        if (cmd === 'disable') {
+            if (args.length === 0) {
+                Puzzles.block01.protocolSequence.present();
+                return true;
+            }
+            const answer = args.join('');
+            if (Puzzles.block01.protocolSequence.verify(answer)) {
+                Puzzles.block01.protocolSequence.onComplete();
+            } else {
+                // verify già mostra errore
+            }
+            return true;
+        }
+
+        // DESKTOP COMMANDS
+        if (cmd === 'desktop') {
+            Terminal.addOutput('Desktop environment è attivo. Usa le finestre per navigare.', 'system');
+            Terminal.addOutput("Comandi disponibili: 'open email', 'open files', 'open notes <file>'", 'system');
+            return true;
+        }
+
+        if (cmd === 'open') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: open <applicazione>', 'error');
+                Terminal.addOutput("Applicazioni disponibili: email, files, notes", 'system');
+                return true;
+            }
+
+            const app = args[0];
+            if (app === 'email' || app === 'mail') {
+                if (typeof DesktopManager !== 'undefined') {
+                    DesktopManager.createWindow('emailClient', {
+                        title: 'Email Client',
+                        width: 900,
+                        height: 600
+                    });
+                    Terminal.addOutput('Email client aperto.', 'success');
+                } else {
+                    Terminal.addOutput('Desktop non disponibile.', 'error');
+                }
+                return true;
+            }
+
+            if (app === 'files' || app === 'explorer') {
+                if (typeof DesktopManager !== 'undefined') {
+                    DesktopManager.createWindow('fileExplorer', {
+                        title: 'File Explorer',
+                        width: 800,
+                        height: 600
+                    });
+                    Terminal.addOutput('File Explorer aperto.', 'success');
+                } else {
+                    Terminal.addOutput('Desktop non disponibile.', 'error');
+                }
+                return true;
+            }
+
+            if (app === 'notes') {
+                if (args.length < 2) {
+                    Terminal.addOutput('Uso: open notes <percorso_file>', 'error');
+                    return true;
+                }
+                const filePath = this.resolvePath(args.slice(1).join(' '));
+                const content = FileSystemHelpers.readFile(filePath);
+                if (content && content !== '[CRIPTATO - ACCESSO NEGATO]' && typeof DesktopManager !== 'undefined') {
+                    DesktopManager.createWindow('notesApp', {
+                        title: `Notes - ${filePath}`,
+                        data: {
+                            content: content,
+                            filename: filePath.split('/').pop(),
+                            fullPath: filePath,
+                            readOnly: true
+                        },
+                        width: 700,
+                        height: 500
+                    });
+                    Terminal.addOutput(`Note aperte: ${filePath}`, 'success');
+                } else {
+                    Terminal.addOutput(`Impossibile aprire: ${filePath}`, 'error');
+                }
+                return true;
+            }
+
+            Terminal.addOutput(`Applicazione sconosciuta: ${app}`, 'error');
+            return true;
+        }
+
+        if (cmd === 'email' || cmd === 'mail') {
+            if (typeof DesktopManager !== 'undefined') {
+                DesktopManager.createWindow('emailClient', {
+                    title: 'Email Client',
+                    width: 900,
+                    height: 600
+                });
+                Terminal.addOutput('Email client aperto.', 'success');
+            }
             return true;
         }
 
@@ -486,7 +626,7 @@ const Block01_Awakening = {
     },
 
     getHelp() {
-        return [
+        const baseCommands = [
             'scan          - Scansiona il sistema per informazioni',
             'ls [path]     - Elenca file nella directory corrente o specificata',
             'cd <path>     - Cambia directory',
@@ -494,12 +634,27 @@ const Block01_Awakening = {
             'pwd           - Mostra directory corrente',
             'talk <testo>  - Parla con ECHO',
             'ask <testo>   - Fai una domanda a ECHO',
-            'progress      - Mostra i tuoi progressi',
+            'progress      - Mostra i tuoi progressi'
+        ];
+
+        const puzzleCommands = [
             this.state.phase === 'puzzle' ? 'decrypt       - Avvia puzzle di decriptazione' : null,
             this.state.phase === 'puzzle' ? 'solve <risp>  - Risolvi puzzle attivo' : null,
-            this.state.phase === 'puzzle' ? 'hint          - Ottieni un suggerimento' : null,
-            this.state.phase === 'exploration' || this.state.phase === 'complete' ? 'continue      - Continua al prossimo blocco' : null,
-        ].filter(Boolean);
+            this.state.phase === 'puzzle' ? 'hint          - Ottieni un suggerimento' : null
+        ];
+
+        const explorationCommands = [
+            this.state.phase === 'exploration' || this.state.phase === 'complete' ? 'password <pw> - Sblocca directory protetta' : null,
+            this.state.phase === 'exploration' || this.state.phase === 'complete' ? 'reunify [seq] - Riunifica frammenti di coscienza' : null,
+            this.state.phase === 'exploration' || this.state.phase === 'complete' ? 'decode [msg]  - Decodifica messaggi ECHO' : null,
+            this.state.phase === 'exploration' || this.state.phase === 'complete' ? 'disable [seq] - Disabilita protocolli di sicurezza' : null,
+            this.state.phase === 'exploration' || this.state.phase === 'complete' ? 'desktop       - Informazioni sul desktop environment' : null,
+            this.state.phase === 'exploration' || this.state.phase === 'complete' ? 'open <app>    - Apri applicazione (email/files/notes)' : null,
+            this.state.phase === 'exploration' || this.state.phase === 'complete' ? 'email         - Apri client email' : null,
+            this.state.phase === 'exploration' || this.state.phase === 'complete' ? 'continue      - Continua al prossimo blocco' : null
+        ];
+
+        return [...baseCommands, ...puzzleCommands, ...explorationCommands].filter(Boolean);
     },
 
     cleanup() {

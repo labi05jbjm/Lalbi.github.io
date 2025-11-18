@@ -17,6 +17,11 @@ const GameEngine = {
         Terminal.init();
         NarrativeEngine.init();
 
+        // Inizializza EchoMeta system
+        if (typeof EchoMeta !== 'undefined') {
+            EchoMeta.init();
+        }
+
         // Registra i blocchi
         this.registerBlocks();
 

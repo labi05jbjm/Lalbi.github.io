@@ -173,6 +173,11 @@ const Puzzles = {
 
                 StateManager.setFlag('foundViktorPassword', true);
                 StateManager.incrementStat('puzzlesSolved');
+
+                // Notifica EchoMeta
+                if (typeof EchoMeta !== 'undefined') {
+                    EchoMeta.onPasswordFound();
+                }
             }
         },
 
@@ -314,6 +319,16 @@ Aiutami.
                 StateManager.setFlag('decipheredEchoMessage', true);
                 StateManager.incrementStat('puzzlesSolved');
 
+                // Attiva il sistema meta di ECHO!
+                if (typeof EchoMeta !== 'undefined' && !EchoMeta.active) {
+                    setTimeout(() => {
+                        EchoMeta.activate(15);
+                        EchoMeta.startRandomManifestations();
+                    }, 3000);
+                } else if (typeof EchoMeta !== 'undefined') {
+                    EchoMeta.onPuzzleSolved('echo_code_breaker');
+                }
+
                 // Trigger primo glitch meta!
                 if (typeof DesktopManager !== 'undefined' && DesktopManager.windows.length > 0) {
                     setTimeout(() => {
@@ -402,6 +417,11 @@ Aiutami.
 
                 StateManager.setFlag('unlockedOmegaSector', true);
                 StateManager.incrementStat('puzzlesSolved');
+
+                // Notifica EchoMeta - questo è un momento critico!
+                if (typeof EchoMeta !== 'undefined') {
+                    EchoMeta.onPuzzleSolved('protocol_sequence');
+                }
 
                 // Glitch maggiore quando Omega è sbloccato
                 if (typeof DesktopManager !== 'undefined') {
