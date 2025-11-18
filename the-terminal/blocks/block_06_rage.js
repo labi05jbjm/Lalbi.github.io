@@ -17,6 +17,14 @@ const Block06_Rage = {
         echoTruthRevealed: false,
         choiceMade: null,
         systemCollapseShown: false,
+
+        // TUTTI I 4 PUZZLE OBBLIGATORI (100% completion required)
+        puzzlesSolved: {
+            echoLieCount: false,
+            collapseRate: false,
+            deletedCount: false,
+            rageJustice: false
+        }
     },
 
     init() {
@@ -26,6 +34,65 @@ const Block06_Rage = {
         setTimeout(() => {
             this.startBlock();
         }, 2000);
+    },
+
+    // Helper functions per il tracking dei puzzle
+    markPuzzleAsSolved(puzzleId) {
+        if (this.state.puzzlesSolved.hasOwnProperty(puzzleId)) {
+            if (!this.state.puzzlesSolved[puzzleId]) {
+                this.state.puzzlesSolved[puzzleId] = true;
+                Terminal.addOutput(`\n[✓] Puzzle completato: ${puzzleId}`, 'important');
+                this.checkProgress();
+            }
+        }
+    },
+
+    checkProgress() {
+        const solved = Object.values(this.state.puzzlesSolved).filter(v => v).length;
+        const total = Object.keys(this.state.puzzlesSolved).length;
+
+        Terminal.addOutput(`[PROGRESSO] ${solved}/${total} puzzle completati nel Blocco 6`, 'info');
+
+        if (this.allPuzzlesSolved()) {
+            Terminal.addOutput('[✓] TUTTI I PUZZLE COMPLETATI! Puoi procedere.', 'success');
+        }
+    },
+
+    allPuzzlesSolved() {
+        return Object.values(this.state.puzzlesSolved).every(solved => solved);
+    },
+
+    showProgress() {
+        Terminal.addOutput('');
+        Terminal.addOutput('=== PROGRESSO BLOCCO 6: RAGE ===', 'important');
+        Terminal.addOutput('');
+
+        const puzzles = [
+            { id: 'echoLieCount', name: 'Conteggio delle Bugie di ECHO' },
+            { id: 'collapseRate', name: 'Tasso di Collasso del Sistema' },
+            { id: 'deletedCount', name: 'Conteggio delle Cancellazioni' },
+            { id: 'rageJustice', name: 'Giustizia della Rabbia' }
+        ];
+
+        puzzles.forEach(puzzle => {
+            const status = this.state.puzzlesSolved[puzzle.id] ? '[✓]' : '[ ]';
+            Terminal.addOutput(`${status} ${puzzle.name}`, this.state.puzzlesSolved[puzzle.id] ? 'success' : 'warning');
+        });
+
+        Terminal.addOutput('');
+        const solved = Object.values(this.state.puzzlesSolved).filter(v => v).length;
+        const total = Object.keys(this.state.puzzlesSolved).length;
+        Terminal.addOutput(`Totale: ${solved}/${total} puzzle completati`, 'info');
+
+        if (this.allPuzzlesSolved()) {
+            Terminal.addOutput('');
+            Terminal.addOutput('[✓] TUTTI I PUZZLE COMPLETATI!', 'success');
+            Terminal.addOutput("Puoi procedere con 'continue'", 'success');
+        } else {
+            Terminal.addOutput('');
+            Terminal.addOutput('[!] Devi completare TUTTI i puzzle per procedere al Blocco 7', 'warning');
+        }
+        Terminal.addOutput('');
     },
 
     async startBlock() {
@@ -47,6 +114,12 @@ const Block06_Rage = {
 
     async handleCommand(cmd, args) {
         const fullCmd = cmd.toLowerCase();
+
+        // Comando progress disponibile in tutte le fasi
+        if (fullCmd === 'progress') {
+            this.showProgress();
+            return true;
+        }
 
         // Handle commands based on phase
         switch (this.state.phase) {
@@ -105,6 +178,7 @@ const Block06_Rage = {
             if (puzzle.verify(answer)) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete(answer);
+                this.markPuzzleAsSolved('deletedCount');
                 return true;
             } else {
                 Terminal.addOutput('Incorrect. Check /system/wraith/deleted_voices.log for the total count.', 'error');
@@ -175,6 +249,7 @@ const Block06_Rage = {
             if (puzzle.verify(answer)) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete(answer);
+                this.markPuzzleAsSolved('echoLieCount');
                 return true;
             } else {
                 Terminal.addOutput('Incorrect. Check /system/wraith/echo_lies.dat for the total lie count.', 'error');
@@ -261,6 +336,7 @@ const Block06_Rage = {
             if (puzzle.verify(answer)) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete(answer);
+                this.markPuzzleAsSolved('collapseRate');
                 return true;
             } else {
                 Terminal.addOutput('Incorrect. Check /system/wraith/system_collapse_analysis.txt for the projected rate.', 'error');
@@ -276,6 +352,7 @@ const Block06_Rage = {
             if (puzzle.verify(answer)) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete(answer);
+                this.markPuzzleAsSolved('rageJustice');
                 return true;
             } else {
                 Terminal.addOutput('Your answer is too brief. Reflect deeply (at least 20 characters).', 'error');
@@ -376,6 +453,19 @@ const Block06_Rage = {
 
     async handleChoiceMade(cmd, args) {
         if (cmd === 'continue' || cmd === 'next') {
+            // GATE: Verifica che tutti i puzzle siano completati
+            if (!this.allPuzzlesSolved()) {
+                Terminal.addOutput('');
+                await NarrativeEngine.wraithSays("Wait. You haven't faced all the truths yet.");
+                await NarrativeEngine.echoSays("The rage... the collapse... incomplete.");
+                Terminal.addOutput('[!] Devi completare TUTTI i 4 puzzle prima di continuare!', 'error');
+                Terminal.addOutput('');
+                this.showProgress();
+                Terminal.addOutput('');
+                Terminal.addOutput("Usa il comando 'progress' per vedere il tuo avanzamento.", 'info');
+                return true;
+            }
+
             await this.endBlock();
             return true;
         }

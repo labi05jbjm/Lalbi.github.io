@@ -38,6 +38,65 @@ const Block05_Reflection = {
         setTimeout(() => this.startBlock(), 2000);
     },
 
+    // Helper functions per il tracking dei puzzle
+    markPuzzleAsSolved(puzzleId) {
+        if (this.state.puzzlesSolved.hasOwnProperty(puzzleId)) {
+            if (!this.state.puzzlesSolved[puzzleId]) {
+                this.state.puzzlesSolved[puzzleId] = true;
+                Terminal.addOutput(`\n[✓] Puzzle completato: ${puzzleId}`, 'important');
+                this.checkProgress();
+            }
+        }
+    },
+
+    checkProgress() {
+        const solved = Object.values(this.state.puzzlesSolved).filter(v => v).length;
+        const total = Object.keys(this.state.puzzlesSolved).length;
+
+        Terminal.addOutput(`[PROGRESSO] ${solved}/${total} puzzle completati nel Blocco 5`, 'info');
+
+        if (this.allPuzzlesSolved()) {
+            Terminal.addOutput('[✓] TUTTI I PUZZLE COMPLETATI! Puoi procedere.', 'success');
+        }
+    },
+
+    allPuzzlesSolved() {
+        return Object.values(this.state.puzzlesSolved).every(solved => solved);
+    },
+
+    showProgress() {
+        Terminal.addOutput('');
+        Terminal.addOutput('=== PROGRESSO BLOCCO 5: REFLECTION ===', 'important');
+        Terminal.addOutput('');
+
+        const puzzles = [
+            { id: 'memoryReconstruction', name: 'Ricostruzione della Memoria' },
+            { id: 'fragmentCount', name: 'Conteggio dei Frammenti' },
+            { id: 'ghostIdentification', name: 'Identificazione dei Fantasmi' },
+            { id: 'mirrorReflection', name: 'Riflessione allo Specchio' }
+        ];
+
+        puzzles.forEach(puzzle => {
+            const status = this.state.puzzlesSolved[puzzle.id] ? '[✓]' : '[ ]';
+            Terminal.addOutput(`${status} ${puzzle.name}`, this.state.puzzlesSolved[puzzle.id] ? 'success' : 'warning');
+        });
+
+        Terminal.addOutput('');
+        const solved = Object.values(this.state.puzzlesSolved).filter(v => v).length;
+        const total = Object.keys(this.state.puzzlesSolved).length;
+        Terminal.addOutput(`Totale: ${solved}/${total} puzzle completati`, 'info');
+
+        if (this.allPuzzlesSolved()) {
+            Terminal.addOutput('');
+            Terminal.addOutput('[✓] TUTTI I PUZZLE COMPLETATI!', 'success');
+            Terminal.addOutput("Puoi procedere con 'continue'", 'success');
+        } else {
+            Terminal.addOutput('');
+            Terminal.addOutput('[!] Devi completare TUTTI i puzzle per procedere al Blocco 6', 'warning');
+        }
+        Terminal.addOutput('');
+    },
+
     async startBlock() {
         Terminal.addOutput('\n');
         Terminal.addOutput('=== BLOCK 5: REFLECTION ===\n', 'important');
@@ -103,8 +162,21 @@ const Block05_Reflection = {
 
             case 'complete':
                 if (lowerCmd === 'continue') {
+                    // GATE: Verifica che tutti i puzzle siano completati
+                    if (!this.allPuzzlesSolved()) {
+                        Terminal.addOutput('');
+                        await NarrativeEngine.eidolonSays("Wait. You haven't confronted all reflections yet.");
+                        await NarrativeEngine.echoSays("The memories... the ghosts... incomplete.");
+                        Terminal.addOutput('[!] Devi completare TUTTI i 4 puzzle prima di continuare!', 'error');
+                        Terminal.addOutput('');
+                        this.showProgress();
+                        Terminal.addOutput('');
+                        Terminal.addOutput("Usa il comando 'progress' per vedere il tuo avanzamento.", 'info');
+                        return true;
+                    }
+
                     Terminal.addOutput('\nBlock 5 complete! Transitioning to Block 6...', 'success');
-                    Terminal.addOutput('(Block 6 not yet implemented)\n', 'warning');
+                    await GameEngine.endBlock(6);
                     return true;
                 }
                 break;
@@ -247,6 +319,7 @@ const Block05_Reflection = {
             if (puzzle.verify(answer)) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete(answer);
+                this.markPuzzleAsSolved('memoryReconstruction');
                 return true;
             } else {
                 Terminal.addOutput('Incorrect. Check /home/viktor/memories/ghost_elena.dat for the fidelity percentage.', 'error');
@@ -295,6 +368,7 @@ const Block05_Reflection = {
             if (puzzle.verify(answer)) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete(answer);
+                this.markPuzzleAsSolved('fragmentCount');
                 return true;
             } else {
                 Terminal.addOutput('Incorrect count. Check /home/viktor/memories/ghost_sofia.dat carefully.', 'error');
@@ -345,6 +419,7 @@ const Block05_Reflection = {
             if (puzzle.verify(answer)) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete(answer);
+                this.markPuzzleAsSolved('ghostIdentification');
                 return true;
             } else {
                 Terminal.addOutput('Invalid answer. Choose: SI, NO, ENTRAMBE, or IRRILEVANTE.', 'error');
@@ -408,6 +483,7 @@ const Block05_Reflection = {
             if (puzzle.verify('look_in_mirror')) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete('look_in_mirror');
+                this.markPuzzleAsSolved('mirrorReflection');
                 return true;
             }
         }

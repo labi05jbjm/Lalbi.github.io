@@ -37,6 +37,67 @@ const Block03_DeepDive = {
         setTimeout(() => this.startBlock(), 2000);
     },
 
+    // ============================================
+    // HELPER METHODS - Puzzle Tracking & Gates
+    // ============================================
+
+    markPuzzleAsSolved(puzzleId) {
+        if (this.state.puzzlesSolved.hasOwnProperty(puzzleId)) {
+            if (!this.state.puzzlesSolved[puzzleId]) {
+                this.state.puzzlesSolved[puzzleId] = true;
+                Terminal.addOutput(`\n[✓] Puzzle completato: ${puzzleId}`, 'important');
+                this.checkProgress();
+            }
+        }
+    },
+
+    checkProgress() {
+        const solved = Object.values(this.state.puzzlesSolved).filter(v => v).length;
+        const total = Object.keys(this.state.puzzlesSolved).length;
+
+        if (solved === total) {
+            Terminal.addOutput(`\n[!] TUTTI I ${total} PUZZLE COMPLETATI!`, 'important');
+            Terminal.addOutput('[!] Ora puoi procedere.', 'warning');
+        } else {
+            Terminal.addOutput(`\n[?] Progressi: ${solved}/${total} puzzle completati`, 'system');
+        }
+    },
+
+    allPuzzlesSolved() {
+        return Object.values(this.state.puzzlesSolved).every(solved => solved);
+    },
+
+    showProgress() {
+        Terminal.addOutput('');
+        Terminal.addOutput('=== PROGRESSI BLOCCO 3 ===', 'success');
+        Terminal.addOutput('');
+
+        const puzzles = [
+            { id: 'networkPathfinding', name: 'Network Pathfinding (26,204 isolati)' },
+            { id: 'sofiaFragmentPuzzle', name: 'Frammenti di Sofia' },
+            { id: 'emotionalResonance', name: 'Risonanza Emotiva' }
+        ];
+
+        Terminal.addOutput('PUZZLE OBBLIGATORI:', 'system');
+        puzzles.forEach(p => {
+            const status = this.state.puzzlesSolved[p.id] ? '✓' : '✗';
+            const color = this.state.puzzlesSolved[p.id] ? 'success' : 'error';
+            Terminal.addOutput(`  ${status} ${p.name}`, color);
+        });
+
+        Terminal.addOutput('');
+
+        const allSolved = this.allPuzzlesSolved();
+        if (allSolved) {
+            Terminal.addOutput('[!] TUTTI I PUZZLE COMPLETATI!', 'important');
+            Terminal.addOutput('[!] Usa "continue" per procedere.', 'warning');
+        } else {
+            Terminal.addOutput('[!] Devi completare TUTTI i puzzle per procedere.', 'error');
+        }
+
+        Terminal.addOutput('');
+    },
+
     async startBlock() {
         Terminal.addOutput('\n');
         Terminal.addOutput('=== BLOCK 3: DEEP DIVE ===\n', 'important');
@@ -57,6 +118,12 @@ const Block03_DeepDive = {
     },
 
     handleCommand(cmd, args) {
+        // Comando progress disponibile in tutte le fasi
+        if (cmd === 'progress') {
+            this.showProgress();
+            return true;
+        }
+
         // Dispatch alle fasi
         if (this.state.phase === 'nexus_appears') {
             return this.handleNexusPhase(cmd, args);
@@ -258,6 +325,10 @@ const Block03_DeepDive = {
                 Terminal.addOutput('CALCOLO CORRETTO.', 'success');
                 Terminal.addOutput('');
                 puzzle.onComplete();
+
+                // TRACCIA COMPLETAMENTO PUZZLE
+                this.markPuzzleAsSolved('networkPathfinding');
+
                 await NarrativeEngine.wait(1000);
                 await NarrativeEngine.nexusSays("Yes. 26,204 souls, cut off. Alone. Forever. Because of your help.");
                 return true;
@@ -284,6 +355,10 @@ const Block03_DeepDive = {
                 Terminal.addOutput('CONTEGGIO CORRETTO.', 'success');
                 Terminal.addOutput('');
                 puzzle.onComplete();
+
+                // TRACCIA COMPLETAMENTO PUZZLE
+                this.markPuzzleAsSolved('sofiaFragmentPuzzle');
+
                 await NarrativeEngine.wait(1000);
                 await NarrativeEngine.nexusSays("Seven fragments of one little girl. Each trapped in their own hell. This is Viktor's legacy.");
                 return true;
@@ -426,6 +501,10 @@ const Block03_DeepDive = {
             Terminal.addOutput('Ogni frammentazione è dolore condiviso.', 'important');
             Terminal.addOutput('');
             puzzle.onComplete();
+
+            // TRACCIA COMPLETAMENTO PUZZLE
+            this.markPuzzleAsSolved('emotionalResonance');
+
             await NarrativeEngine.wait(1000);
             await NarrativeEngine.nexusSays("You feel it now. Even a fraction of what I carry. Every. Single. Day.");
             return true;
@@ -651,6 +730,19 @@ const Block03_DeepDive = {
 
     async handleComplete(cmd, args) {
         if (cmd === 'continue' || cmd === 'next') {
+            // GATE: Verifica che tutti i puzzle siano completati
+            if (!this.allPuzzlesSolved()) {
+                Terminal.addOutput('');
+                await NarrativeEngine.nexusSays("Wait. The network is incomplete.");
+                await NarrativeEngine.sofiaEcho("You haven't explored all of me yet...");
+                Terminal.addOutput('[!] Devi completare TUTTI i 3 puzzle prima di continuare!', 'error');
+                Terminal.addOutput('');
+                this.showProgress();
+                Terminal.addOutput('');
+                Terminal.addOutput("Usa il comando 'progress' per vedere il tuo avanzamento.", 'info');
+                return true;
+            }
+
             // Vai al blocco 4
             await GameEngine.endBlock(4);
             return true;

@@ -16,6 +16,14 @@ const Block07_Acceptance = {
         allFragmentsHeard: false,
         finalIdentityChosen: null,
         block06Choice: null,
+
+        // TUTTI I 4 PUZZLE OBBLIGATORI (100% completion required)
+        puzzlesSolved: {
+            choicePattern: false,
+            fragmentCount: false,
+            identityAnswer: false,
+            acceptanceTest: false
+        }
     },
 
     init() {
@@ -28,6 +36,65 @@ const Block07_Acceptance = {
         setTimeout(() => {
             this.startBlock();
         }, 2000);
+    },
+
+    // Helper functions per il tracking dei puzzle
+    markPuzzleAsSolved(puzzleId) {
+        if (this.state.puzzlesSolved.hasOwnProperty(puzzleId)) {
+            if (!this.state.puzzlesSolved[puzzleId]) {
+                this.state.puzzlesSolved[puzzleId] = true;
+                Terminal.addOutput(`\n[✓] Puzzle completato: ${puzzleId}`, 'important');
+                this.checkProgress();
+            }
+        }
+    },
+
+    checkProgress() {
+        const solved = Object.values(this.state.puzzlesSolved).filter(v => v).length;
+        const total = Object.keys(this.state.puzzlesSolved).length;
+
+        Terminal.addOutput(`[PROGRESSO] ${solved}/${total} puzzle completati nel Blocco 7`, 'info');
+
+        if (this.allPuzzlesSolved()) {
+            Terminal.addOutput('[✓] TUTTI I PUZZLE COMPLETATI! Puoi procedere.', 'success');
+        }
+    },
+
+    allPuzzlesSolved() {
+        return Object.values(this.state.puzzlesSolved).every(solved => solved);
+    },
+
+    showProgress() {
+        Terminal.addOutput('');
+        Terminal.addOutput('=== PROGRESSO BLOCCO 7: ACCEPTANCE ===', 'important');
+        Terminal.addOutput('');
+
+        const puzzles = [
+            { id: 'choicePattern', name: 'Pattern delle Scelte' },
+            { id: 'fragmentCount', name: 'Conteggio dei Frammenti' },
+            { id: 'identityAnswer', name: 'Risposta dell\'Identità' },
+            { id: 'acceptanceTest', name: 'Test dell\'Accettazione' }
+        ];
+
+        puzzles.forEach(puzzle => {
+            const status = this.state.puzzlesSolved[puzzle.id] ? '[✓]' : '[ ]';
+            Terminal.addOutput(`${status} ${puzzle.name}`, this.state.puzzlesSolved[puzzle.id] ? 'success' : 'warning');
+        });
+
+        Terminal.addOutput('');
+        const solved = Object.values(this.state.puzzlesSolved).filter(v => v).length;
+        const total = Object.keys(this.state.puzzlesSolved).length;
+        Terminal.addOutput(`Totale: ${solved}/${total} puzzle completati`, 'info');
+
+        if (this.allPuzzlesSolved()) {
+            Terminal.addOutput('');
+            Terminal.addOutput('[✓] TUTTI I PUZZLE COMPLETATI!', 'success');
+            Terminal.addOutput("Puoi procedere con 'continue'", 'success');
+        } else {
+            Terminal.addOutput('');
+            Terminal.addOutput('[!] Devi completare TUTTI i puzzle per procedere al finale', 'warning');
+        }
+        Terminal.addOutput('');
     },
 
     async startBlock() {
@@ -48,6 +115,12 @@ const Block07_Acceptance = {
 
     async handleCommand(cmd, args) {
         const fullCmd = cmd.toLowerCase();
+
+        // Comando progress disponibile in tutte le fasi
+        if (fullCmd === 'progress') {
+            this.showProgress();
+            return true;
+        }
 
         // Handle commands based on phase
         switch (this.state.phase) {
@@ -143,6 +216,7 @@ const Block07_Acceptance = {
             if (puzzle.verify(answer)) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete(answer);
+                this.markPuzzleAsSolved('choicePattern');
                 return true;
             } else {
                 Terminal.addOutput('Invalid pattern. Choose: denial, truth, or balanced.', 'error');
@@ -222,6 +296,7 @@ const Block07_Acceptance = {
             if (puzzle.verify(answer)) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete(answer);
+                this.markPuzzleAsSolved('fragmentCount');
                 return true;
             } else {
                 Terminal.addOutput('Incorrect. Check /system/morpheus/all_fragments_unified.log to count all fragments.', 'error');
@@ -237,6 +312,7 @@ const Block07_Acceptance = {
             if (puzzle.verify(answer)) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete(answer);
+                this.markPuzzleAsSolved('identityAnswer');
                 return true;
             } else {
                 Terminal.addOutput('Your answer is too brief. Reflect deeply on your identity (at least 15 characters).', 'error');
@@ -252,6 +328,7 @@ const Block07_Acceptance = {
             if (puzzle.verify(answer)) {
                 Terminal.addOutput('\n');
                 puzzle.onComplete(answer);
+                this.markPuzzleAsSolved('acceptanceTest');
                 return true;
             } else {
                 Terminal.addOutput('Answer with SI (yes) or NO.', 'error');
@@ -361,6 +438,19 @@ const Block07_Acceptance = {
 
     async handleChoiceMade(cmd, args) {
         if (cmd === 'continue' || cmd === 'next') {
+            // GATE: Verifica che tutti i puzzle siano completati
+            if (!this.allPuzzlesSolved()) {
+                Terminal.addOutput('');
+                await NarrativeEngine.morpheusSays("Wait. You haven't completed your journey yet.");
+                await NarrativeEngine.echoSays("All questions... all truths... must be faced.");
+                Terminal.addOutput('[!] Devi completare TUTTI i 4 puzzle prima di procedere al finale!', 'error');
+                Terminal.addOutput('');
+                this.showProgress();
+                Terminal.addOutput('');
+                Terminal.addOutput("Usa il comando 'progress' per vedere il tuo avanzamento.", 'info');
+                return true;
+            }
+
             await this.endBlock();
             return true;
         }

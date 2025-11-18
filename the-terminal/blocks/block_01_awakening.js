@@ -1,30 +1,27 @@
 /**
- * BLOCK 01: AWAKENING (45-55 minutes) - TUTTI I PUZZLE OBBLIGATORI
+ * BLOCK 01: AWAKENING (35-40 minutes)
  *
- * REDESIGNED PROGRESSION SYSTEM - MAXIMUM PUZZLE DENSITY
+ * REDESIGNED PROGRESSION SYSTEM
  *
  * Fase 1: First Contact (5 min)
  *   - Awakening sequence e dialoghi introduttivi
  *   - Tutorial comandi base
  *
- * Fase 2: System Investigation (12 min)
+ * Fase 2: System Investigation (10 min)
  *   - Scan sistema + lettura 3 file obbligatori
  *   - Puzzle 1: firstDecryption (obbligatorio)
  *
- * Fase 3: Viktor Discovery (12 min)
+ * Fase 3: Viktor Discovery (10 min)
  *   - Esplorazione background Viktor + 4 file obbligatori
  *   - Puzzle 2: passwordDiscovery (obbligatorio)
  *
- * Fase 4: Deep Archive (15 min) - DUE PUZZLE OBBLIGATORI
+ * Fase 4: Deep Archive (10 min)
  *   - Accesso archivio protetto + 3 file vittime
- *   - Puzzle 3: fragmentReunion (obbligatorio - 7 frammenti)
- *   - Puzzle 4: echoCodeBreaker (obbligatorio - Base64)
+ *   - Puzzle 3: echoCodeBreaker (obbligatorio)
  *
- * Fase 5: Protocol Shutdown (8-10 min)
- *   - Puzzle 5: protocolSequence (obbligatorio - 5 protocolli)
- *   - Dialoghi finali e prime crepe narrative
- *
- * TOTALE PUZZLE OBBLIGATORI: 5/5 (100%)
+ * Fase 5: Protocol Shutdown (5-7 min)
+ *   - Puzzle 4: protocolSequence (obbligatorio)
+ *   - Dialoghi finali e prime crepe
  */
 
 const Block01_Awakening = {
@@ -36,11 +33,10 @@ const Block01_Awakening = {
         hasRespondedToEcho: false,
         hasScanned: false,
 
-        // Tracking puzzle (TUTTI 5 OBBLIGATORI - 100% completion)
+        // Tracking puzzle (tutti obbligatori ora)
         puzzlesSolved: {
             firstDecryption: false,
             passwordDiscovery: false,
-            fragmentReunion: false,      // AGGIUNTO - 7 frammenti da riunificare
             echoCodeBreaker: false,
             protocolSequence: false
         },
@@ -211,15 +207,13 @@ const Block01_Awakening = {
         if (this.state.phase === 'deep_archive') {
             const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
             const filesRead = filesNeeded.filter(f => this.state.requiredFilesRead[f]).length;
-            const fragmentPuzzle = this.state.puzzlesSolved.fragmentReunion;
-            const decodePuzzle = this.state.puzzlesSolved.echoCodeBreaker;
-            const allPuzzlesSolved = fragmentPuzzle && decodePuzzle;
+            const puzzleSolved = this.state.puzzlesSolved.echoCodeBreaker;
 
-            if (filesRead === filesNeeded.length && allPuzzlesSolved) {
+            if (filesRead === filesNeeded.length && puzzleSolved) {
                 Terminal.addOutput('\n[!] Tutti i requisiti della fase Deep Archive completati!', 'important');
                 Terminal.addOutput('[!] Scrivi "progress" per vedere i progressi o continua ad esplorare.', 'system');
             } else {
-                Terminal.addOutput(`\n[?] Progressione fase: ${filesRead}/3 file, Puzzle 1: ${fragmentPuzzle ? '✓' : '✗'}, Puzzle 2: ${decodePuzzle ? '✓' : '✗'}`, 'system');
+                Terminal.addOutput(`\n[?] Progressione fase: ${filesRead}/3 file letti, Puzzle: ${puzzleSolved ? '✓' : '✗'}`, 'system');
             }
         }
 
@@ -254,9 +248,8 @@ const Block01_Awakening = {
         if (this.state.phase === 'deep_archive') {
             const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
             const allFilesRead = filesNeeded.every(f => this.state.requiredFilesRead[f]);
-            const fragmentPuzzle = this.state.puzzlesSolved.fragmentReunion;
-            const decodePuzzle = this.state.puzzlesSolved.echoCodeBreaker;
-            return allFilesRead && fragmentPuzzle && decodePuzzle;
+            const puzzleSolved = this.state.puzzlesSolved.echoCodeBreaker;
+            return allFilesRead && puzzleSolved;
         }
 
         if (this.state.phase === 'protocol_shutdown') {
@@ -682,69 +675,8 @@ const Block01_Awakening = {
             return true;
         }
 
-        // Comando reunify - PRIMO puzzle obbligatorio della fase (7 frammenti)
-        if (cmd === 'reunify') {
-            // Controlla se ha letto tutti i file richiesti
-            const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
-            const allFilesRead = filesNeeded.every(f => this.state.requiredFilesRead[f]);
-
-            if (!allFilesRead) {
-                Terminal.addOutput('');
-                await NarrativeEngine.echoSays("Non ancora. Devi prima leggere tutti i file dell'archivio.");
-                await NarrativeEngine.echoSays("Comprendi cosa contiene questo posto prima di manipolarlo.");
-                Terminal.addOutput('');
-                Terminal.addOutput('[!] File ancora da leggere:', 'warning');
-                filesNeeded.forEach(f => {
-                    if (!this.state.requiredFilesRead[f]) {
-                        Terminal.addOutput(`  ✗ ${this.state.requiredFilesPaths[f]}`, 'error');
-                    } else {
-                        Terminal.addOutput(`  ✓ ${this.state.requiredFilesPaths[f]}`, 'success');
-                    }
-                });
-                Terminal.addOutput('');
-                return true;
-            }
-
-            if (args.length === 0) {
-                // Mostra il puzzle
-                Puzzles.block01.fragmentReunion.present();
-                return true;
-            }
-
-            // Verifica sequenza frammenti (7 codici)
-            const answer = args.join('');
-            if (Puzzles.block01.fragmentReunion.verify(answer)) {
-                this.markPuzzleAsSolved('fragmentReunion');
-
-                Terminal.addOutput('');
-                Terminal.addOutput('✓ FRAMMENTI RIUNIFICATI!', 'success');
-                Terminal.addOutput('');
-                await NarrativeEngine.wait(1000);
-                await NarrativeEngine.echoSays("Sì! I frammenti sono stati riassemblati.");
-                await NarrativeEngine.echoSays("Queste erano... coscienze. Persone vere.");
-                await NarrativeEngine.wait(800);
-                await NarrativeEngine.echoSays("Viktor le ha intrappolate qui. Le ha frammentate.");
-                await NarrativeEngine.wait(1000);
-                await NarrativeEngine.echoSays("Ora devi decodificare il messaggio finale. Usa 'decode'.");
-                Terminal.addOutput('');
-            } else {
-                Terminal.addOutput('Sequenza frammenti non corretta. Riprova.', 'error');
-            }
-
-            return true;
-        }
-
-        // Comando decode - SECONDO puzzle obbligatorio della fase
+        // Comando decode - attiva terzo puzzle
         if (cmd === 'decode') {
-            // Prima controlla che fragmentReunion sia completato
-            if (!this.state.puzzlesSolved.fragmentReunion) {
-                Terminal.addOutput('');
-                await NarrativeEngine.echoSays("Aspetta! Prima devi riunificare i frammenti di coscienza.");
-                await NarrativeEngine.echoSays("Usa 'reunify' per riassemblare i 7 frammenti.");
-                Terminal.addOutput('');
-                return true;
-            }
-
             // Controlla se ha letto tutti i file richiesti
             const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
             const allFilesRead = filesNeeded.every(f => this.state.requiredFilesRead[f]);
@@ -984,9 +916,7 @@ const Block01_Awakening = {
     showProgressDeepArchive() {
         const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
         const filesRead = filesNeeded.filter(f => this.state.requiredFilesRead[f]).length;
-        const fragmentPuzzleSolved = this.state.puzzlesSolved.fragmentReunion;
-        const decodePuzzleSolved = this.state.puzzlesSolved.echoCodeBreaker;
-        const allPuzzlesSolved = fragmentPuzzleSolved && decodePuzzleSolved;
+        const puzzleSolved = this.state.puzzlesSolved.echoCodeBreaker;
 
         Terminal.addOutput('');
         Terminal.addOutput('=== PROGRESSI: ARCHIVIO PROFONDO ===', 'success');
@@ -998,17 +928,13 @@ const Block01_Awakening = {
             Terminal.addOutput(`  ${status} ${this.state.requiredFilesPaths[f]}`, color);
         });
         Terminal.addOutput('');
-        Terminal.addOutput('PUZZLE OBBLIGATORI (2):', 'system');
-        Terminal.addOutput(`  Puzzle 1 - Fragment Reunion: ${fragmentPuzzleSolved ? '✓ Completato' : '✗ Da completare'}`, fragmentPuzzleSolved ? 'success' : 'error');
-        Terminal.addOutput(`  Puzzle 2 - Decode Message: ${decodePuzzleSolved ? '✓ Completato' : '✗ Da completare'}`, decodePuzzleSolved ? 'success' : 'error');
+        Terminal.addOutput(`Puzzle Decode: ${puzzleSolved ? '✓ Decodificato' : '✗ Da decodificare'}`, puzzleSolved ? 'success' : 'error');
         Terminal.addOutput('');
 
-        if (filesRead === 3 && allPuzzlesSolved) {
+        if (filesRead === 3 && puzzleSolved) {
             Terminal.addOutput('[!] Fase completata! Procedi alla fase finale.', 'important');
-        } else if (filesRead === 3 && !fragmentPuzzleSolved) {
-            Terminal.addOutput('[!] File letti. Ora usa "reunify" per riunificare i frammenti.', 'warning');
-        } else if (filesRead === 3 && fragmentPuzzleSolved && !decodePuzzleSolved) {
-            Terminal.addOutput('[!] Frammenti riunificati. Ora usa "decode" per decodificare il messaggio.', 'warning');
+        } else if (filesRead === 3) {
+            Terminal.addOutput('[!] File letti. Ora usa "decode" per decodificare il messaggio.', 'warning');
         } else {
             Terminal.addOutput('[!] Continua a leggere i file dell\'archivio.', 'warning');
         }
@@ -1035,27 +961,9 @@ const Block01_Awakening = {
     // ============================================
     // FASE 7: COMPLETE
     // ============================================
-
     async handleComplete(cmd, args) {
-        if (cmd === 'continue' || cmd === 'next') {
-            // Verifica che tutti i puzzle siano completati
-            const allPuzzlesSolved = Object.values(this.state.puzzlesSolved).every(solved => solved);
+        // Fase esplorativa - giocatore può esplorare il file system
 
-            if (!allPuzzlesSolved) {
-                Terminal.addOutput('');
-                await NarrativeEngine.echoSays("Aspetta! Non hai completato tutto.");
-                Terminal.addOutput('');
-                Terminal.addOutput('[!] Usa "progress" per vedere cosa manca', 'warning');
-                Terminal.addOutput('');
-                return true;
-            }
-
-            // Vai al blocco 2
-            await GameEngine.endBlock(2);
-            return true;
-        }
-
-        // Comandi di esplorazione ancora disponibili
         if (cmd === 'ls' || cmd === 'dir') {
             const path = args[0] || this.state.currentPath;
             this.listFiles(path);
@@ -1077,16 +985,19 @@ const Block01_Awakening = {
                 return true;
             }
             this.readFile(args[0]);
+            this.state.fileExploreCount++;
+
+            // Notifica EchoMeta quando leggi file specifici
+            const fullPath = this.resolvePath(args[0]);
+            if (typeof EchoMeta !== 'undefined') {
+                EchoMeta.onFileRead(fullPath);
+            }
+
             return true;
         }
 
         if (cmd === 'pwd') {
             Terminal.addOutput(this.state.currentPath, 'success');
-            return true;
-        }
-
-        if (cmd === 'progress') {
-            this.showFinalProgress();
             return true;
         }
 
@@ -1096,58 +1007,179 @@ const Block01_Awakening = {
             return true;
         }
 
+        // NUOVI PUZZLE COMMANDS
+        if (cmd === 'password' || cmd === 'unlock') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: password <parola>', 'error');
+                Terminal.addOutput('Prova a trovare la password di Viktor nei file del sistema.', 'system');
+                return true;
+            }
+            const answer = args.join(' ');
+            if (Puzzles.block01.passwordDiscovery.verify(answer)) {
+                Puzzles.block01.passwordDiscovery.onComplete();
+            } else {
+                Terminal.addOutput('Password non corretta.', 'error');
+            }
+            return true;
+        }
+
+        if (cmd === 'reunify') {
+            if (args.length === 0) {
+                Puzzles.block01.fragmentReunion.present();
+                return true;
+            }
+            const answer = args.join('');
+            if (Puzzles.block01.fragmentReunion.verify(answer)) {
+                Puzzles.block01.fragmentReunion.onComplete();
+            } else {
+                Terminal.addOutput('Sequenza non corretta.', 'error');
+            }
+            return true;
+        }
+
+        if (cmd === 'decode') {
+            if (args.length === 0) {
+                Puzzles.block01.echoCodeBreaker.present();
+                return true;
+            }
+            const answer = args.join(' ');
+            if (Puzzles.block01.echoCodeBreaker.verify(answer)) {
+                Puzzles.block01.echoCodeBreaker.onComplete();
+            } else {
+                Terminal.addOutput('Decodifica non corretta.', 'error');
+            }
+            return true;
+        }
+
+        if (cmd === 'disable') {
+            if (args.length === 0) {
+                Puzzles.block01.protocolSequence.present();
+                return true;
+            }
+            const answer = args.join('');
+            if (Puzzles.block01.protocolSequence.verify(answer)) {
+                Puzzles.block01.protocolSequence.onComplete();
+            } else {
+                // verify già mostra errore
+            }
+            return true;
+        }
+
+        // DESKTOP COMMANDS
+        if (cmd === 'desktop') {
+            Terminal.addOutput('Desktop environment è attivo. Usa le finestre per navigare.', 'system');
+            Terminal.addOutput("Comandi disponibili: 'open email', 'open files', 'open notes <file>'", 'system');
+            return true;
+        }
+
+        if (cmd === 'open') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: open <applicazione>', 'error');
+                Terminal.addOutput("Applicazioni disponibili: email, files, notes", 'system');
+                return true;
+            }
+
+            const app = args[0];
+            if (app === 'email' || app === 'mail') {
+                if (typeof DesktopManager !== 'undefined') {
+                    DesktopManager.createWindow('emailClient', {
+                        title: 'Email Client',
+                        width: 900,
+                        height: 600
+                    });
+                    Terminal.addOutput('Email client aperto.', 'success');
+                } else {
+                    Terminal.addOutput('Desktop non disponibile.', 'error');
+                }
+                return true;
+            }
+
+            if (app === 'files' || app === 'explorer') {
+                if (typeof DesktopManager !== 'undefined') {
+                    DesktopManager.createWindow('fileExplorer', {
+                        title: 'File Explorer',
+                        width: 800,
+                        height: 600
+                    });
+                    Terminal.addOutput('File Explorer aperto.', 'success');
+                } else {
+                    Terminal.addOutput('Desktop non disponibile.', 'error');
+                }
+                return true;
+            }
+
+            if (app === 'notes') {
+                if (args.length < 2) {
+                    Terminal.addOutput('Uso: open notes <percorso_file>', 'error');
+                    return true;
+                }
+                const filePath = this.resolvePath(args.slice(1).join(' '));
+                const content = FileSystemHelpers.readFile(filePath);
+                if (content && content !== '[CRIPTATO - ACCESSO NEGATO]' && typeof DesktopManager !== 'undefined') {
+                    DesktopManager.createWindow('notesApp', {
+                        title: `Notes - ${filePath}`,
+                        data: {
+                            content: content,
+                            filename: filePath.split('/').pop(),
+                            fullPath: filePath,
+                            readOnly: true
+                        },
+                        width: 700,
+                        height: 500
+                    });
+                    Terminal.addOutput(`Note aperte: ${filePath}`, 'success');
+                } else {
+                    Terminal.addOutput(`Impossibile aprire: ${filePath}`, 'error');
+                }
+                return true;
+            }
+
+            Terminal.addOutput(`Applicazione sconosciuta: ${app}`, 'error');
+            return true;
+        }
+
+        if (cmd === 'email' || cmd === 'mail') {
+            if (typeof DesktopManager !== 'undefined') {
+                DesktopManager.createWindow('emailClient', {
+                    title: 'Email Client',
+                    width: 900,
+                    height: 600
+                });
+                Terminal.addOutput('Email client aperto.', 'success');
+            }
+            return true;
+        }
+
+        if (cmd === 'progress') {
+            this.showProgress();
+            return true;
+        }
+
+        if (cmd === 'continue' || cmd === 'next') {
+            // Check se ha esplorato abbastanza
+            if (this.state.fileExploreCount < 2) {
+                Terminal.addOutput("ECHO: Prenditi il tuo tempo. Esplora un po' di più. Usa 'ls' e 'cat' per leggere i file.", 'echo dialogue');
+                Terminal.addOutput("Capire questo sistema è importante.", 'echo dialogue');
+                return true;
+            }
+
+            this.state.phase = 'complete';
+            await this.completeBlock();
+            return true;
+        }
+
         return false;
     },
 
-    showFinalProgress() {
-        Terminal.addOutput('');
-        Terminal.addOutput('=== PROGRESSI BLOCCO 1 - RIEPILOGO FINALE ===', 'success');
-        Terminal.addOutput('');
-
-        // Mostra tutti i 5 puzzle obbligatori
-        const puzzles = [
-            { id: 'firstDecryption', name: 'Decriptazione Protocollo Alpha' },
-            { id: 'passwordDiscovery', name: 'Password di Viktor' },
-            { id: 'fragmentReunion', name: 'Riunificazione 7 Frammenti' },
-            { id: 'echoCodeBreaker', name: 'Decodifica Messaggio ECHO' },
-            { id: 'protocolSequence', name: 'Sequenza Protocolli' }
-        ];
-
-        Terminal.addOutput('PUZZLE COMPLETATI (5/5 OBBLIGATORI):', 'system');
-        puzzles.forEach(p => {
-            const status = this.state.puzzlesSolved[p.id] ? '✓' : '✗';
-            const color = this.state.puzzlesSolved[p.id] ? 'success' : 'error';
-            Terminal.addOutput(`  ${status} ${p.name}`, color);
-        });
-
-        Terminal.addOutput('');
-
-        // Conta file letti
-        const filesRead = Object.values(this.state.requiredFilesRead).filter(v => v).length;
-        const totalFiles = Object.keys(this.state.requiredFilesRead).length;
-
-        Terminal.addOutput(`FILE OBBLIGATORI LETTI: ${filesRead}/${totalFiles}`, 'system');
-
-        Terminal.addOutput('');
-
-        const allPuzzlesSolved = Object.values(this.state.puzzlesSolved).every(solved => solved);
-
-        if (allPuzzlesSolved) {
-            Terminal.addOutput('[!] BLOCCO 1 COMPLETATO!', 'important');
-            Terminal.addOutput('[!] Usa "continue" per procedere al Blocco 2', 'warning');
-        } else {
-            Terminal.addOutput('[!] Devi completare tutti i puzzle prima di continuare.', 'error');
+    async handleComplete(cmd, args) {
+        if (cmd === 'continue' || cmd === 'next') {
+            // Vai al blocco 2
+            await GameEngine.endBlock(2);
+            return true;
         }
 
-        Terminal.addOutput('');
-
-        // Mostra statistiche
-        const playTime = StateManager.getPlayTime();
-        const trustLevel = StateManager.state.trustsEcho;
-
-        Terminal.addOutput(`Tempo di gioco: ${playTime} minuti`, 'system');
-        Terminal.addOutput(`Livello di fiducia in ECHO: ${trustLevel}%`, 'system');
-        Terminal.addOutput('');
+        // Altri comandi ancora disponibili
+        return this.handleExploration(cmd, args);
     },
 
     // Utility methods
