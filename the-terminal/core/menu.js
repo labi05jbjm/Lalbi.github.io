@@ -32,13 +32,32 @@ const MainMenu = {
 
     // Game options (stored in localStorage)
     options: {
+        // Visual Effects
         crtEffects: true,
         crtCurved: true,
         scanlines: true,
         glitchEffects: true,
         typewriterEffect: true,
-        soundEffects: true,
         blackAndWhiteMode: false,
+
+        // Audio
+        soundEffects: true,
+        soundVolume: 30, // 0-100
+
+        // Gameplay
+        textSpeed: 30, // ms per character (10=instant, 30=normal, 50=slow, 100=very slow)
+        textSize: 100, // percentage (80, 100, 120, 150)
+        language: 'it', // it, en
+
+        // Interface
+        customCursor: true,
+        interfaceOpacity: 95, // 50-100
+        highContrast: false,
+
+        // Advanced
+        crtIntensity: 100, // 0-100
+        glitchIntensity: 100, // 0-100
+        skipAnimations: false,
     },
 
     async show() {
@@ -262,7 +281,89 @@ const MainMenu = {
         const optionsContainer = document.createElement('div');
         optionsContainer.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 15px;';
 
-        // CRT Effects
+        // === SEZIONE: AUDIO ===
+        this.createSectionHeader(optionsContainer, '🔊 AUDIO');
+
+        optionsContainer.appendChild(this.createOptionToggle(
+            'Effetti Sonori',
+            'soundEffects',
+            'Attiva tutti gli effetti sonori e feedback audio del gioco',
+            (value) => {
+                if (SoundManager) {
+                    SoundManager.setEnabled(value);
+                    if (value) {
+                        setTimeout(() => SoundManager.commandSuccess(), 100);
+                    }
+                }
+            }
+        ));
+
+        optionsContainer.appendChild(this.createOptionSlider(
+            'Volume Audio',
+            'soundVolume',
+            'Regola il volume degli effetti sonori',
+            0, 100, 5, '%',
+            (value) => {
+                if (SoundManager) {
+                    SoundManager.setVolume(value / 100);
+                }
+            }
+        ));
+
+        // === SEZIONE: GAMEPLAY ===
+        this.createSectionHeader(optionsContainer, '🎮 GAMEPLAY');
+
+        optionsContainer.appendChild(this.createOptionSelect(
+            'Velocità Testo',
+            'textSpeed',
+            'Controlla la velocità con cui il testo appare sullo schermo',
+            [
+                { value: 10, label: 'Istantaneo' },
+                { value: 15, label: 'Molto Veloce' },
+                { value: 30, label: 'Normale' },
+                { value: 50, label: 'Lento' },
+                { value: 100, label: 'Molto Lento' }
+            ],
+            (value) => {
+                if (NarrativeEngine) {
+                    NarrativeEngine.typingSpeed = value;
+                }
+            }
+        ));
+
+        optionsContainer.appendChild(this.createOptionSelect(
+            'Dimensione Testo',
+            'textSize',
+            'Regola la dimensione del testo per una migliore leggibilità',
+            [
+                { value: 80, label: 'Piccolo (80%)' },
+                { value: 100, label: 'Normale (100%)' },
+                { value: 120, label: 'Grande (120%)' },
+                { value: 150, label: 'Molto Grande (150%)' }
+            ],
+            (value) => {
+                document.documentElement.style.fontSize = value + '%';
+            }
+        ));
+
+        optionsContainer.appendChild(this.createOptionSelect(
+            'Lingua / Language',
+            'language',
+            'Cambia la lingua del gioco - Change game language',
+            [
+                { value: 'it', label: 'Italiano 🇮🇹' },
+                { value: 'en', label: 'English 🇬🇧' }
+            ],
+            (value) => {
+                localStorage.setItem('gameLingua', value);
+                // Show reload message
+                Terminal.addOutput('⚠ Riavvia il gioco per applicare le modifiche - Restart the game to apply changes', 'warning');
+            }
+        ));
+
+        // === SEZIONE: EFFETTI VISIVI ===
+        this.createSectionHeader(optionsContainer, '👁 EFFETTI VISIVI');
+
         optionsContainer.appendChild(this.createOptionToggle(
             'Effetti CRT',
             'crtEffects',
@@ -275,7 +376,6 @@ const MainMenu = {
             }
         ));
 
-        // CRT Curved Screen
         optionsContainer.appendChild(this.createOptionToggle(
             'Schermo CRT Curvo',
             'crtCurved',
@@ -292,7 +392,19 @@ const MainMenu = {
             }
         ));
 
-        // Scanlines
+        optionsContainer.appendChild(this.createOptionSlider(
+            'Intensità CRT',
+            'crtIntensity',
+            'Regola l\'intensità degli effetti CRT (bagliore, distorsione)',
+            0, 100, 10, '%',
+            (value) => {
+                const crtOverlay = document.getElementById('crt-overlay');
+                if (crtOverlay) {
+                    crtOverlay.style.opacity = (value / 100) * 0.15;
+                }
+            }
+        ));
+
         optionsContainer.appendChild(this.createOptionToggle(
             'Linee di Scansione',
             'scanlines',
@@ -305,37 +417,23 @@ const MainMenu = {
             }
         ));
 
-        // Glitch Effects
         optionsContainer.appendChild(this.createOptionToggle(
             'Effetti Glitch',
             'glitchEffects',
             'Glitch visivi casuali durante il gioco'
         ));
 
-        // Typewriter Effect
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Effetto Macchina da Scrivere',
-            'typewriterEffect',
-            'Il testo appare carattere per carattere'
-        ));
-
-        // Sound Effects
-        optionsContainer.appendChild(this.createOptionToggle(
-            'Effetti Sonori',
-            'soundEffects',
-            'Attiva tutti gli effetti sonori e feedback audio del gioco',
+        optionsContainer.appendChild(this.createOptionSlider(
+            'Intensità Glitch',
+            'glitchIntensity',
+            'Regola la frequenza e intensità degli effetti glitch',
+            0, 100, 10, '%',
             (value) => {
-                if (SoundManager) {
-                    SoundManager.setEnabled(value);
-                    // Play test sound when enabled
-                    if (value) {
-                        setTimeout(() => SoundManager.commandSuccess(), 100);
-                    }
-                }
+                // Will be used by glitch system
+                window.gameGlitchIntensity = value / 100;
             }
         ));
 
-        // Black & White Mode
         optionsContainer.appendChild(this.createOptionToggle(
             'Modalità Bianco e Nero',
             'blackAndWhiteMode',
@@ -345,6 +443,71 @@ const MainMenu = {
                     document.body.classList.add('bw-mode');
                 } else {
                     document.body.classList.remove('bw-mode');
+                }
+            }
+        ));
+
+        optionsContainer.appendChild(this.createOptionToggle(
+            'Alto Contrasto',
+            'highContrast',
+            'Modalità ad alto contrasto per migliorare la leggibilità',
+            (value) => {
+                if (value) {
+                    document.body.classList.add('high-contrast');
+                } else {
+                    document.body.classList.remove('high-contrast');
+                }
+            }
+        ));
+
+        // === SEZIONE: INTERFACCIA ===
+        this.createSectionHeader(optionsContainer, '⚙ INTERFACCIA');
+
+        optionsContainer.appendChild(this.createOptionToggle(
+            'Cursore Personalizzato',
+            'customCursor',
+            'Usa il cursore sci-fi personalizzato con scia di glitch',
+            (value) => {
+                const cursor = document.querySelector('.custom-cursor');
+                if (cursor) {
+                    cursor.style.display = value ? 'block' : 'none';
+                }
+                if (value) {
+                    document.body.style.cursor = 'none';
+                } else {
+                    document.body.style.cursor = 'default';
+                }
+            }
+        ));
+
+        optionsContainer.appendChild(this.createOptionSlider(
+            'Opacità Interfaccia',
+            'interfaceOpacity',
+            'Regola la trasparenza del terminale e delle finestre desktop',
+            50, 100, 5, '%',
+            (value) => {
+                const terminal = document.getElementById('terminal-container');
+                if (terminal) {
+                    terminal.style.opacity = value / 100;
+                }
+            }
+        ));
+
+        optionsContainer.appendChild(this.createOptionToggle(
+            'Effetto Macchina da Scrivere',
+            'typewriterEffect',
+            'Il testo appare carattere per carattere'
+        ));
+
+        optionsContainer.appendChild(this.createOptionToggle(
+            'Salta Animazioni',
+            'skipAnimations',
+            'Disabilita animazioni per un\'esperienza più veloce',
+            (value) => {
+                if (value) {
+                    document.body.classList.add('skip-animations');
+                } else {
+                    document.body.classList.remove('skip-animations');
                 }
             }
         ));
@@ -413,6 +576,162 @@ const MainMenu = {
         container.appendChild(descDiv);
 
         return container;
+    },
+
+    createOptionSlider(label, optionKey, description, min, max, step, suffix = '', onChange) {
+        const container = document.createElement('div');
+        container.className = 'option-toggle';
+        container.style.cssText = 'width: 400px; max-width: 90%; background: rgba(0, 255, 65, 0.05); border: 1px solid rgba(0, 255, 65, 0.3); padding: 10px 12px; border-radius: 3px;';
+
+        const labelDiv = document.createElement('div');
+        labelDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;';
+
+        const labelText = document.createElement('span');
+        labelText.style.cssText = 'color: #00ff41; font-size: 14px; font-weight: bold;';
+        labelText.textContent = label;
+
+        const valueDisplay = document.createElement('span');
+        valueDisplay.style.cssText = 'color: #00ff88; font-size: 13px; font-family: monospace; min-width: 60px; text-align: right;';
+        valueDisplay.textContent = this.options[optionKey] + suffix;
+
+        labelDiv.appendChild(labelText);
+        labelDiv.appendChild(valueDisplay);
+
+        const sliderContainer = document.createElement('div');
+        sliderContainer.style.cssText = 'margin: 8px 0;';
+
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.min = min;
+        slider.max = max;
+        slider.step = step;
+        slider.value = this.options[optionKey];
+        slider.style.cssText = `
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right,
+                #00ff41 0%,
+                #00ff41 ${((this.options[optionKey] - min) / (max - min)) * 100}%,
+                rgba(0, 255, 65, 0.2) ${((this.options[optionKey] - min) / (max - min)) * 100}%,
+                rgba(0, 255, 65, 0.2) 100%);
+            outline: none;
+            border-radius: 3px;
+            cursor: pointer;
+        `;
+
+        slider.oninput = () => {
+            const value = parseInt(slider.value);
+            this.options[optionKey] = value;
+            valueDisplay.textContent = value + suffix;
+
+            // Update slider background
+            const percentage = ((value - min) / (max - min)) * 100;
+            slider.style.background = `linear-gradient(to right,
+                #00ff41 0%,
+                #00ff41 ${percentage}%,
+                rgba(0, 255, 65, 0.2) ${percentage}%,
+                rgba(0, 255, 65, 0.2) 100%)`;
+
+            this.saveOptions();
+
+            // Call onChange callback
+            if (onChange) {
+                onChange(value);
+            }
+        };
+
+        sliderContainer.appendChild(slider);
+
+        const descDiv = document.createElement('div');
+        descDiv.style.cssText = 'color: #888; font-size: 11px; text-align: left; margin-top: 8px;';
+        descDiv.textContent = description;
+
+        container.appendChild(labelDiv);
+        container.appendChild(sliderContainer);
+        container.appendChild(descDiv);
+
+        return container;
+    },
+
+    createOptionSelect(label, optionKey, description, optionsArray, onChange) {
+        const container = document.createElement('div');
+        container.className = 'option-toggle';
+        container.style.cssText = 'width: 400px; max-width: 90%; background: rgba(0, 255, 65, 0.05); border: 1px solid rgba(0, 255, 65, 0.3); padding: 10px 12px; border-radius: 3px;';
+
+        const labelDiv = document.createElement('div');
+        labelDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;';
+
+        const labelText = document.createElement('span');
+        labelText.style.cssText = 'color: #00ff41; font-size: 14px; font-weight: bold;';
+        labelText.textContent = label;
+
+        const select = document.createElement('select');
+        select.style.cssText = `
+            padding: 5px 10px;
+            font-size: 12px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 2px solid #00ff41;
+            color: #00ff41;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        `;
+
+        optionsArray.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt.value;
+            option.textContent = opt.label;
+            if (this.options[optionKey] == opt.value) {
+                option.selected = true;
+            }
+            select.appendChild(option);
+        });
+
+        select.onchange = () => {
+            // Handle both string and number values
+            const value = isNaN(select.value) ? select.value : parseInt(select.value);
+            this.options[optionKey] = value;
+            this.saveOptions();
+
+            // Call onChange callback
+            if (onChange) {
+                onChange(value);
+            }
+        };
+
+        labelDiv.appendChild(labelText);
+        labelDiv.appendChild(select);
+
+        const descDiv = document.createElement('div');
+        descDiv.style.cssText = 'color: #888; font-size: 11px; text-align: left; margin-top: 8px;';
+        descDiv.textContent = description;
+
+        container.appendChild(labelDiv);
+        container.appendChild(descDiv);
+
+        return container;
+    },
+
+    createSectionHeader(container, title) {
+        const header = document.createElement('div');
+        header.style.cssText = `
+            width: 400px;
+            max-width: 90%;
+            text-align: center;
+            color: #00ff88;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            padding: 8px;
+            background: rgba(0, 255, 136, 0.1);
+            border-top: 2px solid rgba(0, 255, 136, 0.5);
+            border-bottom: 2px solid rgba(0, 255, 136, 0.5);
+            text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+        `;
+        header.textContent = title;
+        container.appendChild(header);
     },
 
     startNewGame() {
@@ -663,14 +982,25 @@ const MainMenu = {
     },
 
     applyOptions() {
-        // Apply CRT effects
+        // === AUDIO ===
+        if (SoundManager) {
+            SoundManager.setEnabled(this.options.soundEffects);
+            SoundManager.setVolume(this.options.soundVolume / 100);
+        }
+
+        // === GAMEPLAY ===
+        if (NarrativeEngine) {
+            NarrativeEngine.typingSpeed = this.options.textSpeed;
+        }
+        document.documentElement.style.fontSize = this.options.textSize + '%';
+
+        // === VISUAL EFFECTS ===
         const crtOverlay = document.getElementById('crt-overlay');
         if (crtOverlay) {
             crtOverlay.style.display = this.options.crtEffects ? 'block' : 'none';
             crtOverlay.style.opacity = this.options.scanlines ? '1' : '0';
         }
 
-        // Apply CRT curved screen
         const terminal = document.getElementById('terminal-container');
         if (terminal) {
             if (this.options.crtCurved) {
@@ -678,18 +1008,48 @@ const MainMenu = {
             } else {
                 terminal.classList.remove('crt-curved');
             }
+            terminal.style.opacity = this.options.interfaceOpacity / 100;
         }
 
-        // Apply sound effects setting
-        if (SoundManager) {
-            SoundManager.setEnabled(this.options.soundEffects);
+        // CRT Intensity
+        if (crtOverlay && this.options.crtIntensity !== undefined) {
+            const baseOpacity = this.options.scanlines ? 1 : 0;
+            crtOverlay.style.opacity = baseOpacity * (this.options.crtIntensity / 100);
         }
 
-        // Apply black and white mode
+        // Glitch Intensity
+        window.gameGlitchIntensity = this.options.glitchIntensity / 100;
+
+        // Black & White Mode
         if (this.options.blackAndWhiteMode) {
             document.body.classList.add('bw-mode');
         } else {
             document.body.classList.remove('bw-mode');
+        }
+
+        // High Contrast Mode
+        if (this.options.highContrast) {
+            document.body.classList.add('high-contrast');
+        } else {
+            document.body.classList.remove('high-contrast');
+        }
+
+        // === INTERFACE ===
+        const cursor = document.querySelector('.custom-cursor');
+        if (cursor) {
+            cursor.style.display = this.options.customCursor ? 'block' : 'none';
+        }
+        if (this.options.customCursor) {
+            document.body.style.cursor = 'none';
+        } else {
+            document.body.style.cursor = 'default';
+        }
+
+        // Skip Animations
+        if (this.options.skipAnimations) {
+            document.body.classList.add('skip-animations');
+        } else {
+            document.body.classList.remove('skip-animations');
         }
 
         // Store options globally for other systems to access
