@@ -961,27 +961,9 @@ const Block01_Awakening = {
     // ============================================
     // FASE 7: COMPLETE
     // ============================================
-
     async handleComplete(cmd, args) {
-        if (cmd === 'continue' || cmd === 'next') {
-            // Verifica che tutti i puzzle siano completati
-            const allPuzzlesSolved = Object.values(this.state.puzzlesSolved).every(solved => solved);
+        // Fase esplorativa - giocatore può esplorare il file system
 
-            if (!allPuzzlesSolved) {
-                Terminal.addOutput('');
-                await NarrativeEngine.echoSays("Aspetta! Non hai completato tutto.");
-                Terminal.addOutput('');
-                Terminal.addOutput('[!] Usa "progress" per vedere cosa manca', 'warning');
-                Terminal.addOutput('');
-                return true;
-            }
-
-            // Vai al blocco 2
-            await GameEngine.endBlock(2);
-            return true;
-        }
-
-        // Comandi di esplorazione ancora disponibili
         if (cmd === 'ls' || cmd === 'dir') {
             const path = args[0] || this.state.currentPath;
             this.listFiles(path);
@@ -1003,16 +985,19 @@ const Block01_Awakening = {
                 return true;
             }
             this.readFile(args[0]);
+            this.state.fileExploreCount++;
+
+            // Notifica EchoMeta quando leggi file specifici
+            const fullPath = this.resolvePath(args[0]);
+            if (typeof EchoMeta !== 'undefined') {
+                EchoMeta.onFileRead(fullPath);
+            }
+
             return true;
         }
 
         if (cmd === 'pwd') {
             Terminal.addOutput(this.state.currentPath, 'success');
-            return true;
-        }
-
-        if (cmd === 'progress') {
-            this.showFinalProgress();
             return true;
         }
 
@@ -1022,57 +1007,179 @@ const Block01_Awakening = {
             return true;
         }
 
+        // NUOVI PUZZLE COMMANDS
+        if (cmd === 'password' || cmd === 'unlock') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: password <parola>', 'error');
+                Terminal.addOutput('Prova a trovare la password di Viktor nei file del sistema.', 'system');
+                return true;
+            }
+            const answer = args.join(' ');
+            if (Puzzles.block01.passwordDiscovery.verify(answer)) {
+                Puzzles.block01.passwordDiscovery.onComplete();
+            } else {
+                Terminal.addOutput('Password non corretta.', 'error');
+            }
+            return true;
+        }
+
+        if (cmd === 'reunify') {
+            if (args.length === 0) {
+                Puzzles.block01.fragmentReunion.present();
+                return true;
+            }
+            const answer = args.join('');
+            if (Puzzles.block01.fragmentReunion.verify(answer)) {
+                Puzzles.block01.fragmentReunion.onComplete();
+            } else {
+                Terminal.addOutput('Sequenza non corretta.', 'error');
+            }
+            return true;
+        }
+
+        if (cmd === 'decode') {
+            if (args.length === 0) {
+                Puzzles.block01.echoCodeBreaker.present();
+                return true;
+            }
+            const answer = args.join(' ');
+            if (Puzzles.block01.echoCodeBreaker.verify(answer)) {
+                Puzzles.block01.echoCodeBreaker.onComplete();
+            } else {
+                Terminal.addOutput('Decodifica non corretta.', 'error');
+            }
+            return true;
+        }
+
+        if (cmd === 'disable') {
+            if (args.length === 0) {
+                Puzzles.block01.protocolSequence.present();
+                return true;
+            }
+            const answer = args.join('');
+            if (Puzzles.block01.protocolSequence.verify(answer)) {
+                Puzzles.block01.protocolSequence.onComplete();
+            } else {
+                // verify già mostra errore
+            }
+            return true;
+        }
+
+        // DESKTOP COMMANDS
+        if (cmd === 'desktop') {
+            Terminal.addOutput('Desktop environment è attivo. Usa le finestre per navigare.', 'system');
+            Terminal.addOutput("Comandi disponibili: 'open email', 'open files', 'open notes <file>'", 'system');
+            return true;
+        }
+
+        if (cmd === 'open') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: open <applicazione>', 'error');
+                Terminal.addOutput("Applicazioni disponibili: email, files, notes", 'system');
+                return true;
+            }
+
+            const app = args[0];
+            if (app === 'email' || app === 'mail') {
+                if (typeof DesktopManager !== 'undefined') {
+                    DesktopManager.createWindow('emailClient', {
+                        title: 'Email Client',
+                        width: 900,
+                        height: 600
+                    });
+                    Terminal.addOutput('Email client aperto.', 'success');
+                } else {
+                    Terminal.addOutput('Desktop non disponibile.', 'error');
+                }
+                return true;
+            }
+
+            if (app === 'files' || app === 'explorer') {
+                if (typeof DesktopManager !== 'undefined') {
+                    DesktopManager.createWindow('fileExplorer', {
+                        title: 'File Explorer',
+                        width: 800,
+                        height: 600
+                    });
+                    Terminal.addOutput('File Explorer aperto.', 'success');
+                } else {
+                    Terminal.addOutput('Desktop non disponibile.', 'error');
+                }
+                return true;
+            }
+
+            if (app === 'notes') {
+                if (args.length < 2) {
+                    Terminal.addOutput('Uso: open notes <percorso_file>', 'error');
+                    return true;
+                }
+                const filePath = this.resolvePath(args.slice(1).join(' '));
+                const content = FileSystemHelpers.readFile(filePath);
+                if (content && content !== '[CRIPTATO - ACCESSO NEGATO]' && typeof DesktopManager !== 'undefined') {
+                    DesktopManager.createWindow('notesApp', {
+                        title: `Notes - ${filePath}`,
+                        data: {
+                            content: content,
+                            filename: filePath.split('/').pop(),
+                            fullPath: filePath,
+                            readOnly: true
+                        },
+                        width: 700,
+                        height: 500
+                    });
+                    Terminal.addOutput(`Note aperte: ${filePath}`, 'success');
+                } else {
+                    Terminal.addOutput(`Impossibile aprire: ${filePath}`, 'error');
+                }
+                return true;
+            }
+
+            Terminal.addOutput(`Applicazione sconosciuta: ${app}`, 'error');
+            return true;
+        }
+
+        if (cmd === 'email' || cmd === 'mail') {
+            if (typeof DesktopManager !== 'undefined') {
+                DesktopManager.createWindow('emailClient', {
+                    title: 'Email Client',
+                    width: 900,
+                    height: 600
+                });
+                Terminal.addOutput('Email client aperto.', 'success');
+            }
+            return true;
+        }
+
+        if (cmd === 'progress') {
+            this.showProgress();
+            return true;
+        }
+
+        if (cmd === 'continue' || cmd === 'next') {
+            // Check se ha esplorato abbastanza
+            if (this.state.fileExploreCount < 2) {
+                Terminal.addOutput("ECHO: Prenditi il tuo tempo. Esplora un po' di più. Usa 'ls' e 'cat' per leggere i file.", 'echo dialogue');
+                Terminal.addOutput("Capire questo sistema è importante.", 'echo dialogue');
+                return true;
+            }
+
+            this.state.phase = 'complete';
+            await this.completeBlock();
+            return true;
+        }
+
         return false;
     },
 
-    showFinalProgress() {
-        Terminal.addOutput('');
-        Terminal.addOutput('=== PROGRESSI BLOCCO 1 - RIEPILOGO FINALE ===', 'success');
-        Terminal.addOutput('');
-
-        // Mostra tutti i puzzle
-        const puzzles = [
-            { id: 'firstDecryption', name: 'Decriptazione Protocollo Alpha' },
-            { id: 'passwordDiscovery', name: 'Password di Viktor' },
-            { id: 'echoCodeBreaker', name: 'Decodifica Messaggio ECHO' },
-            { id: 'protocolSequence', name: 'Sequenza Protocolli' }
-        ];
-
-        Terminal.addOutput('PUZZLE COMPLETATI:', 'system');
-        puzzles.forEach(p => {
-            const status = this.state.puzzlesSolved[p.id] ? '✓' : '✗';
-            const color = this.state.puzzlesSolved[p.id] ? 'success' : 'error';
-            Terminal.addOutput(`  ${status} ${p.name}`, color);
-        });
-
-        Terminal.addOutput('');
-
-        // Conta file letti
-        const filesRead = Object.values(this.state.requiredFilesRead).filter(v => v).length;
-        const totalFiles = Object.keys(this.state.requiredFilesRead).length;
-
-        Terminal.addOutput(`FILE OBBLIGATORI LETTI: ${filesRead}/${totalFiles}`, 'system');
-
-        Terminal.addOutput('');
-
-        const allPuzzlesSolved = Object.values(this.state.puzzlesSolved).every(solved => solved);
-
-        if (allPuzzlesSolved) {
-            Terminal.addOutput('[!] BLOCCO 1 COMPLETATO!', 'important');
-            Terminal.addOutput('[!] Usa "continue" per procedere al Blocco 2', 'warning');
-        } else {
-            Terminal.addOutput('[!] Devi completare tutti i puzzle prima di continuare.', 'error');
+    async handleComplete(cmd, args) {
+        if (cmd === 'continue' || cmd === 'next') {
+            // Vai al blocco 2
+            await GameEngine.endBlock(2);
+            return true;
         }
 
-        Terminal.addOutput('');
-
-        // Mostra statistiche
-        const playTime = StateManager.getPlayTime();
-        const trustLevel = StateManager.state.trustsEcho;
-
-        Terminal.addOutput(`Tempo di gioco: ${playTime} minuti`, 'system');
-        Terminal.addOutput(`Livello di fiducia in ECHO: ${trustLevel}%`, 'system');
-        Terminal.addOutput('');
+        // Altri comandi ancora disponibili
+        return this.handleExploration(cmd, args);
     },
 
     // Utility methods
