@@ -56,28 +56,24 @@ const MainMenu = {
         titleDiv.style.cssText = 'text-align: center; margin: 40px 0 20px 0;';
         titleDiv.innerHTML = `
 <pre class="title-logo" style="
-    color: #00ff41;
-    text-shadow:
-        0 0 10px #00ff41,
-        0 0 20px #00ff41,
-        0 0 30px #00ff41,
-        0 0 40px #00aa33;
-    font-size: 14px;
+    color: #00ff88;
+    text-shadow: 0 0 3px #00ff41;
+    font-size: 16px;
     line-height: 1.1;
-    letter-spacing: 2px;
-    animation: titlePulse 3s ease-in-out infinite, titleGlitch 8s infinite;
+    letter-spacing: 3px;
+    font-weight: bold;
 ">
 ▀█▀ █ █ █▀▀   ▀█▀ █▀▀ █▀▀█ █▀▄▀█ █ █▄ █ ▄▀▄ █
  █  █▀█ █▀▀    █  █▀▀ █▄▄▀ █ ▀ █ █ █ ▀█ █▀█ █
  ▀  ▀ ▀ ▀▀▀    ▀  ▀▀▀ ▀ ▀▀ ▀   ▀ ▀ ▀  ▀ ▀ ▀ ▀▀▀
 </pre>
 <div class="subtitle" style="
-    color: #888;
+    color: #00ff41;
     font-style: italic;
     margin-top: 15px;
-    font-size: 14px;
-    letter-spacing: 1px;
-    animation: subtitleFade 4s ease-in-out infinite;
+    font-size: 13px;
+    letter-spacing: 2px;
+    opacity: 0.8;
 ">Una Discesa Digitale nella Memoria</div>
 <div class="version" style="
     color: #00ff4144;
