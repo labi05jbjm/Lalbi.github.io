@@ -47,23 +47,17 @@ const DesktopManager = {
     },
 
     createDesktopContainer() {
-        let desktop = document.getElementById('desktop-container');
+        // Desktop container is now in HTML, no need to create it
+        const desktop = document.getElementById('desktop-container');
         if (!desktop) {
-            desktop = document.createElement('div');
-            desktop.id = 'desktop-container';
-            document.body.appendChild(desktop);
+            console.error('[DESKTOP] Desktop container not found in HTML!');
         }
     },
 
     registerApps() {
         // Register all available desktop apps
+        // NOTE: Terminal is NOT an app - it's a separate mode
         this.apps = {
-            terminal: {
-                name: 'Terminal',
-                icon: '⌨',
-                component: 'Terminal',
-                singleton: true
-            },
             fileExplorer: {
                 name: 'File Explorer',
                 icon: '📁',
@@ -289,14 +283,6 @@ const DesktopManager = {
         const contentEl = document.getElementById(`${windowId}-content`);
 
         switch (appId) {
-            case 'terminal':
-                // Terminal is already in the page, just move it
-                const terminalContainer = document.getElementById('terminal-container');
-                if (terminalContainer) {
-                    contentEl.appendChild(terminalContainer);
-                }
-                break;
-
             case 'fileExplorer':
                 if (typeof FileExplorer !== 'undefined') {
                     FileExplorer.mount(contentEl, options);
@@ -313,6 +299,10 @@ const DesktopManager = {
                 if (typeof NotesApp !== 'undefined') {
                     NotesApp.mount(contentEl, options);
                 }
+                break;
+
+            default:
+                console.error(`[DESKTOP] Unknown app: ${appId}`);
                 break;
         }
     },
@@ -431,6 +421,9 @@ const DesktopManager = {
                 if (typeof NotesApp !== 'undefined') {
                     NotesApp.unmount(windowId);
                 }
+                break;
+            default:
+                // No cleanup needed for unknown apps
                 break;
         }
     },
