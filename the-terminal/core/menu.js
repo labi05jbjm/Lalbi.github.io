@@ -261,6 +261,117 @@ const MainMenu = {
         Terminal.scrollToBottom();
     },
 
+    showPauseMenu() {
+        // Check if pause menu already exists
+        if (document.getElementById('pause-menu-overlay')) return;
+
+        // Create pause menu overlay
+        const pauseOverlay = document.createElement('div');
+        pauseOverlay.id = 'pause-menu-overlay';
+        pauseOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        `;
+
+        const pauseDialog = document.createElement('div');
+        pauseDialog.style.cssText = `
+            background: rgba(10, 14, 20, 0.98);
+            border: 3px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 30px var(--primary-color);
+            min-width: 400px;
+            text-align: center;
+        `;
+
+        const title = document.createElement('div');
+        title.style.cssText = `
+            color: var(--primary-color);
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px var(--primary-color);
+        `;
+        title.textContent = '⏸ PAUSA';
+
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.style.cssText = 'display: flex; flex-direction: column; gap: 15px;';
+
+        // Resume button
+        const btnResume = this.createMenuButton('RIPRENDI [ESC]', () => {
+            pauseOverlay.remove();
+        });
+        btnResume.style.width = '100%';
+
+        // Save button
+        const btnSave = this.createMenuButton('SALVA PARTITA', () => {
+            StateManager.save();
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: rgba(0, 255, 136, 0.9);
+                color: #000;
+                padding: 10px 20px;
+                border-radius: 5px;
+                font-size: 14px;
+                font-weight: bold;
+            `;
+            notification.textContent = '✓ Salvataggio completato';
+            pauseDialog.appendChild(notification);
+            setTimeout(() => notification.remove(), 2000);
+        });
+        btnSave.style.width = '100%';
+
+        // Options button
+        const btnOptions = this.createMenuButton('OPZIONI', () => {
+            pauseOverlay.remove();
+            this.showOptions();
+        });
+        btnOptions.style.width = '100%';
+
+        // Save and Exit button
+        const btnSaveExit = this.createMenuButton('SALVA ED ESCI', () => {
+            StateManager.save();
+            pauseOverlay.remove();
+            Terminal.clear();
+            this.show();
+        });
+        btnSaveExit.style.width = '100%';
+        btnSaveExit.style.background = 'rgba(255, 170, 0, 0.2)';
+        btnSaveExit.style.borderColor = '#ffaa00';
+        btnSaveExit.style.color = '#ffaa00';
+
+        buttonsContainer.appendChild(btnResume);
+        buttonsContainer.appendChild(btnSave);
+        buttonsContainer.appendChild(btnOptions);
+        buttonsContainer.appendChild(btnSaveExit);
+
+        pauseDialog.appendChild(title);
+        pauseDialog.appendChild(buttonsContainer);
+        pauseOverlay.appendChild(pauseDialog);
+        document.body.appendChild(pauseOverlay);
+
+        // ESC key to close
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                pauseOverlay.remove();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+    },
+
     showOptions() {
         // Create full-screen diegetic options overlay
         const optionsOverlay = document.createElement('div');
@@ -769,14 +880,22 @@ const MainMenu = {
                 // Confirm if slot is not empty
                 if (slot.exists) {
                     this.showOverwriteConfirmation(slotId, () => {
-                        newGameDiv.remove();
-                        StateManager.currentSlot = slotId;
-                        this.startNewGame();
+                        // After confirming overwrite, ask for new save name
+                        this.showSaveNameDialog(slotId, (saveName) => {
+                            newGameDiv.remove();
+                            StateManager.currentSlot = slotId;
+                            StateManager.state.saveName = saveName;
+                            this.startNewGame();
+                        });
                     });
                 } else {
-                    newGameDiv.remove();
-                    StateManager.currentSlot = slotId;
-                    this.startNewGame();
+                    // Empty slot - ask for save name first
+                    this.showSaveNameDialog(slotId, (saveName) => {
+                        newGameDiv.remove();
+                        StateManager.currentSlot = slotId;
+                        StateManager.state.saveName = saveName;
+                        this.startNewGame();
+                    });
                 }
             }, !slot.exists);
             slotsContainer.appendChild(slotDiv);
@@ -816,11 +935,12 @@ const MainMenu = {
             const hours = Math.floor(slot.timePlayedMinutes / 60);
             const minutes = slot.timePlayedMinutes % 60;
 
+            const saveName = slot.saveName ? `"${slot.saveName}"` : '';
             container.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div style="text-align: left;">
                         <div style="color: #00ff88; font-size: 16px; font-weight: bold; margin-bottom: 5px;">
-                            💾 SLOT ${slot.slotId}
+                            💾 SLOT ${slot.slotId}${saveName ? ' - ' + saveName : ''}
                         </div>
                         <div style="color: #00ff66; font-size: 13px; margin-bottom: 3px;">
                             Blocco ${slot.currentBlock}/8 · ${slot.progress}% completato
@@ -889,6 +1009,91 @@ const MainMenu = {
         return container;
     },
 
+    showSaveNameDialog(slotId, onConfirm) {
+        const dialogDiv = document.createElement('div');
+        dialogDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10, 14, 20, 0.95); border: 2px solid #00ff88; padding: 30px; border-radius: 8px; z-index: 10000; box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);';
+
+        const titleDiv = document.createElement('div');
+        titleDiv.style.cssText = 'color: #00ff88; font-size: 16px; margin-bottom: 20px; text-align: center;';
+        titleDiv.innerHTML = `
+            💾 NOMINA IL TUO SALVATAGGIO<br><br>
+            <span style="font-size: 13px; color: #888;">
+            Inserisci un nome per questo salvataggio (opzionale)<br>
+            Max 20 caratteri
+            </span>
+        `;
+        dialogDiv.appendChild(titleDiv);
+
+        // Input field
+        const inputDiv = document.createElement('div');
+        inputDiv.style.cssText = 'margin-bottom: 20px;';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.maxLength = 20;
+        input.placeholder = 'es. Prima Run, Finale Buono...';
+        input.style.cssText = `
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00ff88;
+            border-radius: 4px;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            text-align: center;
+            outline: none;
+        `;
+
+        // Character counter
+        const charCounter = document.createElement('div');
+        charCounter.style.cssText = 'color: #888; font-size: 11px; text-align: right; margin-top: 5px;';
+        charCounter.textContent = '0/20';
+
+        input.addEventListener('input', () => {
+            charCounter.textContent = `${input.value.length}/20`;
+        });
+
+        inputDiv.appendChild(input);
+        inputDiv.appendChild(charCounter);
+        dialogDiv.appendChild(inputDiv);
+
+        // Buttons
+        const btnContainer = document.createElement('div');
+        btnContainer.style.cssText = 'display: flex; justify-content: center; gap: 15px;';
+
+        const btnSkip = this.createMenuButton('SALTA', () => {
+            dialogDiv.remove();
+            onConfirm('');
+        });
+        btnSkip.style.minWidth = '120px';
+
+        const btnConfirm = this.createMenuButton('CONFERMA', () => {
+            const saveName = input.value.trim();
+            dialogDiv.remove();
+            onConfirm(saveName);
+        });
+        btnConfirm.style.minWidth = '120px';
+
+        btnContainer.appendChild(btnSkip);
+        btnContainer.appendChild(btnConfirm);
+        dialogDiv.appendChild(btnContainer);
+        document.body.appendChild(dialogDiv);
+
+        // Focus input and allow Enter key
+        input.focus();
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const saveName = input.value.trim();
+                dialogDiv.remove();
+                onConfirm(saveName);
+            } else if (e.key === 'Escape') {
+                dialogDiv.remove();
+                onConfirm('');
+            }
+        });
+    },
+
     showOverwriteConfirmation(slotId, onConfirm) {
         const output = document.getElementById('terminal-output');
 
@@ -936,12 +1141,12 @@ const MainMenu = {
         dialogDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10, 14, 20, 0.95); border: 2px solid #ff3366; padding: 30px; border-radius: 8px; z-index: 10000; box-shadow: 0 0 30px rgba(255, 51, 102, 0.5);';
 
         if (!slot || !slot.exists) {
-            // Empty slot - philosophical message
+            // Empty slot - simple confirmation
             dialogDiv.innerHTML = `
                 <div style="color: #00ff88; font-size: 16px; margin-bottom: 20px; text-align: center; line-height: 1.6;">
                     💭<br><br>
-                    <span style="font-size: 14px; color: #00ff66; font-style: italic;">
-                    Non puoi cancellare<br>ciò che non hai vissuto.
+                    <span style="font-size: 14px; color: #00ff66;">
+                    Lo slot ${slotId} è già vuoto.
                     </span>
                 </div>
             `;
@@ -949,7 +1154,7 @@ const MainMenu = {
             const btnContainer = document.createElement('div');
             btnContainer.style.cssText = 'display: flex; justify-content: center;';
 
-            const btnOk = this.createMenuButton('COMPRENDO', () => {
+            const btnOk = this.createMenuButton('OK', () => {
                 dialogDiv.remove();
             });
             btnOk.style.minWidth = '150px';
@@ -1043,12 +1248,8 @@ const MainMenu = {
             localStorage.setItem('gameLingua', newLanguage);
             this.saveOptions();
 
-            // Reload options menu
-            const optionsScreen = document.getElementById('options-screen');
-            if (optionsScreen) {
-                optionsScreen.remove();
-                this.showOptions();
-            }
+            // Reload the entire page to apply language changes
+            location.reload();
         });
         btnYes.style.minWidth = '120px';
 

@@ -38,6 +38,18 @@ const Terminal = {
             }
         });
 
+        // Global ESC key for pause menu (not in input only)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                // Don't open pause if we're in main menu
+                if (!MainMenu || !MainMenu.menuActive) {
+                    if (typeof MainMenu !== 'undefined' && MainMenu.showPauseMenu) {
+                        MainMenu.showPauseMenu();
+                    }
+                }
+            }
+        });
+
         // Mantieni focus sull'input
         document.addEventListener('click', () => {
             if (!this.isLocked) {

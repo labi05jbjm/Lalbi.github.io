@@ -8,6 +8,7 @@ const StateManager = {
     maxSlots: 5, // Maximum number of save slots
 
     state: {
+        saveName: '', // Custom name for this save
         currentBlock: 1,
         progress: 0,
         timePlayedMinutes: 0,
@@ -134,6 +135,7 @@ const StateManager = {
             metadata[slotId - 1] = {
                 slotId: slotId,
                 exists: true,
+                saveName: this.state.saveName || '',
                 saveTime: this.state.lastSaveTime,
                 currentBlock: this.state.currentBlock,
                 timePlayedMinutes: this.state.timePlayedMinutes,
@@ -169,6 +171,7 @@ const StateManager = {
                     slots.push({
                         slotId: i,
                         exists: true,
+                        saveName: state.saveName || '',
                         saveTime: state.lastSaveTime || Date.now(),
                         currentBlock: state.currentBlock || 1,
                         timePlayedMinutes: state.timePlayedMinutes || 0,
