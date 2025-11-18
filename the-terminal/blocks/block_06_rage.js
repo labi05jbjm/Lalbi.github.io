@@ -36,6 +36,7 @@ const Block06_Rage = {
 
         this.state.phase = 'wraith_intro';
         this.state.wraithMet = true;
+        StateManager.setFlag('metWraith', true); // Unlock WRAITH content
         StateManager.adjustSuspicion(50); // WRAITH maxes out suspicion
 
         Terminal.addOutput('\n> Scrivi "confront echo" per vedere WRAITH smascherare la verità', 'important');
@@ -96,6 +97,21 @@ const Block06_Rage = {
             return true;
         }
 
+        // Puzzle: deleted count
+        if (cmd === 'deleted_count' && args.length > 0) {
+            const answer = args.join(' ');
+            const puzzle = Puzzles.block06.deletedCount;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Incorrect. Check /system/wraith/deleted_voices.log for the total count.', 'error');
+                return true;
+            }
+        }
+
         return false;
     },
 
@@ -149,6 +165,21 @@ const Block06_Rage = {
                 Terminal.addOutput('The fragments are too focused on the system collapse.', 'warning');
             }
             return true;
+        }
+
+        // Puzzle: ECHO lie count
+        if (cmd === 'echo_lie_count' && args.length > 0) {
+            const answer = args.join(' ');
+            const puzzle = Puzzles.block06.echoLieCount;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Incorrect. Check /system/wraith/echo_lies.dat for the total lie count.', 'error');
+                return true;
+            }
         }
 
         return false;
@@ -220,6 +251,36 @@ const Block06_Rage = {
 
             Terminal.addOutput('The fragments are waiting for your decision.', 'warning');
             return true;
+        }
+
+        // Puzzle: collapse rate
+        if (cmd === 'collapse_rate' && args.length > 0) {
+            const answer = args.join(' ');
+            const puzzle = Puzzles.block06.collapseRate;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Incorrect. Check /system/wraith/system_collapse_analysis.txt for the projected rate.', 'error');
+                return true;
+            }
+        }
+
+        // Puzzle: rage vs justice
+        if (cmd === 'rage_justice' && args.length > 0) {
+            const answer = args.slice(0).join(' ');
+            const puzzle = Puzzles.block06.rageJustice;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Your answer is too brief. Reflect deeply (at least 20 characters).', 'error');
+                return true;
+            }
         }
 
         return false;

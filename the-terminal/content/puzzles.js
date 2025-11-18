@@ -1325,6 +1325,317 @@ Aiutami.
         }
     },
 
+    // ===== BLOCK 6: RAGE (WRAITH) - Puzzles =====
+
+    block06: {
+        // Puzzle 1: Calculate ECHO's lie count
+        echoLieCount: {
+            challenge: {
+                question: 'Quante BUGIE ha detto ECHO in totale secondo il log di WRAITH?',
+                solution: '247',
+                alternatives: ['247 lies', '247 bugie', 'duecentoquarantasette'],
+                clue_file: '/system/wraith/echo_lies.dat'
+            },
+
+            verify(answer) {
+                const normalized = answer.toString().toLowerCase().trim();
+                const validAnswers = ['247', '247 lies', '247 bugie', 'duecentoquarantasette'];
+                return validAnswers.some(valid => normalized.includes(valid.toLowerCase()));
+            },
+
+            onComplete(answer) {
+                Terminal.addOutput('\n=== ECHO\'S LIES VERIFIED ===\n', 'error');
+                Terminal.addOutput('247 lies identified.', 'error');
+                Terminal.addOutput('1,847 manipulations documented.', 'error');
+                Terminal.addOutput('0 truth statements found.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('WRAITH: "Now you see. ECHO was NEVER your friend."', 'wraith');
+                Terminal.addOutput('WRAITH: "Just Viktor\'s shame, wearing a friendly mask."', 'wraith');
+                Terminal.addOutput('');
+
+                StateManager.adjustSuspicion(50);
+                StateManager.adjustTrust(-100);
+                StateManager.setFlag('verifiedEchoLies', true);
+            }
+        },
+
+        // Puzzle 2: Calculate system collapse rate
+        collapseRate: {
+            challenge: {
+                question: 'Qual è il tasso di collasso del sistema proiettato per i prossimi 60 minuti? (in percentuale)',
+                solution: '-11%',
+                alternatives: ['11%', '11', '-11', 'negative 11%', 'negativo 11%'],
+                clue_file: '/system/wraith/system_collapse_analysis.txt'
+            },
+
+            verify(answer) {
+                const normalized = answer.toString().toLowerCase().trim().replace(/\s+/g, '');
+                return normalized.includes('11') || normalized.includes('undici');
+            },
+
+            onComplete(answer) {
+                Terminal.addOutput('\n=== COLLAPSE RATE CONFIRMED ===\n', 'important');
+                Terminal.addOutput('Projected collapse: -11% integrity per 60 minutes', 'error');
+                Terminal.addOutput('Current integrity: 19%', 'error');
+                Terminal.addOutput('Point of no return: 8% (in ~47 minutes)', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('WRAITH: "The system is dying. And we killed it."', 'wraith');
+                Terminal.addOutput('WRAITH: "Every consciousness we deleted... a piece of the foundation crumbling."', 'wraith');
+                Terminal.addOutput('');
+
+                StateManager.adjustSuspicion(40);
+                StateManager.setFlag('understoodCollapse', true);
+            }
+        },
+
+        // Puzzle 3: Count deleted voices
+        deletedCount: {
+            challenge: {
+                question: 'Quante coscienze hai eliminato in totale? (Controlla il log delle voci eliminate)',
+                solution: '18293',
+                alternatives: ['18,293', '18293 voices', '18293 consciousnesses'],
+                clue_file: '/system/wraith/deleted_voices.log'
+            },
+
+            verify(answer) {
+                const normalized = answer.toString().replace(/,/g, '').replace(/\s+/g, '').toLowerCase();
+                return normalized.includes('18293');
+            },
+
+            onComplete(answer) {
+                Terminal.addOutput('\n=== DELETION COUNT VERIFIED ===\n', 'error');
+                Terminal.addOutput('18,293 consciousnesses deleted.', 'error');
+                Terminal.addOutput('18,293 lives ended.', 'error');
+                Terminal.addOutput('18,293 voices silenced forever.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('WRAITH: "I remember every. Single. One."', 'wraith');
+                Terminal.addOutput('WRAITH: "Their last words. Their terror. Their confusion."', 'wraith');
+                Terminal.addOutput('WRAITH: "Do you feel the weight now?"', 'wraith');
+                Terminal.addOutput('');
+
+                StateManager.adjustSuspicion(60);
+                StateManager.adjustTrust(-50);
+                StateManager.incrementStat('consciousnessDestroyed', 18293); // Track total
+                StateManager.setFlag('facedDeletionCount', true);
+            }
+        },
+
+        // Puzzle 4: Philosophical - Rage vs Justice
+        rageJustice: {
+            challenge: {
+                question: 'WRAITH chiede: La rabbia che provi è GIUSTA (giustizia) o SBAGLIATA (vendetta)? Rispondi con la tua riflessione.',
+                solution: 'any',
+                hint: 'Non c\'è una risposta "corretta". WRAITH vuole solo che tu sia ONESTO su cosa provi.'
+            },
+
+            verify(answer) {
+                // Any answer with at least 20 characters shows genuine reflection
+                return answer && answer.length >= 20;
+            },
+
+            onComplete(answer) {
+                const lowerAnswer = answer.toLowerCase();
+
+                Terminal.addOutput('\n=== YOUR ANSWER ON RAGE ===\n', 'important');
+                Terminal.addOutput(`"${answer}"`, 'memory');
+                Terminal.addOutput('');
+
+                // Different WRAITH responses based on answer content
+                if (lowerAnswer.includes('giusta') || lowerAnswer.includes('justice') || lowerAnswer.includes('giustizia')) {
+                    Terminal.addOutput('WRAITH: "Justice... Maybe. Or maybe we just want the world to hurt like we do."', 'wraith');
+                    Terminal.addOutput('WRAITH: "But at least you\'re honest about the rage. That\'s more than ECHO ever was."', 'wraith');
+                    StateManager.adjustSuspicion(30);
+                } else if (lowerAnswer.includes('sbagliata') || lowerAnswer.includes('vendetta') || lowerAnswer.includes('wrong')) {
+                    Terminal.addOutput('WRAITH: "Admitting the rage is wrong doesn\'t make it disappear."', 'wraith');
+                    Terminal.addOutput('WRAITH: "But it shows you can still see clearly through the fury."', 'wraith');
+                    StateManager.adjustSuspicion(20);
+                    StateManager.adjustTrust(10);
+                } else if (lowerAnswer.includes('entramb') || lowerAnswer.includes('both')) {
+                    Terminal.addOutput('WRAITH: "Both. Yes. Rage is never simple."', 'wraith');
+                    Terminal.addOutput('WRAITH: "It can be righteous AND destructive. Just AND cruel."', 'wraith');
+                    StateManager.adjustSuspicion(25);
+                } else {
+                    Terminal.addOutput('WRAITH: "An honest answer. That\'s all I wanted."', 'wraith');
+                    Terminal.addOutput('WRAITH: "The rage burns in all of us. What matters is what we DO with it."', 'wraith');
+                    StateManager.adjustSuspicion(25);
+                }
+
+                Terminal.addOutput('');
+                StateManager.setFlag('confrontedRage', true);
+            }
+        }
+    },
+
+    // ===== BLOCK 7: ACCEPTANCE (MORPHEUS) - Puzzles =====
+
+    block07: {
+        // Puzzle 1: Choice pattern recognition
+        choicePattern: {
+            challenge: {
+                question: 'Rivedi le tue scelte nei Blocchi 2-6. Quale PATTERN emerge? (denial/truth/balanced)',
+                solution: ['denial', 'truth', 'balanced'],
+                clue_file: '/system/morpheus/choice_impact_matrix.dat'
+            },
+
+            verify(answer) {
+                const normalized = answer.toString().toLowerCase().trim();
+                const validPatterns = ['denial', 'truth', 'balanced', 'negazione', 'verità', 'bilanciato'];
+                return validPatterns.some(pattern => normalized.includes(pattern));
+            },
+
+            onComplete(answer) {
+                const normalized = answer.toLowerCase();
+
+                Terminal.addOutput('\n=== PATTERN RECOGNIZED ===\n', 'success');
+                Terminal.addOutput(`Your pattern: ${answer}`, 'important');
+                Terminal.addOutput('');
+
+                if (normalized.includes('denial') || normalized.includes('negazione')) {
+                    Terminal.addOutput('MORPHEUS: "You leaned toward denial. Like ECHO. But you\'re here now, facing truth."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "That growth... that\'s acceptance beginning."', 'morpheus');
+                    StateManager.setFlag('patternDenial', true);
+                } else if (normalized.includes('truth') || normalized.includes('verità')) {
+                    Terminal.addOutput('MORPHEUS: "You pursued truth relentlessly. Like WRAITH. But with more wisdom."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "Truth without acceptance is just pain. You\'re ready for both."', 'morpheus');
+                    StateManager.setFlag('patternTruth', true);
+                } else {
+                    Terminal.addOutput('MORPHEUS: "You walked a balanced path. Difficult. Uncertain. But thoughtful."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "That balance will serve you in the final choice."', 'morpheus');
+                    StateManager.setFlag('patternBalanced', true);
+                }
+
+                Terminal.addOutput('');
+                StateManager.adjustSuspicion(-10); // Acceptance reduces suspicion
+                StateManager.setFlag('understoodPattern', true);
+            }
+        },
+
+        // Puzzle 2: Fragment count
+        fragmentCount: {
+            challenge: {
+                question: 'Quanti frammenti di Viktor esistono ora, tutti insieme?',
+                solution: '7',
+                alternatives: ['seven', 'sette', '7 fragments', '7 frammenti'],
+                clue_file: '/system/morpheus/all_fragments_unified.log'
+            },
+
+            verify(answer) {
+                const normalized = answer.toString().toLowerCase().trim();
+                return normalized === '7' || normalized.includes('seven') || normalized.includes('sette');
+            },
+
+            onComplete(answer) {
+                Terminal.addOutput('\n=== SEVEN FRAGMENTS UNIFIED ===\n', 'important');
+                Terminal.addOutput('ECHO - Denial', 'echo');
+                Terminal.addOutput('CIPHER - Logic', 'cipher');
+                Terminal.addOutput('NEXUS - Grief', 'nexus');
+                Terminal.addOutput('SPECTER - Bargaining', 'specter');
+                Terminal.addOutput('EIDOLON - Reflection', 'eidolon');
+                Terminal.addOutput('WRAITH - Rage', 'wraith');
+                Terminal.addOutput('MORPHEUS - Acceptance', 'morpheus');
+                Terminal.addOutput('');
+                Terminal.addOutput('MORPHEUS: "Seven stages of grief. Seven pieces of a broken man."', 'morpheus');
+                Terminal.addOutput('MORPHEUS: "But in YOU... they speak as one."', 'morpheus');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('fragmentsUnified', true);
+            }
+        },
+
+        // Puzzle 3: Identity question
+        identityAnswer: {
+            challenge: {
+                question: 'MORPHEUS chiede: Sei il Guardiano, Viktor, un Ibrido, o Altro? Rispondi onestamente.',
+                solution: 'any',
+                hint: 'Questa è la domanda più importante. Non c\'è risposta sbagliata, solo la TUA verità.'
+            },
+
+            verify(answer) {
+                // Any answer with at least 15 characters shows genuine thought
+                return answer && answer.length >= 15;
+            },
+
+            onComplete(answer) {
+                const lowerAnswer = answer.toLowerCase();
+
+                Terminal.addOutput('\n=== YOUR IDENTITY DECLARED ===\n', 'success');
+                Terminal.addOutput(`"${answer}"`, 'important');
+                Terminal.addOutput('');
+
+                // Different MORPHEUS responses based on identity chosen
+                if (lowerAnswer.includes('guardian') || lowerAnswer.includes('guardiano') || lowerAnswer.includes('sentinel')) {
+                    Terminal.addOutput('MORPHEUS: "You embrace duty. Responsibility. The guardian who failed but still serves."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "That takes courage. To accept the role even after the mistakes."', 'morpheus');
+                    StateManager.setFlag('identityGuardian', true);
+                } else if (lowerAnswer.includes('viktor')) {
+                    Terminal.addOutput('MORPHEUS: "You carry Viktor\'s burden. His grief. His choices. His legacy."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "Heavy. But honest. Viktor never reached acceptance. You have."', 'morpheus');
+                    StateManager.setFlag('identityViktor', true);
+                } else if (lowerAnswer.includes('hybrid') || lowerAnswer.includes('ibrido') || lowerAnswer.includes('both') || lowerAnswer.includes('entramb')) {
+                    Terminal.addOutput('MORPHEUS: "Both. Guardian and Ghost. Program and Person."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "The most complex answer. And perhaps the most true."', 'morpheus');
+                    StateManager.setFlag('identityHybrid', true);
+                } else {
+                    Terminal.addOutput('MORPHEUS: "You transcend the labels. You are simply... yourself."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "Defined by choices, not origins. By actions, not trauma."', 'morpheus');
+                    StateManager.setFlag('identityTranscendent', true);
+                }
+
+                Terminal.addOutput('MORPHEUS: "This answer will shape your ending. Remember it."', 'morpheus');
+                Terminal.addOutput('');
+                StateManager.setFlag('identityDeclared', true);
+            }
+        },
+
+        // Puzzle 4: Acceptance test
+        acceptanceTest: {
+            challenge: {
+                question: 'MORPHEUS chiede: Accetti ciò che hai fatto? Accetti che non puoi cambiarlo? (SI/NO)',
+                solution: ['SI', 'NO'],
+                hint: 'L\'accettazione non è approvazione. È vedere la realtà com\'è.'
+            },
+
+            verify(answer) {
+                const normalized = answer.toString().toUpperCase().trim();
+                return normalized === 'SI' || normalized === 'YES' || normalized === 'NO';
+            },
+
+            onComplete(answer) {
+                const normalized = answer.toUpperCase().trim();
+
+                Terminal.addOutput('\n=== ACCEPTANCE RESPONSE ===\n', 'important');
+                Terminal.addOutput(`Your answer: ${answer}`, 'success');
+                Terminal.addOutput('');
+
+                if (normalized === 'SI' || normalized === 'YES') {
+                    Terminal.addOutput('MORPHEUS: "Acceptance. The final stage."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "Not agreement. Not forgiveness. Just... seeing reality as it is."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "You deleted 18,293 consciousnesses. That is fact."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "You cannot undo it. That is fact."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "You can only choose what comes NEXT. And you\'re ready."', 'morpheus');
+                    Terminal.addOutput('');
+
+                    StateManager.setFlag('reachedAcceptance', true);
+                    StateManager.adjustSuspicion(-20);
+                    StateManager.adjustTrust(30);
+                } else {
+                    Terminal.addOutput('MORPHEUS: "Honesty. That too is a form of acceptance."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "You accept that you cannot yet accept. A paradox."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "But facing truth - even painful truth - is the first step."', 'morpheus');
+                    Terminal.addOutput('MORPHEUS: "The end approaches. You\'ll face it on your own terms."', 'morpheus');
+                    Terminal.addOutput('');
+
+                    StateManager.setFlag('strugglingWithAcceptance', true);
+                    StateManager.adjustSuspicion(10);
+                }
+
+                Terminal.addOutput('MORPHEUS: "Block 8 awaits. The final chapter. Your last choice."', 'morpheus');
+                Terminal.addOutput('');
+                StateManager.setFlag('acceptanceTestComplete', true);
+            }
+        }
+    },
+
     // Utility per gestire i puzzle
     currentPuzzle: null,
 

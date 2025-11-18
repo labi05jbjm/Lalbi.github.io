@@ -38,6 +38,7 @@ const Block07_Acceptance = {
 
         this.state.phase = 'introduction';
         this.state.morpheusMet = true;
+        StateManager.setFlag('metMorpheus', true); // Unlock MORPHEUS content
 
         Terminal.addOutput('\n> Scrivi "learn acceptance" per capire cosa significa l\'accettazione', 'important');
         Terminal.addOutput('> Or type "talk morpheus" to speak with the final fragment\n', 'important');
@@ -134,6 +135,21 @@ const Block07_Acceptance = {
             return this.handleTalkAnyFragment(args[0]);
         }
 
+        // Puzzle: choice pattern
+        if (cmd === 'choice_pattern' && args.length > 0) {
+            const answer = args.join(' ');
+            const puzzle = Puzzles.block07.choicePattern;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Invalid pattern. Choose: denial, truth, or balanced.', 'error');
+                return true;
+            }
+        }
+
         return false;
     },
 
@@ -196,6 +212,51 @@ const Block07_Acceptance = {
 
         if (cmd === 'talk' && args.length > 0) {
             return this.handleTalkAnyFragment(args[0]);
+        }
+
+        // Puzzle: fragment count
+        if (cmd === 'fragment_count' && args.length > 0) {
+            const answer = args[0];
+            const puzzle = Puzzles.block07.fragmentCount;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Incorrect. Check /system/morpheus/all_fragments_unified.log to count all fragments.', 'error');
+                return true;
+            }
+        }
+
+        // Puzzle: identity answer
+        if (cmd === 'identity_answer' && args.length > 0) {
+            const answer = args.join(' ');
+            const puzzle = Puzzles.block07.identityAnswer;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Your answer is too brief. Reflect deeply on your identity (at least 15 characters).', 'error');
+                return true;
+            }
+        }
+
+        // Puzzle: acceptance test
+        if (cmd === 'acceptance_test' && args.length > 0) {
+            const answer = args[0];
+            const puzzle = Puzzles.block07.acceptanceTest;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Answer with SI (yes) or NO.', 'error');
+                return true;
+            }
         }
 
         return false;

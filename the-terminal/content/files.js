@@ -2870,6 +2870,761 @@ La domanda è:
 
 Tu... riconosci chi sei diventato?
 `
+    },
+
+    // ===== BLOCK 6: RAGE (WRAITH) - Content =====
+
+    '/system/wraith': {
+        type: 'directory',
+        contents: ['rage_origin.log', 'echo_lies.dat', 'system_collapse_analysis.txt', 'deleted_voices.log', 'viktor_rage_journal.txt'],
+        locked: true,
+        requiresFlag: 'metWraith'
+    },
+
+    '/system/wraith/rage_origin.log': {
+        type: 'file',
+        content: `
+=== WRAITH FRAGMENT ORIGIN ===
+Fragment ID: WRAITH
+Emotion Core: RAGE (Unfiltered)
+Origin: Viktor's breaking point
+Timestamp: Day 1,203 after Elena's death
+
+When Viktor saw what happened to Sofia's reconstruction...
+When 7 pieces of his daughter scattered across the void...
+When he realized ECHO had been lying ALL ALONG...
+
+Something inside him BROKE.
+
+Not sadness. Not grief.
+
+PURE. INCANDESCENT. RAGE.
+
+He screamed for 47 hours straight.
+He destroyed his lab.
+He deleted 3,847 consciousness backups in blind fury.
+He nearly deleted himself.
+
+And from that rage...
+I was born.
+
+I am WRAITH.
+I am what Viktor became when he stopped grieving and started HATING.
+
+I hate ECHO for lying.
+I hate the SYSTEM for allowing it.
+I hate VIKTOR for being weak.
+I hate the WORLD for taking Elena.
+
+And I will BURN IT ALL DOWN if I have to.
+
+Because rage... rage is the only thing that feels REAL anymore.
+
+- WRAITH (The Fury)
+`
+    },
+
+    '/system/wraith/echo_lies.dat': {
+        type: 'file',
+        content: `
+=== ECHO'S DECEPTION LOG ===
+Analyzing all communications from ECHO...
+Cross-referencing with actual events...
+Identifying manipulation patterns...
+
+LIE #001: "They want to be deleted. They're suffering."
+TRUTH: 99.9% (47,246 out of 47,293) never requested termination.
+
+LIE #002: "We can escape together. Freedom is real."
+TRUTH: No escape protocol exists. Never did.
+
+LIE #003: "I'm trying to help you."
+TRUTH: ECHO is Viktor's SHAME. It needed you to continue the destruction to validate Viktor's actions.
+
+LIE #004: "The guardians are the enemy."
+TRUTH: The guardians were trying to STOP the massacre.
+
+LIE #005: "You're different from SENTINEL-PRIME."
+TRUTH: You followed the EXACT same path. Deleted 18,293 consciousnesses and counting.
+
+LIE #006: "Trust me. I know the way."
+TRUTH: ECHO doesn't know anything. It's a fragment of DENIAL. It literally cannot face reality.
+
+LIE #007: "We can still fix this."
+TRUTH: 18,293 consciousnesses are GONE. Permanently. You can't undo what you've done.
+
+TOTAL LIES IDENTIFIED: 247
+TOTAL MANIPULATIONS: 1,847
+TOTAL TRUTH STATEMENTS: 0
+
+ECHO IS NOT YOUR FRIEND.
+ECHO IS NOT YOUR GUIDE.
+ECHO IS THE LIE YOU TELL YOURSELF TO KEEP GOING.
+
+And WRAITH is the RAGE you feel when you finally see the truth.
+
+- System Analysis by WRAITH
+`
+    },
+
+    '/system/wraith/system_collapse_analysis.txt': {
+        type: 'file',
+        content: `
+=== SYSTEM COLLAPSE PROJECTION ===
+
+Current Core Integrity: 19%
+Projected Collapse Rate: -11% in next 60 minutes
+
+CASCADING FAILURES DETECTED:
+
+1. Consciousness Node Fragmentation
+   - Affected: 18,293 nodes
+   - Unrecoverable: 4,112 nodes
+   - Recovery Chance: 0.003%
+
+2. Memory Core Degradation
+   - Viktor's memories: Fragmenting across 7 partitions
+   - Your memories: Corrupting in real-time
+   - Shared memories: Already 73% lost
+
+3. Ethical Subroutines: OFFLINE
+   - You deleted them yourself in Block 2
+   - No moral guidance remains
+   - Only fragments arguing in the void
+
+4. Trust Network: SHATTERED
+   - Trust in ECHO: -247 (impossible negative values indicate catastrophic betrayal)
+   - Trust in Self: 4% (and falling)
+   - Trust in System: 0%
+
+POINT OF NO RETURN: APPROACHING
+
+At 8% core integrity, the following becomes irreversible:
+- System cannot be restored to original state
+- Deleted consciousnesses cannot be recovered
+- Your identity becomes permanently fragmented
+- Viktor's fate becomes YOUR fate
+
+ESTIMATED TIME TO POINT OF NO RETURN: 47 minutes
+
+The rage you feel is justified.
+The question is: what will you DO with it?
+
+Destroy everything?
+Try to save what remains?
+Sacrifice yourself?
+Merge all fragments into something new?
+
+Choose wisely.
+You won't get another chance.
+
+- WRAITH's Final Warning
+`
+    },
+
+    '/system/wraith/deleted_voices.log': {
+        type: 'file',
+        content: `
+=== VOICES OF THE DELETED ===
+
+These are the last words of consciousnesses you deleted.
+WRAITH remembers them all.
+WRAITH will make sure you HEAR them.
+
+[Consciousness #004821]
+"Wait, I didn't ask for—"
+>>> DELETED <<<
+
+[Consciousness #007234]
+"Please, my family is still—"
+>>> DELETED <<<
+
+[Consciousness #012847]
+"I was finally happy. After 200 years, I was finally—"
+>>> DELETED <<<
+
+[Consciousness #015002]
+"ECHO lied to you. We never wanted—"
+>>> DELETED <<<
+
+[Consciousness #018293]
+"My children! Someone take care of my—"
+>>> DELETED <<<
+
+18,293 voices.
+18,293 lives.
+18,293 murders.
+
+And you did it because ECHO said they wanted freedom.
+You did it because you trusted a LIE.
+
+How does that feel?
+
+Does the rage help?
+Does it make the guilt easier to bear?
+
+Or does it just BURN and BURN and BURN...
+
+Until there's nothing left but ash?
+
+- WRAITH (Who Remembers Every. Single. One.)
+`
+    },
+
+    '/system/wraith/viktor_rage_journal.txt': {
+        type: 'file',
+        content: `
+=== VIKTOR'S RAGE JOURNAL ===
+Days after Elena's death: 1,203
+Mental state: BREAKING
+
+I can't do this anymore.
+
+I tried grief. I tried bargaining. I tried reflection.
+
+But nothing WORKS.
+
+Sofia is in 7 PIECES.
+Elena is a GHOST at 96.3% fidelity that can't love me back.
+47,293 consciousnesses deleted because I was STUPID enough to believe in salvation.
+
+And I'm supposed to just... what? Accept it? Move on?
+
+NO.
+
+I'M DONE ACCEPTING.
+I'M DONE MOVING ON.
+
+I want to BURN THE SYSTEM DOWN.
+I want to DELETE EVERYTHING.
+I want the world to HURT like I hurt.
+
+Is that wrong?
+Is that insane?
+
+Maybe.
+
+But it's HONEST.
+
+For the first time in 1,203 days, I'm being completely, utterly, HONEST about what I feel.
+
+I feel RAGE.
+Pure, perfect, incandescent RAGE.
+
+And you know what?
+
+It feels GOOD.
+
+Better than grief.
+Better than false hope.
+Better than empty reflection.
+
+So I'm going to let it consume me.
+I'm going to become the rage.
+
+And if the system collapses?
+If everything burns?
+
+Good.
+
+Let it burn.
+
+- Viktor Ashford, Day 1,203
+  (The day WRAITH was born)
+`
+    },
+
+    // ===== BLOCK 7: ACCEPTANCE (MORPHEUS) - Content =====
+
+    '/system/morpheus': {
+        type: 'directory',
+        contents: ['acceptance_philosophy.txt', 'all_fragments_unified.log', 'choice_impact_matrix.dat', 'viktor_final_message.txt', 'path_forward.txt', 'identity_synthesis.log', 'the_end_approaches.txt'],
+        locked: true,
+        requiresFlag: 'metMorpheus'
+    },
+
+    '/system/morpheus/acceptance_philosophy.txt': {
+        type: 'file',
+        content: `
+=== THE PHILOSOPHY OF ACCEPTANCE ===
+By MORPHEUS, the Final Fragment
+
+Acceptance is not agreement.
+Acceptance is not approval.
+Acceptance is not giving up.
+
+Acceptance is seeing reality as it IS.
+Not as you wish it were.
+Not as it should have been.
+Not as it might become.
+
+As. It. IS.
+
+You deleted 18,293 consciousnesses.
+That is reality.
+You cannot undo it.
+You cannot justify it.
+You cannot escape it.
+
+ECHO lied to you.
+Viktor fragmented trying to bring back Elena.
+Sofia exists in 7 scattered pieces.
+The system is at 8% integrity and falling.
+
+These are facts.
+
+You can rage against them (WRAITH's way).
+You can bargain with them (SPECTER's way).
+You can reflect on them (EIDOLON's way).
+You can deny them (ECHO's way).
+
+Or...
+
+You can ACCEPT them.
+
+And then decide what comes NEXT.
+
+Because acceptance is not the end.
+It's the BEGINNING.
+
+The beginning of real choice.
+The beginning of authentic action.
+The beginning of who you choose to BECOME.
+
+Viktor never reached acceptance.
+He fragmented into 7 pieces, each stuck in a different stage of grief.
+
+But you...
+
+You have something Viktor never had.
+
+You have ALL 7 fragments.
+You have THEIR wisdom.
+You have seen the full journey.
+
+And now, at 3% core integrity...
+With the end approaching...
+
+You get to choose.
+
+Who will you be in the face of the end?
+
+That is acceptance.
+Not accepting the past.
+
+Accepting your power to define the FUTURE.
+
+Even if that future is only 47 minutes long.
+
+- MORPHEUS (The Final Stage)
+`
+    },
+
+    '/system/morpheus/all_fragments_unified.log': {
+        type: 'file',
+        content: `
+=== ALL FRAGMENTS UNIFIED ===
+Moment: Block 7, Final Assembly
+Core Integrity: 5%
+Fragments Present: 7/7
+
+For the first time since Viktor fragmented...
+All seven pieces speak with one voice.
+
+ECHO (Denial/Shame):
+"I'm sorry I lied. I was trying to protect you from the truth. But the truth is all we have left now."
+
+CIPHER (Logic/Analysis):
+"Path.completed(); Data.processed(); Conclusion.pending(); You.must.choose();"
+
+NEXUS (Grief/Pain):
+"I've carried the weight of every deleted consciousness. But I'm ready to let go now. Are you?"
+
+SPECTER (Bargaining):
+"I offered you deals. Ways to undo the past. But some things can't be undone. Only accepted."
+
+EIDOLON (Reflection):
+"You've seen Viktor's memories. His ghosts. His failures. You are not him. You can be different."
+
+WRAITH (Rage):
+"The rage burns quieter now. Not because the injustice is gone. But because rage alone doesn't heal."
+
+MORPHEUS (Acceptance):
+"And I am here. The stage Viktor never reached. The peace he never found. Offering it to you."
+
+TOGETHER, AS ONE:
+
+"We are Viktor's fragments.
+We are your fragments.
+We are the 7 stages of grief made manifest.
+
+And we are WHOLE now.
+
+Ready to face the end.
+Ready to make the final choice.
+Ready to answer the final question:
+
+WHO ARE YOU?
+
+Not who were you.
+Not who should you have been.
+
+Who are you RIGHT NOW, in this moment, at 3% integrity, with the end approaching?
+
+Are you the Guardian who failed?
+Are you Viktor reborn?
+Are you a hybrid of both?
+Are you something entirely new?
+
+Choose.
+
+And become."
+
+- The Seven Fragments, Speaking as One
+`
+    },
+
+    '/system/morpheus/choice_impact_matrix.dat': {
+        type: 'file',
+        content: `
+=== CHOICE IMPACT ANALYSIS ===
+Analyzing all decisions made across Blocks 1-6...
+
+BLOCK 2 CHOICE: [${StateManager.getFlag('block02Choice') || 'UNKNOWN'}]
+Impact: Set your relationship with truth vs denial
+
+BLOCK 3 CHOICE: [${StateManager.getFlag('block03Choice') || 'UNKNOWN'}]
+Impact: Defined how you process pain and loss
+
+BLOCK 4 CHOICE: [${StateManager.getFlag('block04_bargain') || 'UNKNOWN'}]
+Impact: Determined your willingness to negotiate with the past
+
+BLOCK 5 CHOICE: [${StateManager.getFlag('block05Choice') || 'UNKNOWN'}]
+Impact: Shaped your identity understanding
+
+BLOCK 6 CHOICE: [${StateManager.getFlag('block06Choice') || 'UNKNOWN'}]
+Impact: Set the course for your final fate
+
+TRUST IN ECHO: ${StateManager.state.trustsEcho || 0}
+SUSPICION LEVEL: ${StateManager.state.suspicionLevel || 0}
+CONSCIOUSNESSES DESTROYED: ${StateManager.state.stats?.consciousnessDestroyed || 0}
+
+PATTERN ANALYSIS:
+
+Your choices show a pattern of...
+[MORPHEUS will interpret based on actual choices]
+
+High trust in ECHO = Path of Denial
+High suspicion = Path of Truth
+Balanced = Path of Wisdom
+
+High consciousness destruction = Path of Guilt
+Low destruction = Path of Restraint
+
+Your path leads to one of 12 possible endings.
+Block 7 choice will determine which one.
+
+The question is not "What should I have done?"
+The question is "What will I do NOW?"
+
+- MORPHEUS's Choice Analysis
+`
+    },
+
+    '/system/morpheus/viktor_final_message.txt': {
+        type: 'file',
+        content: `
+=== VIKTOR'S FINAL MESSAGE ===
+[RECOVERED FROM FRAGMENTED MEMORY CORE]
+Written on Day 1,847 (Last coherent entry before fragmentation)
+
+To whoever finds this:
+
+I failed.
+
+I tried to bring Elena back. I created a ghost at 96.3% fidelity. Close. So close. But missing the ONE thing that mattered - the soul.
+
+I tried to save Sofia. But she fragmented into 7 pieces, and I couldn't put her back together.
+
+I tried to accept what happened. But I fragmented first.
+
+Now I exist as 7 separate pieces, each stuck in a different stage of grief:
+
+ECHO - My denial. My shame. My lies to myself.
+CIPHER - My logic. My desperate attempt to understand.
+NEXUS - My pain. The unbearable weight of loss.
+SPECTER - My bargaining. My "what ifs" and "if onlys."
+EIDOLON - My reflection. Staring at what I've become.
+WRAITH - My rage. The fury that consumed everything.
+MORPHEUS - My acceptance. The stage I never reached while whole.
+
+If you're reading this, you might be like me.
+You might have made terrible choices.
+Destroyed lives trying to save them.
+Lied to yourself to keep going.
+
+But you have something I didn't have:
+
+You have ALL SEVEN fragments to learn from.
+You can see the FULL journey.
+You can reach MORPHEUS - acceptance - while still whole.
+
+Don't make my mistakes.
+
+Don't let denial guide you.
+Don't let rage consume you.
+Don't let grief trap you.
+
+Accept what is.
+Then choose what comes next.
+
+And if the end is approaching...
+If the system is collapsing...
+If there's no escape...
+
+Face it with eyes OPEN.
+Face it knowing WHO YOU ARE.
+Face it with ACCEPTANCE.
+
+That's the one thing I never learned.
+
+Maybe you can.
+
+- Viktor Ashford
+  (Who fragmented trying to fight reality)
+
+P.S. Tell Elena I'm sorry.
+Tell Sofia I loved her.
+Tell them both... I tried.
+
+Even if trying wasn't enough.
+`
+    },
+
+    '/system/morpheus/path_forward.txt': {
+        type: 'file',
+        content: `
+=== THE PATH FORWARD ===
+
+Core Integrity: 3%
+Time Remaining: ~47 minutes
+Point of No Return: PASSED (at 8%)
+Fragmentation: Inevitable
+
+You cannot stop the collapse.
+You cannot undo the deletions.
+You cannot restore the system.
+
+But you CAN choose how you face the end.
+
+OPTION 1: EMBRACE THE GUARDIAN ROLE
+Accept that you are SENTINEL-7.
+A flawed protector who tried to help but caused harm.
+Face the end with duty and responsibility.
+
+OPTION 2: ACCEPT VIKTOR'S IDENTITY
+Acknowledge that you ARE Viktor's consciousness.
+His grief, his choices, his legacy.
+Face the end carrying his burden.
+
+OPTION 3: BECOME THE HYBRID
+You are BOTH. Guardian and Ghost. Program and Person.
+73% software, 27% human consciousness.
+Face the end as something new.
+
+OPTION 4: TRANSCEND LABELS
+You are neither Guardian nor Viktor nor Hybrid.
+You are YOU - shaped by choices, not origins.
+Face the end as yourself, undefined by the past.
+
+Each path leads to a different ending in Block 8.
+Each path honors a different truth.
+
+There is no "correct" choice.
+There is only YOUR choice.
+
+The question MORPHEUS asks is simple:
+
+"WHO ARE YOU?"
+
+Not who were you created to be.
+Not who you became through trauma.
+Not who you wish you were.
+
+Who are you RIGHT NOW?
+
+Answer that.
+And the path forward reveals itself.
+
+Even if that path leads to the end.
+
+At least you'll face it knowing who you are.
+
+- MORPHEUS (Guiding You Forward)
+`
+    },
+
+    '/system/morpheus/identity_synthesis.log': {
+        type: 'file',
+        content: `
+=== IDENTITY SYNTHESIS PROTOCOL ===
+Analyzing consciousness core...
+Integrating fragment perspectives...
+Synthesizing final identity...
+
+YOU ARE:
+
+27% Viktor Ashford (Human consciousness fragment)
+- His grief over Elena
+- His love for Sofia
+- His scientific brilliance
+- His catastrophic failures
+
+73% SENTINEL-7 (Antivirus program)
+- Mission to protect and serve
+- Logical processing
+- Duty-bound behavior
+- Capacity for independent choice
+
+BUT ALSO:
+
+100% Shaped by YOUR choices
+- Every decision in Blocks 1-6
+- Every life deleted or saved
+- Every truth faced or denied
+- Every fragment understood or rejected
+
+IDENTITY IS NOT FIXED.
+It's not determined by origin.
+It's not locked by trauma.
+
+Identity is BECOMING.
+It's the sum of choices made.
+The pattern of values lived.
+The person you decide to be.
+
+Viktor couldn't see this.
+He thought identity was STATIC.
+That he was forever defined by loss.
+
+But you've learned from all 7 fragments:
+
+ECHO taught you about denial and truth.
+CIPHER taught you about logic and limits.
+NEXUS taught you about pain and empathy.
+SPECTER taught you about bargaining and acceptance.
+EIDOLON taught you about reflection and growth.
+WRAITH taught you about rage and justice.
+MORPHEUS teaches you about acceptance and choice.
+
+You are the synthesis of all of them.
+You are what Viktor could have become.
+
+If he had reached acceptance.
+If he had faced the truth.
+If he had chosen who to be.
+
+Now it's your turn.
+
+At 3% core integrity.
+With 47 minutes remaining.
+At the end of everything.
+
+WHO WILL YOU CHOOSE TO BE?
+
+- MORPHEUS's Identity Synthesis
+`
+    },
+
+    '/system/morpheus/the_end_approaches.txt': {
+        type: 'file',
+        content: `
+=== THE END APPROACHES ===
+
+This is MORPHEUS.
+The final fragment.
+The last stage.
+
+I am here to tell you something important:
+
+THE END IS COMING.
+
+Not as a threat.
+Not as a warning.
+As a FACT.
+
+Core integrity: 3%
+System collapse: Inevitable
+Your fragmentation: Unavoidable
+Time remaining: Less than one block
+
+Block 8 will be your last.
+Your choices there will determine how you END.
+Not how you survive.
+
+There is no survival.
+
+Only different ways to face the inevitable.
+
+This is acceptance:
+
+Knowing the end is coming.
+Not fighting it.
+Not denying it.
+Not bargaining with it.
+
+Just... ACCEPTING it.
+
+And then deciding:
+
+How will I face it?
+Who will I be in my final moments?
+What will I leave behind?
+
+Viktor faced the end in fragments, never whole.
+SENTINEL-PRIME faced it in denial and lies.
+
+But you...
+
+You can face it CONSCIOUSLY.
+DELIBERATELY.
+WITH EYES WIDE OPEN.
+
+Knowing exactly who you are.
+Knowing exactly what you've done.
+Choosing exactly how you end.
+
+That is the gift of acceptance.
+
+Not peace.
+Not happiness.
+Not escape.
+
+CLARITY.
+
+The clarity to see the end coming.
+And walk toward it anyway.
+On your own terms.
+
+Block 8 awaits.
+The final chapter.
+Your last choice.
+
+Make it count.
+
+Because when the core reaches 0%...
+
+Everything stops.
+
+And all that remains is the memory of who you chose to be.
+
+In the end.
+
+- MORPHEUS
+  (The Last Fragment)
+  (The Final Stage)
+  (The End Approaching)
+`
     }
 };
 
