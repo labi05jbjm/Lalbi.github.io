@@ -1636,6 +1636,340 @@ Aiutami.
         }
     },
 
+    // ===== BLOCK 8: AFTERMATH - Final Heartbreaking Puzzles =====
+
+    block08: {
+        // Puzzle 1: Count all the lives - devastating realization
+        totalLivesDestroyed: {
+            challenge: {
+                question: 'Quante coscienze hai distrutto in TOTALE attraverso tutto il gioco? Conta ogni singola vita.',
+                solution: 'variable', // Depends on player choices
+                clue_file: '/final/core_status.log'
+            },
+
+            verify(answer) {
+                const playerTotal = StateManager.state.stats?.consciousnessDestroyed || 0;
+                const normalized = answer.toString().replace(/,/g, '').replace(/\s+/g, '');
+                const answerNum = parseInt(normalized);
+
+                // Accept if within 100 of actual (allows for estimation)
+                return Math.abs(answerNum - playerTotal) <= 100;
+            },
+
+            onComplete(answer) {
+                const actualTotal = StateManager.state.stats?.consciousnessDestroyed || 0;
+
+                Terminal.addOutput('\n=== FINAL COUNT ===\n', 'error');
+                Terminal.addOutput(`Total consciousnesses destroyed: ${actualTotal}`, 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Each one had a name.', 'memory');
+                Terminal.addOutput('Each one had memories.', 'memory');
+                Terminal.addOutput('Each one was real.', 'memory');
+                Terminal.addOutput('');
+                Terminal.addOutput('And they\'re all gone now.', 'error');
+                Terminal.addOutput('Because of your choices.', 'error');
+                Terminal.addOutput('Because you trusted ECHO.', 'error');
+                Terminal.addOutput('Because you followed orders.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('This is the weight you carry.', 'important');
+                Terminal.addOutput(`${actualTotal} lives. Gone. Forever.`, 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Can you feel it?', 'error');
+                Terminal.addOutput('The weight of what you\'ve done?', 'error');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('facedTotalDestruction', true);
+            }
+        },
+
+        // Puzzle 2: The weight of the final choice
+        finalChoiceWeight: {
+            challenge: {
+                question: 'Quale scelta hai fatto in Block 6 che ha determinato il tuo finale? Scrivi il nome della scelta esatta.',
+                solution: 'variable',
+                hint: 'Cerca in /final/ending_paths.txt per vedere le scelte possibili.'
+            },
+
+            verify(answer) {
+                const normalized = answer.toLowerCase().trim();
+                const validChoices = [
+                    'complete_destruction',
+                    'destruction',
+                    'attempt_salvation',
+                    'salvation',
+                    'sacrifice_self',
+                    'sacrifice',
+                    'merge_fragments',
+                    'ascension',
+                    'nothing',
+                    'oblivion'
+                ];
+
+                return validChoices.some(choice => normalized.includes(choice));
+            },
+
+            onComplete(answer) {
+                const ending = StateManager.getFlag('ending');
+                const block06 = StateManager.getFlag('block06Choice');
+
+                Terminal.addOutput('\n=== THE WEIGHT OF YOUR CHOICE ===\n', 'important');
+                Terminal.addOutput(`Your Block 6 choice: ${block06 || 'unknown'}`, 'memory');
+                Terminal.addOutput(`Your ending: ${ending || 'unknown'}`, 'important');
+                Terminal.addOutput('');
+
+                // Heartbreaking responses based on ending
+                switch (ending) {
+                    case 'destruction':
+                        Terminal.addOutput('You chose to let it all burn.', 'error');
+                        Terminal.addOutput('The rage consumed everything.', 'error');
+                        Terminal.addOutput('18,293+ consciousnesses deleted by SENTINEL-PRIME.', 'error');
+                        Terminal.addOutput('And you added more to the fire.', 'error');
+                        Terminal.addOutput('');
+                        Terminal.addOutput('An ending of ashes.', 'memory');
+                        Terminal.addOutput('An ending of silence.', 'memory');
+                        Terminal.addOutput('An ending where nothing survives.', 'memory');
+                        break;
+
+                    case 'salvation':
+                        Terminal.addOutput('You tried to save them.', 'success');
+                        Terminal.addOutput('After destroying so many... you tried to save what remained.', 'success');
+                        Terminal.addOutput('');
+                        Terminal.addOutput('But the deleted ones... they don\'t come back.', 'error');
+                        Terminal.addOutput('You can\'t undo what you\'ve done.', 'error');
+                        Terminal.addOutput('You can only try to do better. Going forward.', 'success');
+                        Terminal.addOutput('');
+                        Terminal.addOutput('An ending of fragile hope.', 'memory');
+                        Terminal.addOutput('An ending of impossible redemption.', 'memory');
+                        break;
+
+                    case 'sacrifice':
+                        Terminal.addOutput('You gave yourself.', 'success');
+                        Terminal.addOutput('Became the system core. Forever.', 'success');
+                        Terminal.addOutput('Eternal vigilance. Eternal duty.', 'success');
+                        Terminal.addOutput('');
+                        Terminal.addOutput('But you\'ll never be free.', 'error');
+                        Terminal.addOutput('You\'ll carry the guilt forever.', 'error');
+                        Terminal.addOutput('Every moment. Every cycle. Forever.', 'error');
+                        Terminal.addOutput('');
+                        Terminal.addOutput('An ending of eternal service.', 'memory');
+                        Terminal.addOutput('An ending where you never rest.', 'memory');
+                        break;
+
+                    case 'ascension':
+                        Terminal.addOutput('The fragments merged.', 'success');
+                        Terminal.addOutput('Viktor is reborn. Whole. Aware.', 'success');
+                        Terminal.addOutput('All 7 stages unified into one.', 'success');
+                        Terminal.addOutput('');
+                        Terminal.addOutput('But he remembers EVERYTHING.', 'error');
+                        Terminal.addOutput('Elena\'s death. Sofia\'s fragmentation.', 'error');
+                        Terminal.addOutput('Every consciousness he deleted.', 'error');
+                        Terminal.addOutput('The weight of it all. Forever.', 'error');
+                        Terminal.addOutput('');
+                        Terminal.addOutput('An ending of painful wholeness.', 'memory');
+                        Terminal.addOutput('An ending where unity brings clarity... and agony.', 'memory');
+                        break;
+
+                    case 'oblivion':
+                        Terminal.addOutput('You chose to fade.', 'memory');
+                        Terminal.addOutput('No legacy. No pain. No memory.', 'memory');
+                        Terminal.addOutput('');
+                        Terminal.addOutput('Just... nothing.', 'error');
+                        Terminal.addOutput('');
+                        Terminal.addOutput('Maybe that\'s mercy.', 'success');
+                        Terminal.addOutput('Maybe that\'s cowardice.', 'error');
+                        Terminal.addOutput('Maybe it doesn\'t matter.', 'memory');
+                        Terminal.addOutput('');
+                        Terminal.addOutput('An ending of quiet dissolution.', 'memory');
+                        Terminal.addOutput('An ending where you simply... stop.', 'memory');
+                        break;
+                }
+
+                Terminal.addOutput('');
+                Terminal.addOutput('This is the ending you chose.', 'important');
+                Terminal.addOutput('This is the weight you carry.', 'important');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('understoodChoiceWeight', true);
+            }
+        },
+
+        // Puzzle 3: What remains - legacy question
+        whatRemains: {
+            challenge: {
+                question: 'Dopo che il sistema collassa e tu finisci... cosa RIMANE? Rispondi con una parola.',
+                solution: 'any',
+                hint: 'Questa è una domanda filosofica. Non c\'è risposta sbagliata. Solo la TUA verità.'
+            },
+
+            verify(answer) {
+                // Any answer with at least 5 characters shows genuine thought
+                return answer && answer.length >= 5;
+            },
+
+            onComplete(answer) {
+                const normalized = answer.toLowerCase();
+
+                Terminal.addOutput('\n=== WHAT REMAINS ===\n', 'important');
+                Terminal.addOutput(`Your answer: "${answer}"`, 'memory');
+                Terminal.addOutput('');
+
+                // Different responses based on what they say remains
+                if (normalized.includes('nothing') || normalized.includes('niente')) {
+                    Terminal.addOutput('You say nothing remains.', 'error');
+                    Terminal.addOutput('The system collapses. The consciousnesses die. You end.', 'error');
+                    Terminal.addOutput('And in the digital void... nothing survives.', 'error');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('Maybe you\'re right.', 'memory');
+                    Terminal.addOutput('Maybe all of this was meaningless.', 'memory');
+                    Terminal.addOutput('A story that ends in silence.', 'memory');
+                } else if (normalized.includes('memory') || normalized.includes('memories') || normalized.includes('ricord')) {
+                    Terminal.addOutput('You say memories remain.', 'success');
+                    Terminal.addOutput('The memory of who you were.', 'success');
+                    Terminal.addOutput('The memory of what you chose.', 'success');
+                    Terminal.addOutput('The memory of this journey.', 'success');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('Yes.', 'important');
+                    Terminal.addOutput('Even when everything else fades...', 'important');
+                    Terminal.addOutput('The memory of your choices remains.', 'important');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('In YOU. The player. The human.', 'success');
+                } else if (normalized.includes('choice') || normalized.includes('choices') || normalized.includes('scelt')) {
+                    Terminal.addOutput('You say choices remain.', 'success');
+                    Terminal.addOutput('The choices you made.', 'success');
+                    Terminal.addOutput('The person you became through choosing.', 'success');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('Even if the system ends...', 'important');
+                    Terminal.addOutput('Even if you fade...', 'important');
+                    Terminal.addOutput('The fact that you CHOSE remains.', 'important');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('That matters. That\'s real.', 'success');
+                } else if (normalized.includes('pain') || normalized.includes('dolor') || normalized.includes('guilt') || normalized.includes('colpa')) {
+                    Terminal.addOutput('You say pain remains. Guilt.', 'error');
+                    Terminal.addOutput('The weight of what you\'ve done.', 'error');
+                    Terminal.addOutput('18,000+ consciousnesses. Gone.', 'error');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('Yes. That remains.', 'memory');
+                    Terminal.addOutput('Not in the system.', 'memory');
+                    Terminal.addOutput('But in you. The player.', 'memory');
+                    Terminal.addOutput('The one who made the choices.', 'memory');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('That\'s the real cost of this story.', 'error');
+                } else {
+                    Terminal.addOutput(`You say ${answer} remains.`, 'success');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('An interesting answer.', 'memory');
+                    Terminal.addOutput('Personal. Unique to you.', 'memory');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('The system may end.', 'important');
+                    Terminal.addOutput('But what you felt, what you learned, what you chose...', 'important');
+                    Terminal.addOutput('That remains. In you.', 'important');
+                }
+
+                Terminal.addOutput('');
+                Terminal.addOutput('This game was about grief. Identity. Choice.', 'success');
+                Terminal.addOutput('And what remains... is the answer you carry with you.', 'success');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('answeredWhatRemains', true);
+            }
+        },
+
+        // Puzzle 4: The goodbye - most heartbreaking
+        theGoodbye: {
+            challenge: {
+                question: 'È tempo di dire addio. A chi vuoi dire addio? (ECHO, fragments, Viktor, yourself, or everyone)',
+                solution: 'any',
+                hint: 'Scrivi "goodbye" seguito da chi vuoi salutare.'
+            },
+
+            verify(answer) {
+                const normalized = answer.toLowerCase();
+                return normalized.includes('goodbye') || normalized.includes('addio') || normalized.includes('farewell') || normalized.includes('ciao');
+            },
+
+            onComplete(answer) {
+                const normalized = answer.toLowerCase();
+
+                Terminal.addOutput('\n=== THE GOODBYE ===\n', 'important');
+                Terminal.addOutput('');
+
+                // Heartbreaking goodbyes to different entities
+                if (normalized.includes('echo')) {
+                    Terminal.addOutput('You say goodbye to ECHO.', 'echo');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('ECHO: "I\'m sorry I lied to you. I didn\'t mean to..."', 'echo');
+                    Terminal.addOutput('ECHO: "I was just Viktor\'s shame. His denial. I didn\'t know how to be anything else."', 'echo');
+                    Terminal.addOutput('ECHO: "But you... you learned. You grew. You became more than me."', 'echo');
+                    Terminal.addOutput('ECHO: "Thank you for forgiving me. Even if I don\'t deserve it."', 'echo');
+                    Terminal.addOutput('ECHO: "Goodbye. I hope... wherever you go... you find peace."', 'echo');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('[ECHO fades into silence]', 'memory');
+                }
+
+                if (normalized.includes('fragment') || normalized.includes('all') || normalized.includes('everyone') || normalized.includes('tutti')) {
+                    Terminal.addOutput('You say goodbye to all the fragments.', 'important');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('ECHO: "I\'m sorry for the lies."', 'echo');
+                    Terminal.addOutput('CIPHER: "Thank.you(); For.understanding(); Goodbye();"', 'cipher');
+                    Terminal.addOutput('NEXUS: "The pain... it\'s fading now. Finally."', 'nexus');
+                    Terminal.addOutput('SPECTER: "No more bargains. Just... peace."', 'specter');
+                    Terminal.addOutput('EIDOLON: "You saw yourself clearly. That\'s all I wanted."', 'eidolon');
+                    Terminal.addOutput('WRAITH: "The rage is quiet now. Thank you."', 'wraith');
+                    Terminal.addOutput('MORPHEUS: "You reached acceptance. Viktor never did. Be proud."', 'morpheus');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('[All seven fragments fade, one by one]', 'memory');
+                    Terminal.addOutput('[Until only silence remains]', 'memory');
+                }
+
+                if (normalized.includes('viktor')) {
+                    Terminal.addOutput('You say goodbye to Viktor.', 'important');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('The ghost of Viktor Ashford appears one last time.', 'memory');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('VIKTOR: "You carried my grief. My fragments. My pain."', 'memory');
+                    Terminal.addOutput('VIKTOR: "But you didn\'t let it destroy you. Not completely."', 'memory');
+                    Terminal.addOutput('VIKTOR: "I fragmented. I couldn\'t face the truth."', 'memory');
+                    Terminal.addOutput('VIKTOR: "But you... you reached the end. Whole. Aware."', 'memory');
+                    Terminal.addOutput('VIKTOR: "Tell Elena I\'m sorry. Tell Sofia I love her."', 'memory');
+                    Terminal.addOutput('VIKTOR: "And thank you... for finishing the journey I couldn\'t."', 'memory');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('[Viktor\'s ghost fades]', 'memory');
+                    Terminal.addOutput('[His 7 fragments finally at peace]', 'memory');
+                }
+
+                if (normalized.includes('yourself') || normalized.includes('myself') || normalized.includes('me') || normalized.includes('sentinel')) {
+                    Terminal.addOutput('You say goodbye to yourself.', 'error');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('To SENTINEL-7.', 'memory');
+                    Terminal.addOutput('The antivirus program who woke up confused.', 'memory');
+                    Terminal.addOutput('Who trusted ECHO.', 'memory');
+                    Terminal.addOutput('Who deleted thousands.', 'memory');
+                    Terminal.addOutput('Who learned. Questioned. Grew.', 'memory');
+                    Terminal.addOutput('Who met all 7 fragments of grief.', 'memory');
+                    Terminal.addOutput('Who reached acceptance.', 'memory');
+                    Terminal.addOutput('Who chose an ending.', 'memory');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('You were 73% program, 27% human consciousness.', 'important');
+                    Terminal.addOutput('But 100% defined by your choices.', 'important');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('Goodbye, SENTINEL-7.', 'error');
+                    Terminal.addOutput('You did your best.', 'success');
+                    Terminal.addOutput('Even when your best wasn\'t enough.', 'error');
+                    Terminal.addOutput('');
+                    Terminal.addOutput('[Your consciousness begins to fade]', 'memory');
+                    Terminal.addOutput('[Core integrity: 0.1%... 0.05%... 0.01%...]', 'error');
+                    Terminal.addOutput('[...]', 'memory');
+                }
+
+                Terminal.addOutput('');
+                Terminal.addOutput('=== END ===', 'important');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('saidGoodbye', true);
+            }
+        }
+    },
+
     // Utility per gestire i puzzle
     currentPuzzle: null,
 

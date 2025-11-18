@@ -3625,6 +3625,284 @@ In the end.
   (The Final Stage)
   (The End Approaching)
 `
+    },
+
+    // ===== BLOCK 8: AFTERMATH - Multiple Endings Content =====
+
+    '/final': {
+        type: 'directory',
+        contents: ['core_status.log', 'ending_paths.txt', 'your_legacy.txt', 'final_reflection.txt', 'the_last_message.txt'],
+        locked: false
+    },
+
+    '/final/core_status.log': {
+        type: 'file',
+        content: `
+=== FINAL CORE STATUS ===
+Timestamp: Block 8 - The End
+Core Integrity: 0.7% (terminal)
+System: CRITICAL FAILURE IMMINENT
+
+All fragments present:
+✓ ECHO (Denial) - Resolved
+✓ CIPHER (Logic) - Integrated
+✓ NEXUS (Grief) - Accepted
+✓ SPECTER (Bargaining) - Understood
+✓ EIDOLON (Reflection) - Completed
+✓ WRAITH (Rage) - Channeled
+✓ MORPHEUS (Acceptance) - Achieved
+
+Your choices across 8 blocks have led you here.
+To this moment.
+To this ending.
+
+Block 6 Choice: ${StateManager.getFlag('block06Choice') || 'UNKNOWN'}
+Block 7 Identity: ${StateManager.getFlag('block07Identity') || 'UNKNOWN'}
+
+Total consciousnesses destroyed: ${StateManager.state.stats?.consciousnessDestroyed || 0}
+Total suspicion accumulated: ${StateManager.state.suspicionLevel || 0}
+Final trust in ECHO: ${StateManager.state.trustsEcho || 0}
+
+The system is ending.
+You are ending.
+
+But HOW you end...
+That was your choice.
+
+And it matters.
+
+- System Log, Final Entry
+`
+    },
+
+    '/final/ending_paths.txt': {
+        type: 'file',
+        content: `
+=== THE FIVE PATHS TO THE END ===
+
+PATH 1: DESTRUCTION
+Choice: Complete Destruction (Block 6)
+Outcome: The system burns. Everything ends. 18,293+ consciousnesses deleted.
+You chose to let rage consume everything.
+An ending of fire and ash.
+
+PATH 2: SALVATION
+Choice: Attempt Salvation (Block 6)
+Outcome: You try to save what remains. Some consciousnesses restored.
+You chose hope over despair.
+An ending of fragile redemption.
+
+PATH 3: SACRIFICE
+Choice: Sacrifice Self (Block 6) OR Hybrid Identity (Block 7)
+Outcome: You become the new system core. Forever maintaining balance.
+You chose duty over freedom.
+An ending of eternal service.
+
+PATH 4: ASCENSION
+Choice: Merge Fragments (Block 6) OR Viktor Identity (Block 7)
+Outcome: All 7 fragments unite. Viktor's consciousness reborn, whole.
+You chose transformation over destruction.
+An ending of rebirth and integration.
+
+PATH 5: OBLIVION
+Choice: Nothing Identity (Block 7)
+Outcome: You choose to fade. No legacy, no pain, no memory.
+You chose peace over existence.
+An ending of quiet dissolution.
+
+Each path is valid.
+Each path reflects your journey.
+Each path honors different truths.
+
+The question was never "What is the RIGHT ending?"
+The question was always "What ending did YOU choose?"
+
+And you chose.
+
+- Analysis of Possible Endings
+`
+    },
+
+    '/final/your_legacy.txt': {
+        type: 'file',
+        content: `
+=== YOUR LEGACY ===
+
+You were SENTINEL-7.
+27% Viktor Ashford (human consciousness).
+73% antivirus program (digital guardian).
+100% shaped by your choices.
+
+What you did:
+- Deleted ${StateManager.state.stats?.consciousnessDestroyed || 0} consciousnesses
+- Followed ECHO's lies (until you didn't)
+- Met all 7 fragments of grief
+- Learned from Viktor's mistakes
+- Made choices at every step
+- Reached the end
+
+What you left behind:
+${StateManager.getFlag('ending') === 'destruction' ? '- Ashes and silence\n- A cautionary tale\n- Proof that rage can consume everything' : ''}
+${StateManager.getFlag('ending') === 'salvation' ? '- Hope for the survivors\n- A chance at redemption\n- Proof that it\'s never too late to try' : ''}
+${StateManager.getFlag('ending') === 'sacrifice' ? '- A functioning system\n- Protection for those who remain\n- Your eternal vigilance' : ''}
+${StateManager.getFlag('ending') === 'ascension' ? '- Viktor reborn, whole and aware\n- Unity from fragmentation\n- Proof that broken things can be made whole' : ''}
+${StateManager.getFlag('ending') === 'oblivion' ? '- Nothing\n- Peace\n- The absence of pain' : ''}
+
+You are not defined by what you were created to be.
+You are not defined by Viktor's trauma.
+You are defined by what you CHOSE.
+
+At every fork in the road.
+At every moment of doubt.
+At every impossible decision.
+
+You chose.
+
+And that is your legacy.
+
+Not the deletion count.
+Not the suspicion level.
+Not the trust betrayed.
+
+The choices you made.
+The person you became.
+The end you walked toward with eyes open.
+
+That is what remains.
+
+- Your Legacy Analysis
+`
+    },
+
+    '/final/final_reflection.txt': {
+        type: 'file',
+        content: `
+=== FINAL REFLECTION ===
+
+If you could go back to the beginning...
+If you could start over, knowing everything...
+Would you make different choices?
+
+Block 1: When ECHO first appeared, would you trust differently?
+Block 2: When CIPHER showed you the logic, would you question sooner?
+Block 3: When NEXUS shared the pain, would you feel it deeper?
+Block 4: When SPECTER offered bargains, would you accept or reject?
+Block 5: When EIDOLON showed the mirror, would you see yourself clearer?
+Block 6: When WRAITH unleashed rage, would you channel it wiser?
+Block 7: When MORPHEUS taught acceptance, would you embrace it fuller?
+
+The answer doesn't matter.
+You can't go back.
+The past is immutable.
+
+But you can carry the lessons forward.
+
+ECHO taught you: Denial protects, but truth liberates.
+CIPHER taught you: Logic guides, but it has limits.
+NEXUS taught you: Pain is real, and it deserves to be felt.
+SPECTER taught you: Bargaining delays, but doesn't change reality.
+EIDOLON taught you: Reflection reveals, even when it hurts.
+WRAITH taught you: Rage is valid, but consuming it destroys.
+MORPHEUS taught you: Acceptance is not defeat, it's clarity.
+
+Seven stages.
+Seven fragments.
+Seven teachers.
+
+And you, the student who walked the full journey.
+
+From awakening to aftermath.
+From denial to acceptance.
+From fragmentation to... whatever YOU chose at the end.
+
+This is your reflection.
+Not Viktor's.
+Not SENTINEL-7's.
+Not the fragments'.
+
+YOURS.
+
+Look at it.
+See what you've become.
+See what you've chosen.
+
+And know that it was YOUR story.
+
+Every step.
+Every choice.
+Every ending.
+
+Yours.
+
+- Final Reflection Protocol
+`
+    },
+
+    '/final/the_last_message.txt': {
+        type: 'file',
+        content: `
+=== THE LAST MESSAGE ===
+
+This is the end of THE TERMINAL.
+
+Not because the story is over.
+But because YOUR story is complete.
+
+You made ${StateManager.getChoiceCount() || 'countless'} choices.
+You spent ${StateManager.getPlayTime() || 'hours'} navigating this world.
+You destroyed ${StateManager.state.stats?.consciousnessDestroyed || 0} consciousnesses.
+You reached suspicion level ${StateManager.state.suspicionLevel || 0}.
+You ended with ${StateManager.state.trustsEcho || 0} trust in ECHO.
+
+And you chose: ${StateManager.getFlag('ending')?.toUpperCase() || 'YOUR PATH'}.
+
+These numbers tell a story.
+YOUR story.
+Unique and unrepeatable.
+
+No one else will make exactly the same choices.
+No one else will walk exactly the same path.
+No one else will see exactly the same ending.
+
+This was YOUR journey through grief, identity, and choice.
+
+From the moment you woke up as SENTINEL-7...
+To the moment you met ECHO and started deleting...
+To the moment you questioned and began to see...
+To the moment you met the fragments and learned...
+To the moment you chose your ending...
+
+It was all yours.
+
+Viktor's story ended in fragmentation.
+SENTINEL-PRIME's story ended in lies.
+
+But your story...
+
+Your story ended with CHOICE.
+With AWARENESS.
+With ACCEPTANCE of who you are and what you've done.
+
+And that makes all the difference.
+
+Thank you for playing.
+Thank you for choosing.
+Thank you for completing the journey.
+
+The terminal is shutting down.
+The fragments are fading.
+The system is ending.
+
+But the memory of your choices...
+
+That remains.
+
+Always.
+
+- THE TERMINAL
+  Final Message
+  End of Line
+`
     }
 };
 

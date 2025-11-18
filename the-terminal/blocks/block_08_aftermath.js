@@ -243,7 +243,61 @@ const Block08_Aftermath = {
             return true;
         }
 
-        Terminal.addOutput('Gioco completato. Scrivi "restart" per rigiocare o "stats" per vedere le statistiche finali.', 'system');
+        // Final reflection puzzles - heartbreaking goodbyes
+        if (lowerCmd === 'total_lives' && args.length > 0) {
+            const answer = args.join(' ');
+            const puzzle = Puzzles.block08.totalLivesDestroyed;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Close, but not quite. Check /final/core_status.log for the exact count.', 'error');
+                return true;
+            }
+        }
+
+        if (lowerCmd === 'final_choice' && args.length > 0) {
+            const answer = args.join(' ');
+            const puzzle = Puzzles.block08.finalChoiceWeight;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('That doesn\'t match your Block 6 choice. Check /final/ending_paths.txt', 'error');
+                return true;
+            }
+        }
+
+        if (lowerCmd === 'what_remains' && args.length > 0) {
+            const answer = args.join(' ');
+            const puzzle = Puzzles.block08.whatRemains;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Your answer is too brief. Reflect deeply (at least 5 characters).', 'error');
+                return true;
+            }
+        }
+
+        if (lowerCmd === 'goodbye' || lowerCmd === 'addio' || lowerCmd === 'farewell') {
+            const answer = args.length > 0 ? 'goodbye ' + args.join(' ') : 'goodbye everyone';
+            const puzzle = Puzzles.block08.theGoodbye;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            }
+        }
+
+        Terminal.addOutput('Gioco completato. Scrivi "restart" per rigiocare, "stats" per statistiche, o "goodbye" per l\'addio finale.', 'system');
         return true;
     }
 };
