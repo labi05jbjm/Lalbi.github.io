@@ -3,6 +3,30 @@
  * Main game menu
  */
 
+// Credits translations
+const CREDITS_TRANSLATIONS = {
+    it: {
+        author_label: "Autore",
+        inspiration: "Le ispirazioni per il mio gioco sono state Pony Island, The Stanley Parable e NaissancE",
+        message1: "Ringrazio te Fogliolina mia, per aver strappato parti di me che non riavrò mai più",
+        message2: "Non mi hai mai ringraziato per esserti cibata del mio nettare, per poi abbandonarlo e tramutarlo in veleno",
+        message3: "Io sono morto quel giorno",
+        message4: "Ora mi rivolgo a te, utente coraggioso che hai scelto di avventurarti in questo breve viaggio. Se hai comprato il gioco ti sono grato per la fiducia. Se lo hai piratato non posso biasimarti. In entrambe le circostanze, spero di non averti fatto perdere del tempo",
+        goodbye: "Alla prossima",
+        skip: "Salta [ESC]"
+    },
+    en: {
+        author_label: "Author",
+        inspiration: "The inspirations for my game were Pony Island, The Stanley Parable and NaissancE",
+        message1: "Thank you my Little Leaf, for tearing away parts of me that I will never get back",
+        message2: "You never thanked me for feeding on my nectar, only to abandon it and turn it into poison",
+        message3: "I died that day",
+        message4: "Now I turn to you, brave user who chose to venture into this short journey. If you bought the game I am grateful for your trust. If you pirated it I cannot blame you. In both circumstances, I hope I didn't waste your time",
+        goodbye: "Until next time",
+        skip: "Skip [ESC]"
+    }
+};
+
 const MainMenu = {
     menuActive: false,
 
@@ -415,54 +439,181 @@ const MainMenu = {
     },
 
     showCredits() {
-        const output = document.getElementById('terminal-output');
+        console.log('[MENU] Showing cinematic credits');
+        this.menuActive = false;
 
-        // Remove menu
-        const menu = document.getElementById('main-menu-container');
-        if (menu) menu.remove();
+        // Get current language
+        const currentLang = localStorage.getItem('gameLingua') || 'it';
+        const translations = CREDITS_TRANSLATIONS[currentLang];
 
-        // Credits screen
-        const creditsDiv = document.createElement('div');
-        creditsDiv.id = 'credits-screen';
-        creditsDiv.style.cssText = 'text-align: center; margin-top: 40px;';
-        creditsDiv.innerHTML = `
-            <div style="font-size: 22px; margin-bottom: 25px; color: #00ff41;">
-                CREDITI
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'cinematic-credits-overlay';
+        overlay.classList.add('hidden');
+
+        // Create scrolling credits section
+        const scrollContainer = document.createElement('div');
+        scrollContainer.className = 'credits-scroll-container';
+        scrollContainer.innerHTML = `
+            <div class="credits-scroll-item">
+                <div class="credits-role-label">${translations.author_label}</div>
+                <div class="credits-author-name">Alberto Romeo</div>
             </div>
-            <div style="font-size: 18px; margin-bottom: 35px; color: #fff;">
-                THE TERMINAL
-            </div>
-            <div style="font-size: 13px; color: #888; line-height: 2;">
-                <div style="margin-bottom: 18px;">
-                    <div style="color: #00ff41; font-size: 14px;">Design & Narrativa</div>
-                    <div>Claude & User</div>
-                </div>
-                <div style="margin-bottom: 18px;">
-                    <div style="color: #00ff41; font-size: 14px;">Sviluppo</div>
-                    <div>Puro HTML5/CSS3/JavaScript</div>
-                    <div style="font-size: 11px; margin-top: 5px;">Nessuna dipendenza esterna</div>
-                </div>
-                <div style="margin-bottom: 25px;">
-                    <div style="color: #00ff41; font-size: 14px;">Ispirato da</div>
-                    <div>Pony Island</div>
-                    <div>The Stanley Parable</div>
-                    <div>Classico Cyberpunk Noir</div>
-                </div>
-                <div style="font-size: 15px; color: #00ff41; margin-top: 35px;">
-                    ❖ Grazie per aver giocato ❖
-                </div>
+            <div class="credits-scroll-item">
+                <div class="credits-inspiration-text">${translations.inspiration}</div>
             </div>
         `;
 
-        const btnBack = this.createMenuButton('TORNA AL MENU', () => {
-            creditsDiv.remove();
-            this.show();
-        });
-        btnBack.style.marginTop = '35px';
-        creditsDiv.appendChild(btnBack);
+        // Create messages container
+        const messagesContainer = document.createElement('div');
+        messagesContainer.className = 'credits-messages-container hidden';
 
-        output.appendChild(creditsDiv);
-        Terminal.scrollToBottom();
+        // Create message screens
+        const messageTexts = [
+            translations.message1,
+            translations.message2,
+            translations.message3,
+            translations.message4
+        ];
+
+        messageTexts.forEach((text, index) => {
+            const screen = document.createElement('div');
+            screen.className = 'credits-message-screen';
+            screen.innerHTML = `<p class="credits-typewriter-text">${text}</p>`;
+            messagesContainer.appendChild(screen);
+        });
+
+        // Create final message with brush effect
+        const finalScreen = document.createElement('div');
+        finalScreen.className = 'credits-message-screen credits-final-screen';
+        finalScreen.innerHTML = `<div class="credits-brush-text">${translations.goodbye}</div>`;
+        messagesContainer.appendChild(finalScreen);
+
+        // Create skip button
+        const skipButton = document.createElement('button');
+        skipButton.className = 'credits-skip-button';
+        skipButton.textContent = translations.skip;
+        skipButton.onclick = () => this.skipCredits(overlay);
+
+        // Assemble overlay
+        overlay.appendChild(scrollContainer);
+        overlay.appendChild(messagesContainer);
+        overlay.appendChild(skipButton);
+        document.body.appendChild(overlay);
+
+        // Start credits sequence
+        setTimeout(() => {
+            overlay.classList.remove('hidden');
+            overlay.classList.add('active');
+
+            // Start messages after scroll completes
+            setTimeout(() => {
+                this.startCreditsMessages(messagesContainer);
+            }, 12000); // 12 seconds for scrolling credits
+        }, 100);
+
+        // Handle ESC key
+        this.creditsEscapeHandler = (e) => {
+            if (e.key === 'Escape') {
+                this.skipCredits(overlay);
+            }
+        };
+        document.addEventListener('keydown', this.creditsEscapeHandler);
+    },
+
+    startCreditsMessages(container) {
+        const screens = container.querySelectorAll('.credits-message-screen');
+        container.classList.remove('hidden');
+        container.classList.add('active');
+
+        let currentIndex = 0;
+
+        const showNextMessage = () => {
+            // Hide previous message
+            if (currentIndex > 0) {
+                const prevScreen = screens[currentIndex - 1];
+                prevScreen.classList.remove('active', 'fade-in', 'white-bg');
+                prevScreen.classList.add('fade-out');
+            }
+
+            if (currentIndex < screens.length) {
+                const currentScreen = screens[currentIndex];
+
+                // Fade to white background on first message
+                if (currentIndex === 0) {
+                    setTimeout(() => {
+                        container.style.background = '#fff';
+                    }, 100);
+                }
+
+                setTimeout(() => {
+                    currentScreen.classList.add('white-bg', 'fade-in', 'active');
+
+                    // Typewriter effect for text messages
+                    const textElement = currentScreen.querySelector('.credits-typewriter-text');
+                    const brushElement = currentScreen.querySelector('.credits-brush-text');
+
+                    if (textElement) {
+                        this.typewriterEffect(textElement, textElement.textContent);
+                    } else if (brushElement) {
+                        // Brush stroke effect for final message
+                        setTimeout(() => {
+                            brushElement.classList.add('active');
+                        }, 500);
+                    }
+
+                    // Duration for each message
+                    const duration = currentIndex === screens.length - 1 ? 5000 : 6500;
+                    setTimeout(() => {
+                        currentIndex++;
+                        showNextMessage();
+                    }, duration);
+                }, currentIndex === 0 ? 2000 : 500);
+            } else {
+                // End of credits, return to menu
+                setTimeout(() => {
+                    const overlay = document.getElementById('cinematic-credits-overlay');
+                    this.skipCredits(overlay);
+                }, 2000);
+            }
+        };
+
+        showNextMessage();
+    },
+
+    typewriterEffect(element, text) {
+        element.textContent = '';
+        let charIndex = 0;
+
+        const typeChar = () => {
+            if (charIndex < text.length) {
+                element.textContent += text.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeChar, 25); // 25ms per character
+            }
+        };
+
+        typeChar();
+    },
+
+    skipCredits(overlay) {
+        console.log('[MENU] Skipping credits');
+
+        // Remove escape handler
+        if (this.creditsEscapeHandler) {
+            document.removeEventListener('keydown', this.creditsEscapeHandler);
+            this.creditsEscapeHandler = null;
+        }
+
+        // Fade out and remove overlay
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            if (overlay && overlay.parentNode) {
+                overlay.remove();
+            }
+            // Return to main menu
+            this.show();
+        }, 500);
     },
 
     hide() {
