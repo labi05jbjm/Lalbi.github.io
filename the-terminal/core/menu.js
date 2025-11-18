@@ -108,7 +108,7 @@ const MainMenu = {
 
         // Continua button (only if there's a saved game)
         if (hasSavedGame) {
-            const btnContinua = this.createMenuButton('CONFIROTINUA', () => {
+            const btnContinua = this.createMenuButton('CONTINUA', () => {
                 this.continueGame();
             });
             menuContainer.appendChild(btnContinua);

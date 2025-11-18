@@ -78,7 +78,7 @@ const LanguageSelector = {
             '> CARICAMENTO ARCHIVIO MEMORIAM v3.7.2...',
             '> SISTEMA PRONTO',
             '',
-            '> CONFIROFIGURAZIACCESOE LINGUISTICA RICHIESTA',
+            '> CONFIGURAZIONE LINGUISTICA RICHIESTA',
             '> SI PREGA DI SELEZIONARE LA LINGUA PREFERITA',
             '',
         ];
@@ -189,7 +189,7 @@ const LanguageSelector = {
         await this.wait(300);
         Terminal.addOutput('', 'system');
 
-        const warningLine = Terminal.addOutput('> ⚠ SEI SICURO UTENTE? NON POTRAI CAMBIARE OPZIONEE LINGUISTICA', 'warning');
+        const warningLine = Terminal.addOutput('> ⚠ SEI SICURO UTENTE? NON POTRAI CAMBIARE OPZIONE LINGUISTICA', 'warning');
         warningLine.style.color = '#ffff00';
         warningLine.style.fontWeight = 'bold';
         warningLine.style.textShadow = '0 0 10px rgba(255, 255, 0, 0.5)';
@@ -202,7 +202,7 @@ const LanguageSelector = {
         container.className = 'language-confirmation-container';
         container.style.cssText = 'display: flex; flex-direction: column; gap: 10px; margin: 20px 0;';
 
-        const btnConferma = this.createConfermaButton('▶ CONFIROFERMA OPZIONEE LINGUISTICA', () => {
+        const btnConferma = this.createConfermaButton('▶ CONFERMA OPZIONE LINGUISTICA', () => {
             this.confirmLanguage();
         });
 
@@ -268,12 +268,12 @@ const LanguageSelector = {
 
         await this.wait(300);
         Terminal.addOutput('', 'system');
-        const confirmLine = Terminal.addOutput('> LINGUA CONFIROFERMATA', 'success');
+        const confirmLine = Terminal.addOutput('> LINGUA CONFERMATA', 'success');
         confirmLine.style.color = '#00ff00';
         confirmLine.style.textShadow = '0 0 10px rgba(0, 255, 0, 0.8)';
 
         await this.wait(500);
-        const initLine = Terminal.addOutput('> INIZIALIZZAZIONE SISTEMA CONFIRO LINGUA SELEZIONATA...', 'system');
+        const initLine = Terminal.addOutput('> INIZIALIZZAZIONE SISTEMA CON LINGUA SELEZIONATA...', 'system');
         initLine.style.color = '#ffffff';
 
         await this.wait(1000);
