@@ -65,6 +65,7 @@ body.bw-mode .taskbar-window-btn:hover {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    cursor: none !important; /* Force custom cursor everywhere */
 }
 
 body {
@@ -74,7 +75,6 @@ body {
     overflow: hidden;
     height: 100vh;
     position: relative;
-    cursor: none; /* Hide default cursor */
 }
 
 /* ===== SCI-FI CURSOR ===== */
@@ -128,28 +128,85 @@ body {
         inset 0 0 10px #00ff88;
 }
 
-/* Cursor trail particles */
+/* Cybernetic glitch trail */
 .cursor-trail {
     position: fixed;
-    width: 8px;
-    height: 8px;
-    background: #00ff88;
-    border-radius: 50%;
+    width: 12px;
+    height: 12px;
     pointer-events: none;
     z-index: 10000;
-    opacity: 0.6;
-    box-shadow: 0 0 8px #00ff88;
-    animation: trailFade 0.6s ease-out forwards;
+    opacity: 0.9;
+    animation: glitchTrailFade 0.5s ease-out forwards;
 }
 
-@keyframes trailFade {
+.cursor-trail::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #00ff88;
+    box-shadow:
+        0 0 5px #00ff88,
+        inset 0 0 3px #00ff88;
+}
+
+.cursor-trail::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 1px;
+    background: #00ff88;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 3px #00ff88;
+}
+
+/* Glitch trail variants */
+.cursor-trail.glitch-1::before {
+    transform: skew(-5deg, 2deg);
+    border-color: #00ffaa;
+}
+
+.cursor-trail.glitch-2::before {
+    transform: skew(3deg, -4deg);
+    border-color: #00ff66;
+    width: 14px;
+    height: 8px;
+}
+
+.cursor-trail.glitch-3::before {
+    transform: rotate(15deg) skew(-2deg);
+    border-color: #00ffcc;
+    width: 10px;
+    height: 14px;
+}
+
+.cursor-trail.glitch-4::before {
+    transform: scaleX(1.5) skew(5deg);
+    border-color: #00ff44;
+}
+
+@keyframes glitchTrailFade {
     0% {
-        opacity: 0.8;
-        transform: scale(1);
+        opacity: 0.9;
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        opacity: 0.7;
+        transform: scale(1.1) rotate(5deg);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.9) rotate(-3deg);
+    }
+    75% {
+        opacity: 0.3;
+        transform: scale(1.05) rotate(2deg);
     }
     100% {
         opacity: 0;
-        transform: scale(0);
+        transform: scale(0.8) rotate(0deg);
     }
 }
 

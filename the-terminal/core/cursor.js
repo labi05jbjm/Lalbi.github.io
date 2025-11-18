@@ -53,20 +53,34 @@ const CursorManager = {
     createTrail(x, y) {
         // Throttle trail creation
         this.trailDelay++;
-        if (this.trailDelay < 3) return; // Create trail every 3 frames
+        if (this.trailDelay < 2) return; // Create trail every 2 frames for more density
         this.trailDelay = 0;
 
         const trail = document.createElement('div');
-        trail.className = 'cursor-trail';
+
+        // Randomly apply glitch variant (70% chance of glitch)
+        const glitchVariants = ['glitch-1', 'glitch-2', 'glitch-3', 'glitch-4'];
+        const useGlitch = Math.random() > 0.3;
+        const glitchClass = useGlitch ? glitchVariants[Math.floor(Math.random() * glitchVariants.length)] : '';
+
+        trail.className = `cursor-trail ${glitchClass}`;
         trail.style.left = x + 'px';
         trail.style.top = y + 'px';
+
+        // Random offset for more chaotic glitch effect
+        if (useGlitch) {
+            const offsetX = (Math.random() - 0.5) * 6;
+            const offsetY = (Math.random() - 0.5) * 6;
+            trail.style.left = (x + offsetX) + 'px';
+            trail.style.top = (y + offsetY) + 'px';
+        }
 
         document.body.appendChild(trail);
 
         // Remove trail after animation
         setTimeout(() => {
             trail.remove();
-        }, 600);
+        }, 500);
     }
 };
 
