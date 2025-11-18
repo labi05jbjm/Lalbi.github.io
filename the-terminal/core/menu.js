@@ -53,6 +53,7 @@ const MainMenu = {
         customCursor: true,
         interfaceOpacity: 95, // 50-100
         highContrast: false,
+        colorTheme: 'green', // green, amber, blue, red, purple, cyan
 
         // Advanced
         crtIntensity: 100, // 0-100
@@ -505,6 +506,23 @@ const MainMenu = {
                 } else {
                     document.body.classList.remove('skip-animations');
                 }
+            }
+        ));
+
+        optionsContainer.appendChild(this.createOptionSelect(
+            'Tema Colore',
+            'colorTheme',
+            'Cambia la palette colori dell\'interfaccia',
+            [
+                { value: 'green', label: '🟢 Verde (Default)' },
+                { value: 'amber', label: '🟡 Ambra' },
+                { value: 'blue', label: '🔵 Blu' },
+                { value: 'red', label: '🔴 Rosso' },
+                { value: 'purple', label: '🟣 Viola' },
+                { value: 'cyan', label: '🔷 Ciano' }
+            ],
+            (value) => {
+                this.applyColorTheme(value);
             }
         ));
 
@@ -1340,11 +1358,94 @@ const MainMenu = {
             document.body.classList.remove('skip-animations');
         }
 
+        // Color Theme
+        this.applyColorTheme(this.options.colorTheme);
+
         // Store options globally for other systems to access
         if (typeof window.gameOptions === 'undefined') {
             window.gameOptions = this.options;
         } else {
             Object.assign(window.gameOptions, this.options);
         }
+    },
+
+    applyColorTheme(theme) {
+        const themes = {
+            green: {
+                primary: '#00ff88',
+                secondary: '#00aaff',
+                tertiary: '#00ff41',
+                glow: '#00ff88'
+            },
+            amber: {
+                primary: '#ffaa00',
+                secondary: '#ff8800',
+                tertiary: '#ffcc00',
+                glow: '#ffaa00'
+            },
+            blue: {
+                primary: '#00aaff',
+                secondary: '#0088ff',
+                tertiary: '#00ccff',
+                glow: '#00aaff'
+            },
+            red: {
+                primary: '#ff3366',
+                secondary: '#ff0044',
+                tertiary: '#ff5588',
+                glow: '#ff3366'
+            },
+            purple: {
+                primary: '#cc66ff',
+                secondary: '#aa44ff',
+                tertiary: '#ee88ff',
+                glow: '#cc66ff'
+            },
+            cyan: {
+                primary: '#00ffff',
+                secondary: '#00cccc',
+                tertiary: '#00ffcc',
+                glow: '#00ffff'
+            }
+        };
+
+        const selectedTheme = themes[theme] || themes.green;
+
+        // Apply CSS custom properties
+        document.documentElement.style.setProperty('--primary-color', selectedTheme.primary);
+        document.documentElement.style.setProperty('--secondary-color', selectedTheme.secondary);
+        document.documentElement.style.setProperty('--glow', `0 0 5px ${selectedTheme.glow}`);
+
+        // Update cursor colors
+        const cursorStyle = document.createElement('style');
+        cursorStyle.id = 'dynamic-cursor-theme';
+        const existingStyle = document.getElementById('dynamic-cursor-theme');
+        if (existingStyle) existingStyle.remove();
+
+        cursorStyle.textContent = `
+            .custom-cursor {
+                border-color: ${selectedTheme.primary} !important;
+                box-shadow: 0 0 10px ${selectedTheme.primary}, inset 0 0 5px ${selectedTheme.primary} !important;
+            }
+            .custom-cursor::before {
+                background: ${selectedTheme.primary} !important;
+                box-shadow: 0 0 5px ${selectedTheme.primary} !important;
+            }
+            .custom-cursor::after {
+                border-color: ${selectedTheme.tertiary} !important;
+            }
+            .cursor-trail::before {
+                border-color: ${selectedTheme.primary} !important;
+                box-shadow: 0 0 5px ${selectedTheme.primary}, inset 0 0 3px ${selectedTheme.primary} !important;
+            }
+            .cursor-trail::after {
+                background: ${selectedTheme.primary} !important;
+                box-shadow: 0 0 3px ${selectedTheme.primary} !important;
+            }
+        `;
+
+        document.head.appendChild(cursorStyle);
+
+        console.log(`[MENU] Applied color theme: ${theme}`);
     }
 };
