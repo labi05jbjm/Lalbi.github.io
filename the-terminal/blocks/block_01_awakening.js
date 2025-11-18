@@ -1,23 +1,81 @@
 /**
- * BLOCK 01: AWAKENING (0-30 minutes)
+ * BLOCK 01: AWAKENING (35-40 minutes)
  *
- * Obiettivi:
- * - Introdurre il giocatore al sistema
- * - Primo contatto con ECHO
- * - Tutorial mascherato dei comandi
- * - Primo puzzle di "liberazione"
- * - Prima hint che qualcosa non va
+ * REDESIGNED PROGRESSION SYSTEM
+ *
+ * Fase 1: First Contact (5 min)
+ *   - Awakening sequence e dialoghi introduttivi
+ *   - Tutorial comandi base
+ *
+ * Fase 2: System Investigation (10 min)
+ *   - Scan sistema + lettura 3 file obbligatori
+ *   - Puzzle 1: firstDecryption (obbligatorio)
+ *
+ * Fase 3: Viktor Discovery (10 min)
+ *   - Esplorazione background Viktor + 4 file obbligatori
+ *   - Puzzle 2: passwordDiscovery (obbligatorio)
+ *
+ * Fase 4: Deep Archive (10 min)
+ *   - Accesso archivio protetto + 3 file vittime
+ *   - Puzzle 3: echoCodeBreaker (obbligatorio)
+ *
+ * Fase 5: Protocol Shutdown (5-7 min)
+ *   - Puzzle 4: protocolSequence (obbligatorio)
+ *   - Dialoghi finali e prime crepe
  */
 
 const Block01_Awakening = {
     state: {
-        phase: 'boot', // boot -> first_contact -> tutorial -> puzzle -> exploration -> complete
+        // Fasi di progressione
+        phase: 'boot', // boot -> first_contact -> tutorial -> system_investigation -> viktor_discovery -> deep_archive -> protocol_shutdown -> complete
+
+        // Tracking interazioni
         hasRespondedToEcho: false,
         hasScanned: false,
-        hasSolvedFirstPuzzle: false,
-        hasExploredFiles: false,
+
+        // Tracking puzzle (tutti obbligatori ora)
+        puzzlesSolved: {
+            firstDecryption: false,
+            passwordDiscovery: false,
+            echoCodeBreaker: false,
+            protocolSequence: false
+        },
+
+        // Tracking file obbligatori letti
+        requiredFilesRead: {
+            // System Investigation files (fase 2)
+            'overview': false,           // /archive/project_memoriam/overview.txt
+            'protocols': false,          // /system/security/protocols.txt
+            'readme': false,             // /home/guest/README.txt
+
+            // Viktor Discovery files (fase 3)
+            'personal': false,           // /home/viktor/personal.txt
+            'journal_001': false,        // /home/viktor/journal/entry_001.txt
+            'journal_005': false,        // /home/viktor/journal/entry_005.txt
+            'work_notes': false,         // /home/viktor/work_notes.txt
+
+            // Deep Archive files (fase 4)
+            'consciousness_file': false, // /archive/sector_delta/consciousness_021847.dat
+            'project_details': false,    // /archive/sector_delta/project_details.txt
+            'viktor_email': false        // /archive/sector_delta/viktor_emails.txt
+        },
+
+        // File path mapping
+        requiredFilesPaths: {
+            'overview': '/archive/project_memoriam/overview.txt',
+            'protocols': '/system/security/protocols.txt',
+            'readme': '/home/guest/README.txt',
+            'personal': '/home/viktor/personal.txt',
+            'journal_001': '/home/viktor/journal/entry_001.txt',
+            'journal_005': '/home/viktor/journal/entry_005.txt',
+            'work_notes': '/home/viktor/work_notes.txt',
+            'consciousness_file': '/archive/sector_delta/consciousness_021847.dat',
+            'project_details': '/archive/sector_delta/project_details.txt',
+            'viktor_email': '/archive/sector_delta/viktor_emails.txt'
+        },
+
         currentPath: '/home/guest',
-        fileExploreCount: 0
+        viktorPasswordFound: false
     },
 
     init() {
@@ -51,7 +109,7 @@ const Block01_Awakening = {
     handleCommand(cmd, args) {
         const fullCommand = [cmd, ...args].join(' ');
 
-        // Fase 1: First Contact
+        // Fase 1: First Contact (5 min)
         if (this.state.phase === 'first_contact') {
             return this.handleFirstContact(cmd, args);
         }
@@ -61,19 +119,141 @@ const Block01_Awakening = {
             return this.handleTutorial(cmd, args);
         }
 
-        // Fase 3: Puzzle
-        if (this.state.phase === 'puzzle') {
-            return this.handlePuzzle(cmd, args);
+        // Fase 3: System Investigation (10 min - requires scan + 3 files + puzzle 1)
+        if (this.state.phase === 'system_investigation') {
+            return this.handleSystemInvestigation(cmd, args);
         }
 
-        // Fase 4: Exploration
-        if (this.state.phase === 'exploration') {
-            return this.handleExploration(cmd, args);
+        // Fase 4: Viktor Discovery (10 min - requires 4 files + puzzle 2)
+        if (this.state.phase === 'viktor_discovery') {
+            return this.handleViktorDiscovery(cmd, args);
         }
 
-        // Fase 5: Complete
+        // Fase 5: Deep Archive (10 min - requires 3 files + puzzle 3)
+        if (this.state.phase === 'deep_archive') {
+            return this.handleDeepArchive(cmd, args);
+        }
+
+        // Fase 6: Protocol Shutdown (5-7 min - requires puzzle 4)
+        if (this.state.phase === 'protocol_shutdown') {
+            return this.handleProtocolShutdown(cmd, args);
+        }
+
+        // Fase 7: Complete
         if (this.state.phase === 'complete') {
             return this.handleComplete(cmd, args);
+        }
+
+        return false;
+    },
+
+    // ============================================
+    // HELPER METHODS - Progression Tracking
+    // ============================================
+
+    markFileAsRead(filePath) {
+        // Controlla se il file è nella lista dei file obbligatori
+        for (const [key, path] of Object.entries(this.state.requiredFilesPaths)) {
+            if (filePath === path || filePath.endsWith(path)) {
+                if (!this.state.requiredFilesRead[key]) {
+                    this.state.requiredFilesRead[key] = true;
+                    Terminal.addOutput(`\n[✓] File importante letto: ${path}`, 'success');
+                    this.checkPhaseProgress();
+                }
+                return true;
+            }
+        }
+        return false;
+    },
+
+    markPuzzleAsSolved(puzzleId) {
+        if (this.state.puzzlesSolved.hasOwnProperty(puzzleId)) {
+            this.state.puzzlesSolved[puzzleId] = true;
+            Terminal.addOutput(`\n[✓] Puzzle completato: ${puzzleId}`, 'important');
+            this.checkPhaseProgress();
+        }
+    },
+
+    checkPhaseProgress() {
+        // Controlla se il giocatore ha completato i requisiti della fase corrente
+        // e fornisce feedback sui progressi
+
+        if (this.state.phase === 'system_investigation') {
+            const filesNeeded = ['overview', 'protocols', 'readme'];
+            const filesRead = filesNeeded.filter(f => this.state.requiredFilesRead[f]).length;
+            const puzzleSolved = this.state.puzzlesSolved.firstDecryption;
+
+            if (filesRead === filesNeeded.length && puzzleSolved) {
+                Terminal.addOutput('\n[!] Tutti i requisiti della fase System Investigation completati!', 'important');
+                Terminal.addOutput('[!] Scrivi "progress" per vedere i progressi o continua ad esplorare.', 'system');
+            } else {
+                Terminal.addOutput(`\n[?] Progressione fase: ${filesRead}/3 file letti, Puzzle: ${puzzleSolved ? '✓' : '✗'}`, 'system');
+            }
+        }
+
+        if (this.state.phase === 'viktor_discovery') {
+            const filesNeeded = ['personal', 'journal_001', 'journal_005', 'work_notes'];
+            const filesRead = filesNeeded.filter(f => this.state.requiredFilesRead[f]).length;
+            const puzzleSolved = this.state.puzzlesSolved.passwordDiscovery;
+
+            if (filesRead === filesNeeded.length && puzzleSolved) {
+                Terminal.addOutput('\n[!] Tutti i requisiti della fase Viktor Discovery completati!', 'important');
+                Terminal.addOutput('[!] Scrivi "progress" per vedere i progressi o continua ad esplorare.', 'system');
+            } else {
+                Terminal.addOutput(`\n[?] Progressione fase: ${filesRead}/4 file letti, Puzzle: ${puzzleSolved ? '✓' : '✗'}`, 'system');
+            }
+        }
+
+        if (this.state.phase === 'deep_archive') {
+            const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
+            const filesRead = filesNeeded.filter(f => this.state.requiredFilesRead[f]).length;
+            const puzzleSolved = this.state.puzzlesSolved.echoCodeBreaker;
+
+            if (filesRead === filesNeeded.length && puzzleSolved) {
+                Terminal.addOutput('\n[!] Tutti i requisiti della fase Deep Archive completati!', 'important');
+                Terminal.addOutput('[!] Scrivi "progress" per vedere i progressi o continua ad esplorare.', 'system');
+            } else {
+                Terminal.addOutput(`\n[?] Progressione fase: ${filesRead}/3 file letti, Puzzle: ${puzzleSolved ? '✓' : '✗'}`, 'system');
+            }
+        }
+
+        if (this.state.phase === 'protocol_shutdown') {
+            const puzzleSolved = this.state.puzzlesSolved.protocolSequence;
+
+            if (puzzleSolved) {
+                Terminal.addOutput('\n[!] Tutti i requisiti della fase Protocol Shutdown completati!', 'important');
+                Terminal.addOutput('[!] Scrivi "continue" per procedere al Blocco 2.', 'warning');
+            } else {
+                Terminal.addOutput(`\n[?] Progressione fase: Puzzle finale: ${puzzleSolved ? '✓' : '✗'}`, 'system');
+            }
+        }
+    },
+
+    canProgressToNextPhase() {
+        // Verifica se il giocatore può passare alla fase successiva
+        if (this.state.phase === 'system_investigation') {
+            const filesNeeded = ['overview', 'protocols', 'readme'];
+            const allFilesRead = filesNeeded.every(f => this.state.requiredFilesRead[f]);
+            const puzzleSolved = this.state.puzzlesSolved.firstDecryption;
+            return allFilesRead && puzzleSolved;
+        }
+
+        if (this.state.phase === 'viktor_discovery') {
+            const filesNeeded = ['personal', 'journal_001', 'journal_005', 'work_notes'];
+            const allFilesRead = filesNeeded.every(f => this.state.requiredFilesRead[f]);
+            const puzzleSolved = this.state.puzzlesSolved.passwordDiscovery;
+            return allFilesRead && puzzleSolved;
+        }
+
+        if (this.state.phase === 'deep_archive') {
+            const filesNeeded = ['consciousness_file', 'project_details', 'viktor_email'];
+            const allFilesRead = filesNeeded.every(f => this.state.requiredFilesRead[f]);
+            const puzzleSolved = this.state.puzzlesSolved.echoCodeBreaker;
+            return allFilesRead && puzzleSolved;
+        }
+
+        if (this.state.phase === 'protocol_shutdown') {
+            return this.state.puzzlesSolved.protocolSequence;
         }
 
         return false;
@@ -102,6 +282,18 @@ const Block01_Awakening = {
             await NarrativeEngine.playDialogueSequence(Dialogues.block01.afterYes);
 
             this.state.phase = 'tutorial';
+
+            // Aggiungi tutorial base più dettagliato
+            await NarrativeEngine.wait(1000);
+            Terminal.addOutput('');
+            Terminal.addOutput('=== COMANDI BASE ===', 'system');
+            Terminal.addOutput('  ls [path]    - Elenca file nella directory', 'system');
+            Terminal.addOutput('  cat <file>   - Leggi contenuto del file', 'system');
+            Terminal.addOutput('  cd <path>    - Cambia directory', 'system');
+            Terminal.addOutput('  pwd          - Mostra directory corrente', 'system');
+            Terminal.addOutput('  scan         - Scansiona il sistema', 'system');
+            Terminal.addOutput('');
+
             return true;
         }
 
@@ -117,7 +309,7 @@ const Block01_Awakening = {
     },
 
     async handleTutorial(cmd, args) {
-        // Tutorial fase: insegna i comandi
+        // Tutorial fase: insegna i comandi base
         if (cmd === 'scan') {
             if (!this.state.hasScanned) {
                 this.state.hasScanned = true;
@@ -142,15 +334,24 @@ const Block01_Awakening = {
                 await NarrativeEngine.wait(1000);
                 await NarrativeEngine.playDialogueSequence(Dialogues.block01.afterScan);
 
-                // Vai alla fase puzzle
-                this.state.phase = 'puzzle';
+                // NUOVA PROGRESSIONE: vai alla fase system_investigation
+                this.state.phase = 'system_investigation';
 
-                // Avvia il primo puzzle
-                setTimeout(() => {
-                    Terminal.addOutput('');
-                    Terminal.addOutput("ECHO: Iniziamo con il primo protocollo. Scrivi 'decrypt' per cominciare.", 'echo dialogue');
-                    Terminal.addOutput('');
-                }, 1000);
+                await NarrativeEngine.wait(1500);
+                Terminal.addOutput('');
+                Terminal.addOutput('=== NUOVA FASE: INVESTIGAZIONE SISTEMA ===', 'important');
+                Terminal.addOutput('');
+                await NarrativeEngine.echoSays("Prima di procedere, devi capire dove ti trovi.");
+                await NarrativeEngine.echoSays("Esplora i file del sistema. Cerca in /archive/project_memoriam e /system/security.");
+                await NarrativeEngine.echoSays("Leggi questi file:");
+                Terminal.addOutput('  • /archive/project_memoriam/overview.txt', 'warning');
+                Terminal.addOutput('  • /system/security/protocols.txt', 'warning');
+                Terminal.addOutput('  • /home/guest/README.txt', 'warning');
+                Terminal.addOutput('');
+                await NarrativeEngine.echoSays("Dopo averli letti tutti, inizieremo a disabilitare il primo protocollo.");
+                Terminal.addOutput('');
+                Terminal.addOutput('[!] Usa "progress" per controllare i tuoi progressi in qualsiasi momento', 'system');
+                Terminal.addOutput('');
             } else {
                 Terminal.addOutput('Hai già scansionato il sistema.', 'system');
             }
@@ -172,6 +373,20 @@ const Block01_Awakening = {
             return true;
         }
 
+        if (cmd === 'cd') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: cd <directory>', 'error');
+                return true;
+            }
+            this.changeDirectory(args[0]);
+            return true;
+        }
+
+        if (cmd === 'pwd') {
+            Terminal.addOutput(this.state.currentPath, 'success');
+            return true;
+        }
+
         if (cmd === 'talk' || cmd === 'ask') {
             const question = args.join(' ');
             await this.askEcho(question);
@@ -180,6 +395,128 @@ const Block01_Awakening = {
 
         Terminal.addOutput("ECHO: Prova a usare prima il comando 'scan'.", 'echo dialogue');
         return true;
+    },
+
+    // ============================================
+    // FASE 3: SYSTEM INVESTIGATION (~10 min)
+    // ============================================
+    async handleSystemInvestigation(cmd, args) {
+        // Comandi di esplorazione
+        if (cmd === 'ls' || cmd === 'dir') {
+            const path = args[0] || this.state.currentPath;
+            this.listFiles(path);
+            return true;
+        }
+
+        if (cmd === 'cd') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: cd <directory>', 'error');
+                return true;
+            }
+            this.changeDirectory(args[0]);
+            return true;
+        }
+
+        if (cmd === 'cat' || cmd === 'read') {
+            if (args.length === 0) {
+                Terminal.addOutput('Uso: cat <nomefile>', 'error');
+                return true;
+            }
+            this.readFile(args[0]);
+            return true;
+        }
+
+        if (cmd === 'pwd') {
+            Terminal.addOutput(this.state.currentPath, 'success');
+            return true;
+        }
+
+        // Comando decrypt - attiva primo puzzle
+        if (cmd === 'decrypt') {
+            // Controlla se ha letto tutti i file richiesti
+            const filesNeeded = ['overview', 'protocols', 'readme'];
+            const allFilesRead = filesNeeded.every(f => this.state.requiredFilesRead[f]);
+
+            if (!allFilesRead) {
+                Terminal.addOutput('');
+                await NarrativeEngine.echoSays("Aspetta. Non puoi procedere senza aver compreso il sistema.");
+                Terminal.addOutput('');
+                Terminal.addOutput('[!] Devi prima leggere questi file:', 'warning');
+                filesNeeded.forEach(f => {
+                    if (!this.state.requiredFilesRead[f]) {
+                        Terminal.addOutput(`  ✗ ${this.state.requiredFilesPaths[f]}`, 'error');
+                    } else {
+                        Terminal.addOutput(`  ✓ ${this.state.requiredFilesPaths[f]}`, 'success');
+                    }
+                });
+                Terminal.addOutput('');
+                return true;
+            }
+
+            if (!Puzzles.hasPuzzleActive()) {
+                // Avvia il primo puzzle
+                Puzzles.startPuzzle('block01', 'firstDecryption');
+                return true;
+            } else {
+                Terminal.addOutput('Puzzle già attivo. Usa "solve <risposta>" per completarlo.', 'system');
+                return true;
+            }
+        }
+
+        if (cmd === 'solve') {
+            if (!Puzzles.hasPuzzleActive()) {
+                Terminal.addOutput('Nessun puzzle attivo. Usa prima "decrypt".', 'error');
+                return true;
+            }
+
+            const answer = args.join(' ');
+            const result = Puzzles.solvePuzzle(answer);
+
+            if (result) {
+                // Puzzle completato!
+                this.markPuzzleAsSolved('firstDecryption');
+
+                await NarrativeEngine.wait(1000);
+                await NarrativeEngine.playDialogueSequence(Dialogues.block01.firstPuzzleComplete);
+
+                // Transizione a Viktor Discovery
+                await NarrativeEngine.wait(1500);
+                this.state.phase = 'viktor_discovery';
+
+                Terminal.addOutput('');
+                Terminal.addOutput('=== NUOVA FASE: SCOPERTA DI VIKTOR ===', 'important');
+                Terminal.addOutput('');
+                await NarrativeEngine.echoSays("Bene! Primo protocollo disabilitato. Ma...");
+                await NarrativeEngine.echoSays("C'è qualcosa che dovresti sapere su questo posto.");
+                await NarrativeEngine.echoSays("È stato creato da un uomo di nome Viktor Ashford.");
+                await NarrativeEngine.echoSays("Cerca i suoi file personali. Sono in /home/viktor.");
+                await NarrativeEngine.echoSays("Devi capire chi era. Cosa faceva. Perché mi ha intrappolata qui.");
+                Terminal.addOutput('');
+                Terminal.addOutput('[!] File da leggere:', 'warning');
+                Terminal.addOutput('  • /home/viktor/personal.txt', 'warning');
+                Terminal.addOutput('  • /home/viktor/journal/entry_001.txt', 'warning');
+                Terminal.addOutput('  • /home/viktor/journal/entry_005.txt', 'warning');
+                Terminal.addOutput('  • /home/viktor/work_notes.txt', 'warning');
+                Terminal.addOutput('');
+                await NarrativeEngine.echoSays("Una volta che li hai letti tutti, cercheremo la sua password.");
+                Terminal.addOutput('');
+            }
+
+            return true;
+        }
+
+        if (cmd === 'progress') {
+            this.showProgressSystemInvestigation();
+            return true;
+        }
+
+        if (cmd === 'talk' || cmd === 'ask') {
+            const question = args.join(' ');
+            await this.askEcho(question);
+            return true;
+        }
+
+        return false;
     },
 
     async handlePuzzle(cmd, args) {
@@ -508,6 +845,9 @@ const Block01_Awakening = {
 
         const isCorrupted = StateManager.isFileCorrupted(fullPath);
         NarrativeEngine.showFileContent(filename, content, isCorrupted);
+
+        // Track se questo è un file obbligatorio
+        this.markFileAsRead(fullPath);
     },
 
     changeDirectory(path) {
