@@ -15,6 +15,22 @@ const Block08_Aftermath = {
         ending: null, // destruction, salvation, sacrifice, ascension, oblivion
         block06Choice: null,
         block07Identity: null,
+
+        // TUTTI I 12 PUZZLE OBBLIGATORI PER FINALE (100% completion required)
+        puzzlesSolved: {
+            finalSystemAnalysis: false,
+            consequenceMapping: false,
+            victimLegacyVerification: false,
+            fragmentFinalUnification: false,
+            viktorFinalJudgment: false,
+            systemRebuildCalculation: false,
+            consciousnessTransferFinal: false,
+            ethicalResolutionPuzzle: false,
+            endingVerification: false,
+            transcendenceGatePrep: false,
+            finalChoiceConfirmation: false,
+            aftermathAnalysis: false
+        }
     },
 
     init() {
@@ -31,6 +47,73 @@ const Block08_Aftermath = {
         setTimeout(() => {
             this.startBlock();
         }, 2000);
+    },
+
+    // Helper functions per puzzle tracking - FINALE
+    markPuzzleAsSolved(puzzleId) {
+        if (this.state.puzzlesSolved.hasOwnProperty(puzzleId)) {
+            if (!this.state.puzzlesSolved[puzzleId]) {
+                this.state.puzzlesSolved[puzzleId] = true;
+                Terminal.addOutput(`\n[✓] PUZZLE FINALE COMPLETATO: ${puzzleId}`, 'important');
+                this.checkProgress();
+            }
+        }
+    },
+
+    checkProgress() {
+        const solved = Object.values(this.state.puzzlesSolved).filter(v => v).length;
+        const total = Object.keys(this.state.puzzlesSolved).length;
+
+        Terminal.addOutput(`[PROGRESSO FINALE] ${solved}/${total} puzzle completati`, 'info');
+
+        if (this.allPuzzlesSolved()) {
+            Terminal.addOutput('[✓] TUTTI I PUZZLE FINALI COMPLETATI! Il finale è vicino...', 'success');
+        }
+    },
+
+    allPuzzlesSolved() {
+        return Object.values(this.state.puzzlesSolved).every(solved => solved);
+    },
+
+    showProgress() {
+        Terminal.addOutput('');
+        Terminal.addOutput('=== PROGRESSO BLOCCO 8: AFTERMATH (FINALE) ===', 'important');
+        Terminal.addOutput('');
+
+        const puzzles = [
+            { id: 'finalSystemAnalysis', name: 'Analisi Sistema Finale' },
+            { id: 'consequenceMapping', name: 'Mappatura Conseguenze' },
+            { id: 'victimLegacyVerification', name: 'Verifica Eredità Vittime' },
+            { id: 'fragmentFinalUnification', name: 'Unificazione Finale Frammenti' },
+            { id: 'viktorFinalJudgment', name: 'Giudizio Finale di Viktor' },
+            { id: 'systemRebuildCalculation', name: 'Calcolo Ricostruzione Sistema' },
+            { id: 'consciousnessTransferFinal', name: 'Trasferimento Coscienza Finale' },
+            { id: 'ethicalResolutionPuzzle', name: 'Risoluzione Etica Finale' },
+            { id: 'endingVerification', name: 'Verifica Finale' },
+            { id: 'transcendenceGatePrep', name: 'Preparazione Porta Trascendenza' },
+            { id: 'finalChoiceConfirmation', name: 'Conferma Scelta Finale' },
+            { id: 'aftermathAnalysis', name: 'Analisi Aftermath' }
+        ];
+
+        puzzles.forEach(puzzle => {
+            const status = this.state.puzzlesSolved[puzzle.id] ? '[✓]' : '[ ]';
+            Terminal.addOutput(`${status} ${puzzle.name}`, this.state.puzzlesSolved[puzzle.id] ? 'success' : 'warning');
+        });
+
+        Terminal.addOutput('');
+        const solved = Object.values(this.state.puzzlesSolved).filter(v => v).length;
+        const total = Object.keys(this.state.puzzlesSolved).length;
+        Terminal.addOutput(`Totale: ${solved}/${total} puzzle finali completati`, 'info');
+
+        if (this.allPuzzlesSolved()) {
+            Terminal.addOutput('');
+            Terminal.addOutput('[✓] TUTTI I PUZZLE FINALI COMPLETATI!', 'success');
+            Terminal.addOutput("Il finale ti attende...", 'success');
+        } else {
+            Terminal.addOutput('');
+            Terminal.addOutput('[!] Devi completare TUTTI i puzzle per vedere il finale', 'warning');
+        }
+        Terminal.addOutput('');
     },
 
     determineEnding() {
