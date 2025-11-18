@@ -3,7 +3,7 @@
  * Struttura dei file nel sistema
  */
 
-const FileSystem = {
+window.FileSystem = {
     '/': {
         type: 'directory',
         contents: ['home', 'archive', 'system', 'logs', 'tmp']
@@ -3854,7 +3854,7 @@ You destroyed ${StateManager.state.stats?.consciousnessDestroyed || 0} conscious
 You reached suspicion level ${StateManager.state.suspicionLevel || 0}.
 You ended with ${StateManager.state.trustsEcho || 0} trust in ECHO.
 
-And you chose: ${StateManager.getFlag('ending')?.toUpperCase() || 'YOUR PATH'}.
+And you chose: ${typeof StateManager.getFlag('ending') === 'string' ? StateManager.getFlag('ending').toUpperCase() : 'YOUR PATH'}.
 
 These numbers tell a story.
 YOUR story.
@@ -3906,8 +3906,8 @@ Always.
     }
 };
 
-// Helper functions
-const FileSystemHelpers = {
+// Helper functions (global)
+window.FileSystemHelpers = {
     getFile(path) {
         return FileSystem[path] || null;
     },
