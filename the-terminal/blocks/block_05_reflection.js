@@ -47,6 +47,7 @@ const Block05_Reflection = {
         Terminal.addOutput('');
 
         this.state.hasMetEidolon = true;
+        StateManager.setFlag('metEidolon', true);
         this.state.phase = 'memory_exploration';
     },
 
@@ -230,6 +231,21 @@ const Block05_Reflection = {
             return true;
         }
 
+        // Puzzle: memoryReconstruction
+        if (lowerCmd === 'reconstruction_answer' && args.length > 0) {
+            const answer = args.join(' ');
+            const puzzle = Puzzles.block05.memoryReconstruction;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Incorrect. Check /home/viktor/memories/ghost_elena.dat for the fidelity percentage.', 'error');
+                return true;
+            }
+        }
+
         return false;
     },
 
@@ -261,6 +277,21 @@ const Block05_Reflection = {
         if (lowerCmd === 'view' && args[0] === 'reconstruction' && args[1] === 'sofia') {
             await this.viewSofiaGhost();
             return true;
+        }
+
+        // Puzzle: fragmentCount
+        if (lowerCmd === 'fragment_count' && args.length > 0) {
+            const answer = args[0];
+            const puzzle = Puzzles.block05.fragmentCount;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Incorrect count. Check /home/viktor/memories/ghost_sofia.dat carefully.', 'error');
+                return true;
+            }
         }
 
         return false;
@@ -296,6 +327,21 @@ const Block05_Reflection = {
         if (lowerCmd === 'understand' || lowerCmd === 'continue') {
             await this.proceedToMirror();
             return true;
+        }
+
+        // Puzzle: ghostIdentification
+        if (lowerCmd === 'ghost_answer' && args.length > 0) {
+            const answer = args[0].toUpperCase();
+            const puzzle = Puzzles.block05.ghostIdentification;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Invalid answer. Choose: SI, NO, ENTRAMBE, or IRRILEVANTE.', 'error');
+                return true;
+            }
         }
 
         return false;
@@ -345,6 +391,17 @@ const Block05_Reflection = {
         if (lowerCmd === 'reflect') {
             await this.presentReflectionChoice();
             return true;
+        }
+
+        // Puzzle: mirrorReflection
+        if (lowerCmd === 'look_in_mirror' || (lowerCmd === 'look' && args[0] === 'in' && args[1] === 'mirror')) {
+            const puzzle = Puzzles.block05.mirrorReflection;
+
+            if (puzzle.verify('look_in_mirror')) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete('look_in_mirror');
+                return true;
+            }
         }
 
         return false;
@@ -531,6 +588,12 @@ const Block05_Reflection = {
         Terminal.addOutput('');
         Terminal.addOutput('Ghost Reconstructions:', 'important');
         Terminal.addOutput('  view reconstruction <name> - View ghost reconstructions (elena/sofia)', 'system');
+        Terminal.addOutput('');
+        Terminal.addOutput('Puzzles:', 'important');
+        Terminal.addOutput('  reconstruction_answer <percentage> - Answer Elena\'s fidelity question', 'system');
+        Terminal.addOutput('  fragment_count <number>            - Count Viktor\'s fragments', 'system');
+        Terminal.addOutput('  ghost_answer <SI/NO/ENTRAMBE/IRRILEVANTE> - Answer the ghost question', 'system');
+        Terminal.addOutput('  look_in_mirror                     - Look at your reflection', 'system');
         Terminal.addOutput('');
         Terminal.addOutput('Reflection:', 'important');
         Terminal.addOutput('  reflect             - Contemplate your identity', 'system');

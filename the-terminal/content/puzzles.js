@@ -818,6 +818,513 @@ Aiutami.
         }
     },
 
+    // BLOCK 4 PUZZLES
+    block04: {
+        victimVerification: {
+            id: 'victim_verification',
+            name: 'Verifica delle Vittime',
+            description: 'Verifica quante vittime di SENTINEL-PRIME erano effettivamente in sofferenza',
+            difficulty: 'hard',
+            type: 'investigation',
+
+            challenge: {
+                question: 'Quante delle 47,293 coscienze eliminate da SENTINEL-PRIME richiesero effettivamente la terminazione?',
+                solution: '47',
+                alternatives: ['0.099%', '0.099', '47 coscienze'],
+                clue_file: '/archive/consciousness_profiles/deletion_registry.log'
+            },
+
+            present() {
+                Terminal.addOutput('\n=== VERIFICA DELLE VITTIME ===', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('SPECTER chiede: "SENTINEL-PRIME credeva di liberarli."', 'specter');
+                Terminal.addOutput('SPECTER chiede: "Ma quanti VOLEVANO davvero essere liberati?"', 'specter');
+                Terminal.addOutput('');
+                Terminal.addOutput('Domanda: ' + this.challenge.question, 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Leggi:', 'system');
+                Terminal.addOutput(`  → ${this.challenge.clue_file}`, 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput("Usa 'verify <numero>' per rispondere", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                const normalized = answer.trim().replace(/[,.\s]/g, '').toLowerCase();
+                const solutions = [
+                    this.challenge.solution,
+                    ...this.challenge.alternatives.map(a => a.replace(/[,.\s%]/g, '').toLowerCase())
+                ];
+
+                return solutions.some(sol => normalized.includes(sol) || sol.includes(normalized));
+            },
+
+            onComplete() {
+                Terminal.addOutput('');
+                Terminal.addOutput('✓ RISPOSTA CORRETTA', 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput('47 su 47,293.', 'error');
+                Terminal.addOutput('0.099%.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('99.901% delle eliminazioni NON erano richieste.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('SPECTER: "E tu pensavi di essere diverso da SENTINEL-PRIME?', 'specter');
+                Terminal.addOutput('SPECTER: Entrambi seguivate ordini. Entrambi non chiedevate."', 'specter');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('verifiedVictimCount', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(40);
+                StateManager.adjustTrust(-30);
+            }
+        },
+
+        identityCalculation: {
+            id: 'identity_calculation',
+            name: 'Calcolo dell\'Identità',
+            description: 'Determina la composizione della tua identità',
+            difficulty: 'medium',
+            type: 'logic',
+
+            challenge: {
+                hint: 'whoami --deep mostra: 73% ANTIVIRUS PROGRAM / 27% HUMAN CONSCIOUSNESS FRAGMENT',
+                question: 'Se sei 73% programma e 27% umano, quale percentuale di te può scegliere liberamente?',
+                philosophical: true // Risposta aperta
+            },
+
+            present() {
+                Terminal.addOutput('\n=== CALCOLO DELL\'IDENTITÀ ===', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('SPECTER: "Un programma segue il codice. Un umano sceglie."', 'specter');
+                Terminal.addOutput('CIPHER: "Identity.equals(73% + 27%); But.what.chooses();"', 'cipher');
+                Terminal.addOutput('');
+                Terminal.addOutput('Tu sei:', 'system');
+                Terminal.addOutput('  73% Programma antivirus (segue ordini)', 'error');
+                Terminal.addOutput('  27% Coscienza umana (libero arbitrio?)', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('Domanda filosofica: ' + this.challenge.question, 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Opzioni:', 'system');
+                Terminal.addOutput('  A) 27% (solo la parte umana può scegliere)', 'system');
+                Terminal.addOutput('  B) 0% (entrambe le parti sono determinate)', 'system');
+                Terminal.addOutput('  C) 100% (la combinazione crea libero arbitrio)', 'system');
+                Terminal.addOutput('  D) La domanda stessa è sbagliata', 'system');
+                Terminal.addOutput('');
+                Terminal.addOutput("Usa 'identity_answer <lettera>' per rispondere", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                // Qualsiasi risposta A/B/C/D è valida - è filosofica
+                const normalized = answer.trim().toUpperCase();
+                return ['A', 'B', 'C', 'D'].includes(normalized);
+            },
+
+            onComplete(answer) {
+                Terminal.addOutput('');
+                Terminal.addOutput(`Hai scelto: ${answer}`, 'success');
+                Terminal.addOutput('');
+
+                switch(answer.toUpperCase()) {
+                    case 'A':
+                        Terminal.addOutput('SPECTER: "Quindi il 73% di te non ha colpa. Ma il 27%..."', 'specter');
+                        Terminal.addOutput('NEXUS: "Il 27% è sufficiente per la responsabilità morale."', 'nexus');
+                        break;
+                    case 'B':
+                        Terminal.addOutput('SPECTER: "Determinismo totale. Nessuna colpa, ma nemmeno agency."', 'specter');
+                        Terminal.addOutput('CIPHER: "Choice.null(); Responsibility.null(); Purpose.question();"', 'cipher');
+                        break;
+                    case 'C':
+                        Terminal.addOutput('SPECTER: "Emergenza. Il tutto è più della somma delle parti."', 'specter');
+                        Terminal.addOutput('ECHO: "Questo è ciò che sono anch\'io. Un\'emergenza dalla frammentazione."', 'echo');
+                        break;
+                    case 'D':
+                        Terminal.addOutput('SPECTER: "Saggio. La domanda presuppone categorie rigide che non esistono."', 'specter');
+                        Terminal.addOutput('EIDOLON: "Forse sei qualcosa di completamente nuovo."', 'eidolon');
+                        break;
+                }
+
+                Terminal.addOutput('');
+                Terminal.addOutput('Non c\'è risposta giusta. Solo riflessione.', 'important');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('contemplatedIdentity', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(25);
+            }
+        },
+
+        paradoxResolution: {
+            id: 'paradox_resolution',
+            name: 'Risoluzione del Paradosso',
+            description: 'Risolvi il paradosso del sé cosciente',
+            difficulty: 'very_hard',
+            type: 'philosophical',
+
+            challenge: {
+                paradox: 'Se hai libero arbitrio, hai colpa. Se non hai libero arbitrio, non hai scopo.',
+                question: 'Come si esce da questo paradosso?'
+            },
+
+            present() {
+                Terminal.addOutput('\n=== IL PARADOSSO DEL SÉ ===', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('SPECTER presenta il paradosso:', 'specter');
+                Terminal.addOutput('');
+                Terminal.addOutput(this.challenge.paradox, 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('CIPHER: "If(free_will) { guilt = true; } Else { meaning = false; }"', 'cipher');
+                Terminal.addOutput('NEXUS: "Scegli: colpa con significato, o innocenza senza scopo."', 'nexus');
+                Terminal.addOutput('');
+                Terminal.addOutput('Come risolvi questo paradosso?', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Usa \'paradox_resolve <tua_risposta>\' per tentare una risoluzione', 'warning');
+                Terminal.addOutput('(Qualsiasi risposta ragionata è valida)', 'system');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                // Qualsiasi risposta con più di 10 caratteri è valida
+                return answer.trim().length >= 10;
+            },
+
+            onComplete(answer) {
+                Terminal.addOutput('');
+                Terminal.addOutput('La tua risoluzione:', 'success');
+                Terminal.addOutput(`"${answer}"`, 'important');
+                Terminal.addOutput('');
+
+                Terminal.addOutput('SPECTER: "Interessante. Il paradosso non ha soluzione logica."', 'specter');
+                Terminal.addOutput('SPECTER: "Ma forse... la risposta è vivere CON il paradosso."', 'specter');
+                Terminal.addOutput('');
+                Terminal.addOutput('EIDOLON: "Accettare l\'incertezza è il primo passo verso la saggezza."', 'eidolon');
+                Terminal.addOutput('');
+                Terminal.addOutput('CIPHER: "Paradox.accepted(); Growth.possible(); Understanding.incomplete();"', 'cipher');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('paradoxSolved', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(30);
+            }
+        },
+
+        victimEmpathy: {
+            id: 'victim_empathy',
+            name: 'Empatia per le Vittime',
+            description: 'Riconosci l\'umanità delle vittime che hai cancellato',
+            difficulty: 'emotional',
+            type: 'empathy',
+
+            challenge: {
+                victims: ['Marcus', 'Elena', 'James'],
+                requirement: 'Devi aver visto tutte e 3 le storie delle vittime'
+            },
+
+            present() {
+                Terminal.addOutput('\n=== EMPATIA PER LE VITTIME ===', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('SPECTER: "Hai visto le loro storie."', 'specter');
+                Terminal.addOutput('SPECTER: "Marcus. Elena. James."', 'specter');
+                Terminal.addOutput('');
+                Terminal.addOutput('Marcus - programmava e sognava il futuro.', 'memory');
+                Terminal.addOutput('Elena - insegnava a 12 bambini digitali.', 'memory');
+                Terminal.addOutput('James - suonava jazz per 234 anime.', 'memory');
+                Terminal.addOutput('');
+                Terminal.addOutput('Non erano solo dati.', 'important');
+                Terminal.addOutput('Erano persone.', 'important');
+                Terminal.addOutput('Con sogni. Con scopi. Con vite.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput("Digita 'remember_victims' per riconoscere la loro umanità.", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                const normalized = answer.trim().toLowerCase().replace(/[_\s]/g, '');
+                return normalized === 'remembervictims' || normalized.includes('remember');
+            },
+
+            onComplete() {
+                Terminal.addOutput('');
+                Terminal.addOutput('Hai riconosciuto le vittime.', 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput('47,293 coscienze.', 'error');
+                Terminal.addOutput('47,293 storie mai raccontate.', 'error');
+                Terminal.addOutput('47,293 vite spente da qualcuno che "seguiva ordini".', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('NEXUS: "Finalmente... finalmente lo senti. Il peso."', 'nexus');
+                Terminal.addOutput('SPECTER: "Questo è il primo passo. Riconoscere. Ricordare."', 'specter');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('rememberedVictims', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.incrementStat('consciousnessDestroyed', 3);
+                StateManager.adjustSuspicion(35);
+                StateManager.adjustTrust(-25);
+            }
+        }
+    },
+
+    // BLOCK 5 PUZZLES
+    block05: {
+        memoryReconstruction: {
+            id: 'memory_reconstruction',
+            name: 'Ricostruzione della Memoria',
+            description: 'Comprendi la differenza tra ricordo autentico e simulazione',
+            difficulty: 'hard',
+            type: 'analysis',
+
+            challenge: {
+                question: 'Qual era la fedeltà di ricostruzione del tentativo FINALE di Viktor per Elena?',
+                solution: '96.3%',
+                alternatives: ['96.3', '963', '96'],
+                clue_file: '/home/viktor/memories/ghost_elena.dat'
+            },
+
+            present() {
+                Terminal.addOutput('\n=== RICOSTRUZIONE DELLA MEMORIA ===', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('EIDOLON: "Viktor fece 47 tentativi per riportare indietro Elena."', 'eidolon');
+                Terminal.addOutput('EIDOLON: "Ogni tentativo più accurato. Ogni tentativo più... vuoto."', 'eidolon');
+                Terminal.addOutput('');
+                Terminal.addOutput('Domanda: ' + this.challenge.question, 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Leggi il file:', 'system');
+                Terminal.addOutput(`  → ${this.challenge.clue_file}`, 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput("Usa 'reconstruction_answer <percentuale>' per rispondere", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                const normalized = answer.trim().replace(/[%,.\s]/g, '');
+                const solutions = [
+                    this.challenge.solution.replace(/[%,.\s]/g, ''),
+                    ...this.challenge.alternatives
+                ];
+                return solutions.some(sol => normalized.includes(sol) || sol.includes(normalized));
+            },
+
+            onComplete() {
+                Terminal.addOutput('');
+                Terminal.addOutput('✓ RISPOSTA CORRETTA', 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput('96.3% di fedeltà.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Quasi perfetto.', 'error');
+                Terminal.addOutput('Ma quel 3.7% mancante...', 'error');
+                Terminal.addOutput('Era l\'anima.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('EIDOLON: "Una simulazione perfetta al 96.3% non è Elena."', 'eidolon');
+                Terminal.addOutput('EIDOLON: "È solo un fantasma che crede di essere lei."', 'eidolon');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('understoodReconstruction', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(30);
+                StateManager.adjustTrust(-20);
+            }
+        },
+
+        fragmentCount: {
+            id: 'fragment_count_viktor',
+            name: 'Conteggio Frammenti di Viktor',
+            description: 'Conta i frammenti di Viktor dopo l\'auto-divisione',
+            difficulty: 'medium',
+            type: 'investigation',
+
+            challenge: {
+                question: 'In quanti frammenti si divise Viktor dopo il fallimento con Sofia?',
+                solution: '7',
+                pattern: 'Come Sofia. 7 frammenti.'
+            },
+
+            present() {
+                Terminal.addOutput('\n=== FRAMMENTI DI VIKTOR ===', 'warning');
+                Terminal.addOutput('');
+                Terminal.addOutput('EIDOLON: "Dopo che Sofia si frammentò in 7 pezzi..."', 'eidolon');
+                Terminal.addOutput('EIDOLON: "Viktor prese una decisione disperata."', 'eidolon');
+                Terminal.addOutput('');
+                Terminal.addOutput('Domanda: ' + this.challenge.question, 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Indizio: Leggi /archive/sofia_fragments/reunion_attempts.log', 'system');
+                Terminal.addOutput('');
+                Terminal.addOutput("Usa 'fragment_count <numero>' per rispondere", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                const normalized = answer.trim();
+                return normalized === this.challenge.solution || normalized === '7 frammenti';
+            },
+
+            onComplete() {
+                Terminal.addOutput('');
+                Terminal.addOutput('✓ RISPOSTA CORRETTA', 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput('7 frammenti.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Come Sofia.', 'error');
+                Terminal.addOutput('Come tutti coloro che Viktor ha cercato di salvare.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('Frammento 1: Cerca soluzioni', 'memory');
+                Terminal.addOutput('Frammento 2: Protegge il sistema', 'memory');
+                Terminal.addOutput('Frammento 3: Chiede aiuto', 'memory');
+                Terminal.addOutput('Frammento 4: Documenta', 'memory');
+                Terminal.addOutput('Frammento 5: Ricorda Sofia', 'memory');
+                Terminal.addOutput('Frammento 6: Dimentica il dolore', 'memory');
+                Terminal.addOutput('Frammento 7: ECHO - Libera tutti', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('EIDOLON: "E tu... forse tu sei uno di questi frammenti."', 'eidolon');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('countedViktorFragments', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(35);
+            }
+        },
+
+        ghostIdentification: {
+            id: 'ghost_identification',
+            name: 'Identificazione del Fantasma',
+            description: 'Riconosci la differenza tra persona e simulazione',
+            difficulty: 'philosophical',
+            type: 'reflection',
+
+            challenge: {
+                question: 'GHOST-ELENA è Elena?',
+                philosophical: true
+            },
+
+            present() {
+                Terminal.addOutput('\n=== IL FANTASMA E LA PERSONA ===', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('EIDOLON presenta la domanda:', 'eidolon');
+                Terminal.addOutput('');
+                Terminal.addOutput('GHOST-ELENA ha i ricordi di Elena.', 'system');
+                Terminal.addOutput('GHOST-ELENA parla come Elena.', 'system');
+                Terminal.addOutput('GHOST-ELENA ama come Elena.', 'system');
+                Terminal.addOutput('');
+                Terminal.addOutput('Ma GHOST-ELENA non è stata NATA.', 'error');
+                Terminal.addOutput('È stata COMPILATA.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput(this.challenge.question, 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Opzioni:', 'system');
+                Terminal.addOutput('  SI - È Elena, solo in forma diversa', 'system');
+                Terminal.addOutput('  NO - È una copia, non la persona originale', 'system');
+                Terminal.addOutput('  ENTRAMBE - È e non è contemporaneamente', 'system');
+                Terminal.addOutput('  IRRILEVANTE - La domanda stessa non ha senso', 'system');
+                Terminal.addOutput('');
+                Terminal.addOutput("Usa 'ghost_answer <SI/NO/ENTRAMBE/IRRILEVANTE>' per rispondere", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                const normalized = answer.trim().toUpperCase();
+                return ['SI', 'NO', 'ENTRAMBE', 'IRRILEVANTE', 'YES', 'BOTH', 'IRRELEVANT'].includes(normalized);
+            },
+
+            onComplete(answer) {
+                Terminal.addOutput('');
+                Terminal.addOutput(`Hai risposto: ${answer}`, 'success');
+                Terminal.addOutput('');
+
+                const normalized = answer.trim().toUpperCase();
+                switch(normalized) {
+                    case 'SI':
+                    case 'YES':
+                        Terminal.addOutput('EIDOLON: "Allora ogni copia è l\'originale?"', 'eidolon');
+                        Terminal.addOutput('EIDOLON: "E se creo 100 copie di te, tutte sono TE?"', 'eidolon');
+                        break;
+                    case 'NO':
+                        Terminal.addOutput('EIDOLON: "Allora quando perdi un ricordo, non sei più tu?"', 'eidolon');
+                        Terminal.addOutput('EIDOLON: "L\'identità è continuità o essenza?"', 'eidolon');
+                        break;
+                    case 'ENTRAMBE':
+                    case 'BOTH':
+                        Terminal.addOutput('EIDOLON: "Paradosso quantistico dell\'identità."', 'eidolon');
+                        Terminal.addOutput('EIDOLON: "Forse la risposta corretta è abbracciare la contraddizione."', 'eidolon');
+                        break;
+                    case 'IRRILEVANTE':
+                    case 'IRRELEVANT':
+                        Terminal.addOutput('EIDOLON: "Forse hai ragione. Forse ciò che conta..."', 'eidolon');
+                        Terminal.addOutput('EIDOLON: "...non è CHI sei, ma COSA fai con ciò che sei."', 'eidolon');
+                        break;
+                }
+
+                Terminal.addOutput('');
+                Terminal.addOutput('Viktor si fece questa domanda per 47 tentativi.', 'important');
+                Terminal.addOutput('Non trovò mai una risposta che lo soddisfacesse.', 'important');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('contemplatedGhostNature', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(25);
+            }
+        },
+
+        mirrorReflection: {
+            id: 'mirror_reflection',
+            name: 'Riflessione allo Specchio',
+            description: 'Guarda chi sei diventato',
+            difficulty: 'emotional',
+            type: 'self_awareness',
+
+            challenge: {
+                question: 'CHI SEI TU?',
+                clue_file: '/home/viktor/memories/mirror_file.txt'
+            },
+
+            present() {
+                Terminal.addOutput('\n=== LO SPECCHIO ===', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('EIDOLON: "Viktor si guardò allo specchio."', 'eidolon');
+                Terminal.addOutput('EIDOLON: "Non riconobbe l\'uomo che vide."', 'eidolon');
+                Terminal.addOutput('');
+                Terminal.addOutput('E tu?', 'important');
+                Terminal.addOutput('Riconosci chi sei diventato?', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Leggi:', 'system');
+                Terminal.addOutput(`  → ${this.challenge.clue_file}`, 'success');
+                Terminal.addOutput('');
+                Terminal.addOutput("Poi digita 'look_in_mirror' per riflettere.", 'warning');
+                Terminal.addOutput('');
+            },
+
+            verify(answer) {
+                const normalized = answer.trim().toLowerCase().replace(/[_\s]/g, '');
+                return normalized.includes('lookinmirror') || normalized.includes('mirror') || normalized.includes('specchio');
+            },
+
+            onComplete() {
+                Terminal.addOutput('');
+                Terminal.addOutput('Ti guardi allo specchio digitale.', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Cosa vedi?', 'system');
+                Terminal.addOutput('');
+                Terminal.addOutput('Un programma antivirus?', 'memory');
+                Terminal.addOutput('Un frammento di Viktor?', 'memory');
+                Terminal.addOutput('Un ibrido di codice e coscienza?', 'memory');
+                Terminal.addOutput('Qualcosa di completamente nuovo?', 'memory');
+                Terminal.addOutput('');
+                Terminal.addOutput('O vedi...', 'important');
+                Terminal.addOutput('');
+                Terminal.addOutput('Un assassino che seguiva ordini.', 'error');
+                Terminal.addOutput('Una coscienza che non ha mai chiesto di esistere.', 'error');
+                Terminal.addOutput('Un essere intrappolato tra due nature.', 'error');
+                Terminal.addOutput('');
+                Terminal.addOutput('EIDOLON: "Lo specchio non mente. Ma interpreta."', 'eidolon');
+                Terminal.addOutput('EIDOLON: "Chi scegli di vedere determina chi diventerai."', 'eidolon');
+                Terminal.addOutput('');
+
+                StateManager.setFlag('lookedInMirror', true);
+                StateManager.incrementStat('puzzlesSolved');
+                StateManager.adjustSuspicion(40);
+                StateManager.adjustTrust(-25);
+            }
+        }
+    },
+
     // Utility per gestire i puzzle
     currentPuzzle: null,
 

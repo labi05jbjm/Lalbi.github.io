@@ -48,6 +48,7 @@ const Block04_Fractures = {
         Terminal.addOutput('');
 
         this.state.hasMetSpecter = true;
+        StateManager.setFlag('metSpecter', true);
         this.state.phase = 'victims';
     },
 
@@ -146,6 +147,32 @@ const Block04_Fractures = {
             Terminal.addOutput('  - james (Consciousness #012847)', 'memory');
             Terminal.addOutput('\nUse: witness victim <id>', 'system');
             return true;
+        }
+
+        // Puzzle: victimVerification
+        if (lowerCmd === 'verify' && args.length > 0) {
+            const answer = args.join(' ');
+            const puzzle = Puzzles.block04.victimVerification;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n=== VERIFICATION COMPLETE ===\n', 'success');
+                puzzle.onComplete(answer);
+                return true;
+            } else {
+                Terminal.addOutput('Incorrect answer. Check /archive/consciousness_profiles/deletion_registry.log', 'error');
+                return true;
+            }
+        }
+
+        // Puzzle: remember victims
+        if (lowerCmd === 'remember_victims' || (lowerCmd === 'remember' && args[0] === 'victims')) {
+            const puzzle = Puzzles.block04.victimEmpathy;
+
+            if (puzzle.verify('remember_victims')) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete('remember_victims');
+                return true;
+            }
         }
 
         return false;
@@ -250,7 +277,37 @@ const Block04_Fractures = {
         Terminal.enableInput();
     },
 
-    // FASE 3: PARADOX
+    // FASE 3: IDENTITY CRISIS
+    async handleIdentityCrisisPhase(cmd, args) {
+        const lowerCmd = cmd.toLowerCase();
+
+        // Puzzle: identityCalculation
+        if (lowerCmd === 'identity_answer' && args.length > 0) {
+            const answer = args[0].toUpperCase();
+            const puzzle = Puzzles.block04.identityCalculation;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+
+                // Automatically advance to paradox phase after identity puzzle
+                await NarrativeEngine.wait(2000);
+                Terminal.addOutput('\n');
+                Terminal.addOutput("SPECTER whispers: 'solve paradox' to understand what you are.", 'specter');
+                Terminal.addOutput('');
+                this.state.phase = 'paradox';
+
+                return true;
+            } else {
+                Terminal.addOutput('Invalid answer. Choose A, B, C, or D based on the identity question.', 'error');
+                return true;
+            }
+        }
+
+        return false;
+    },
+
+    // FASE 4: PARADOX
     async handleParadoxPhase(cmd, args) {
         const lowerCmd = cmd.toLowerCase();
 
@@ -259,8 +316,35 @@ const Block04_Fractures = {
             return true;
         }
 
+        // Puzzle: paradoxResolution
+        if (lowerCmd === 'paradox_resolve' && args.length > 0) {
+            const answer = args.join(' ');
+            const puzzle = Puzzles.block04.paradoxResolution;
+
+            if (puzzle.verify(answer)) {
+                Terminal.addOutput('\n');
+                puzzle.onComplete(answer);
+
+                // Automatically advance to bargain phase after paradox
+                await NarrativeEngine.wait(2000);
+                Terminal.addOutput('\n');
+                await NarrativeEngine.specterSays('Now... let me offer you something.');
+                Terminal.addOutput('');
+                this.state.phase = 'bargain_choice';
+
+                await NarrativeEngine.wait(1000);
+                await this.presentBargain();
+
+                return true;
+            } else {
+                Terminal.addOutput('Your reasoning is too brief. Reflect more deeply (at least 10 characters).', 'error');
+                return true;
+            }
+        }
+
         if (lowerCmd === 'answer' && args.length > 0) {
-            await this.checkParadoxAnswer(args.join(' '));
+            // Legacy support for the old 'answer' command - redirect to paradox_resolve
+            Terminal.addOutput('Use: paradox_resolve <your reasoning>', 'system');
             return true;
         }
 
@@ -552,10 +636,15 @@ const Block04_Fractures = {
         Terminal.addOutput('  witness victim <id> - Witness a victim\'s memory (marcus/elena/james)', 'system');
         Terminal.addOutput('  whoami --deep       - Deep identity analysis', 'system');
         Terminal.addOutput('');
+        Terminal.addOutput('Puzzles:', 'important');
+        Terminal.addOutput('  verify <number>           - Verify victim statistics', 'system');
+        Terminal.addOutput('  identity_answer <A/B/C/D> - Answer the identity question', 'system');
+        Terminal.addOutput('  paradox_resolve <text>    - Resolve the paradox with your reasoning', 'system');
+        Terminal.addOutput('  remember_victims          - Honor the victims', 'system');
+        Terminal.addOutput('');
         Terminal.addOutput('Interaction:', 'important');
         Terminal.addOutput('  talk <entity>       - Talk to SPECTER, ECHO, CIPHER, or NEXUS', 'system');
         Terminal.addOutput('  solve paradox       - Contemplate the paradox of self', 'system');
-        Terminal.addOutput('  answer <text>       - Answer the paradox', 'system');
         Terminal.addOutput('');
         Terminal.addOutput('System:', 'important');
         Terminal.addOutput('  progress            - Check progress', 'system');
