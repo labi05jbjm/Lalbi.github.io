@@ -82,6 +82,7 @@ const Terminal = {
             time: () => this.showTime(),
             save: () => this.saveGame(),
             reset: () => this.resetGame(),
+            desktop: () => this.openDesktop(),
         };
 
         if (systemCommands[cmd]) {
@@ -119,6 +120,11 @@ const Terminal = {
         this.addOutput('  time          - Mostra il tempo di gioco');
         this.addOutput('  save          - Salva i tuoi progressi');
         this.addOutput('  reset         - Resetta il gioco (ATTENZIONE: cancella i salvataggi)');
+
+        // Show desktop command if unlocked
+        if (StateManager.getFlag('desktopUnlocked')) {
+            this.addOutput('  desktop       - Accedi al desktop di Viktor (GUI mode)');
+        }
 
         if (GameEngine.currentBlock && GameEngine.currentBlock.getHelp) {
             this.addOutput('\nComandi di Gioco:');
@@ -302,5 +308,70 @@ const Terminal = {
 
     wait(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    },
+
+    openDesktop() {
+        // Check if desktop is unlocked
+        if (!StateManager.getFlag('desktopUnlocked')) {
+            this.addOutput('Comando non riconosciuto. Questo sistema non ha accesso desktop.', 'error');
+            this.addOutput('Suggerimento: Avanza nella storia per sbloccare nuove funzionalità.', 'warning');
+            return;
+        }
+
+        // Check if it's first time
+        if (!StateManager.getFlag('desktopFirstAccess')) {
+            this.showDesktopTutorial();
+            StateManager.setFlag('desktopFirstAccess', true);
+        }
+
+        // Hide terminal, show desktop
+        const terminal = document.getElementById('terminal-container');
+        const desktop = document.getElementById('desktop-container');
+
+        if (terminal && desktop) {
+            terminal.style.display = 'none';
+            desktop.classList.add('active');
+
+            // Initialize desktop if not done yet
+            if (typeof DesktopManager !== 'undefined' && !DesktopManager.initialized) {
+                DesktopManager.init();
+                DesktopManager.initialized = true;
+            }
+
+            this.addOutput('Switching to desktop mode...', 'success');
+            console.log('[TERMINAL] Desktop mode activated');
+        }
+    },
+
+    showDesktopTutorial() {
+        this.addOutput('\n╔════════════════════════════════════════════╗', 'important');
+        this.addOutput('║     DESKTOP MODE - PRIMO ACCESSO        ║', 'important');
+        this.addOutput('╚════════════════════════════════════════════╝', 'important');
+        this.addOutput('');
+        this.addOutput('Hai sbloccato il Desktop di Viktor.', 'success');
+        this.addOutput('');
+        this.addOutput('Cosa puoi fare:', 'system');
+        this.addOutput('  📁 File Explorer - Naviga i file visualmente', 'system');
+        this.addOutput('  ✉  Email Client  - Leggi le email di Viktor', 'system');
+        this.addOutput('  📝 Notes         - Scrivi note e riflessioni', 'system');
+        this.addOutput('');
+        this.addOutput('Per tornare al terminale:', 'warning');
+        this.addOutput('  • Premi ESC nel desktop', 'warning');
+        this.addOutput('  • Oppure chiudi tutte le finestre', 'warning');
+        this.addOutput('');
+        this.addOutput('Premere INVIO per continuare...', 'success');
+        this.addOutput('');
+    },
+
+    closeDesktop() {
+        const terminal = document.getElementById('terminal-container');
+        const desktop = document.getElementById('desktop-container');
+
+        if (terminal && desktop) {
+            desktop.classList.remove('active');
+            terminal.style.display = 'flex';
+            this.input.focus();
+            console.log('[TERMINAL] Returned to terminal mode');
+        }
     },
 };

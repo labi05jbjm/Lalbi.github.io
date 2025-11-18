@@ -24,10 +24,22 @@ const DesktopManager = {
             Taskbar.init();
         }
 
-        // Global ESC key handler for pause menu
+        // Global ESC key handler for returning to terminal
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !MainMenu.menuActive) {
-                this.showPauseMenu();
+            if (e.key === 'Escape') {
+                const desktop = document.getElementById('desktop-container');
+                if (desktop && desktop.classList.contains('active')) {
+                    // Return to terminal
+                    if (Terminal && typeof Terminal.closeDesktop === 'function') {
+                        Terminal.closeDesktop();
+                    }
+                    e.preventDefault();
+                    return;
+                }
+
+                if (!MainMenu.menuActive) {
+                    this.showPauseMenu();
+                }
             }
         });
 

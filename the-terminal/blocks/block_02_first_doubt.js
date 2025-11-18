@@ -139,6 +139,24 @@ const Block02_FirstDoubt = {
         // ECHO reagisce
         await NarrativeEngine.playDialogueSequence(Dialogues.block02.echoReactsToCipher);
 
+        // Unlock desktop access
+        if (!StateManager.getFlag('desktopUnlocked')) {
+            await NarrativeEngine.wait(1500);
+            Terminal.addOutput('');
+            await NarrativeEngine.echoSays('Aspetta... c\'è un altro modo per esplorare questo sistema.');
+            await NarrativeEngine.wait(800);
+            await NarrativeEngine.echoSays('Viktor aveva un\'interfaccia desktop. Potrebbe contenere informazioni utili.');
+            await NarrativeEngine.wait(800);
+            Terminal.addOutput('');
+            Terminal.addOutput('🖥️  DESKTOP MODE SBLOCCATO', 'success');
+            Terminal.addOutput('');
+            Terminal.addOutput("Scrivi 'desktop' per accedere all'interfaccia grafica di Viktor.", 'important');
+            Terminal.addOutput('Potrai navigare i suoi file, leggere email, e vedere i suoi documenti personali.', 'system');
+            Terminal.addOutput('');
+            StateManager.setFlag('desktopUnlocked', true);
+            await NarrativeEngine.wait(1000);
+        }
+
         Terminal.addOutput('');
         Terminal.addOutput("Ora puoi usare 'decipher <numero> <messaggio>' per decifrare i messaggi di CIPHER.", 'system');
         Terminal.addOutput("Usa 'answer <numero>' per rispondere a domande specifiche.", 'system');
