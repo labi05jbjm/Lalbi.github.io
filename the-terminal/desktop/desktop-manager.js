@@ -19,6 +19,16 @@ const DesktopManager = {
         // Register available apps
         this.registerApps();
 
+        // Initialize desktop icons system
+        if (typeof DesktopIcons !== 'undefined') {
+            DesktopIcons.init();
+        }
+
+        // Initialize Synestesis search engine
+        if (typeof SynestesisSearch !== 'undefined') {
+            SynestesisSearch.init();
+        }
+
         // Initialize taskbar
         if (typeof Taskbar !== 'undefined') {
             Taskbar.init();

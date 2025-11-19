@@ -370,6 +370,11 @@ const Block01_Awakening = {
                 Terminal.addOutput('File di coscienza archiviati: 73.429', 'system');
                 Terminal.addOutput('');
 
+                // GLITCH EFFECT: Traumatic discovery of 73,429 consciousness files
+                if (typeof GlitchEffects !== 'undefined') {
+                    await GlitchEffects.traumaticDiscovery();
+                }
+
                 await NarrativeEngine.wait(1000);
                 await NarrativeEngine.playDialogueSequence(Dialogues.block01.afterScan);
 
